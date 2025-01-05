@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giới thiệu bản thân</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+            background-color: #d4edda; /* Xanh lá pastel */
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            max-width: 500px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 28px;
+            color: #2e8b57; /* Xanh lá đậm */
+        }
+        h2 {
+            font-size: 22px;
+            color: #555;
+        }
+        p {
+            font-size: 18px;
+            color: #444;
+            font-style: italic;
+        }
+        .emoji {
+            font-size: 28px;
+            display: inline-block;
+            animation: bounce 1s infinite alternate;
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-5px); }
+        }
+        .cute-icons {
+            font-size: 20px;
+            margin-top: 15px;
+            line-height: 2;
+        }
+        .cute-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            color: white;
+            background-color: #6abf69;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+        .cute-button:hover {
+            background-color: #4e9b4d;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Xin chào mọi người <span class="emoji">❤️</span>,</h1>
+        <h2>Mình tên là <b>Trần Vũ Duyên An</b> 🎀✨</h2>
+        <p>Chúc mọi người cũng chạy deadline vui vẻ! 🎉🐱🍃</p>
+        
+        <div class="cute-icons">
+            🌸 💖 🍀 🌼 💕 🌿 🌟 🎶 🍰
+        </div>
+
+        <button class="cute-button">Let's gooooooooooo! 💪✨</button>
+    </div>
+</body>
+</html>
