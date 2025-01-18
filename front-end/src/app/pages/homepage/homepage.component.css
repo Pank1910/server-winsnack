@@ -1,0 +1,307 @@
+/* DANH MỤC NỔI BẬT */
+.featured-categories {
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: Montserrat, sans-serif;
+  }
+  
+  .header-wrapper {
+    align-self: end;
+    display: flex;
+    margin-right: 64px;
+    width: 843px;
+    max-width: 100%;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .section-title {
+    color: #000;
+    font-size: 35px;
+    font-weight: 600;
+    line-height: 1;
+  }
+  
+  .view-more-btn {
+    border-radius: 20px;
+    background-color: #FEFFF8;
+    align-self: start;
+    display: flex;
+    margin-top: 11px;
+    gap: 11px;
+    overflow: hidden;
+    font-size: 16px;
+    color: #197544;
+    font-weight: 700;
+    text-align: center;
+    padding: 10px 16px;
+    border: 1px solid #23562A;
+  }
+  
+  .view-more-text {
+    flex-grow: 1;
+  }
+  
+  .view-more-icon {
+    aspect-ratio: 1.43;
+    object-fit: contain;
+    width: 20px;
+    align-self: start;
+  }
+  
+  .categories-grid {
+    display: flex;
+    margin-top: 51px;
+    min-height: 400px;
+    align-items: start;
+    gap: 39px;
+    font-size: 14px;
+    color: #FFF;
+    font-weight: 700;
+    justify-content: start;
+  }
+  
+  .category-card {
+    border-radius: 12px;
+    display: flex;
+    min-width: 240px;
+    flex-direction: column;
+    width: 296px;
+  }
+  
+  .card-wrapper {
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+    position: relative;
+    aspect-ratio: 0.841;
+    width: 100%;
+  }
+  
+  .card-image {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+  
+  .card-content {
+    position: relative;
+    border-radius: 12px;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 134px 59px 33px 20px;
+  }
+  
+  .card-title {
+    font-size: 30px;
+    width: 257px;
+  }
+  
+  .price-text {
+    font-weight: 500;
+    margin-top: 19px;
+    width: 257px;
+  }
+  
+  .price-amount {
+    font-weight: 700;
+    font-size: 34px;
+    color: #FF5B00;
+  }
+  
+  .buy-button {
+    border-radius: 7px;
+    background-color: #FF5B00;
+    box-shadow: 0 0 39px rgba(255, 91, 0, 0.23);
+    margin-top: 18px;
+    text-align: center;
+    padding: 5px 42px 11px;
+  }
+  
+  @media (max-width: 991px) {
+    .header-wrapper {
+      margin-right: 10px;
+    }
+    
+    .categories-grid {
+      margin-top: 40px;
+    }
+    
+    .card-content {
+      padding: 100px 20px 0 0;
+    }
+    
+    .buy-button {
+      padding: 0 20px;
+    }
+  }
+  
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+
+/* SẢN PHẨM BÁN CHẠY */
+
+
+.product-details {
+    display: flex;
+    margin-top: 4px;
+    width: 100%;
+    flex-direction: column;
+    align-items: start;
+    padding: 0 16px;
+  }
+  
+  .rating-container {
+    display: flex;
+    gap: 4px;
+    font-weight: 400;
+  }
+  
+  .rating-icon {
+    aspect-ratio: 1.04;
+    object-fit: contain;
+    object-position: center;
+    width: 24px;
+    align-self: start;
+  }
+  
+  .rating-score {
+    color: #000;
+    font-size: 19px;
+    letter-spacing: 0.1px;
+  }
+  
+  .rating-divider {
+    aspect-ratio: 0.06;
+    object-fit: contain;
+    object-position: center;
+    width: 1px;
+    margin: auto 0;
+  }
+  
+  .review-count {
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 13px;
+    letter-spacing: 0.07px;
+    margin: auto 0;
+  }
+  
+  .product-name {
+    color: #000;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+  }
+  
+  .product-description {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 0.07px;
+    align-self: stretch;
+  }
+  
+  .price-container {
+    display: flex;
+    margin-top: 6px;
+    gap: 22px;
+  }
+  
+  .original-price {
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 0.07px;
+  }
+  
+  .discounted-price {
+    color: #f00;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+  }
+  
+  .view-more-btn {
+    border-radius: 20px;
+    background-color: #FEFFF8;
+    display: flex;
+    margin-top: 38px;
+    width: 149px;
+    max-width: 100%;
+    gap: 11px;
+    overflow: hidden;
+    font-size: 16px;
+    color: #197544;
+    font-weight: 700;
+    text-align: center;
+    padding: 10px 15px;
+    border: 1px solid #23562a;
+  }
+  
+  .view-more-text {
+    flex-grow: 1;
+  }
+  
+  .view-more-icon {
+    aspect-ratio: 1.43;
+    object-fit: contain;
+    object-position: center;
+    width: 20px;
+    align-self: start;
+  }
+  
+  @media (max-width: 991px) {
+    .section-subtitle {
+      max-width: 100%;
+    }
+    
+    .products-grid {
+      max-width: 100%;
+      margin-top: 40px;
+    }
+  
+    .image-wrapper {
+      white-space: initial;
+      padding: 0 20px 100px 0;
+    }
+  
+    .discount-badge {
+      margin-bottom: 10px;
+      white-space: initial;
+    }
+  
+    .product-details {
+      padding-right: 20px;
+    }
+  
+    .price-container {
+      white-space: initial;
+    }
+  }
+  
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
