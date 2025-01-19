@@ -1,106 +1,140 @@
-<div class="main-content tw-bg-[#fef6f3] tw-py-10">
-  <div class="tw-container tw-mx-auto tw-px-4">
-    <h2 class="tw-text-2xl tw-font-bold tw-mb-6">Giỏ hàng của bạn</h2>
-    <p class="tw-text-gray-600 tw-mb-6">
-      Các sản phẩm bạn đã thêm vào giỏ hàng, điều chỉnh số lượng và tiến hành thanh toán
-    </p>
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Win Snack</title>
 
-    <div class="tw-grid tw-grid-cols-12 tw-gap-6">
-      <!-- Cart Items Section -->
-      <div class="tw-col-span-8">
-        <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-6">
-          <table class="tw-w-full tw-border-collapse">
-            <thead>
-              <tr class="tw-border-b tw-border-gray-300">
-                <th class="tw-text-left tw-pb-4">Sản phẩm</th>
-                <th class="tw-text-left tw-pb-4">Giá</th>
-                <th class="tw-text-left tw-pb-4">Số lượng</th>
-                <th class="tw-text-left tw-pb-4">Tạm tính</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of cart.items" class="tw-border-b tw-border-gray-200">
-                <td class="tw-py-4 tw-flex tw-items-center">
-                  <img [src]="item.image" alt="Product" class="tw-w-16 tw-h-16 tw-object-cover tw-mr-4">
-                  <span>{{ item.name }}</span>
-                </td>
-                <td class="tw-py-4">{{ item.price | currency: 'VND' }}</td>
-                <td class="tw-py-4">
-                  <div class="tw-flex tw-items-center">
-                    <button
-                      class="tw-px-2 tw-border tw-border-gray-300 tw-rounded"
-                      (click)="onRemoveQuantity(item)"
-                    >-</button>
-                    <span class="tw-px-4">{{ item.quantity }}</span>
-                    <button
-                      class="tw-px-2 tw-border tw-border-gray-300 tw-rounded"
-                      (click)="onAddQuantity(item)"
-                    >+</button>
-                  </div>
-                </td>
-                <td class="tw-py-4">{{ item.quantity * item.price | currency: 'VND' }}</td>
-              </tr>
-            </tbody>
-          </table>
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="/front-end/src/reset.css" />
 
-          <div class="tw-flex tw-justify-between tw-items-center tw-mt-6">
-            <button
-              mat-raised-button
-              routerLink="/products"
-              class="tw-bg-gray-200 tw-rounded-full tw-py-2 tw-px-4 tw-text-gray-700"
-            >
-              Tiếp tục xem sản phẩm
-            </button>
-            <button
-              mat-raised-button
-              class="tw-bg-green-600 tw-text-white tw-rounded-full tw-py-2 tw-px-4"
-              (click)="updateCart()"
-            >
-              Cập nhật giỏ hàng
-            </button>
+    <!-- Embed fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="./cart.component.css" />
+  </head>
+  <body>
+    <div class="main-content tw-bg-[#fef6f3] tw-py-10">
+      <div class="tw-container tw-mx-auto tw-px-4">
+        <h2 class="tw-text-2xl tw-font-bold tw-mb-6">Giỏ hàng của bạn</h2>
+        <p class="tw-text-gray-600 tw-mb-6">
+          Các sản phẩm bạn đã thêm vào giỏ hàng, điều chỉnh số lượng và tiến hành thanh toán
+        </p>
+
+        <div class="tw-grid tw-grid-cols-12 tw-gap-6">
+          <!-- Cart Items Section -->
+          <div class="tw-col-span-8">
+            <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-6">
+              <table class="tw-w-full tw-border-collapse">
+                <thead>
+                  <tr class="tw-border-b tw-border-gray-300">
+                    <th class="tw-text-left tw-pb-4">Sản phẩm</th>
+                    <th class="tw-text-left tw-pb-4">Giá</th>
+                    <th class="tw-text-left tw-pb-4">Số lượng</th>
+                    <th class="tw-text-left tw-pb-4">Tạm tính</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of cart.items" class="tw-border-b tw-border-gray-200">
+                    <td class="tw-py-4 tw-flex tw-items-center">
+                      <a [routerLink]="'/product/' + item.id">
+                        <img [src]="item.image" alt="Product" class="tw-w-16 tw-h-16 tw-object-cover tw-mr-4">
+                      </a>
+                      <span>{{ item.name }}</span>
+                    </td>
+                    <td class="tw-py-4">{{ item.price | currency: 'VND' }}</td>
+                    <td class="tw-py-4">
+                      <div class="tw-flex tw-items-center">
+                        <button
+                          class="tw-px-2 tw-border tw-border-gray-300 tw-rounded"
+                          (click)="onRemoveQuantity(item)"
+                        >-</button>
+                        <span class="tw-px-4">{{ item.quantity }}</span>
+                        <button
+                          class="tw-px-2 tw-border tw-border-gray-300 tw-rounded"
+                          (click)="onAddQuantity(item)"
+                        >+</button>
+                      </div>
+                    </td>
+                    <td class="tw-py-4">{{ item.quantity * item.price | currency: 'VND' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="tw-flex tw-justify-between tw-items-center tw-mt-6">
+                <button
+                  mat-raised-button
+                  routerLink="/products"
+                  class="tw-bg-gray-200 tw-rounded-full tw-py-2 tw-px-4 tw-text-gray-700"
+                >
+                  Tiếp tục xem sản phẩm
+                </button>
+                <button
+                  mat-raised-button
+                  class="tw-bg-green-600 tw-text-white tw-rounded-full tw-py-2 tw-px-4"
+                  (click)="updateCart()"
+                >
+                  Cập nhật giỏ hàng
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cart Summary Section -->
+          <div class="tw-col-span-4">
+            <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-6">
+              <h3 class="tw-text-lg tw-font-bold tw-mb-4">Cộng giỏ hàng</h3>
+              <div class="tw-flex tw-justify-between tw-mb-4">
+                <span>Tạm tính</span>
+                <span>{{ getTotal() | currency: 'VND' }}</span>
+              </div>
+              <div class="tw-flex tw-justify-between tw-mb-6">
+                <span class="tw-font-bold">Tổng</span>
+                <span class="tw-font-bold">{{ getTotal() | currency: 'VND' }}</span>
+              </div>
+              <button
+                mat-raised-button
+                class="tw-w-full tw-bg-orange-500 tw-text-white tw-rounded-full tw-py-3"
+                (click)="navigateToCheckout()"
+              >
+                Tiến hành thanh toán
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Cart Summary Section -->
-      <div class="tw-col-span-4">
-        <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-6">
-          <h3 class="tw-text-lg tw-font-bold tw-mb-4">Công giỏ hàng</h3>
-          <div class="tw-flex tw-justify-between tw-mb-4">
-            <span>Tạm tính</span>
-            <span>{{ getTotal() | currency: 'VND' }}</span>
+      <!-- Recommended Products -->
+      <div class="tw-bg-[#fef6f3] tw-mt-10 tw-pt-8">
+        <div class="tw-container tw-mx-auto tw-px-4">
+          <!-- Thanh màu cam bao quanh "BẠN CÓ THỂ THÍCH" -->
+          <div class="tw-flex tw-justify-between tw-items-center tw-mb-6 tw-bg-[#f57c00] tw-py-3 tw-px-4 tw-rounded-full">
+            <h3 class="tw-text-lg tw-font-bold tw-text-white">BẠN CÓ THỂ THÍCH</h3>
+            <a routerLink="/products" class="tw-text-white tw-font-semibold">Xem tất cả ></a>
           </div>
-          <div class="tw-flex tw-justify-between tw-mb-6">
-            <span class="tw-font-bold">Tổng</span>
-            <span class="tw-font-bold">{{ getTotal() | currency: 'VND' }}</span>
+
+          <!-- Display a message if no recommended products -->
+          <div *ngIf="recommendedProducts.length === 0" class="tw-text-center tw-text-gray-500">
+            Không có sản phẩm gợi ý nào.
           </div>
-          <button
-            mat-raised-button
-            class="tw-w-full tw-bg-orange-500 tw-text-white tw-rounded-full tw-py-3"
-            (click)="navigateToCheckout()"
-          >
-            Tiến hành thanh toán
-          </button>
+
+          <div class="tw-grid tw-grid-cols-5 tw-gap-4">
+            <div *ngFor="let product of recommendedProducts" class="tw-bg-white tw-rounded-lg tw-shadow-md tw-p-4">
+              <a routerLink="/products/{{ product.id }}">
+                <img [src]="product.image" alt="Product" class="tw-w-full tw-h-40 tw-object-cover">
+                <h4 class="tw-text-sm tw-font-bold tw-mt-2">{{ product.name }}</h4>
+                <p class="tw-text-orange-500 tw-font-bold">{{ product.price | currency: 'VND' }}</p>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Recommended Products -->
-  <div class="tw-bg-[#fef6f3] tw-mt-10 tw-pt-8">
-    <div class="tw-container tw-mx-auto tw-px-4">
-      <div class="tw-flex tw-justify-between tw-items-center tw-mb-6">
-        <h3 class="tw-text-lg tw-font-bold">Bạn có thể thích</h3>
-        <a routerLink="/products" class="tw-text-orange-500">Xem tất cả ></a>
-      </div>
-
-      <div class="tw-grid tw-grid-cols-5 tw-gap-4">
-        <div *ngFor="let product of recommendedProducts" class="tw-bg-white tw-rounded-lg tw-shadow-md tw-p-4">
-          <img [src]="product.image" alt="Product" class="tw-w-full tw-h-40 tw-object-cover">
-          <h4 class="tw-text-sm tw-font-bold tw-mt-2">{{ product.name }}</h4>
-          <p class="tw-text-orange-500 tw-font-bold">{{ product.price | currency: 'VND' }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+  </body>
+</html>
