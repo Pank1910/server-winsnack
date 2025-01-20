@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail Page</title>
+    <link rel="stylesheet" href="product-detail.component.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#">Trang chủ</a> > <a href="#">Bánh tráng trộn sỉ</a> > <span>Bánh tráng rong biển</span>
+        </nav>
+    </header>
+
+    <main>
+        <section class="product-detail">
+            <div class="product-image-gallery">
+                <img src="src/assets/images/products/banh-trang-rong-bien.png" alt="Bánh tráng rong biển" class="main-image">
+                <div class="thumbnail-gallery">
+                    <img src="images/product-thumbnail1.jpg" alt="Thumbnail 1">
+                    <img src="images/product-thumbnail2.jpg" alt="Thumbnail 2">
+                    <img src="images/product-thumbnail3.jpg" alt="Thumbnail 3">
+                </div>
+            </div>
+
+            <div class="product-info">
+                <h1>Bánh tráng rong biển</h1>
+                <p class="price">
+                    <span class="current-price">25.000</span> <span class="original-price">30.000</span>
+                </p>
+                <p class="rating">93% người mua đã gợi ý sản phẩm này.</p>
+                <p>ComBo Phơi Sương Chấm Tỏi Đặc Biệt sẵn sàng chinh phục mọi khách hàng khó tính nhất.</p>
+
+                <div class="options">
+                    <label for="size">Chọn phân loại:</label>
+                    <div>
+                        <input type="radio" id="size-100" name="size" value="100g" checked>
+                        <label for="size-100">100g</label>
+
+                        <input type="radio" id="size-200" name="size" value="200g">
+                        <label for="size-200">200g</label>
+                    </div>
+                </div>
+
+                <div class="quantity">
+                    <label for="quantity">Số lượng:</label>
+                    <button class="decrease">-</button>
+                    <input type="number" id="quantity" value="1" min="1">
+                    <button class="increase">+</button>
+                </div>
+
+                <button class="add-to-cart">Thêm vào giỏ hàng</button>
+                <div class="policies">
+                    <p>Miễn phí Ship TP. HCM</p>
+                    <p>Đổi trả miễn phí</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="details">
+            <h2>Mô tả chi tiết</h2>
+            <p>Thông tin sản phẩm: Bánh tráng, phơi sương, chấm tỏi đặc biệt...</p>
+            <h3>Cách ăn</h3>
+            <ol>
+                <li>Gỡ túi zip để lấy bánh tráng ra.</li>
+                <li>Mở gói gia vị, thêm sốt chấm.</li>
+            </ol>
+
+            <h3>Cam kết</h3>
+            <p>Khách hàng luôn được hài lòng...</p>
+
+            <h3>Thông tin liên hệ</h3>
+            <ul>
+                <li>Địa chỉ cửa hàng...</li>
+            </ul>
+        </section>
+
+        <section class="related-products">
+            <h2>Bạn có thể thích</h2>
+            <div class="product-list">
+                <div class="product-item">
+                    <img src="images/related-product1.jpg" alt="Product 1">
+                    <p>Bánh tráng chà bông</p>
+                </div>
+                <div class="product-item">
+                    <img src="images/related-product2.jpg" alt="Product 2">
+                    <p>Bánh tráng sốt bơ</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Winsnack</p>
+    </footer>
+</body>
+</html>
