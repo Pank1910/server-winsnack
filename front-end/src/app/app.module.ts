@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router'; 
+import { RouterModule } from '@angular/router';
 
 // Import các trang mới
 import { HomepageComponent } from './pages/homepage/homepage.component';
@@ -15,6 +15,7 @@ import { PaymentPageComponent } from './pages/payment/payment.component';
     AppComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     // AppRoutingModule, // Thêm AppRoutingModule vào imports
   //   RouterModule.forRoot([ // Cấu hình routing trực tiếp

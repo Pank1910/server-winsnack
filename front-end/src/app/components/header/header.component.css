@@ -1,0 +1,60 @@
+/* Global Styles */
+body {
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  /* Tailwind Custom Colors */
+  .bg-orange-50 {
+    background-color: #FFF8EC;
+  }
+  
+  .bg-amber-500 {
+    background-color: #FF9413;
+  }
+  
+  .text-amber-500 {
+    color: #FF9413;
+  }
+  
+  .text-slate-700 {
+    color: #253D4E;
+  }
+  
+  .bg-zinc-100 {
+    background-color: #F3F3F3;
+  }
+  
+  .text-zinc-400 {
+    color: #A0A0A0;
+  }
+
+/* Dropdown animation */
+.dropdown-enter {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  .dropdown-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 200ms;
+  }
+  .dropdown-exit {
+    opacity: 1;
+  }
+  .dropdown-exit-active {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 200ms;
+  }
+  
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .group:hover .dropdown-content {
+      display: none;
+    }
+    
+    .dropdown-mobile {
+      position: static;
+      width: 100%;
+    }
+  }
