@@ -15,6 +15,7 @@ import { PaymentPageComponent } from './pages/payment/payment.component';
     AppComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     // AppRoutingModule, // Thêm AppRoutingModule vào imports
   //   RouterModule.forRoot([ // Cấu hình routing trực tiếp

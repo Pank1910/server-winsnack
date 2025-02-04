@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Win Snack</title>
+        
+        <!-- Reset CSS -->
+        <link rel="stylesheet" href="/front-end/src/reset.css" />
+
+        <!-- Embed fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet"
+        />
+
+        <!-- Styles -->
+        <link rel="stylesheet" href="./homepage.component.css" />
+    </head>
+    <body>
+        <!-- Landing -->
+        <section class="landing-page">
+            <img
+                src="/front-end/src/assets/images/homepage/anhbia.png"
+                alt=""
+                class="landing_pic"
+            />
+        </section>
+
+        <!-- List -->
+        <section class="list-page">
+            <div class="list-head">
+                <h2 class="list_header">Danh mục nổi bật</h2>
+                <div class="btn_list-wrap">
+                    <a href="#!" class="btn btn_list">Xem thêm</a>
+                    <img src="/front-end/src/assets/icon/Arrow.svg" alt="" class="arrow" />
+                </div>
+            </div>
+
+            <div class="ricepaper_list">
+                <!-- Ricepaper 1 -->
+                <div class="ricepaper_item">
+                    <figure class="ricepaper_item__img-wrap">
+                        <img
+                            src="/front-end/src/assets/images/homepage/banhtrangtronsan.png"
+                            alt=""
+                            class="ricepaper_item-img"
+                        />
+                    </figure>
+                    <section class="ricepaper_item-info">
+                        <h3 class="ricepaper_item-title">
+                            Bánh tráng trộn sẵn
+                        </h3>
+                        <div class="range">
+                            <span class="from">từ</span>
+                            <span class="rice-price">20.000</span>
+                        </div>
+
+                        <a href="#!" class="btn btn_list_buy">Mua ngay</a>
+                    </section>
+                </div>
+
+                <!-- Ricepaper 2 -->
+                <div class="ricepaper_item">
+                    <figure class="ricepaper_item__img-wrap">
+                        <img
+                            src="/front-end/src/assets/images/homepage/banhtrangnuong.png"
+                            alt=""
+                            class="ricepaper_item-img"
+                        />
+                    </figure>
+                    <section class="ricepaper_item-info">
+                        <h3 class="ricepaper_item-title">Bánh tráng nướng</h3>
+                        <div class="range">
+                            <span class="from">từ</span>
+                            <span class="rice-price">20.000</span>
+                        </div>
+
+                        <a href="#!" class="btn btn_list_buy">Mua ngay</a>
+                    </section>
+                </div>
+                <!-- Ricepaper 3 -->
+                <div class="ricepaper_item">
+                    <figure class="ricepaper_item__img-wrap">
+                        <img
+                            src="/front-end/src/assets/images/homepage/banhtrangngot.png"
+                            alt=""
+                            class="ricepaper_item-img"
+                        />
+                    </figure>
+                    <section class="ricepaper_item-info">
+                        <h3 class="ricepaper_item-title">Bánh tráng ngọt</h3>
+                        <div class="range">
+                            <span class="from">từ</span>
+                            <span class="rice-price">20.000</span>
+                        </div>
+
+                        <a href="#!" class="btn btn_list_buy">Mua ngay</a>
+                    </section>
+                </div>
+                <!-- Ricepaper 4 -->
+                <div class="ricepaper_item">
+                    <figure class="ricepaper_item__img-wrap">
+                        <img
+                            src="/front-end/src/assets/images/homepage/combomixvi.png"
+                            alt=""
+                            class="ricepaper_item-img"
+                        />
+                    </figure>
+                    <section class="ricepaper_item-info">
+                        <h3 class="ricepaper_item-title">Combo mix vị</h3>
+                        <div class="range">
+                            <span class="from">từ</span>
+                            <span class="rice-price">20.000</span>
+                        </div>
+
+                        <a href="#!" class="btn btn_list_buy">Mua ngay</a>
+                    </section>
+                </div>
+                <!-- Ricepaper 5 -->
+                <div class="ricepaper_item">
+                    <figure class="ricepaper_item__img-wrap">
+                        <img
+                            src="/front-end/src/assets/images/homepage/banhtrangnuong.png"
+                            alt=""
+                            class="ricepaper_item-img"
+                        />
+                    </figure>
+                    <section class="ricepaper_item-info">
+                        <h3 class="ricepaper_item-title">
+                            Bánh tráng trộn sẵn
+                        </h3>
+                        <div class="range">
+                            <span class="from">từ</span>
+                            <span class="rice-price">20.000</span>
+                        </div>
+
+                        <a href="#!" class="btn btn_list_buy">Mua ngay</a>
+                    </section>
+                </div>
+            </div>
+        </section>
+
+        <!-- Showing -->
+        <section class="show">
+            <img
+                src="/front-end/src/assets/images/homepage/anhxuathien.png"
+                alt=""
+                class="show"
+            />
+            <div class="new">
+                <p class="new-item new-item_top">
+                    mới <strong class="showing">Xuất hiện </strong>hôm nay !!!
+                </p>
+                <p class="new-item new-item_bot">Bánh tráng phơi sương</p>
+                <a href="#!" class="buy-btn btn">Mua liền</a>
+            </div>
+            <div class="show-orange"></div>
+        </section>
+
+        <!-- Best-seller -->
+        <section class="best-seller-page">
+            <div class="container">
+                <div class="best-seller_header">
+                    <h2 class="best-seller_header-title">Sản phẩm bán chạy</h2>
+                    <p class="best-seller_header-desc">
+                        Top sản phẩm có doanh số cao nhất trong tuần
+                    </p>
+                </div>
+
+                <div class="best-seller_list">
+                    <!-- Bestseller 1 -->
+                    <div class="best-seller_item">
+                        <figure class="best-seller_item__img-wrap">
+                            <img
+                                src="/front-end/src/assets/images/homepage/chabong.png"
+                                alt=""
+                                class="thumb"
+                            />
+                            <div class="sales">
+                                <div class="rectangle_red"></div>
+                                <span class="prices">30%</span>
+                            </div>
+                        </figure>
+                        <section class="best-seller_info">
+                            <div class="head">
+                                <div class="rating">
+                                    <img
+                                        src="/front-end/src/assets/images/homepage/Star.png"
+                                        alt=""
+                                        class="star"
+                                    />
+                                    <span class="value">5.9</span>
+                                </div>
+                                <div class="value-vertical"></div>
+                                <span class="review">+100 review</span>
+                            </div>
+                            <h3 class="best-seller-title">
+                                Bánh tráng chà bông
+                            </h3>
+                            <p class="best-seller_desc">
+                                Made with juicy beef burger, cheese...
+                            </p>
+                            <div class="foot">
+                                <img
+                                    src="/front-end/src/assets/images/homepage/30000.png"
+                                    alt=""
+                                    class="sale"
+                                />
+                                <span class="price">25.000Đ</span>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Bestseller 2 -->
+                    <div class="best-seller_item">
+                        <figure class="best-seller_item__img-wrap">
+                            <img
+                                src="/front-end/src/assets/images/homepage/rongbien.png"
+                                alt=""
+                                class="thumb"
+                            />
+                            <div class="sales">
+                                <div class="rectangle_red"></div>
+                                <span class="prices">30%</span>
+                            </div>
+                        </figure>
+                        <section class="best-seller_info">
+                            <div class="head">
+                                <div class="rating">
+                                    <img
+                                        src="/front-end/src/assets/images/homepage/Star.png"
+                                        alt=""
+                                        class="star"
+                                    />
+                                    <span class="value">5.9</span>
+                                </div>
+                                <div class="value-vertical"></div>
+                                <span class="review">+100 review</span>
+                            </div>
+                            <h3 class="best-seller-title">
+                                Bánh tráng rong biển
+                            </h3>
+                            <p class="best-seller_desc">
+                                Made with juicy beef burger, cheese...
+                            </p>
+                            <div class="foot">
+                                <img
+                                    src="/front-end/src/assets/images/homepage/30000.png"
+                                    alt=""
+                                    class="sale"
+                                />
+                                <span class="price">25.000Đ</span>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Bestseller 3 -->
+                    <div class="best-seller_item">
+                        <figure class="best-seller_item__img-wrap">
+                            <img
+                                src="/front-end/src/assets/images/homepage/chabong.png"
+                                alt=""
+                                class="thumb"
+                            />
+                            <div class="sales">
+                                <div class="rectangle_red"></div>
+                                <span class="prices">30%</span>
+                            </div>
+                        </figure>
+                        <section class="best-seller_info">
+                            <div class="head">
+                                <div class="rating">
+                                    <img
+                                        src="/front-end/src/assets/images/homepage/Star.png"
+                                        alt=""
+                                        class="star"
+                                    />
+                                    <span class="value">5.9</span>
+                                </div>
+                                <div class="value-vertical"></div>
+                                <span class="review">+100 review</span>
+                            </div>
+                            <h3 class="best-seller-title">
+                                Bánh tráng chà bông
+                            </h3>
+                            <p class="best-seller_desc">
+                                Made with juicy beef burger, cheese...
+                            </p>
+                            <div class="foot">
+                                <img
+                                    src="/front-end/src/assets/images/homepage/30000.png"
+                                    alt=""
+                                    class="sale"
+                                />
+                                <span class="price">25.000Đ</span>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Bestseller 4 -->
+                    <div class="best-seller_item">
+                        <figure class="best-seller_item__img-wrap">
+                            <img
+                                src="/front-end/src/assets/images/homepage/rongbien.png"
+                                alt=""
+                                class="thumb"
+                            />
+                            <div class="sales">
+                                <div class="rectangle_red"></div>
+                                <span class="prices">30%</span>
+                            </div>
+                        </figure>
+                        <section class="best-seller_info">
+                            <div class="head">
+                                <div class="rating">
+                                    <img
+                                        src="/front-end/src/assets/images/homepage/Star.png"
+                                        alt=""
+                                        class="star"
+                                    />
+                                    <span class="value">5.9</span>
+                                </div>
+                                <div class="value-vertical"></div>
+                                <span class="review">+100 review</span>
+                            </div>
+                            <h3 class="best-seller-title">
+                                Bánh tráng rong biển
+                            </h3>
+                            <p class="best-seller_desc">
+                                Made with juicy beef burger, cheese...
+                            </p>
+                            <div class="foot">
+                                <img
+                                    src="/front-end/src/assets/images/homepage/30000.png"
+                                    alt=""
+                                    class="sale"
+                                />
+                                <span class="price">25.000Đ</span>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Bestseller 5 -->
+                    <div class="best-seller_item">
+                        <figure class="best-seller_item__img-wrap">
+                            <img
+                                src="/front-end/src/assets/images/homepage/chabong.png"
+                                alt=""
+                                class="thumb"
+                            />
+                            <div class="sales">
+                                <div class="rectangle_red"></div>
+                                <span class="prices">30%</span>
+                            </div>
+                        </figure>
+                        <section class="best-seller_info">
+                            <div class="head">
+                                <div class="rating">
+                                    <img
+                                        src="/front-end/src/assets/images/homepage/Star.png"
+                                        alt=""
+                                        class="star"
+                                    />
+                                    <span class="value">5.9</span>
+                                </div>
+                                <div class="value-vertical"></div>
+                                <span class="review">+100 review</span>
+                            </div>
+                            <h3 class="best-seller-title">
+                                Bánh tráng chà bông
+                            </h3>
+                            <p class="best-seller_desc">
+                                Made with juicy beef burger, cheese...
+                            </p>
+                            <div class="foot">
+                                <img
+                                    src="/front-end/src/assets/images/homepage/30000.png"
+                                    alt=""
+                                    class="sale"
+                                />
+                                <span class="price">25.000Đ</span>
+                            </div>
+                        </section>
+                    </div>
+                    <!-- Bestseller 6 -->
+                    <div class="best-seller_item">
+                        <figure class="best-seller_item__img-wrap">
+                            <img
+                                src="/front-end/src/assets/images/homepage/chabong.png"
+                                alt=""
+                                class="thumb"
+                            />
+                            <div class="sales">
+                                <div class="rectangle_red"></div>
+                                <span class="prices">30%</span>
+                            </div>
+                        </figure>
+                        <section class="best-seller_info">
+                            <div class="head">
+                                <div class="rating">
+                                    <img
+                                        src="/front-end/src/assets/images/homepage/Star.png"
+                                        alt=""
+                                        class="star"
+                                    />
+                                    <span class="value">5.9</span>
+                                </div>
+                                <div class="value-vertical"></div>
+                                <span class="review">+100 review</span>
+                            </div>
+                            <h3 class="best-seller-title">
+                                Bánh tráng chà bông
+                            </h3>
+                            <p class="best-seller_desc">
+                                Made with juicy beef burger, cheese...
+                            </p>
+                            <div class="foot">
+                                <img
+                                    src="/front-end/src/assets/images/homepage/30000.png"
+                                    alt=""
+                                    class="sale"
+                                />
+                                <span class="price">25.000Đ</span>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mini-game -->
+        <section class="mini-game">
+            <div class="container">
+                <div class="mini-game_inner">
+                    <figure>
+                        <img
+                            src="/front-end/src/assets/images/homepage/mini-game.png"
+                            alt=""
+                            class="mini-game_img"
+                        />
+                    </figure>
+                    <div class="mini-game_content">
+                        <h2 class="mini-game_heading">
+                            Subcribe To Our Newsletter
+                        </h2>
+                        <p class="mini-game_desc">
+                            Lorem ipsum dolor sit Lorem ipsum dolor sit amet
+                            consectetur adipisicing elit. Cum, alias dolor
+                            assumenda sint esse eveniet officia perspiciatis
+                            aliquid, incidunt maiores molestiae? Perferendis
+                            eligendi eveniet facere perspiciatis vel ex libero
+                            voluptates!
+                        </p>
+
+                        <!-- Subscribe form -->
+                        <form action="" class="subscribe-form">
+                            <input
+                                type="email"
+                                name=""
+                                id=""
+                                placeholder="Nhập email của bạn"
+                                class="subscribe-form__input"
+                            />
+                            <button
+                                type="submit"
+                                class="subscribe-form__submit"
+                            >
+                                <a href="" class="subscribe-submit">Đăng kí</a>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog -->
+        <section class="blog-page">
+            <div class="container">
+                <div class="blog_header">
+                    <h2 class="blog_header-title">Ghé xem blog hôm nay</h2>
+                </div>
+
+                <div class="blog_list">
+                    <!-- Blog 1 -->
+                    <div class="blog_item">
+                        <figure class="blog_item__img-wrap">
+                            <img
+                                src="/front-end/src/assets/images/homepage/chabong.png"
+                                alt=""
+                                class="thumb"
+                            />
+                            <div class="sales">
+                                <span class="prices">30%</span>
+                            </div>
+                        </figure>
+                        <section class="best-seller_info">
+                            <div class="head">
+                                <div class="rating">
+                                    <img
+                                        src="/front-end/src/assets/images/homepage/Star.png"
+                                        alt=""
+                                        class="star"
+                                    />
+                                    <span class="value">5.9</span>
+                                </div>
+                                <div class="value-vertical"></div>
+                                <span class="review">+100 review</span>
+                            </div>
+                            <h3 class="best-seller-title">
+                                Bánh tráng chà bông
+                            </h3>
+                            <p class="best-seller_desc">
+                                Made with juicy beef burger, cheese...
+                            </p>
+                            <div class="foot">
+                                <img
+                                    src="/front-end/src/assets/images/homepage/30000.png"
+                                    alt=""
+                                    class="sale"
+                                />
+                                <span class="price">25.000Đ</span>
+                            </div>
+                        </section>
+                    </div>
+                    <!-- Blog 2 -->
+                    <div class="blog_item">
+                        <figure class="blog_item__img-wrap">
+                            <img
+                                src="/front-end/src/assets/images/homepage/chabong.png"
+                                alt=""
+                                class="thumb"
+                            />
+                            <div class="sales">
+                                <span class="prices">30%</span>
+                            </div>
+                        </figure>
+                        <section class="best-seller_info">
+                            <div class="head">
+                                <div class="rating">
+                                    <img
+                                        src="/front-end/src/assets/images/homepage/Star.png"
+                                        alt=""
+                                        class="star"
+                                    />
+                                    <span class="value">5.9</span>
+                                </div>
+                                <div class="value-vertical"></div>
+                                <span class="review">+100 review</span>
+                            </div>
+                            <h3 class="best-seller-title">
+                                Bánh tráng chà bông
+                            </h3>
+                            <p class="best-seller_desc">
+                                Made with juicy beef burger, cheese...
+                            </p>
+                            <div class="foot">
+                                <img
+                                    src="/front-end/src/assets/images/homepage/30000.png"
+                                    alt=""
+                                    class="sale"
+                                />
+                                <span class="price">25.000Đ</span>
+                            </div>
+                        </section>
+                    </div>
+                    <!-- Blog 3 -->
+                    <div class="blog_item">
+                        <figure class="blog_item__img-wrap">
+                            <img
+                                src="/front-end/src/assets/images/homepage/chabong.png"
+                                alt=""
+                                class="thumb"
+                            />
+                            <div class="sales">
+                                <span class="prices">30%</span>
+                            </div>
+                        </figure>
+                        <section class="best-seller_info">
+                            <div class="head">
+                                <div class="rating">
+                                    <img
+                                        src="/front-end/src/assets/images/homepage/Star.png"
+                                        alt=""
+                                        class="star"
+                                    />
+                                    <span class="value">5.9</span>
+                                </div>
+                                <div class="value-vertical"></div>
+                                <span class="review">+100 review</span>
+                            </div>
+                            <h3 class="best-seller-title">
+                                Bánh tráng chà bông
+                            </h3>
+                            <p class="best-seller_desc">
+                                Made with juicy beef burger, cheese...
+                            </p>
+                            <div class="foot">
+                                <img
+                                    src="/front-end/src/assets/images/homepage/30000.png"
+                                    alt=""
+                                    class="sale"
+                                />
+                                <span class="price">25.000Đ</span>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html> 
