@@ -9,42 +9,68 @@ import { Router } from '@angular/router';
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
-  cart: Cart = { items: [] };
-  recommendedProducts = [
-    { name: 'Bánh tráng rong biển', price: 25000, image: 'assets/products/product1.jpg' },
-    { name: 'Bánh tráng sốt bơ', price: 25000, image: 'assets/products/product2.jpg' },
-    { name: 'Bánh tráng chà bông', price: 25000, image: 'assets/products/product3.jpg' },
-    { name: 'Bánh tráng muối nhuyễn', price: 25000, image: 'assets/products/product4.jpg' },
-    { name: 'Bánh tráng phô mai', price: 25000, image: 'assets/products/product5.jpg' },
-  ];
+  cart: any = {
+    items: [
+      {
+        productId: 1,
+        productName: 'Product Name',
+        productImage: 'image.jpg',
+        price: 100000,
+        quantity: 1
+      }
+      // Add more products as needed
+    ]
+  };
 
-  constructor(private cartService: CartService, private router: Router) {}
+  constructor() { }
 
   ngOnInit(): void {
-    this.cartService.cart.subscribe((_cart: Cart) => {
-      this.cart = _cart;
-    });
+    // Optionally, fetch cart data from a service or localStorage
   }
 
-  getTotal(): number {
-    return this.cart.items
-      .map((item) => item.price * item.quantity)
-      .reduce((acc, value) => acc + value, 0);
+  // Function to increase quantity
+  onAddQuantity(item: any): void {
+    item.quantity++;
+    this.updateCart();
   }
 
-  onAddQuantity(item: CartItem): void {
-    this.cartService.addToCart(item);
+  // Function to decrease quantity
+  onRemoveQuantity(item: any): void {
+    if (item.quantity > 1) {
+      item.quantity--;
+      this.updateCart();
+    }
   }
 
-  onRemoveQuantity(item: CartItem): void {
-    this.cartService.removeQuantity(item);
+  // Function to remove item from cart
+  onRemoveFromCart(item: any): void {
+    const index = this.cart.items.indexOf(item);
+    if (index !== -1) {
+      this.cart.items.splice(index, 1);
+      this.updateCart();
+    }
   }
 
+  // Function to update cart (e.g., store the updated cart)
   updateCart(): void {
-    this.cartService.updateCart(this.cart.items);
+    // Logic to update the cart, e.g., calling a service or saving to localStorage
+    console.log("Cart updated", this.cart.items);
   }
 
+  // Function to calculate total price
+  getTotal(items: any[]): number {
+    return items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  }
+
+  // Function to navigate to checkout
   navigateToCheckout(): void {
-    this.router.navigate(['/checkout']);
+    // Logic to navigate to checkout page, e.g., using Angular Router
+    console.log('Navigating to checkout');
+  }
+
+  // Function to continue shopping
+  continueShopping(): void {
+    // Navigate to products page or perform other actions
+    console.log('Continuing shopping');
   }
 }
