@@ -1,0 +1,16 @@
+/* Các lớp CSS tuỳ chỉnh */
+.banner-img {
+    border-radius: 8px;
+}
+
+.product-card {
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.price-label {
+    font-size: 1rem;
+}
+
+.price-values input {
+    border-radius: 0.375rem;
+}
