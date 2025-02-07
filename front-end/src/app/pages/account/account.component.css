@@ -1,0 +1,170 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+.breadcrumb {
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.breadcrumb .current {
+    color: #ff6b00;
+}
+
+.container {
+    display: flex;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-right: 1px solid #e0e0e0;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar li {
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.sidebar .active {
+    color: #ff6b00;
+    font-weight: bold;
+}
+
+.sidebar .logout {
+    color: red;
+    margin-top: 20px;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.profile-avatar img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.profile-actions {
+    margin-left: auto;
+}
+
+.profile-actions button {
+    margin-left: 10px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff6b00;
+    color: white;
+    cursor: pointer;
+}
+
+.account-details {
+    margin-bottom: 20px;
+}
+
+.detail-row {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.detail-row label {
+    width: 150px;
+    font-weight: bold;
+    color: #666;
+}
+
+.notification-preferences {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 20px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-container input {
+    margin-right: 10px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.purchase-history, .address-section {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.purchase-history h2, .address-section h2 {
+    background-color: #FFF3E0;
+    color: #ff6b00;
+    padding: 15px;
+    margin: 0;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.no-order-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    text-align: center;
+}
+
+.shop-now-btn {
+    background-color: #ff6b00;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.address-card {
+    background-color: #FFF3E0;
+    margin: 15px;
+    border-radius: 8px;
+}
+
+.address-header {
+    background-color: #FFE0B2;
+    padding: 10px 15px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    font-weight: bold;
+}
+
+.address-details {
+    padding: 15px;
+}
+
