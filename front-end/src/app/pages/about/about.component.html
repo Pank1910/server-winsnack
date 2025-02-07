@@ -1,278 +1,268 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Win Snack - Thưởng thức những món snack ngon nhất với hương vị hấp dẫn">
+    <meta name="keywords" content="snack, bánh tráng, đồ ăn vặt, Win Snack">
+    <meta name="author" content="Win Snack">
     <title>Win Snack</title>
 
-    <!-- Reset CSS -->
-    <link rel="stylesheet" href="/front-end/src/reset.css" />
-
-    <!-- Embed fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-      rel="stylesheet"
-    />
-
     <!-- Styles -->
-    <link rel="stylesheet" href="./about.component.css" />
-  </head>
-  <body>
-    <!-- Header -->
-    <header class="header">
-      <div class="intro-container">
-        <div class="intro-logo">
-          <img src="logo.png" alt="Win Snack Logo" />
-        </div>
-        <div class="intro-text">
-          <p>
-            Win Snack là thương hiệu đồ ăn vặt chuyên cung cấp các loại bánh
-            tráng đa dạng, từ những hương vị truyền thống quen thuộc đến những sự
-            kết hợp sáng tạo hiện đại, phù hợp với mọi lứa tuổi. Với slogan "Ăn
-            là ghiền", chúng tôi luôn đặt chất lượng và sự hài lòng của khách
-            hàng lên hàng đầu. Mỗi sản phẩm tại Win Snack không chỉ là món ăn vặt
-            thông thường mà còn là tâm huyết, sự sáng tạo và niềm đam mê mang
-            đến niềm vui qua từng miếng bánh. Chúng tôi mong muốn trở thành lựa
-            chọn yêu thích của mọi người, là người bạn đồng hành trong mọi
-            khoảnh khắc từ những buổi tiệc nhẹ, cuộc họp mặt bạn bè đến những
-            giây phút thưởng thức riêng tư.
-          </p>
-        </div>
-      </div>
-    </header>
+    <link rel="stylesheet" href="./homepage.component.css" />
 
-    <!-- Video giới thiệu -->
-    <div class="intro-video">
-      <video src="video.mp4" controls></video>
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#fff8e5] text-[#333]">
+  <!-- Header -->
+  <header class="text-center py-10">
+    <div class="flex items-center justify-center gap-5">
+      <div class="intro-logo">
+        <img src="logo.png" alt="Win Snack Logo" class="w-30" />
+      </div>
+      <div class="intro-text text-justify max-w-2xl">
+        <p class="text-lg leading-7">
+          Win Snack là thương hiệu đồ ăn vặt chuyên cung cấp các loại bánh
+          tráng đa dạng, từ những hương vị truyền thống quen thuộc đến những sự
+          kết hợp sáng tạo hiện đại, phù hợp với mọi lứa tuổi. Với slogan "Ăn
+          là ghiền", chúng tôi luôn đặt chất lượng và sự hài lòng của khách
+          hàng lên hàng đầu...
+        </p>
+      </div>
     </div>
+  </header>
 
-    <!-- Cam Kết -->
-    <section id="commitments">
-      <h2>CAM KẾT TỪ WIN SNACK</h2>
-      <p>Tại sao bạn có thể tin tưởng Win Snack?</p>
-      <div class="commitment-items">
-        <div class="item">
-          <img src="quality.png" alt="Chất lượng" />
-          <h3>CAM KẾT CHẤT LƯỢNG</h3>
-          <p>
-            Sản phẩm đạt chuẩn an toàn vệ sinh thực phẩm và đảm bảo chất lượng cao
-            nhất đến tay người tiêu dùng.
-          </p>
-        </div>
-        <div class="item">
-          <img src="source.png" alt="Nguồn gốc" />
-          <h3>NGUỒN GỐC RÕ RÀNG</h3>
-          <p>
-            Nguyên liệu chọn lọc kỹ lưỡng và có nguồn gốc rõ ràng, đảm bảo sự minh
-            bạch và an toàn.
-          </p>
-        </div>
-        <div class="item">
-          <img src="certification.png" alt="Chứng nhận" />
-          <h3>CHỨNG NHẬN & GIẢI THƯỞNG</h3>
-          <p>
-            Đạt chứng nhận HACCP, ISO và nhiều giải thưởng uy tín khác về chất
-            lượng sản phẩm.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Đôi Lời Nhắn Gửi -->
-    <section id="message">
-      <div class="message-container">
-        <div class="message-image">
-          <img src="food.png" alt="Món ăn đặc trưng" />
-        </div>
-        <div class="message-text">
-          <h2>ĐÔI LỜI NHẮN GỬI</h2>
-          <p>
-            Chúng tôi luôn tin rằng mỗi món ăn vặt không chỉ là một sản phẩm, mà
-            còn là một cách để kết nối cảm xúc. Win Snack xin gửi lời cảm ơn chân
-            thành đến tất cả khách hàng đã đồng hành cùng chúng tôi trong hành
-            trình mang lại niềm vui và hương vị tuyệt vời này. Hy vọng những sản
-            phẩm từ Win Snack sẽ tiếp tục là sự lựa chọn yêu thích của bạn và gia
-            đình.
-          </p>
-        </div>
-      </div>
-    </section>
-
-<!-- Đối Tác Đồng Hành -->
-<section id="partners">
-    <h2>ĐỐI TÁC ĐỒNG HÀNH</h2>
-    <div class="partners-grid">
-      <!-- Cụm 1: Trang Thương Mại Điện Tử -->
-      <div class="partner-item">
-        <div class="partner-icons">
-          <img src="shopee.png" alt="Shopee" />
-          <img src="tiktok.png" alt="TikTok Shop" />
-          <img src="lazada.png" alt="Lazada" />
-        </div>
-        <h3>Trang Thương Mại Điện Tử</h3>
-        <p>
-          Các gian hàng trực tuyến của Win Snack được thiết kế chuyên nghiệp, đầy
-          đủ thông tin để bạn có thể đặt mua sản phẩm mọi lúc, mọi nơi với nhiều ưu
-          đãi hấp dẫn.
+  <!-- Video giới thiệu -->
+  <div class="flex justify-center mt-5">
+    <video src="video.mp4" controls class="w-4/5 max-w-4xl rounded-lg shadow-lg"></video>
+  </div>
+  <!-- Cam Kết -->
+  <section id="commitments" class="text-center py-10 px-5 max-w-screen-xl mx-auto">
+    <h2 class="text-4xl font-bold text-[#f77d00] mb-4">CAM KẾT TỪ WIN SNACK</h2>
+    <p class="text-xl mb-8">Tại sao bạn có thể tin tưởng Win Snack?</p>
+    <div class="flex justify-around flex-wrap gap-5">
+      <!-- Commitment Item 1 -->
+      <div
+        class="w-1/3 p-5 bg-white rounded-lg shadow-lg text-center hover:translate-y-1 transition duration-300 ease-in-out">
+        <img src="quality.png" alt="Chất lượng" class="w-20 mb-3" />
+        <h3 class="text-xl font-bold text-[#f77d00] mb-2">CAM KẾT CHẤT LƯỢNG</h3>
+        <p class="text-base leading-6">
+          Sản phẩm đạt chuẩn an toàn vệ sinh thực phẩm và đảm bảo chất lượng cao
+          nhất đến tay người tiêu dùng.
         </p>
       </div>
-      <!-- Cụm 2: Đơn Vị Giao Hàng Uy Tín -->
-      <div class="partner-item">
-        <div class="partner-icons">
-          <img src="ghn.png" alt="GHN" />
-          <img src="viettel.png" alt="Viettel Post" />
-          <img src="ghtk.png" alt="GHTK" />
-        </div>
-        <h3>Đơn Vị Giao Hàng Uy Tín</h3>
-        <p>
-          Với sự hợp tác từ các nền tảng giao hàng nhanh chóng và đáng tin cậy,
-          khách hàng có thể thưởng thức bánh tráng Win Snack một cách tiện lợi, chỉ
-          cần vài thao tác đặt hàng.
+
+      <!-- Commitment Item 2 -->
+      <div
+        class="w-1/3 p-5 bg-white rounded-lg shadow-lg text-center hover:translate-y-1 transition duration-300 ease-in-out">
+        <img src="source.png" alt="Nguồn gốc" class="w-20 mb-3" />
+        <h3 class="text-xl font-bold text-[#f77d00] mb-2">NGUỒN GỐC RÕ RÀNG</h3>
+        <p class="text-base leading-6">
+          Nguyên liệu chọn lọc kỹ lưỡng và có nguồn gốc rõ ràng, đảm bảo sự minh
+          bạch và an toàn.
         </p>
       </div>
-      <!-- Cụm 3: Siêu Thị và Cửa Hàng -->
-      <div class="partner-item">
-        <div class="partner-icons">
-          <img src="bigc.png" alt="BigC" />
-          <img src="ministop.png" alt="Ministop" />
-          <img src="bachhoaxanh.png" alt="Bách Hóa Xanh" />
-        </div>
-        <h3>Siêu Thị & Cửa Hàng Tiện Lợi</h3>
-        <p>
-          Các sản phẩm của Win Snack hiện diện tại nhiều hệ thống siêu thị và cửa
-          hàng tiện lợi hàng đầu, giúp bạn dễ dàng tìm thấy và trải nghiệm hương vị
-          bánh tráng chất lượng ngay gần nhà.
+
+      <!-- Commitment Item 3 -->
+      <div
+        class="w-1/3 p-5 bg-white rounded-lg shadow-lg text-center hover:translate-y-1 transition duration-300 ease-in-out">
+        <img src="certification.png" alt="Chứng nhận" class="w-20 mb-3" />
+        <h3 class="text-xl font-bold text-[#f77d00] mb-2">CHỨNG NHẬN & GIẢI THƯỞNG</h3>
+        <p class="text-base leading-6">
+          Đạt chứng nhận HACCP, ISO và nhiều giải thưởng uy tín khác về chất
+          lượng sản phẩm.
         </p>
       </div>
     </div>
   </section>
-  
+  <!-- Đôi Lời Nhắn Gửi -->
+  <section id="message" class="bg-[#ffd8b2] py-10 px-5">
+    <div class="flex items-center justify-center gap-5 flex-wrap">
+      <div class="message-image w-full max-w-xl">
+        <img src="food.png" alt="Món ăn đặc trưng" class="w-full rounded-lg shadow-lg" />
+      </div>
+      <div class="message-text flex-1 text-left max-w-2xl">
+        <h2 class="text-3xl font-bold text-[#f77d00] mb-6">ĐÔI LỜI NHẮN GỬI</h2>
+        <p class="text-xl leading-8">
+          Chúng tôi luôn tin rằng mỗi món ăn vặt không chỉ là một sản phẩm, mà
+          còn là một cách để kết nối cảm xúc. Win Snack xin gửi lời cảm ơn chân
+          thành đến tất cả khách hàng đã đồng hành cùng chúng tôi trong hành
+          trình mang lại niềm vui và hương vị tuyệt vời này. Hy vọng những sản
+          phẩm từ Win Snack sẽ tiếp tục là sự lựa chọn yêu thích của bạn và gia
+          đình.
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- Đối Tác Đồng Hành -->
+  <section id="partners" class="text-center py-10 px-5">
+    <h2 class="text-4xl font-bold text-[#f77d00] mb-8">ĐỐI TÁC ĐỒNG HÀNH</h2>
+    <div class="flex justify-around flex-wrap gap-5">
+      <!-- Partner Item 1 -->
+      <div class="w-1/3 p-5 bg-white rounded-lg shadow-lg">
+        <div class="partner-icons flex justify-center gap-5 mb-5">
+          <img src="assets/logo/shopee.png" alt="Shopee" class="w-15 h-15 rounded-full bg-[#f7f7f7] p-2 shadow-lg" />
+          <img src="assets/logo/tiktok.png" alt="TikTok Shop" class="w-15 h-15 rounded-full bg-[#f7f7f7] p-2 shadow-lg" />
+          <img src="assets/logo/lazada.png" alt="Lazada" class="w-15 h-15 rounded-full bg-[#f7f7f7] p-2 shadow-lg" />
+        </div>
+        <h3 class="text-xl font-bold text-[#f77d00] mb-3">Trang Thương Mại Điện Tử</h3>
+        <p class="text-base leading-6">
+          Các gian hàng trực tuyến của Win Snack được thiết kế chuyên nghiệp, đầy đủ thông tin để bạn có thể đặt mua sản
+          phẩm mọi lúc, mọi nơi với nhiều ưu đãi hấp dẫn.
+        </p>
+      </div>
 
-    <!-- Đội Ngũ -->
-    <section id="team">
-        <div class="team-container">
-        <h2>ĐỘI NGŨ WIN SNACK</h2>
-        <div class="team-members">
-            <!-- Thành viên 1 -->
-            <div class="member">
-            <img src="member1.jpg" alt="Phương Anh" />
-            <h3>Phương Anh</h3>
-            <div class="social-links">
-                <a href="#"><img src="facebook-icon.png" alt="Facebook" /></a>
-                <a href="#"><img src="linkedin-icon.png" alt="LinkedIn" /></a>
-            </div>
-            </div>
-            <!-- Thành viên 2 -->
-            <div class="member">
-            <img src="member2.jpg" alt="Duyên An" />
-            <h3>Duyên An</h3>
-            <div class="social-links">
-                <a href="#"><img src="facebook-icon.png" alt="Facebook" /></a>
-                <a href="#"><img src="linkedin-icon.png" alt="LinkedIn" /></a>
-            </div>
-            </div>
-            <!-- Thành viên 3 -->
-            <div class="member">
-            <img src="member3.jpg" alt="Khánh Linh" />
-            <h3>Khánh Linh</h3>
-            <div class="social-links">
-                <a href="#"><img src="facebook-icon.png" alt="Facebook" /></a>
-                <a href="#"><img src="linkedin-icon.png" alt="LinkedIn" /></a>
-            </div>
-            </div>
-            <!-- Thành viên 4 -->
-            <div class="member">
-            <img src="member4.jpg" alt="Bảo Trân" />
-            <h3>Bảo Trân</h3>
-            <div class="social-links">
-                <a href="#"><img src="facebook-icon.png" alt="Facebook" /></a>
-                <a href="#"><img src="linkedin-icon.png" alt="LinkedIn" /></a>
-            </div>
-            </div>
-            <!-- Thành viên 5 -->
-            <div class="member">
-            <img src="member5.jpg" alt="Thành Tý" />
-            <h3>Thành Tý</h3>
-            <div class="social-links">
-                <a href="#"><img src="facebook-icon.png" alt="Facebook" /></a>
-                <a href="#"><img src="linkedin-icon.png" alt="LinkedIn" /></a>
-            </div>
-            </div>
+      <!-- Partner Item 2 -->
+      <div class="w-1/3 p-5 bg-white rounded-lg shadow-lg">
+        <div class="partner-icons flex justify-center gap-5 mb-5">
+          <img src="assets/logo/ghn.png" alt="GHN" class="w-15 h-15 rounded-full bg-[#f7f7f7] p-2 shadow-lg" />
+          <img src="assets/logo/viettel.png" alt="Viettel Post" class="w-15 h-15 rounded-full bg-[#f7f7f7] p-2 shadow-lg" />
+          <img src="assets/logo/ghtk.png" alt="GHTK" class="w-15 h-15 rounded-full bg-[#f7f7f7] p-2 shadow-lg" />
         </div>
-        </div>
-    </section>
-  
+        <h3 class="text-xl font-bold text-[#f77d00] mb-3">Đơn Vị Giao Hàng Uy Tín</h3>
+        <p class="text-base leading-6">
+          Với sự hợp tác từ các nền tảng giao hàng nhanh chóng và đáng tin cậy, khách hàng có thể thưởng thức bánh tráng
+          Win Snack một cách tiện lợi, chỉ cần vài thao tác đặt hàng.
+        </p>
+      </div>
 
-    <!-- Đánh Giá -->
-    <section id="reviews">
-        <h2>ĐÁNH GIÁ TỪ KHÁCH HÀNG</h2>
-        <p class="subtitle">Khách hàng nói gì về Win Snack</p>
-        <div class="review-items">
-        <!-- Đánh giá 1 -->
-        <div class="review">
-            <div class="quote-icon">
-            <img src="quote-icon.png" alt="Quote" />
-            </div>
-            <p>
-            "Bánh tráng ở đây không chỉ ngon mà còn rất hợp vệ sinh, lần nào ăn cũng cảm giác an tâm. Đặc biệt, mấy loại bánh tráng mix vị siêu tiện lợi, mua một lần là có đủ loại để thử."
-            </p>
-            <div class="stars">
-            ★★★★☆
-            </div>
-            <h4>Khả Ái</h4>
-            <p class="location">Hồ Chí Minh</p>
+      <!-- Partner Item 3 -->
+      <div class="w-1/3 p-5 bg-white rounded-lg shadow-lg">
+        <div class="partner-icons flex justify-center gap-5 mb-5">
+          <img src="assets/logo/bigc.png" alt="BigC" class="w-15 h-15 rounded-full bg-[#f7f7f7] p-2 shadow-lg" />
+          <img src="assets/logo/ministop.png" alt="Ministop" class="w-15 h-15 rounded-full bg-[#f7f7f7] p-2 shadow-lg" />
+          <img src="assets/logo/bachhoaxanh.png" alt="Bách Hóa Xanh" class="w-15 h-15 rounded-full bg-[#f7f7f7] p-2 shadow-lg" />
         </div>
-        <!-- Đánh giá 2 -->
-        <div class="review">
-            <div class="quote-icon">
-            <img src="quote-icon.png" alt="Quote" />
-            </div>
-            <p>
-            "Cách đóng gói đẹp và chỉnh chu làm mình rất bất ngờ. Không chỉ ngon mà còn cực kỳ phù hợp để làm quà tặng. Mình đã tặng bạn bè mấy lần và ai cũng thích mê!"
-            </p>
-            <div class="stars">
-            ★★★★★
-            </div>
-            <h4>Anh Tuấn</h4>
-            <p class="location">Đà Nẵng</p>
+        <h3 class="text-xl font-bold text-[#f77d00] mb-3">Siêu Thị & Cửa Hàng Tiện Lợi</h3>
+        <p class="text-base leading-6">
+          Các sản phẩm của Win Snack hiện diện tại nhiều hệ thống siêu thị và cửa hàng tiện lợi hàng đầu, giúp bạn dễ
+          dàng tìm thấy và trải nghiệm hương vị bánh tráng chất lượng ngay gần nhà.
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- Đội Ngũ -->
+<section id="team" class="py-15 px-5 text-center bg-cover bg-center" style="background-image: url('background-team.jpg');">
+  <h2 class="text-4xl font-bold text-[#f77d00] mb-8">ĐỘI NGŨ WIN SNACK</h2>
+  <div class="max-w-screen-xl mx-auto">
+    <div class="flex justify-center flex-wrap gap-5">
+      <!-- Team Member 1 -->
+      <div class="w-1/5">
+        <img src="member1.jpg" alt="Phương Anh" class="w-30 h-30 rounded-full shadow-lg mb-3 mx-auto" />
+        <h3 class="text-lg font-bold">Phương Anh</h3>
+        <div class="social-links flex justify-center gap-3">
+          <a href="#"><img src="facebook-icon.png" alt="Facebook" class="w-6 h-6" /></a>
+          <a href="#"><img src="linkedin-icon.png" alt="LinkedIn" class="w-6 h-6" /></a>
         </div>
-        <!-- Đánh giá 3 -->
-        <div class="review">
-            <div class="quote-icon">
-            <img src="quote-icon.png" alt="Quote" />
-            </div>
-            <p>
-            "Mình thích nhất bộ DIY tự chế biến vì có đủ nguyên liệu và hướng dẫn chi tiết. Làm xong vừa ngon vừa vui, cảm giác như mình được làm đầu bếp thực thụ."
-            </p>
-            <div class="stars">
-            ★★★★☆
-            </div>
-            <h4>Khoa Trịnh</h4>
-            <p class="location">Hà Nội</p>
+      </div>
+
+      <!-- Team Member 2 -->
+      <div class="w-1/5">
+        <img src="member2.jpg" alt="Duyên An" class="w-30 h-30 rounded-full shadow-lg mb-3 mx-auto" />
+        <h3 class="text-lg font-bold">Duyên An</h3>
+        <div class="social-links flex justify-center gap-3">
+          <a href="#"><img src="facebook-icon.png" alt="Facebook" class="w-6 h-6" /></a>
+          <a href="#"><img src="linkedin-icon.png" alt="LinkedIn" class="w-6 h-6" /></a>
         </div>
+      </div>
+
+      <!-- Team Member 3 -->
+      <div class="w-1/5">
+        <img src="member3.jpg" alt="Khánh Linh" class="w-30 h-30 rounded-full shadow-lg mb-3 mx-auto" />
+        <h3 class="text-lg font-bold">Khánh Linh</h3>
+        <div class="social-links flex justify-center gap-3">
+          <a href="#"><img src="facebook-icon.png" alt="Facebook" class="w-6 h-6" /></a>
+          <a href="#"><img src="linkedin-icon.png" alt="LinkedIn" class="w-6 h-6" /></a>
         </div>
-        <!-- Phần số liệu -->
-        <div class="stats">
-        <div class="stat-item">
-            <h3>1287+</h3>
-            <p>Khách ghé thăm mỗi ngày</p>
+      </div>
+
+      <!-- Team Member 4 -->
+      <div class="w-1/5">
+        <img src="member4.jpg" alt="Bảo Trân" class="w-30 h-30 rounded-full shadow-lg mb-3 mx-auto" />
+        <h3 class="text-lg font-bold">Bảo Trân</h3>
+        <div class="social-links flex justify-center gap-3">
+          <a href="#"><img src="facebook-icon.png" alt="Facebook" class="w-6 h-6" /></a>
+          <a href="#"><img src="linkedin-icon.png" alt="LinkedIn" class="w-6 h-6" /></a>
         </div>
-        <div class="stat-item">
-            <h3>578+</h3>
-            <p>Đơn hàng được giao mỗi tháng</p>
+      </div>
+
+      <!-- Team Member 5 -->
+      <div class="w-1/5">
+        <img src="member5.jpg" alt="Thành Tý" class="w-30 h-30 rounded-full shadow-lg mb-3 mx-auto" />
+        <h3 class="text-lg font-bold">Thành Tý</h3>
+        <div class="social-links flex justify-center gap-3">
+          <a href="#"><img src="facebook-icon.png" alt="Facebook" class="w-6 h-6" /></a>
+          <a href="#"><img src="linkedin-icon.png" alt="LinkedIn" class="w-6 h-6" /></a>
         </div>
-        <div class="stat-item">
-            <h3>1440+</h3>
-            <p>Phản hồi tích cực</p>
-        </div>
-        <div class="stat-item">
-            <h3>40+</h3>
-            <p>Giải thưởng & đối tác</p>
-        </div>
-        </div>
-    </section>
-  
-  </body>
-</html>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Đánh Giá Từ Khách Hàng -->
+<section id="reviews" class="text-center py-15 px-5 bg-[#fff5ea]">
+  <h2 class="text-4xl font-bold text-[#f77d00] mb-4">ĐÁNH GIÁ TỪ KHÁCH HÀNG</h2>
+  <p class="text-xl mb-10">Khách hàng nói gì về Win Snack</p>
+  <div class="flex justify-around flex-wrap gap-5">
+    <!-- Review 1 -->
+    <div class="review bg-[#ffe9d6] p-5 rounded-lg shadow-lg max-w-xs relative">
+      <div class="quote-icon absolute top-[-20px] left-1/2 transform -translate-x-1/2 bg-[#ffd8b2] rounded-full w-10 h-10 flex items-center justify-center shadow-lg">
+        <img src="quote-icon.png" alt="Quote" class="w-5 h-5" />
+      </div>
+      <p class="text-base leading-6 mb-10">
+        "Bánh tráng ở đây không chỉ ngon mà còn rất hợp vệ sinh, lần nào ăn cũng cảm giác an tâm. Đặc biệt, mấy loại bánh tráng mix vị siêu tiện lợi, mua một lần là có đủ loại để thử."
+      </p>
+      <div class="stars text-yellow-400 text-xl mb-2">★★★★☆</div>
+      <h4 class="font-bold">Khả Ái</h4>
+      <p class="text-sm text-[#666]">Hồ Chí Minh</p>
+    </div>
+
+    <!-- Review 2 -->
+    <div class="review bg-[#ffe9d6] p-5 rounded-lg shadow-lg max-w-xs relative">
+      <div class="quote-icon absolute top-[-20px] left-1/2 transform -translate-x-1/2 bg-[#ffd8b2] rounded-full w-10 h-10 flex items-center justify-center shadow-lg">
+        <img src="quote-icon.png" alt="Quote" class="w-5 h-5" />
+      </div>
+      <p class="text-base leading-6 mb-10">
+        "Cách đóng gói đẹp và chỉnh chu làm mình rất bất ngờ. Không chỉ ngon mà còn cực kỳ phù hợp để làm quà tặng. Mình đã tặng bạn bè mấy lần và ai cũng thích mê!"
+      </p>
+      <div class="stars text-yellow-400 text-xl mb-2">★★★★★</div>
+      <h4 class="font-bold">Anh Tuấn</h4>
+      <p class="text-sm text-[#666]">Đà Nẵng</p>
+    </div>
+
+    <!-- Review 3 -->
+    <div class="review bg-[#ffe9d6] p-5 rounded-lg shadow-lg max-w-xs relative">
+      <div class="quote-icon absolute top-[-20px] left-1/2 transform -translate-x-1/2 bg-[#ffd8b2] rounded-full w-10 h-10 flex items-center justify-center shadow-lg">
+        <img src="quote-icon.png" alt="Quote" class="w-5 h-5" />
+      </div>
+      <p class="text-base leading-6 mb-10">
+        "Mình thích nhất bộ DIY tự chế biến vì có đủ nguyên liệu và hướng dẫn chi tiết. Làm xong vừa ngon vừa vui, cảm giác như mình được làm đầu bếp thực thụ."
+      </p>
+      <div class="stars text-yellow-400 text-xl mb-2">★★★★☆</div>
+      <h4 class="font-bold">Khoa Trịnh</h4>
+      <p class="text-sm text-[#666]">Hà Nội</p>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="flex justify-around flex-wrap gap-10 mt-10">
+    <div class="stat-item text-center">
+      <h3 class="text-3xl font-bold text-[#f77d00]">1287+</h3>
+      <p class="text-base">Khách ghé thăm mỗi ngày</p>
+    </div>
+    <div class="stat-item text-center">
+      <h3 class="text-3xl font-bold text-[#f77d00]">578+</h3>
+      <p class="text-base">Đơn hàng được giao mỗi tháng</p>
+    </div>
+    <div class="stat-item text-center">
+      <h3 class="text-3xl font-bold text-[#f77d00]">1440+</h3>
+      <p class="text-base">Phản hồi tích cực</p>
+    </div>
+    <div class="stat-item text-center">
+      <h3 class="text-3xl font-bold text-[#f77d00]">40+</h3>
+      <p class="text-base">Giải thưởng & đối tác</p>
+    </div>
+  </div>
+</section>
