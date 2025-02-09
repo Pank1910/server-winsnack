@@ -6,55 +6,55 @@
       loading="lazy"
       src="assets/images/header/logo.png"
       alt="Company Logo"
-      class="object-contain w-12 md:w-[55px]"
+      class="object-contain w-12 md:w-[45px]"
     />
-    <div class="ml-2">
+    <div class="ml-1">
       <img
         loading="lazy"
         src="assets/images/header/company-name.png"
         alt="Company Name"
-        class="object-contain w-24 md:w-[169px]"
+        class="object-contain w-24 md:w-[145px]"
       />
     </div>
   </div>
 
   <!-- Search Bar -->
-  <div class="flex items-center flex-grow max-w-full mx-4">
+  <div class="flex items-center flex-grow max-w-full text-sm mx-4">
     <!-- Container chứa phần dropdown & tìm kiếm -->
     <div class="relative flex-grow">
       <div class="flex items-center bg-[#F3F3F3] rounded-sm px-3 py-2">
         <!-- Dropdown "Tất cả sản phẩm": chuyển sang click -->
-        <div class="relative inline-block" (click)="toggleShowAllProducts()">
-          <div class="flex items-center font-semibold text-[#253D4E] cursor-pointer">
+        <div class="relative inline-flex whitespace-nowrap" (click)="toggleShowAllProducts()">
+          <div class="flex items-center font-semibold text-[#253D4E] cursor-pointer text-1x1">
             <span>Tất cả sản phẩm</span>
             <img
               loading="lazy"
               src="assets/images/header/dropdown.png"
               alt=""
-              class="w-4 h-4 ml-1"
+              class="w-5 h-4 ml-1"
             />
           </div>
           <!-- Dropdown Content: căn lề trái ngay dưới container -->
           <div *ngIf="showAllProducts" class="absolute left-0 top-full mt-1 w-40 bg-white shadow-lg rounded-md z-10">
-            <a routerLink="/products/banh-trang-tron-san" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
+            <a routerLink="/product-category/banh-trang-tron-san" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
               Bánh tráng trộn sẵn
             </a>
-            <a routerLink="/products/banh-trang-nuong" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
+            <a routerLink="/product-category/banh-trang-nuong" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
               Bánh tráng nướng
             </a>
-            <a routerLink="/products/banh-trang-ngot" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
+            <a routerLink="/product-category/banh-trang-ngot" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
               Bánh tráng ngọt
             </a>
-            <a routerLink="/products/combo-mix-vi" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
+            <a routerLink="/product-category/combo-mix-vi" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
               Combo mix vị
             </a>
-            <a routerLink="/products/nguyen-lieu-le" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
+            <a routerLink="/product-category/nguyen-lieu-le" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
               Nguyên liệu lẻ
             </a>
           </div>
         </div>
         <!-- Divider -->
-        <div class="flex items-center ml-4">
+        <div class="flex items-center ml-6">
           <img
             loading="lazy"
             src="assets/images/header/divider.png"
@@ -63,14 +63,14 @@
           />
         </div>
         <!-- Phần text "Tìm kiếm" -->
-        <div class="ml-4 font-medium text-[#A0A0A0]">
-          Tìm kiếm
+        <div class="w-full ml-2 font-medium text-[#A0A0A0]">
+          <input type="text" placeholder="Tìm kiếm đee" class="w-full max-w-3xl px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF9413] focus:border-[#FF9413] transition-all duration-300">
         </div>
       </div>
     </div>
     <!-- Nút Search -->
     <div>
-      <div class="flex items-center bg-[#FF9413] rounded-sm p-2">
+      <div class="flex items-center bg-[#FF9413] rounded-sm p-2 cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl">
         <img
           loading="lazy"
           src="assets/images/header/search.png"
@@ -98,7 +98,7 @@
         </span>
       </div>
       
-      <div class="ml-1">
+      <div class="whitespace-nowrap ml-1">
         <div class="text-[#253D4E] text-xs">Yêu thích</div>
         <div class="text-[#FF9413] text-xs">{{ header.price | number }}đ</div>
       </div>
@@ -118,7 +118,7 @@
           {{ header.cart.number }}
         </span>
       </div>      
-      <div class="ml-1">
+      <div class="whitespace-nowrap ml-1">
         <div class="text-[#253D4E] text-xs">Giỏ hàng</div>
         <div class="text-[#FF9413] text-xs">25.000đ</div>
       </div>
@@ -126,11 +126,11 @@
   </div>
 
   <!-- Register and Login Buttons -->
-  <div class="flex space-x-4 mt-4 ml-4 md:mt-0">
-    <button class="bg-[#FF9413] text-white rounded-lg px-4 py-2 shadow-md text-sm font-semibold">
+  <div class="whitespace-nowrap flex space-x-4 mt-4 ml-4 md:mt-0">
+    <button class="bg-[#FF9413] text-white rounded-lg px-2 py-2 shadow-md text-sm font-semibold transition-transform duration-300 ease-in-out hover:scale-105 hover:rotate-1">
       Đăng ký
     </button>
-    <button class="border-2 border-[#FF9413] text-[#FF9413] rounded-lg px-4 py-2 text-sm font-semibold">
+    <button class="border-2 border-[#FF9413] text-[#FF9413] rounded-lg px-2 py-2 text-sm font-semibold transition-all duration-300 ease-in-out hover:bg-[#FF9413] hover:text-white">
       Đăng nhập
     </button>
   </div>
@@ -139,10 +139,12 @@
 <!-- Navigation Section -->
 <div class="flex flex-wrap md:flex-nowrap items-center justify-between py-2 px-4 md:px-8 lg:px-32 bg-[#FFF8EC] font-medium">
   <!-- "Tất cả sản phẩm" button (Navigation) -->
-  <div class="flex items-center bg-[#FF9413] text-white rounded-sm px-4 py-2 cursor-pointer">
-    <img src="assets/images/header/all-products.png" class="w-6 h-6" alt="All Products" />
-    <span class="ml-2">Tất cả sản phẩm</span>
-    <i class="fa fa-angle-down ml-2"></i>
+  <div class="flex items-center bg-[#FF9413] text-white rounded-sm px-3 py-2 cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 hover:bg-gradient-to-b hover:from-[#FF9413] hover:to-[#FFF8EC] hover:-translate-y-1">
+    <a routerLink="/product-category" class="flex items-center w-full">
+      <img src="assets/images/header/all-products.png" class="w-6 h-6" alt="All Products" />
+      <span class="ml-3">Tất cả sản phẩm</span>
+      <i class="fa fa-angle-down ml-2"></i>
+    </a>
   </div>
 
   <!-- Navigation Links -->
@@ -162,7 +164,7 @@
       <!-- Dropdown Content -->
       <div *ngIf="showAbout" class="absolute left-0 top-full mt-1 w-40 md:w-48 bg-white shadow-lg rounded-md z-50">
         <div class="py-1">
-          <a routerLink="/about/intro" class="block px-4 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
+          <a routerLink="/about" class="block px-4 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
             Giới thiệu
           </a>
           <a routerLink="/about/policies" class="block px-4 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
@@ -172,11 +174,11 @@
       </div>
     </div>
 
-    <a routerLink="/events" class="flex items-center hover:underline">
+    <a routerLink="/minigame" class="flex items-center hover:underline">
       <img loading="lazy" src="assets/images/header/event.png" class="w-5 h-5" alt="Events" />
       <span class="ml-1">Sự kiện</span>
     </a>
-    <a routerLink="/blog" class="flex items-center hover:underline">
+    <a routerLink="/blog" class="ml-3 flex items-center hover:underline">
       <img loading="lazy" src="assets/images/header/blog.png" class="w-5 h-5" alt="Blog" />
       <span class="ml-1">Blog</span>
     </a>

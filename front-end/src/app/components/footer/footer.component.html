@@ -1,1 +1,193 @@
-<p>footer works!</p>
+<footer
+  class="flex flex-col items-center overflow-hidden px-20 py-5 bg-[#FF9413] max-md:px-5 font-montserrat"
+>
+  <!-- Main Container -->
+  <div class="w-full max-w-[1252px]">
+    <div class="flex gap-5 max-md:flex-col">
+
+      <!-- <p>Logo & Slogan</p> -->
+      <section class="w-[19%] max-md:w-full max-md:ml-0">
+        <div
+          class="flex flex-wrap items-center gap-3.5 text-sm font-semibold leading-5 text-center text-[#FFFFFF] h-[221px] max-md:mt-10"
+        >
+          <img
+            loading="lazy"
+            src="assets/images/footer/company-logo.png"
+            alt="Company Logo"
+            class="w-[202px] aspect-[1.54] object-contain shrink-0 self-stretch my-auto"
+          />
+          <p class="grow shrink self-stretch my-auto w-[163px]">
+            "Ăn là ghiền"<br />
+            Mang đến niềm vui và sự tiện lợi qua từng sản phẩm ăn vặt chất lượng cao.
+          </p>
+        </div>
+      </section>
+
+      <!-- <p>Sản phẩm</p> -->
+      <nav class="w-[17%] max-md:w-full max-md:ml-0 ml-5">
+        <div
+          class="flex flex-col items-start text-lg font-medium text-[#000000] max-md:mt-10"
+        >
+          <h2 class="text-xl font-bold text-[#FFFFFF]">Sản phẩm</h2>
+          <a routerLink="/banh-trang-tron" class="mt-3 self-stretch">
+            Bánh tráng trộn sẵn
+          </a>
+          <a
+            routerLink="/banh-trang-nuong"
+            class="mt-3 self-stretch max-md:mr-2.5"
+          >
+            Bánh tráng nướng
+          </a>
+          <a routerLink="/banh-trang-ngot" class="mt-3">
+            Bánh tráng ngọt
+          </a>
+          <a routerLink="/combo-mix-vi" class="mt-3">
+            Combo Mix vị
+          </a>
+          <a routerLink="/nguyen-lieu-le" class="mt-3">
+            Nguyên liệu lẻ
+          </a>
+        </div>
+      </nav>
+
+      <!-- <p>Công ty</p> -->
+      <nav class="w-1/5 max-md:w-full max-md:ml-0 ml-5">
+        <div
+          class="flex flex-col items-start text-lg font-medium text-[#000000] max-md:mt-10"
+        >
+          <h2 class="text-xl font-bold text-[#FFFFFF]">Công ty</h2>
+          <a routerLink="/gioi-thieu" class="mt-3">Giới thiệu</a>
+          <a
+            routerLink="/chinh-sach-ban-hang"
+            class="mt-4 self-stretch"
+          >
+            Chính sách bán hàng &amp; Đổi trả
+          </a>
+          <a
+            routerLink="/chinh-sach-van-chuyen"
+            class="mt-4 self-stretch max-md:mr-0.5"
+          >
+            Chính sách vận chuyển
+          </a>
+          <a routerLink="/chinh-sach-bao-mat" class="mt-4">
+            Chính sách bảo mật
+          </a>
+        </div>
+      </nav>
+
+      <!-- <p>Nhận thông báo</p> -->
+      <section class="w-[45%] max-md:w-full max-md:ml-0 ml-5">
+        <div class="flex flex-col w-full max-md:mt-10">
+          <h2 class="text-xl font-bold leading-none text-[#FFFFFF]">
+            Nhận thông báo
+          </h2>
+          <p class="mt-4 text-base leading-6 text-[#000000]">
+            <span class="font-medium">
+              Điền email vào đây để nhận ngay thông báo siêu xịn về sự kiện hot
+              trend và món mới cực ghiền từ
+            </span>
+            <span class="font-medium text-[#000000]"> Win Snack</span>
+            <span class="font-medium"> nha!</span>
+          </p>
+
+          <div class="flex gap-4 mt-3.5 max-md:mr-2">
+            <input
+              type="email"
+              placeholder="Nhập Email của bạn"
+              class="grow p-4 text-base font-medium bg-[#FFE0C3] rounded-lg text-neutral-400 max-md:pr-5"
+            />
+            <button
+              class="px-9 py-4 text-xl font-bold bg-[#FFE0C3] rounded-[35px] text-[#333333] hover:text-[#000000] max-md:px-5 transition-transform duration-300 hover:scale-105"
+            >
+              Đăng ký
+            </button>
+          </div>
+
+          <div class="flex gap-5 items-center mt-5">
+            <a routerLink="/social/facebook" aria-label="Facebook">
+              <img
+                loading="lazy"
+                src="assets/images/footer/facebook.png"
+                alt="Facebook Icon"
+                class="w-[31px] aspect-square object-contain"
+              />
+            </a>
+            <a routerLink="/social/instagram" aria-label="instagram">
+              <img
+                loading="lazy"
+                src="assets/images/footer/instagram.png"
+                alt="Instagram Icon"
+                class="w-[31px] aspect-square object-contain"
+              />
+            </a>
+            <a routerLink="/social/tiktok" aria-label="tiktok">
+              <img
+                loading="lazy"
+                src="assets/images/footer/tiktok.png"
+                alt="Tiktok Icon"
+                class="w-[31px] aspect-square object-contain"
+              />
+            </a>
+            <a routerLink="/social/linkedin" aria-label="LinkedIn">
+              <img
+                loading="lazy"
+                src="assets/images/footer/linkedin.png"
+                alt="LinkedIn Icon"
+                class="w-[31px] aspect-square object-contain"
+              />
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <img
+    loading="lazy"
+    src="assets/images/footer/footer-divider.png"
+    alt="Footer Divider"
+    class="mt-8 w-full max-w-[1232px] object-contain"
+  />
+
+  <div
+    class="flex flex-wrap justify-between gap-5 mt-8 w-full max-w-[1191px] text-base font-semibold"
+  >
+    <p class="text-[#333333]">
+      Copyright © 2024 Winsnack
+    </p>
+    <div class="flex flex-wrap gap-8 text-[#FFE0C3]">
+      <!-- <p>Địa chỉ</p> -->
+      <address class="flex flex-auto gap-4 leading-6 not-italic">
+        <img
+          loading="lazy"
+          src="assets/images/footer/location.png"
+          alt="Location Icon"
+          class="w-6 aspect-square object-contain"
+        />
+        <span>
+          567 đường Cách mạng tháng 8, Phường 9, Quận 10, TP HCM.
+        </span>
+      </address>
+      <!-- <p>Liên hệ</p> -->
+      <div class="flex flex-auto gap-4 items-start whitespace-nowrap">
+        <img
+          loading="lazy"
+          src="assets/images/footer/email.png"
+          alt="Email Icon"
+          class="w-6 aspect-square object-contain"
+        />
+        <a href="mailto:winsnack@gmail.com" class="basis-auto">
+          winsnack&#64;gmail.com
+        </a>
+        <img
+          loading="lazy"
+          src="assets/images/footer/phone.png"
+          alt="Phone Icon"
+          class="w-6 aspect-square object-contain"
+        />
+        <a href="tel:1233-7777">1233-7777</a>
+      </div>
+    </div>
+  </div>
+</footer>

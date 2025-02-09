@@ -1,195 +1,129 @@
-<head>
-    <link rel="stylesheet" href="minigame.component.css">
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="Win Snack - Thưởng thức những món snack ngon nhất với hương vị hấp dẫn">
+        <meta name="keywords" content="snack, bánh tráng, đồ ăn vặt, Win Snack">
+        <meta name="author" content="Win Snack">
+        <title>Win Snack</title>
 
-<div class="program-container">
-    <div class="text-content">
-      <h2 class="program-title">CHƯƠNG TRÌNH ĐẶC BIỆT</h2>
-      <h2 class="program-subtitle">TRI ÂN KHÁCH HÀNG</h2>
-      <p class="program-description">
+        <!-- Styles -->
+        <link rel="stylesheet" href="./minigame.component.css" />
+
+        <!-- TailwindCSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+<div class="program-container flex flex-col md:flex-row items-center justify-between p-4 bg-[#FFF8EC]">
+    <!-- Text content (left side) -->
+    <div class="text-content w-full md:w-1/2 p-4">
+      <h2 class="program-title text-3xl font-bold text-[#F7941D] mb-1 leading-tight">CHƯƠNG TRÌNH ĐẶC BIỆT</h2>
+      <h2 class="program-subtitle text-3xl font-bold text-[#197544] mt-0 leading-tight">TRI ÂN KHÁCH HÀNG</h2>
+      <p class="program-description text-lg text-[#333] mb-5">
         Chương trình đặc biệt <b>“SĂN QUÀ NHỎ - ĐỔI QUÀ TO”</b> của WinSnack nhằm tri ân khách hàng trong tháng 2 này
       </p>
-      <p class="program-time">
+      <p class="program-time text-lg text-[#197544] mb-5">
         <b>Thời gian áp dụng:</b> từ 01/02/2025 - 28/02/2025
       </p>
-      <button class="details-button">Xem Chi Tiết</button>
+      <button class="details-button bg-[#F7941D] text-white text-lg py-2 px-5 rounded-full border-none cursor-pointer transition-colors hover:bg-[#F16A1D]" (click)="viewDetails()">
+        Xem Chi Tiết
+      </button>
     </div>
-    <div class="image-content">
-      <img src="/front-end/src/assets/images/minigame/Banner.png" alt="Banner" class="program-image" />
+  
+    <!-- Image content (right side) -->
+    <div class="image-content w-full md:w-1/2 flex justify-center items-center">
+      <img src="/front-end/src/assets/images/minigame/Banner.png" alt="Banner" class="program-image w-[480px] h-[300px] rounded-[66px] object-cover" />
     </div>
-    <!-- Thêm phần "Thông tin chi tiết" -->
   </div>
-
-<div class="info-details">
-    <h2>Thông tin chi tiết</h2>
-    <div class="details-content">
-        <!-- Left Section: Image -->
-        <div class="details-image">
-            <img src="/front-end/src/assets/images/minigame/Mascot.png" alt="Image" class="details-image-img">
-        </div>
-
-        <!-- Right Section: Text -->
-        <div class="details-text">
-            <p>👉Khi mua bánh tráng Win Snack, trong mỗi bịch bánh tráng sẽ có một thẻ nhân vật Ricey với 3 màu sắc Cam, Xanh, Vàng tương ứng với 3 loại bánh tráng của Win Snack.</p>
-            <p>👉Các bạn chỉ cần thu thập các thẻ nhân vật Ricey này, đủ 3 bạn Ricey cùng màu sẽ được đổi một bịch bánh tráng tương ứng với vị mà bạn Ricey đó đại diện:</p>
-            <ul>
-                <li>🧡 3 Ricey Cam đổi 1 Bánh tráng chà bông</li>
-                <li>💚 3 Ricey Xanh đổi 1 Bánh tráng rong biển</li>
-                <li>💛 3 Ricey Vàng đổi 1 Bánh tráng bơ</li>
-            </ul>
-            <p>🥰Khi nhận được quà đổi thưởng, bạn vui lòng gửi lại Win Snack thẻ nhân vật Ricey nhé!</p>
-            <p>⏳Thời gian: Từ ngày 01/02/2025 đến 28/02/2025</p>
-        </div>
+  
+  <!-- Information details -->
+  <div class="info-details bg-[#FF9413] p-10 text-center mt-8 font-montserrat shadow-lg">
+    <h2 class="text-3xl font-bold text-white mb-5">Thông tin chi tiết</h2>
+    <div class="details-content flex justify-between items-center mt-8">
+      <!-- Left Section: Image -->
+      <div class="details-image flex-1 flex justify-center items-center pr-5">
+        <img src="/front-end/src/assets/images/minigame/Mascot.png" alt="Image" class="details-image-img max-w-full h-auto rounded-lg" />
+      </div>
+  
+      <!-- Right Section: Text -->
+      <div class="details-text flex-2 text-left text-white">
+        <p class="text-xl leading-8 text-white mb-4">
+          👉Khi mua bánh tráng Win Snack, trong mỗi bịch bánh tráng sẽ có một thẻ nhân vật Ricey với 3 màu sắc Cam, Xanh, Vàng tương ứng với 3 loại bánh tráng của Win Snack.
+        </p>
+        <p class="text-xl leading-8 text-white mb-4">
+          👉Các bạn chỉ cần thu thập các thẻ nhân vật Ricey này, đủ 3 bạn Ricey cùng màu sẽ được đổi một bịch bánh tráng tương ứng với vị mà bạn Ricey đó đại diện:
+        </p>
+        <ul class="list-none pl-0 mb-4">
+          <li class="text-xl text-white mb-2">🧡 3 Ricey Cam đổi 1 Bánh tráng chà bông</li>
+          <li class="text-xl text-white mb-2">💚 3 Ricey Xanh đổi 1 Bánh tráng rong biển</li>
+          <li class="text-xl text-white mb-2">💛 3 Ricey Vàng đổi 1 Bánh tráng bơ</li>
+        </ul>
+        <p class="text-xl leading-8 text-white mb-4">🥰Khi nhận được quà đổi thưởng, bạn vui lòng gửi lại Win Snack thẻ nhân vật Ricey nhé!</p>
+        <p class="text-xl leading-8 text-white mb-4">⏳Thời gian: Từ ngày 01/02/2025 đến 28/02/2025</p>
+      </div>
     </div>
-    <button class="details-button1">MUA NGAY</button>
-
-</div>
-<div class="product-section">
-    <h3>Sản phẩm bán chạy</h3>
-    <p>Top sản phẩm có doanh số cao nhất trong tuần</p>
-    <!-- Hàng sản phẩm đầu tiên -->
-<div class="products-grid">
-    <div class="product-card">
-        <div class="discount-badge">30%</div>
-        <img src="/front-end/src/assets/images/product-category/Chabong.png" alt="Bánh tráng chà bông">
-        <p style="font-size: 15px; color: #686766;">⭐ 5.0 | +100 đánh giá</p>
-        <h3>Bánh tráng chà bông</h3>
-        <p style="font-size: 12px; color: #898989;">Bánh tráng phơi sương, xoài sấy, gia vị...</p>
-        <div class="price">
-            <span class="old-price">30.000Đ</span>
-            <span class="new-price">25.000Đ</span>
-        </div>
-    </div>
-
-    <div class="product-card">
-        <div class="discount-badge">30%</div>
-        <img src="/front-end/src/assets/images/product-category/Rongbien.png" alt="Bánh tráng rong biển">
-        <p style="font-size: 15px; color: #686766;">⭐ 5.0 | +100 đánh giá</p>
-        <h3>Bánh tráng rong biển</h3>
-        <p style="font-size: 12px; color: #898989;">Bánh tráng phơi sương, xoài sấy, gia vị...</p>
-        <div class="price">
-            <span class="old-price">30.000Đ</span>
-            <span class="new-price">25.000Đ</span>
-        </div>
-    </div>
-
-    <div class="product-card">
-        <div class="discount-badge">30%</div>
-        <img src="/front-end/src/assets/images/product-category/Chanhday.png" alt="Trà xanh chanh dây">
-        <p style="font-size: 15px; color: #686766;">⭐ 4.8 | +30 đánh giá</p>
-        <h3>Trà xanh chanh dây</h3>
-        <p style="font-size: 12px; color: #898989;">Bánh tráng phơi sương, xoài sấy, gia vị...</p>
-        <div class="price">
-            <span class="new-price">95.000Đ</span>
-        </div>
-    </div>
-
-    <div class="product-card">
-        <div class="discount-badge">30%</div>
-        <img src="/front-end/src/assets/images/product-category/Bo.png" alt="Bánh tráng sốt bơ">
-        <p style="font-size: 15px; color: #686766;">⭐ 5.0 | +100 đánh giá</p>
-        <h3>Bánh tráng sốt bơ</h3>
-        <p style="font-size: 12px; color: #898989;">Bánh tráng phơi sương, xoài sấy, gia vị...</p>
-        <div class="price">
-            <span class="old-price">30.000Đ</span>
-            <span class="new-price">25.000Đ</span>
-        </div>
-    </div>
-</div>
-
-<!-- Hàng sản phẩm thứ hai -->
-<div class="products-grid">
-    <div class="product-card">
-        <div class="discount-badge">30%</div>
-        <img src="/front-end/src/assets/images/product-category/Ga.png" alt="Bánh tráng gà cay">
-        <p style="font-size: 15px; color: #686766;">⭐ 4.9 | +10 đánh giá</p>
-        <h3>Bánh tráng gà cay</h3>
-        <p style="font-size: 12px; color: #898989;">Bánh tráng phơi sương, xoài sấy, gia vị...</p>
-        <div class="price">
-            <span class="old-price">70.000Đ</span>
-            <span class="new-price">40.000Đ</span>
-        </div>
-    </div>
-
-    <div class="product-card">
-        <div class="discount-badge">30%</div>
-        <img src="/front-end/src/assets/images/product-category/Xoai.png" alt="Xoài chín sấy khô">
-        <p style="font-size: 15px; color: #686766;">⭐ 4.9 | +10 đánh giá</p>
-        <h3>Xoài chín sấy khô</h3>
-        <p style="font-size: 12px; color: #898989;">Bánh tráng phơi sương, xoài sấy, gia vị...</p>
-        <div class="price">
-            <span class="old-price">90.000Đ</span>
-            <span class="new-price">65.000Đ</span>
-        </div>
-    </div>
-
-    <div class="product-card">
-        <div class="discount-badge">30%</div>
-        <img src="/front-end/src/assets/images/product-category/Gaoluc.png" alt="Bánh tráng gạo lức">
-        <p style="font-size: 15px; color: #686766;">⭐ 4.8 | +20 đánh giá</p>
-        <h3>Bánh tráng gạo lức</h3>
-        <p style="font-size: 12px; color: #898989;">Bánh tráng phơi sương, xoài sấy, gia vị...</p>
-        <div class="price">
-            <span class="old-price">110.000Đ</span>
-            <span class="new-price">75.000Đ</span>
-        </div>
-    </div>
-
-    <div class="product-card">
-        <div class="discount-badge">30%</div>
-        <img src="/front-end/src/assets/images/product-category/Phoisuong.png" alt="Bánh tráng phơi sương">
-        <p style="font-size: 15px; color: #686766;">⭐ 4.9 | +45 đánh giá</p>
-        <h3>Bánh tráng phơi sương</h3>
-        <p style="font-size: 12px; color: #898989;">Bánh tráng phơi sương, xoài sấy, gia vị...</p>
-        <div class="price">
-            <span class="new-price">55.000Đ</span>
-        </div>
-    </div>
-</div>
-<button class="view-more">XEM THÊM</button>
-</div>
-
-<div>
-    
-    
-</div>
-<div class="banner-container">
-    <img src="/front-end/src/assets/images/minigame/Banner2.png" alt="Banner Quảng Cáo" class="banner-img">
+    <button class="details-button1 bg-[#197544] text-white text-2xl py-2 px-5 rounded-full border-none cursor-pointer transition-colors hover:bg-[#F16A1D]" (click)="buyNow()">
+      MUA NGAY
+    </button>
   </div>
-
-  <div class="signup-container">
-    <h2 class="signup-title">Đăng ký để nhận thông tin về các chương trình ưu đãi</h2>
-    <div class="signup-content">
-      <!-- Left side: Form -->
-      <div class="form-content">
-        <div class="form-box">
-        <form class="signup-form">
-          <label for="fullName">Họ và tên *</label>
-          <input type="text" id="fullName" placeholder="Nhập họ và tên" required />
   
-          <label for="phoneNumber">Số điện thoại *</label>
-          <input type="text" id="phoneNumber" placeholder="Nhập số điện thoại" required />
+  <!-- Product Section -->
+  <div class="product-section bg-[#FFF8EC] p-10 text-center">
+    <h3 class="text-3xl font-semibold text-[#197544] mb-4">Sản phẩm bán chạy</h3>
+    <p class="text-xl text-[#333] mb-5">Top sản phẩm có doanh số cao nhất trong tuần</p>
   
-          <label for="email">Địa chỉ email (tùy chọn)</label>
-          <input type="email" id="email" placeholder="Nhập địa chỉ email" />
+    <!-- Products Grid -->
+    <div class="products-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-5">
+      <div *ngFor="let product of topSellingProducts" class="product-card bg-white p-5 rounded-lg shadow-lg relative hover:transform hover:translate-y-2 transition-all">
+        <div class="discount-badge absolute top-2 left-2 bg-red-600 text-white text-sm font-bold py-1 px-2 rounded">{{product.discount}}%</div>
+        <img [src]="product.image" alt="{{product.name}}" class="w-full h-[150px] object-cover rounded-lg" />
+        <p class="text-sm text-[#686766] mt-2">⭐ {{product.rating}} | +{{product.reviews}} đánh giá</p>
+        <h3 class="text-lg font-semibold mt-2">{{product.name}}</h3>
+        <p class="text-sm text-[#898989] mt-1">{{product.description}}</p>
+        <div class="price mt-2">
+          <span class="old-price line-through text-[#777] mr-2">{{product.originalPrice}}Đ</span>
+          <span class="new-price text-red-600 font-semibold">{{product.discountedPrice}}Đ</span>
+        </div>
+      </div>
+    </div>
+  </div>
   
-          <button type="submit" class="signup-button">Đăng ký</button>
+  <!-- View More Button -->
+  <button class="view-more bg-transparent text-[#197544] border-2 border-[#197544] py-2 px-5 rounded-full cursor-pointer hover:bg-[#197544] hover:text-white mt-8">
+    XEM THÊM
+  </button>
+  
+  <!-- Banner Container -->
+  <div class="banner-container flex justify-center items-center mt-10">
+    <img src="/front-end/src/assets/images/minigame/Banner2.png" alt="Banner Quảng Cáo" class="banner-img w-full h-auto shadow-md" />
+  </div>
+  
+  <!-- Signup Container -->
+  <div class="signup-container bg-[#Ffe0c3] p-8 shadow-lg text-center mt-10">
+    <h2 class="signup-title text-3xl font-semibold text-[#333] mb-6">Đăng ký để nhận thông tin về các chương trình ưu đãi</h2>
+    <div class="signup-content flex justify-between gap-10 items-center mt-8">
+      <!-- Left Side: Form -->
+      <div class="form-content w-full sm:w-1/2">
+        <form class="signup-form flex flex-col gap-5">
+          <label for="fullName" class="text-left text-xl font-bold">Họ và tên *</label>
+          <input type="text" id="fullName" placeholder="Nhập họ và tên" class="p-3 text-xl border border-gray-300 rounded-md" required />
+          
+          <label for="phoneNumber" class="text-left text-xl font-bold">Số điện thoại *</label>
+          <input type="text" id="phoneNumber" placeholder="Nhập số điện thoại" class="p-3 text-xl border border-gray-300 rounded-md" required />
+          
+          <label for="email" class="text-left text-xl font-bold">Địa chỉ email (tùy chọn)</label>
+          <input type="email" id="email" placeholder="Nhập địa chỉ email" class="p-3 text-xl border border-gray-300 rounded-md" />
+          
+          <button type="submit" class="signup-button bg-[#197544] text-white py-3 rounded-full cursor-pointer transition-colors hover:bg-[#F16A1D]">
+            Đăng ký
+          </button>
         </form>
       </div>
-      </div>
-      
-      <!-- Right side: Product images -->
-      <div class="product-images">
-        <img src="/front-end/src/assets/images/minigame/Product.png" alt="Product 1" />
+  
+      <!-- Right Side: Product Images -->
+      <div class="product-images w-full sm:w-1/2 flex justify-center gap-4">
+        <img src="/front-end/src/assets/images/minigame/Product.png" alt="Product" class="w-[300px] h-auto rounded-md" />
       </div>
     </div>
   </div>
-  
-  
-  
-
-
-
-
-  
-</head>
   
