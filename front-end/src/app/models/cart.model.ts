@@ -1,13 +1,12 @@
+export interface Product {
+  productID: string;       // ID sản phẩm
+  name: string;            // Tên sản phẩm
+  price: number;           // Giá sản phẩm
+  quantity: number;        // Số lượng sản phẩm
+  imageUrl: string;        // Đường dẫn ảnh sản phẩm
+}
+
 export interface Cart {
-    items: Array<CartItem>;
-  }
-  
-  export interface CartItem {
-    sku: string;       // Mã sản phẩm duy nhất (bắt buộc)
-    product: string;   // Tên sản phẩm (bắt buộc)
-    name: string;      // Tên hiển thị (bắt buộc)
-    price: number;     // Giá của sản phẩm (bắt buộc)
-    quantity: number;  // Số lượng trong giỏ hàng (bắt buộc)
-    image: string;     // URL hình ảnh sản phẩm (bắt buộc)
-  }
-  
+  cartID?: string;         // ID giỏ hàng (không bắt buộc)
+  products: Product[];     // Danh sách sản phẩm trong giỏ hàng
+}
