@@ -28,7 +28,7 @@
         <div class="main-content">
             <div class="profile-header">
                 <div class="profile-avatar">
-                    <img src="avatar.jpg" alt="Linh Linh">
+                    <img src="/front-end/src/assets/images/account/avatar.png" alt="Linh Linh">
                 </div>
                 <div class="profile-info">
                     <h2>Linh Linh</h2>
@@ -59,7 +59,7 @@
                     <span>KTX Khu B, Mac Dinh Chi, Phường Linh Xuân, TP. Thủ Đức, TP. Hồ Chí Minh</span>
                 </div>
             </div>
-
+            
             <div class="notification-preferences">
                 <label class="checkbox-container">
                     <input type="checkbox" checked>
@@ -76,13 +76,23 @@
         
             <div class="address-section">
                 <h2>ĐỊA CHỈ</h2>
-                <div class="address-card">
-                    <div class="address-header">
-                        <span>Linh Linh (mặc định)</span>
+                <div class="address-container">
+                    <div class="address-card">
+                        <div class="address-header">
+                            <span>Linh Linh (mặc định)</span>
+                        </div>
+                        <div class="address-details">
+                            <p>Số điện thoại: 0123456789</p>
+                            <p>Địa chỉ: KTX Khu B, ĐHQG TP HCM</p>
+                        </div>
                     </div>
-                    <div class="address-details">
-                        <p>Số điện thoại: 0123456789</p>
-                        <p>Địa chỉ: KTX Khu B, ĐHQG TP HCM</p>
+                    <!-- Bản đồ Google -->
+                    <div class="map-container">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.336509723974!2d106.78134937505632!3d10.862176689292305!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175276fc1db3d7f%3A0x4358f22a0a462f1!2zS2h1IHBo4buRIEIsIMSQSCBRdeG7kWMgR2lhIEPhuqVu!5e0!3m2!1svi!2s!4v1700000000000"
+                            allowfullscreen=""
+                            loading="lazy">
+                        </iframe>
                     </div>
                 </div>
             </div>
