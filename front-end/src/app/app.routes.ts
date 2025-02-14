@@ -10,7 +10,8 @@ import { AboutComponent } from './pages/about/about.component';
 // import { MinigameComponent } from './pages/minigame/minigame.component';
 // import { PaymentPageComponent } from './pages/payment/payment.component';
 // import { ProductCategoryComponent } from './pages/product-category/product-category.component';
-// import { ProductDetailComponent } from './pages/product-detail/product-detail.component';
+// // import { ProductDetailComponent } from './pages/product-detail/product-detail.component';
+// import { TermsAndPoliciesComponent } from './pages/terms-and-policies/terms-and-policies.component';
 
 export const routes: Routes = [
     { path: 'home', component: HomepageComponent },
@@ -18,6 +19,7 @@ export const routes: Routes = [
     { path: 'about', component: AboutComponent },
     { path: 'header', component: HeaderComponent },
     { path: 'footer', component: FooterComponent },
+    // { path: 'terms-and-policies', component:  TermsAndPoliciesComponent},
     // { path: 'account', component: AccountComponent },
     // { path: 'cart', component: CartComponent },
     // { path: 'minigame', component: PaymentPageComponent },
