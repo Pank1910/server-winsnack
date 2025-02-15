@@ -151,60 +151,35 @@ body {
     background-color: #FFE0C2;
     color: #ff6b00;
     text-align: center;
-    padding: 15px;
-    margin: 0;
+    padding: 10px 0;
     font-weight: bold;
 }
 
-.no-order-message {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 30px;
-    text-align: left;
-    background-color: FFE0C2;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-    position: relative; /* For positioning the border */
-}
-
-/* Add border below the message */
-.no-order-message p {
-    margin: 0;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #afa9a9;
-    width:max-content;
-}
-
-.shop-now-btn {
-    background-color: #ff6b00;
-    color: white;
-    border: 2px solid #ff6b00; /* Added border */
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 15px; /* Add space from the border */
-    display: flex;
-    align-items: center;
-    transition: all 0.3s ease; /* Smooth transition for hover */
-}
-
-.shop-now-btn:hover {
+.purchase-history table {
+    width: 100%;
+    border-collapse: collapse;
     background-color: white;
-    color: #ff6b00;
-    border-color: #ff6b00;
 }
 
-.shop-now-btn::after {
-    content: "";
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    margin-left: 5px;
-    background-image: url('/front-end/src/assets/images/account/cart-icon.png');
-    background-size: contain;
-    background-repeat: no-repeat;
+.purchase-history th,
+.purchase-history td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+.purchase-history th {
+    background-color: #FFE0B2;
+    color: #D48806;
+    font-weight: bold;
+}
+
+.purchase-history tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.purchase-history tr:hover {
+    background-color: #f1f1f1;
 }
 
 .address-card {
@@ -273,4 +248,123 @@ iframe {
 
 .address-container > * {
     flex: 1; /* Chia đều không gian cho hai phần */
+}
+
+.feedback-container {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+}
+
+.feedback-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.mascots {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.mascot-image {
+    height: 60px;
+}
+
+.feedback-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.title-primary {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.title-secondary {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.orange-text {
+    color: #FF8A3D;
+}
+
+.rating {
+    margin: 30px 0;
+}
+
+.star-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    max-width: 300px;
+    margin-bottom: 10px;
+}
+
+.star {
+    font-size: 30px;
+    color: #E0E0E0;
+    cursor: pointer;
+}
+
+.star:hover, .star.active {
+    color: #FFD700;
+}
+
+.rating-labels {
+    display: flex;
+    justify-content: space-between;
+    color: #666;
+    font-size: 14px;
+    padding: 0 10px;
+}
+
+.feedback-message, .success-message {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 30px;
+}
+
+.success-message {
+    color: #FF8A3D;
+    font-size: 16px;
+    margin: 20px 0 30px 0;
+}
+
+.feedback-input textarea {
+    width: 100%;
+    height: 100px;
+    padding: 15px;
+    border: 1px solid #E0E0E0;
+    border-radius: 10px;
+    resize: none;
+    margin-bottom: 20px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.submit-button {
+    background-color: #FF8A3D;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+    background-color: #FF7020;
+}
+
+.success-card {
+    text-align: center;
 }
