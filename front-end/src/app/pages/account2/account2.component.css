@@ -1,0 +1,370 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #FFF8EC;
+    margin: 0;
+    /* padding: 20px; */
+    color: #333;
+}
+
+.breadcrumb {
+    height: 30px;
+    color: #666;
+    background-color: #FFE0C2;
+    display: flex; /* Added for vertical alignment */
+    align-items: center; /* Centers content vertically */
+    padding-left: 20px; /* Add left padding for text */
+    
+}
+
+.breadcrumb .current {
+    color: #ff6b00;
+}
+
+.sidebar {
+    width: 250px;
+    padding: 20px;
+    background-color: #FFF8EC;
+    border-right: none;
+}
+
+.sidebar h3 {
+    color: #ff6b00;
+    font-size: 18px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0; /* Thêm dòng kẻ dưới chữ TÀI KHOẢN */
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    flex-direction: column;
+    gap: 5px; /* Khoảng cách giữa các item */
+}
+
+.sidebar li {
+    padding: 12px 20px;
+    cursor: pointer;
+    color: #333;
+    font-size: 16px;
+    transition: all 0.2s ease; /* Thêm transition cho mượt */
+    margin: 0 -20px; /* Để background khi hover trải dài toàn bộ chiều ngang */
+}
+
+.sidebar li:hover {
+    background-color: #FFE0C2; /* Màu nền khi hover */
+    font-weight: bold; /* In đậm chữ khi hover */
+}
+
+.sidebar li.active {
+    background-color: #FFE0C2;
+    font-weight: bold;
+}
+
+.sidebar .logout {
+    color: #ff0000;
+    
+}
+
+.container {
+    background-color: white;
+    box-shadow: none;
+    display: flex
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #FFF8EC;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.profile-avatar img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.profile-actions {
+    margin-left: auto;
+}
+
+.profile-actions button {
+    margin-left: 10px;
+    padding: 8px 15px;
+    border: 1px solid #ff6b00; /* Added border width and color */
+    border-radius: 5px;
+    background-color: #ff6b00;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.profile-actions button:hover {
+    background-color: white;
+    color: #ff6b00;
+    border-color: #ff6b00;
+}
+
+.account-details {
+    margin-bottom: 20px;
+}
+
+.detail-row {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.detail-row label {
+    width: 150px;
+    font-weight: bold;
+    color: #666;
+}
+
+.notification-preferences {
+    padding-top: 5px;
+    padding-bottom: 25px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-container input {
+    margin-right: 10px;
+}
+
+.purchase-history {
+    background-color: #FFE0C2;
+    margin-bottom: 20px;
+}
+
+.purchase-history h2 {
+    background-color: #FFE0C2;
+    color: #ff6b00;
+    text-align: center;
+    padding: 10px 0;
+    font-weight: bold;
+}
+
+.purchase-history table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+.purchase-history th,
+.purchase-history td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+.purchase-history th {
+    background-color: #FFE0B2;
+    color: #D48806;
+    font-weight: bold;
+}
+
+.purchase-history tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.purchase-history tr:hover {
+    background-color: #f1f1f1;
+}
+
+.address-card {
+    overflow: hidden;
+    width:fit-content; /* Chiều rộng tùy biến */
+    padding-bottom: 15px;
+    border: 1px solid #ccc; /* Border màu xám */
+    box-sizing: border-box; /* Đảm bảo padding và border không làm thay đổi kích thước */
+    flex: 1; /* Tự động co giãn theo nội dung */
+    max-width: calc(50% - 25px); 
+}
+
+.address-header {
+    background-color: #FFE0B2;
+    padding: 10px 15px;
+    font-weight: bold;
+    color: #D48806;
+}
+
+.address-details {
+    padding: 15px;
+    font-size: 14px;
+    color: #333;
+}
+
+.address-details p {
+    margin: 5px 0;
+}
+
+.map-container {
+    width: 100%; /* Chiều rộng tùy biến */
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+iframe {
+    width: 100%; /* Chiều rộng tùy biến */
+    height: 180px; /* Chiều cao cố định hoặc có thể tùy biến */
+    border-radius: 8px;
+    border: none;
+}
+
+.address-section h2 {
+    background-color: #FFF8EC;
+    color: #ff6b00;
+    text-align: center;
+    padding: 30px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.address-section {
+    background-color: #FFF8EC;
+    margin-bottom: 20px;
+}
+
+.address-container {
+    background-color: #FFF8EC;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 50px; /* Khoảng cách giữa hai phần là 50px */
+    align-items: stretch; /* Đảm bảo hai phần có chiều cao bằng nhau */
+    padding: 20px; /* Thêm padding để không bị dính sát vào viền */
+    box-sizing: border-box; /* Đảm bảo padding không làm thay đổi kích thước tổng */
+}
+
+.address-container > * {
+    flex: 1; /* Chia đều không gian cho hai phần */
+}
+
+.feedback-container {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+}
+
+.feedback-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.mascots {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.mascot-image {
+    height: 60px;
+}
+
+.feedback-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.title-primary {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.title-secondary {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.orange-text {
+    color: #FF8A3D;
+}
+
+.rating {
+    margin: 30px 0;
+}
+
+.star-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    max-width: 300px;
+    margin-bottom: 10px;
+}
+
+.star {
+    font-size: 30px;
+    color: #E0E0E0;
+    cursor: pointer;
+}
+
+.star:hover, .star.active {
+    color: #FFD700;
+}
+
+.rating-labels {
+    display: flex;
+    justify-content: space-between;
+    color: #666;
+    font-size: 14px;
+    padding: 0 10px;
+}
+
+.feedback-message, .success-message {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 30px;
+}
+
+.success-message {
+    color: #FF8A3D;
+    font-size: 16px;
+    margin: 20px 0 30px 0;
+}
+
+.feedback-input textarea {
+    width: 100%;
+    height: 100px;
+    padding: 15px;
+    border: 1px solid #E0E0E0;
+    border-radius: 10px;
+    resize: none;
+    margin-bottom: 20px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.submit-button {
+    background-color: #FF8A3D;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+    background-color: #FF7020;
+}
+
+.success-card {
+    text-align: center;
+}

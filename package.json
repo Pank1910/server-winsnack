@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@angular/cli": "^19.1.6",
+    "@angular/material": "^19.1.4",
     "@tailwindcss/vite": "^4.0.3"
   }
 }
