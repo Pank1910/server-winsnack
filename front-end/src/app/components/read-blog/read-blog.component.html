@@ -1,0 +1,60 @@
+<!-- Phần header -->
+<h1 class="self-stretch mt-6 text-6xl leading-[65px] max-md:text-4xl max-md:leading-[53px] hover:text-[#0F7A60] transition-colors duration-300" 
+    [innerHTML]="blogTitle"></h1>
+
+<div class="flex gap-2 items-center mt-6 text-base font-medium text-[#0F7A60]">
+  <div>{{author}}</div>
+  <img src="assets/images/icons/date.svg" class="w-0" alt="date icon"/>
+  <div>{{publishDate}}</div>
+</div>
+
+<!-- Main Content -->
+<div class="text-base font-medium leading-7 space-y-4" [innerHTML]="blogContent"></div>
+
+<!-- Related Articles -->
+<div class="space-y-8">
+  <h2 class="text-2xl font-semibold hover:text-[#FF9413] transition-colors duration-300">Bài viết liên quan</h2>
+  
+  <!-- Article 1 -->
+  <div class="flex gap-4 items-start group cursor-pointer" *ngFor="let article of relatedArticles">
+    <img [src]="article.image" 
+         [alt]="article.title"
+         class="w-24 h-24 object-cover rounded-lg transition-all duration-300 group-hover:scale-105"/>
+    <div class="flex-1">
+      <div class="text-sm font-medium uppercase text-[#0F7A60]">{{article.category}}</div>
+      <h4 class="text-xl font-bold mt-2 transition-colors duration-300 group-hover:text-[#FF9413]">
+        {{article.title}}
+      </h4>
+      <div class="flex gap-3 mt-2 text-sm">
+        <div class="flex items-center gap-1 px-2 py-1 rounded border border-[#0F7A60]">
+          <img src="assets/images/icons/comment.svg" class="w-4" alt="comments"/>
+          {{article.comments}}
+        </div>
+        <div class="flex items-center gap-1 px-2 py-1 rounded border border-[#0F7A60]">
+          <img src="assets/images/icons/time.svg" class="w-4" alt="time"/>
+          {{article.time}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- More Articles Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
+  <div class="group" *ngFor="let post of moreArticles">
+    <div class="overflow-hidden rounded-lg">
+      <img [src]="post.image"
+           [alt]="post.title"
+           class="w-full h-64 object-cover transition-all duration-300 group-hover:scale-110"/>
+    </div>
+    <div class="flex gap-2 mt-3">
+      <div *ngFor="let tag of post.tags" class="flex items-center gap-1 px-2 py-1 rounded border border-[#0F7A60]">
+        <img [src]="tag.icon" class="w-4" [alt]="tag.label"/>
+        {{tag.label}}
+      </div>
+    </div>
+    <h4 class="mt-3 text-2xl font-medium transition-colors duration-300 group-hover:text-[#FF9413]">
+      {{post.title}}
+    </h4>
+  </div>
+</div>

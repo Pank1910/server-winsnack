@@ -1,0 +1,41 @@
+<div class="flex flex-col items-center px-32 py-12 bg-[#FFF8EC] max-md:px-5">
+    <!-- Grid hiển thị bài viết -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-80 max-w-full w-[1199px]">
+      <ng-container *ngFor="let post of blogCategory">
+        <div class="flex flex-col pb-3 min-w-[240px] w-[298px]">
+          <img
+            [src]="post.images"
+            [alt]="post.title"
+            class="object-contain max-w-full rounded aspect-[0.79] w-[373px]"
+          />
+          <div class="flex gap-2 items-center mt-3 text-sm leading-relaxed text-[#376F38]">
+            <div class="flex gap-1 items-center px-2 py-1 rounded border border-[#376F38]">
+              <img
+                src="assets/images/blog/comment.png"
+                alt="Comment Icon"
+                class="object-contain w-4 aspect-square"
+              />
+              <div>{{ post.comments }} Bình luận</div>
+            </div>
+            <div class="flex gap-1 items-center px-2 py-1 rounded border border-[#376F38]">
+              <img
+                src="assets/images/blog/time.png"
+                alt="Time Icon"
+                class="object-contain w-4 aspect-square"
+              />
+              <div>{{ post.post_date | date:'short'}}</div>
+            </div>
+          </div>
+          <h2 class="mt-3 text-2xl font-medium leading-7 text-[#333333]">
+            {{ post.title }}
+          </h2>
+        </div>
+      </ng-container>
+    </div>
+    <!-- Nút điều hướng "Xem tất cả bài viết" với hiệu ứng hover, transition -->
+    <div class="mt-10 inline-flex items-center px-4 py-2 text-sm font-medium uppercase rounded border border-[#376F38] text-[#376F38] transition duration-300 ease-in-out hover:bg-[#376F38] hover:text-white cursor-pointer">
+    <a routerLink="/all-blogs" ></a>
+      xem tất cả bài viết
+    </div>
+  </div>
+  

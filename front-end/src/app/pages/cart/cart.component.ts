@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Cart, CartItem } from '../../models/cart.model';
-import { CartService } from '../../services/cart.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { CartService } from '../services/cart.service';
+import { Cart, Product } from '../models/cart.model';  // Sử dụng đúng các kiểu từ cart.model.ts
+import { ModalService } from '../services/modal.service';
 
 @Component({
   selector: 'app-cart',
@@ -9,68 +10,108 @@ import { Router } from '@angular/router';
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
-  cart: any = {
-    items: [
-      {
-        productId: 1,
-        productName: 'Product Name',
-        productImage: 'image.jpg',
-        price: 100000,
-        quantity: 1
-      }
-      // Add more products as needed
-    ]
-  };
+  style: string = "none";
+  products: Product[] = [];  // Sử dụng đúng kiểu mảng Product
+  stringPrice: string = "";
+  totalPrice: number = 0;
+  cart: Cart = { products: [] };  // Cart chỉ có 1 mảng products
+  constructor(
+    private cartService: CartService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private modalService: ModalService
+  ) {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-    // Optionally, fetch cart data from a service or localStorage
+  ngOnInit() {
+    this.getCart(); // Lấy giỏ hàng khi component được khởi tạo
   }
 
-  // Function to increase quantity
-  onAddQuantity(item: any): void {
-    item.quantity++;
-    this.updateCart();
+  closeModal() {
+    this.modalService.close(); // Đóng modal
   }
 
-  // Function to decrease quantity
-  onRemoveQuantity(item: any): void {
-    if (item.quantity > 1) {
-      item.quantity--;
-      this.updateCart();
+  // Tăng số lượng sản phẩm trong giỏ hàng
+  increaseQuantity(productID: string) {
+    const product = this.cart.products.find(p => p.productID === productID);
+    if (product) {
+      product.quantity += 1;
+    }
+    this.updateCart(); // Cập nhật giỏ hàng sau khi thay đổi số lượng
+  }
+
+  // Giảm số lượng sản phẩm trong giỏ hàng
+  decreaseQuantity(productID: string) {
+    const product = this.cart.products.find(p => p.productID === productID);
+    if (product && product.quantity > 1) {
+      product.quantity -= 1;
+    }
+    this.updateCart(); // Cập nhật giỏ hàng sau khi thay đổi số lượng
+  }
+
+  // Lấy số tiền thô từ một chuỗi giá trị
+  getRawNumber(x: string): number {
+    try {
+      return Number(x.replace(",", '')); // Chuyển chuỗi giá trị thành số
+    } catch (e) {
+      return 0; // Trả về 0 nếu có lỗi
     }
   }
 
-  // Function to remove item from cart
-  onRemoveFromCart(item: any): void {
-    const index = this.cart.items.indexOf(item);
-    if (index !== -1) {
-      this.cart.items.splice(index, 1);
-      this.updateCart();
+  // Tính toán tổng giá trị giỏ hàng
+  calculateTotalPrice() {
+    this.totalPrice = 0;
+    this.cart.products.forEach(product => {
+      this.totalPrice += product.quantity * this.getRawNumber(product.price); // Tính tổng
+    });
+    this.stringPrice = this.formatPrice(this.totalPrice); // Định dạng giá trị thành chuỗi với dấu phẩy
+  }
+
+  // Định dạng giá trị thành tiền tệ với dấu phẩy
+  formatPrice(x: number): string {
+    try {
+      const parts = x.toString().split(",");
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      return parts.join("."); // Định dạng thành tiền với dấu chấm ngăn cách
+    } catch (e) {
+      return String(x); // Trả về chuỗi nếu có lỗi
     }
   }
 
-  // Function to update cart (e.g., store the updated cart)
-  updateCart(): void {
-    // Logic to update the cart, e.g., calling a service or saving to localStorage
-    console.log("Cart updated", this.cart.items);
+  // Cập nhật giỏ hàng lên server
+  updateCart() {
+    const extractedProducts = this.cart.products.map(product => ({
+      product: product.productID,
+      quantity: product.quantity
+    }));
+    const data = { products: extractedProducts };
+
+    // Gửi dữ liệu giỏ hàng đã thay đổi lên server
+    this.cartService.updateCart(this.cart.cartID, data).subscribe(() => {
+      this.calculateTotalPrice(); // Tính lại tổng tiền sau khi cập nhật
+    });
   }
 
-  // Function to calculate total price
-  getTotal(items: any[]): number {
-    return items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  // Lấy giỏ hàng từ CartService
+  getCart() {
+    this.cartService.getUserCart().subscribe(data => {
+      this.cart = data;  // Gán giỏ hàng trả về từ API
+      this.calculateTotalPrice(); // Tính toán tổng giỏ hàng
+    });
   }
 
-  // Function to navigate to checkout
-  navigateToCheckout(): void {
-    // Logic to navigate to checkout page, e.g., using Angular Router
-    console.log('Navigating to checkout');
+  // Chuyển đến trang thanh toán
+  checkout() {
+    this.router.navigate(['../checkout'], { relativeTo: this.route });
   }
 
-  // Function to continue shopping
-  continueShopping(): void {
-    // Navigate to products page or perform other actions
-    console.log('Continuing shopping');
+  // Chuyển đến trang thanh toán với modal đóng
+  goToPayment() {
+    this.closeModal(); // Đóng modal nếu có
+    this.router.navigate(['/payment']);
+  }
+
+  // Hiển thị hoặc ẩn modal
+  show() {
+    this.style = this.style === "none" ? "block" : "none";
   }
 }

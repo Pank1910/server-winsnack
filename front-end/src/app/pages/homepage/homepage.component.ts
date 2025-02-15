@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { SubscriptionComponent } from '../../components/subscription/subscription.component';
 // import { slideInOutAnimation } from 'src/app/models/slide-in-out.animation';
 // import { scaleInOutAnimation } from 'src/app/models/scale-in-out.animation';
 // import { fadeInOutAnimation } from 'src/app/models/fade-in-out.animation';
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, SubscriptionComponent],
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.css'],
   // animations: [slideInOutAnimation ,scaleInOutAnimation,fadeInOutAnimation,
