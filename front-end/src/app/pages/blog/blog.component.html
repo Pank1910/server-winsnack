@@ -1,0 +1,346 @@
+<!-- <!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Win Snack - Thưởng thức những món snack ngon nhất với hương vị hấp dẫn" />
+    <meta name="keywords" content="snack, bánh tráng, đồ ăn vặt, Win Snack" />
+    <meta name="author" content="Win Snack" />
+    <title>Giỏ hàng của bạn</title> -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- </head>
+  <body> -->
+    <div class="flex flex-col">
+      <!-- Các section chính: Breadcrumb -->
+      <nav
+        class="flex flex-wrap gap-3.5 items-center px-20 py-3.5 w-full text-xl bg-[#FFE0C2] min-h-[50px] max-md:px-5 max-md:max-w-full"
+        aria-label="Breadcrumb"
+      >
+        <a
+          routerLink="['/product-category']"
+          class="self-stretch my-auto font-medium text-center text-black text-opacity-50 transition duration-300 hover:text-[#FF9413]"
+        >
+          Trang chủ
+        </a>
+        <img
+          loading="lazy"
+          src="assets/images/blog/arrow-right.png"
+          class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square"
+          alt="Breadcrumb arrow"
+        />
+        <span class="self-stretch my-auto font-semibold text-[#FF9413]">
+          Blog
+        </span>
+      </nav>
+
+      <!-- Các section chính: Main Layout -->
+      <div class="flex flex-wrap items-start bg-[#FFE0C2]">
+        <!-- Left Column -->
+        <div class="flex flex-col grow shrink font-medium text-[#FF9413] min-w-[240px] w-[575px] max-md:max-w-full">
+          <div class="flex w-full bg-[#FFF8EC] min-h-[80px] max-md:max-w-full" role="banner"></div>
+          <div class="flex flex-col justify-center px-32 w-full min-h-[520px] max-md:px-5 max-md:max-w-full">
+            <h1 class="text-7xl leading-[86px] max-md:text-4xl max-md:leading-[53px]">
+              HÀNH TRÌNH<br />HƯƠNG VỊ
+            </h1>
+            <p class="mt-6 text-2xl leading-10">
+              Hãy cùng Win Snack khám phá vị ngon trong những sản phẩm chúng tôi gửi gắm nhé.
+            </p>
+            <a
+              routerLink="/all-blogs"
+              class="gap-2 self-start px-4 py-2 mt-6 text-sm leading-snug uppercase rounded border border-[#FF9413] transition duration-300 hover:bg-[#FF9413] hover:text-white"
+              role="button"
+              tabindex="0"
+            >
+              Xem tất cả bài viết
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div *ngFor="let blog of blogs; let i = index">
+            <div *ngIf="i === currentBlogIndex" 
+                class="flex relative flex-col grow shrink items-start px-10 pt-72 pb-10 rounded-none min-h-[600px] min-w-[240px] w-[576px] max-md:px-5 max-md:pt-24 max-md:max-w-full">
+            <img loading="lazy"
+                [src]="blog.images"
+                class="object-cover absolute inset-0 w-full h-full"
+                alt="Background image for the journey section" />
+            
+            <div class="flex relative flex-col items-start max-w-full w-[481px]">
+                <div class="flex gap-2 items-start text-sm font-medium leading-snug uppercase text-zinc-800">
+                <span class="px-3 py-2 bg-[#FFE0C3] rounded">DIY</span>
+                <span class="px-3 py-2 bg-[#FFE0C3] rounded">Đồ ăn vặt</span>
+                </div>
+                
+                <div class="flex flex-col mt-6 w-full text-[#FFF8EC] max-w-[481px]">
+                <h2 class="text-4xl font-bold leading-10">
+                    {{ blog.title }}
+                </h2>
+                <div class="flex gap-2 items-start mt-3">
+                    <div class="flex gap-1 items-center px-3 py-2 rounded border border-[#FFF8EC]">
+                    <img loading="lazy"
+                        src="assets/images/blog/tag-icon1.png"
+                        class="object-contain w-8"
+                        alt="icon" />
+                    <div class="flex flex-col justify-center ml-1">
+                        <span class="text-xs font-medium uppercase">hoạt động</span>
+                        <span class="text-sm">{{ blog.comments }} bình luận</span>
+                    </div>
+                    </div>
+                    <div class="flex gap-1 items-center px-3 py-2 rounded border border-[#FFF8EC]">
+                    <img loading="lazy"
+                        src="assets/images/blog/tag-icon2.png"
+                        class="object-contain w-8"
+                        alt="Tag icon" />
+                    <div class="flex flex-col justify-center ml-1">
+                        <span class="text-xs font-medium uppercase">Đăng bài</span>
+                        <span class="text-sm">{{ blog.post_date| date:'short' }}</span>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                
+                <div class="flex gap-2 items-start mt-6">
+                <button (click)="previousBlog()"
+                        class="flex items-center p-1 w-8 h-8 bg-[#FFE0C3] rounded transition duration-300 hover:opacity-80"
+                        aria-label="Previous blog">
+                    <img loading="lazy"
+                        src="assets/images/blog/arrow-left.png"
+                        class="object-contain w-6"
+                        alt="Left icon" />
+                </button>
+                <button (click)="nextBlog()"
+                        class="flex items-center p-1 w-8 h-8 bg-[#FFE0C3] rounded transition duration-300 hover:opacity-80"
+                        aria-label="Next blog">
+                    <img loading="lazy"
+                        src="assets/images/blog/arrow-right.png"
+                        class="object-contain w-6"
+                        alt="Right icon" />
+                </button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+
+      <!-- Các section chính: New Posts -->
+      <section
+      class="flex flex-col py-20 pr-24 pl-32 w-full leading-tight text-[#0F7A60] bg-[#FFF8EC] max-md:px-5 max-md:max-w-full"
+      >
+      <h2 class="text-7xl w-[581px] max-md:text-4xl">BÀI VIẾT MỚI NHẤT</h2>
+      <div class="flex overflow-hidden gap-10 items-start mt-10 text-xl w-[1220px] max-md:max-w-full">
+        <article
+          *ngFor="let blog of newBlogs"
+          class="flex flex-col justify-center p-3 bg-[#daf1dc] rounded min-h-[259px] w-[212px]"
+        >
+          <img
+            loading="lazy"
+            [src]="blog.images"
+            class="object-contain flex-1 rounded w-[188px] aspect-[0.94]"
+            [alt]="blog.title"
+          />
+          <h3 class="self-center mt-3">{{ blog.title }}</h3>
+        </article>
+      </div>
+      </section>
+
+      <div class="flex flex-col overflow-hidden bg-[#FFE0C3]">
+        <!-- Topics -->
+        <div>
+          <div
+            class="flex flex-wrap gap-8 items-center px-32 py-12 w-full text-6xl leading-tight text-[#FFF8EC] bg-[#FF9413] max-md:px-5 max-md:text-4xl cursor-pointer transition duration-300 ease-in-out hover:opacity-90"
+            (click)="selectCategory()"
+          >
+            <img
+              loading="lazy"
+              src="assets/images/blog/down-white.png"
+              alt="Click to view more"
+              class="object-contain w-[60px] aspect-[0.98] transition-transform duration-300 ease-in-out hover:scale-110 hover:opacity-80"
+            />
+            <div class="flex-1 transition duration-300 ease-in-out hover:underline hover:tracking-wide">
+              BÍ QUYẾT ĂN VẶT NGON MIỆNG
+            </div>
+          </div>
+          <!-- Hiển thị component con Blog Category khi chọn danh mục -->
+          <app-blog-category *ngIf="showCategory"></app-blog-category>
+      
+          <div
+            class="flex flex-wrap gap-8 items-center px-32 py-12 w-full text-6xl leading-tight text-black bg-[#FFE0C3] max-md:px-5 max-md:text-4xl cursor-pointer transition duration-300 ease-in-out hover:opacity-90"
+            (click)="selectCategory()"
+          >
+            <img
+              loading="lazy"
+              src="assets/images/blog/down-black.png"
+              alt="Click to view more"
+              class="object-contain w-[60px] aspect-[0.98] transition-transform duration-300 ease-in-out hover:scale-110 hover:opacity-80"
+            />
+            <div class="flex-1 transition duration-300 ease-in-out hover:underline hover:tracking-wide">
+              CHUYỆN KỂ TỪ NGUYÊN LIỆU
+            </div>
+          </div>
+          <!-- Hiển thị component con Blog Category khi chọn danh mục -->
+          <app-blog-category *ngIf="showCategory"></app-blog-category>
+      
+          <div
+            class="flex flex-wrap gap-8 items-center px-32 py-12 w-full text-6xl leading-tight text-[#FFF8EC] bg-[#FF9413] max-md:px-5 max-md:text-4xl cursor-pointer transition duration-300 ease-in-out hover:opacity-90"
+            (click)="selectCategory()"
+          >
+            <img
+              loading="lazy"
+              src="assets/images/blog/down-white.png"
+              alt="Click to view more"
+              class="object-contain w-[60px] aspect-[0.98] transition-transform duration-300 ease-in-out hover:scale-110 hover:opacity-80"
+            />
+            <div class="flex-1 transition duration-300 ease-in-out hover:underline hover:tracking-wide">
+              CÔNG THỨC DIY (DO IT YOURSELF)
+            </div>
+          </div>
+          <!-- Hiển thị component con Blog Category khi chọn danh mục -->
+          <app-blog-category *ngIf="showCategory"></app-blog-category>
+      
+          <div
+            class="flex flex-wrap gap-8 items-center px-32 py-12 w-full text-6xl leading-tight text-black bg-[#FFE0C3] max-md:px-5 max-md:text-4xl cursor-pointer transition duration-300 ease-in-out hover:opacity-90"
+            (click)="selectCategory()"
+          >
+            <img
+              loading="lazy"
+              src="assets/images/blog/down-black.png"
+              alt="Click to view more"
+              class="object-contain w-[60px] aspect-[0.98] transition-transform duration-300 ease-in-out hover:scale-110 hover:opacity-80"
+            />
+            <div class="flex-1 transition duration-300 ease-in-out hover:underline hover:tracking-wide">
+              ĐÁNH GIÁ & FEEDBACK KHÁCH HÀNG
+            </div>
+          </div>
+          <!-- Hiển thị component con Blog Category khi chọn danh mục -->
+          <app-blog-category *ngIf="showCategory"></app-blog-category>
+      
+          <div
+            class="flex flex-wrap gap-8 items-center px-32 py-12 w-full text-6xl leading-tight text-[#FFF8EC] bg-[#FF9413] max-md:px-5 max-md:text-4xl cursor-pointer transition duration-300 ease-in-out hover:opacity-90"
+            (click)="selectCategory()"
+          >
+            <img
+              loading="lazy"
+              src="assets/images/blog/down-white.png"
+              alt="Click to view more"
+              class="object-contain w-[60px] aspect-[0.98] transition-transform duration-300 ease-in-out hover:scale-110 hover:opacity-80"
+            />
+            <div class="flex-1 transition duration-300 ease-in-out hover:underline hover:tracking-wide">
+              GÓC SỨC KHỎE VÀ DINH DƯỠNG
+            </div>
+          </div>
+          <!-- Hiển thị component con Blog Category khi chọn danh mục -->
+          <app-blog-category *ngIf="showCategory"></app-blog-category>
+        </div>
+      </div>
+      
+      
+<!-- Phần gặp gỡ người sáng lập --> 
+<div class="flex flex-col w-full max-md:max-w-full">
+  <div class="flex flex-col w-full rounded-none max-md:max-w-full">
+      <!-- Phần nền trên -->
+      <div class="flex w-full min-h-[160px] bg-[#FFE0C3] max-md:max-w-full"></div>
+      
+      <!-- Nội dung chính -->
+      <div class="flex flex-col w-full bg-[#376F38] max-md:max-w-full">
+          <div class="z-10 self-center -mt-20 ml-5 w-full max-w-[1241px] max-md:max-w-full">
+              <div class="flex gap-5 max-md:flex-col">
+                  <!-- Ảnh Founder -->
+                  <div class="flex flex-col w-[59%] max-md:w-full">
+                      <img
+                          loading="lazy"
+                          src="assets/images/blog/founder.png"
+                          alt="Founder Linh Linh"
+                          class="object-contain w-full rounded aspect-[1.15] max-md:mt-10 md:-mb-20 max-md:max-w-full"
+                      />
+                  </div>
+                  
+                  <!-- Nội dung văn bản -->
+                  <div class="flex flex-col w-[41%] ml-5 max-md:w-full max-md:ml-0">
+                      <div class="flex flex-col my-auto text-black max-md:mt-10 max-md:max-w-full">
+                          <h2 class="text-4xl font-bold leading-tight max-md:max-w-full">
+                              Gặp gỡ người sáng lập
+                          </h2>
+                          <div class="mt-4 text-2xl leading-relaxed">Linh Linh</div>
+                          <p class="mt-4 text-base leading-7 max-md:max-w-full">
+                              "Xin chào! Tôi là Linh, người đứng sau thương hiệu Win Snack. Đam mê của tôi là mang đến cho mọi người những món ăn vặt vừa ngon miệng, vừa an toàn. Từ những nguyên liệu tinh chọn đến công thức sáng tạo, tôi luôn mong muốn biến mỗi sản phẩm của Win Snack thành một trải nghiệm thú vị cho bạn."
+                          </p>
+                          <button class="gap-2 self-start px-4 py-2 mt-4 text-sm font-medium uppercase rounded border border-black transition duration-300 hover:bg-black hover:text-white">
+                              Xem thêm
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      
+      <!-- Phần nền dưới -->
+      <div class="flex w-full min-h-[80px] bg-[#F8CD42] max-md:max-w-full"></div>
+  </div>
+</div>
+
+
+        
+        <!-- "Hôm nay bạn thèm gì?" -->
+        <section class="flex flex-wrap items-start">
+          <div class="flex flex-col grow shrink min-w-[240px] w-[676px] max-md:max-w-full">
+            <h1
+              class="py-28 pr-24 pl-32 text-7xl text-[#FFF8EC] bg-[#F8CD42] leading-[96px] min-h-[412px] tracking-[4px] w-[803px] max-md:px-5 max-md:py-24 max-md:text-4xl max-md:leading-[53px]"
+            >
+              HÔM NAY BẠN<br />THÈM GÌ ?
+            </h1>
+            <nav
+              class="flex flex-col justify-center items-start py-20 pl-32 w-full text-3xl font-medium leading-tight text-[#376F38] bg-[#FFE0C3] max-w-[803px] min-h-[367px] max-md:pl-5 max-md:max-w-full"
+              aria-label="Food categories"
+            >
+            <ul class="flex flex-wrap gap-6 items-center w-full min-h-[200px] list-none p-0">
+              <li>
+                <a routerLink="/banh-trang-tron-san" class="self-stretch my-auto transition duration-300 hover:text-[#FF9413] cursor-pointer">
+                  Bánh tráng trộn sẵn
+                </a>
+              </li>
+              <li>
+                <a routerLink="/banh-trang-nuong" class="self-stretch my-auto transition duration-300 hover:text-[#FF9413] cursor-pointer">
+                  Bánh tráng nướng
+                </a>
+              </li>
+              <li>
+                <a routerLink="/banh-trang-ngot" class="self-stretch my-auto transition duration-300 hover:text-[#FF9413] cursor-pointer">
+                  Bánh tráng ngọt
+                </a>
+              </li>
+              <li>
+                <a routerLink="/combo-banh-trang" class="self-stretch my-auto transition duration-300 hover:text-[#FF9413] cursor-pointer">
+                  Combo bánh tráng mix vị
+                </a>
+              </li>
+              <li>
+                <a routerLink="'/nguyen-lieu'" class="self-stretch my-auto transition duration-300 hover:text-[#FF9413] cursor-pointer">
+                  Nguyên liệu DIY
+                </a>
+              </li>
+            </ul>            
+            </nav>
+          </div>
+          <div
+            class="flex relative grow shrink gap-2.5 items-start px-20 py-20 min-h-[779px] min-w-[240px] w-[510px] max-md:px-5 max-md:max-w-full"
+          >
+            <div
+              class="flex absolute right-0 bottom-0 z-0 flex-col h-[779px] min-w-[240px] w-[637px] max-md:max-w-full"
+            >
+              <div class="flex shrink-0 bg-[#F8CD42] h-[412px]"></div>
+              <div class="flex shrink-0 bg-[#FFE0C3] h-[367px]"></div>
+            </div>
+            <img
+              loading="lazy"
+              src="assets/images/blog/decorative-food.png"
+              alt="Decorative food image"
+              class="object-contain z-0 my-auto w-[477px] aspect-[0.79] max-md:max-w-full"
+            />
+          </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <app-subscription></app-subscription>
+      </div>
+    </div>
+
