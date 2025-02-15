@@ -1,0 +1,12 @@
+/* Custom styles that can't be replaced directly with Tailwind */
+.program-image {
+    border-radius: 66px;
+}
+
+.details-image-img {
+    border-radius: 8px;
+}
+
+.signup-button {
+    border-radius: 25px;
+}
