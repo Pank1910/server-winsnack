@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gửi Thắc Mắc</title>
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Include TailwindCSS -->
+</head>
+
+<body class="font-montserrat bg-[#FFF8EC]">
+
+    <div class="flex justify-center items-center min-h-screen">
+        <!-- Form Container -->
+        <div class="flex flex-col md:flex-row bg-white rounded-3xl p-8 shadow-xl max-w-4xl">
+            
+            <!-- Image Section -->
+            <div class="flex justify-center items-center mb-8 md:mb-0 md:w-1/2">
+                <img src="assets/images/contact/Mascot.png" alt="Mascot Image" class="w-[230px] h-[230px] object-contain">
+            </div>
+
+            <!-- Form Section -->
+            <div class="md:w-1/2 flex flex-col justify-between">
+                <h2 class="text-2xl font-semibold text-center text-[#FF9413] mb-6">Gửi những thắc mắc của bạn đến với Win Snack!</h2>
+
+                <form action="#" method="POST">
+                    <!-- Name -->
+                    <label for="name" class="text-lg text-[#333] font-medium">Tên <span class="text-red-600">*</span></label>
+                    <input type="text" id="name" name="name" placeholder="Nhập tên của bạn" class="mt-2 mb-4 p-2 border border-[#F7941D] rounded-lg w-full">
+                    
+                    <!-- Email -->
+                    <label for="email" class="text-lg text-[#333] font-medium">Email <span class="text-red-600">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="Nhập email của bạn" class="mt-2 mb-4 p-2 border border-[#F7941D] rounded-lg w-full">
+                    
+                    <!-- Phone -->
+                    <label for="phone" class="text-lg text-[#333] font-medium">Số điện thoại <span class="text-red-600">*</span></label>
+                    <input type="text" id="phone" name="phone" placeholder="Nhập số điện thoại của bạn" class="mt-2 mb-4 p-2 border border-[#F7941D] rounded-lg w-full">
+                    
+                    <!-- Message -->
+                    <label for="message" class="text-lg text-[#333] font-medium">Lời nhắn</label>
+                    <textarea id="message" name="message" placeholder="Nhập lời nhắn của bạn" class="mt-2 mb-4 p-2 border border-[#F7941D] rounded-lg w-full"></textarea>
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" class="bg-[#FF9413] text-white py-2 px-8 rounded-full hover:bg-[#F7941D] transition duration-200 w-full">Gửi</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
