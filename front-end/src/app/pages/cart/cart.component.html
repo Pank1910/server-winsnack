@@ -1,126 +1,113 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Win Snack - Thưởng thức những món snack ngon nhất với hương vị hấp dẫn" />
-    <meta name="keywords" content="snack, bánh tráng, đồ ăn vặt, Win Snack" />
-    <meta name="author" content="Win Snack" />
-    <title>Giỏ hàng của bạn</title>
 
-    <!-- Reset CSS -->
-    <link rel="stylesheet" href="/front-end/src/reset.css" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Win Snack - Thưởng thức những món snack ngon nhất với hương vị hấp dẫn" />
+  <meta name="keywords" content="snack, bánh tráng, đồ ăn vặt, Win Snack" />
+  <meta name="author" content="Win Snack" />
+  <title>Giỏ hàng của bạn</title>
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="bg-[#fef6f3]">
+  <!-- Reset CSS -->
+  <link rel="stylesheet" href="/front-end/src/reset.css" />
 
-    <div class="container mx-auto py-10">
-      <h2 class="text-2xl font-bold mb-6 text-[#f57c00]">Giỏ hàng của bạn</h2>
-      <p class="text-gray-600 mb-6">
-        Các sản phẩm bạn đã thêm vào giỏ hàng, điều chỉnh số lượng và tiến hành thanh toán
-      </p>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
 
-      <!-- Flex container to make sections equal height -->
-      <div class="flex gap-6 mt-6">
-        <!-- Cart Items Section -->
-        <div class="flex-1 bg-white shadow-md rounded-lg p-6 flex flex-col">
-          <table class="w-full border-collapse">
-            <thead>
-              <tr class="border-b border-gray-300">
-                <th class="text-left pb-4">Sản phẩm</th>
-                <th class="text-left pb-4">Giá</th>
-                <th class="text-left pb-4">Số lượng</th>
-                <th class="text-left pb-4">Tạm tính</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="border-b border-gray-200">
-                <td class="py-4 flex items-center">
-                  <a href="/product/1">
-                    <img src="image.jpg" alt="Product" class="w-16 h-16 object-cover mr-4">
-                  </a>
-                  <span>Product Name</span>
-                </td>
-                <td class="py-4">100,000 VND</td>
-                <td class="py-4">
-                  <div class="flex items-center">
-                    <button class="px-2 border border-gray-300 rounded hover:bg-orange-400 active:scale-95 transition-all duration-200">-</button>
-                    <span class="px-4">1</span>
-                    <button class="px-2 border border-gray-300 rounded hover:bg-orange-400 active:scale-95 transition-all duration-200">+</button>
-                  </div>
-                </td>
-                <td class="py-4">100,000 VND</td>
-              </tr>
-            </tbody>
-          </table>
+<body class="bg-[#fef6f3]">
 
-          <div class="flex justify-between items-center mt-6">
-            <button
-              class="bg-gray-200 rounded-full py-2 px-4 text-gray-700 hover:bg-gray-300 active:scale-95 transition-all duration-200"
-              href="/products"
-            >
-              Tiếp tục xem sản phẩm
-            </button>
-            <button
-              class="bg-green-600 text-white rounded-full py-2 px-4 hover:bg-green-700 active:scale-95 transition-all duration-200"
-              onclick="updateCart()"
-            >
-              Cập nhật giỏ hàng
-            </button>
-          </div>
-        </div>
+  <div class="container mx-auto py-10">
+    <h2 class="text-2xl font-bold mb-6 text-[#f57c00]">Giỏ hàng của bạn</h2>
+    <p class="text-gray-600 mb-6">Các sản phẩm bạn đã thêm vào giỏ hàng, điều chỉnh số lượng và tiến hành thanh toán</p>
 
-        <!-- Cart Summary Section -->
-        <div class="flex-1 bg-white shadow-md rounded-lg p-6 flex flex-col">
-          <h3 class="text-lg font-bold mb-4 text-[#f57c00]">Cộng giỏ hàng</h3>
-          <div class="flex justify-between mb-4">
-            <span>Tạm tính</span>
-            <span>100,000 VND</span>
-          </div>
-          <div class="flex justify-between mb-6">
-            <span class="font-bold">Tổng</span>
-            <span class="font-bold">100,000 VND</span>
-          </div>
-          <button
-            class="w-full bg-orange-500 text-white rounded-full py-3 hover:bg-orange-600 active:scale-95 transition-all duration-200"
-            onclick="navigateToCheckout()"
-          >
-            Tiến hành thanh toán
+    <!-- Flex container to make sections equal height -->
+    <div class="flex gap-6 mt-6">
+      <!-- Cart Items Section -->
+      <div class="flex-1 bg-white shadow-md rounded-lg p-6 flex flex-col">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-gray-300">
+              <th class="text-left pb-4">Sản phẩm</th>
+              <th class="text-left pb-4">Giá</th>
+              <th class="text-left pb-4">Số lượng</th>
+              <th class="text-left pb-4">Tạm tính</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Lặp qua các sản phẩm trong giỏ hàng -->
+            <tr *ngFor="let product of cart.products" class="border-b border-gray-200">
+              <td class="py-4 flex items-center">
+                <a [routerLink]="'/product/' + product.productID">
+                  <img [src]="product.imgbase64_reduce" alt="Product" class="w-16 h-16 object-cover mr-4">
+                </a>
+                <span>{{ product.title }}</span>
+              </td>
+              <td class="py-4">{{ product.price | currency:'VND' }}</td>
+              <td class="py-4">
+                <div class="flex items-center">
+                  <button class="px-2 border border-gray-300 rounded hover:bg-orange-400 active:scale-95 transition-all duration-200" (click)="decreaseQuantity(product.productID)">-</button>
+                  <span class="px-4">{{ product.quantity }}</span>
+                  <button class="px-2 border border-gray-300 rounded hover:bg-orange-400 active:scale-95 transition-all duration-200" (click)="increaseQuantity(product.productID)">+</button>
+                </div>
+              </td>
+              <td class="py-4">{{ (product.price * product.quantity) | currency:'VND' }}</td>
+              <td>
+                <button class="font-medium text-[#AD0505] hover:text-[#FF0000]" (click)="onRemoveFromCart(product)">Xóa</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="flex justify-between items-center mt-6">
+          <button class="bg-gray-200 rounded-full py-2 px-4 text-gray-700 hover:bg-gray-300 active:scale-95 transition-all duration-200" (click)="continueShopping()">
+            Tiếp tục xem sản phẩm
+          </button>
+          <button class="bg-green-600 text-white rounded-full py-2 px-4 hover:bg-green-700 active:scale-95 transition-all duration-200" (click)="updateCart()">
+            Cập nhật giỏ hàng
           </button>
         </div>
       </div>
-    </div>
 
-    <!-- Recommended Products -->
-    <div class="bg-[#fef6f3] mt-10 pt-8">
-      <div class="container mx-auto px-4">
-        <div class="flex justify-between items-center mb-6 bg-[#f57c00] py-3 px-4 rounded-full">
-          <h3 class="text-lg font-bold text-white">BẠN CÓ THỂ THÍCH</h3>
-          <a href="/products" class="text-white font-semibold">Xem tất cả ></a>
+      <!-- Cart Summary Section -->
+      <div class="flex-1 bg-white shadow-md rounded-lg p-6 flex flex-col">
+        <h3 class="text-lg font-bold mb-4 text-[#f57c00]">Cộng giỏ hàng</h3>
+        <div class="flex justify-between mb-4">
+          <span>Tạm tính</span>
+          <span>{{ getTotal(cart.products) | currency:'VND' }}</span>
         </div>
+        <div class="flex justify-between mb-6">
+          <span class="font-bold">Tổng</span>
+          <span class="font-bold">{{ getTotal(cart.products) | currency:'VND' }}</span>
+        </div>
+        <button class="w-full bg-orange-500 text-white rounded-full py-3 hover:bg-orange-600 active:scale-95 transition-all duration-200" (click)="navigateToCheckout()">
+          Tiến hành thanh toán
+        </button>
+      </div>
+    </div>
+  </div>
 
-        <div class="grid grid-cols-5 gap-4">
-          <div class="bg-white rounded-lg shadow-md p-4">
-            <a href="/products/1">
-              <img src="image.jpg" alt="Product" class="w-full h-40 object-cover">
-              <h4 class="text-sm font-bold mt-2">Product Name</h4>
-              <p class="text-orange-500 font-bold">100,000 VND</p>
-            </a>
-          </div>
+  <!-- Recommended Products -->
+  <div class="bg-[#fef6f3] mt-10 pt-8">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center mb-6 bg-[#f57c00] py-3 px-4 rounded-full">
+        <h3 class="text-lg font-bold text-white">BẠN CÓ THỂ THÍCH</h3>
+        <a href="/products" class="text-white font-semibold">Xem tất cả ></a>
+      </div>
+
+      <div class="grid grid-cols-5 gap-4">
+        <div *ngFor="let product of recommendedProducts" class="bg-white rounded-lg shadow-md p-4">
+          <a [routerLink]="'/products/' + product.productID">
+            <img [src]="product.imgbase64_reduce" alt="Product" class="w-full h-40 object-cover">
+            <h4 class="text-sm font-bold mt-2">{{ product.title }}</h4>
+            <p class="text-orange-500 font-bold">{{ product.price | currency:'VND' }}</p>
+          </a>
         </div>
       </div>
     </div>
+  </div>
 
-    <script>
-      function updateCart() {
-        console.log("Cart Updated");
-      }
+</body>
 
-      function navigateToCheckout() {
-        console.log("Navigating to Checkout");
-      }
-    </script>
-  </body>
 </html>
