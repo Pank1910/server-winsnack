@@ -1,60 +1,235 @@
-<!-- Phần header -->
-<h1 class="self-stretch mt-6 text-6xl leading-[65px] max-md:text-4xl max-md:leading-[53px] hover:text-[#0F7A60] transition-colors duration-300" 
-    [innerHTML]="blogTitle"></h1>
-
-<div class="flex gap-2 items-center mt-6 text-base font-medium text-[#0F7A60]">
-  <div>{{author}}</div>
-  <img src="assets/images/icons/date.svg" class="w-0" alt="date icon"/>
-  <div>{{publishDate}}</div>
-</div>
-
-<!-- Main Content -->
-<div class="text-base font-medium leading-7 space-y-4" [innerHTML]="blogContent"></div>
-
-<!-- Related Articles -->
-<div class="space-y-8">
-  <h2 class="text-2xl font-semibold hover:text-[#FF9413] transition-colors duration-300">Bài viết liên quan</h2>
+<script src="https://cdn.tailwindcss.com"></script>
+<div class="flex flex-col overflow-hidden text-black bg-[#FFF8EC]">
+    <!-- Header Section -->
+    <div class="flex flex-col bg-[#FFE0C3]">
+      <div class="w-full bg-[#FFF8EC] min-h-20 max-md:max-w-full" role="banner"></div>
+      
+      <div class="z-10 self-end -mt-20 w-full max-w-[1319px] max-md:max-w-full">
+        <div class="flex gap-5 max-md:flex-col">
+          <!-- Title Section -->
+          <div class="flex flex-col w-[50%] max-md:w-full pl-10">
+            <div class="flex flex-col justify-center items-start self-stretch my-auto w-full max-md:mt-10">
+              <div class="flex gap-2 items-start text-sm font-semibold uppercase tracking-wide text-[#0F7A60]">
+                <div>bí quyết</div>
+                <img src="assets/images/blog/blog1.png" class="w-0 object-contain" alt="secret icon"/>
+                <div class="text-[#FF9413]">BÁNH TRÁNG TRỘN</div>
+              </div>
+              
+              <h1 class="special-font self-stretch mt-6 text-6xl leading-[65px] max-md:text-4xl max-md:leading-[53px] text-[#FF9413] hover:text-[#0F7A60] transition-colors duration-300">
+                CÁCH LÀM<br>
+                BÁNH TRÁNG TRỘN<br>
+                "CHUẨN VỊ" SÌ GÒN
+              </h1>
   
-  <!-- Article 1 -->
-  <div class="flex gap-4 items-start group cursor-pointer" *ngFor="let article of relatedArticles">
-    <img [src]="article.image" 
-         [alt]="article.title"
-         class="w-24 h-24 object-cover rounded-lg transition-all duration-300 group-hover:scale-105"/>
-    <div class="flex-1">
-      <div class="text-sm font-medium uppercase text-[#0F7A60]">{{article.category}}</div>
-      <h4 class="text-xl font-bold mt-2 transition-colors duration-300 group-hover:text-[#FF9413]">
-        {{article.title}}
-      </h4>
-      <div class="flex gap-3 mt-2 text-sm">
-        <div class="flex items-center gap-1 px-2 py-1 rounded border border-[#0F7A60]">
-          <img src="assets/images/icons/comment.svg" class="w-4" alt="comments"/>
-          {{article.comments}}
-        </div>
-        <div class="flex items-center gap-1 px-2 py-1 rounded border border-[#0F7A60]">
-          <img src="assets/images/icons/time.svg" class="w-4" alt="time"/>
-          {{article.time}}
+              <div class="flex gap-2 items-center mt-6 text-base font-medium text-[#0F7A60]">
+                <div>Win Snack</div>
+                <img src="assets/images/icons/date.svg" class="w-0" alt="date icon"/>
+                <div>24 - 1 - 2024</div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Main Image -->
+          <div class="flex flex-col w-[50%] max-md:w-full">
+            <img src="assets/images/blog/blog1.png" 
+                 class="object-cover w-full aspect-[1.2] max-md:mt-10 transition-all duration-300 hover:scale-105"
+                 alt="Bánh tráng trộn dish"/>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
+  
+    <!-- Content Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 px-32 py-20 max-md:px-5">
+      <!-- Main Content -->
+      <div class="text-base font-medium leading-7 space-y-4">
+          <p><strong>TỰ TAY LÀM BÁNH TRÁNG TRỘN NGON 'CHUẨN NHÀ LÀM' – BẠN ĐÃ SẴN SÀNG CHƯA? 🏡✨</strong></p>
 
-<!-- More Articles Section -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
-  <div class="group" *ngFor="let post of moreArticles">
-    <div class="overflow-hidden rounded-lg">
-      <img [src]="post.image"
-           [alt]="post.title"
-           class="w-full h-64 object-cover transition-all duration-300 group-hover:scale-110"/>
-    </div>
-    <div class="flex gap-2 mt-3">
-      <div *ngFor="let tag of post.tags" class="flex items-center gap-1 px-2 py-1 rounded border border-[#0F7A60]">
-        <img [src]="tag.icon" class="w-4" [alt]="tag.label"/>
-        {{tag.label}}
+        <p>Bạn đã bao giờ thèm một bịch <strong>bánh tráng trộn</strong> đậm đà, thơm ngon nhưng lại e ngại về chất lượng ngoài hàng chưa? Nếu vậy, tại sao không thử <strong>tự tay làm bánh tráng trộn tại nhà</strong> để vừa đảm bảo an toàn thực phẩm, vừa có thể biến tấu theo khẩu vị riêng? Hôm nay, cùng mình khám phá <strong>công thức làm bánh tráng trộn cực đơn giản</strong>, nhưng đảm bảo <strong>ngon không kém gì ngoài hàng</strong> nhé!</p>
+
+        <h3>🌟 Nguyên liệu cần chuẩn bị</h3>
+        <p>Để làm một bịch bánh tráng trộn ngon chuẩn vị, bạn cần chuẩn bị những nguyên liệu sau:</p>
+
+        <ul>
+            <li><strong>Bánh tráng</strong>: Chọn loại bánh tráng dẻo hoặc bánh tráng mỏng cắt sẵn để dễ trộn hơn.</li>
+            <li><strong>Xoài xanh</strong>: Giúp tạo độ chua nhẹ và hương vị đặc trưng cho món ăn.</li>
+            <li><strong>Trứng cút</strong>: Luộc chín, bóc vỏ, có thể cắt đôi để dễ ăn hơn.</li>
+            <li><strong>Khô bò/khô gà/khô mực</strong>: Đây là thành phần tạo nên độ đậm đà và hấp dẫn. Nếu thích cay, bạn có thể chọn khô bò cay.</li>
+            <li><strong>Rau răm</strong>: Không thể thiếu trong bánh tráng trộn vì giúp tăng hương vị.</li>
+            <li><strong>Đậu phộng rang</strong>: Tạo độ giòn bùi hấp dẫn.</li>
+            <li><strong>Mỡ hành</strong>: Làm tăng thêm độ béo ngậy và thơm ngon.</li>
+            <li><strong>Sa tế/tắc (quất)/muối tôm Tây Ninh</strong>: Đây chính là những nguyên liệu giúp bánh tráng thấm vị và dậy mùi hơn.</li>
+            <li><strong>Hành phi</strong>: Không chỉ làm bánh tráng thơm hơn mà còn giúp tạo độ giòn rụm đầy kích thích.</li>
+        </ul>
+
+        <h3>🔥 Cách làm bánh tráng trộn đơn giản tại nhà</h3>
+        <p>Chỉ cần 4 bước cơ bản là bạn đã có ngay món bánh tráng trộn ngon khó cưỡng:</p>
+
+        <h4><strong>Bước 1: Sơ chế nguyên liệu</strong></h4>
+        <ul>
+            <li>Bánh tráng cắt nhỏ thành miếng vừa ăn (nếu chưa cắt sẵn).</li>
+            <li>Xoài xanh bào sợi, rau răm rửa sạch, cắt nhỏ.</li>
+            <li>Trứng cút luộc chín, bóc vỏ.</li>
+            <li>Chuẩn bị mỡ hành: Phi hành lá với dầu ăn nóng rồi để riêng.</li>
+            <li>Nếu thích vị cay nồng hơn, bạn có thể thêm ớt sa tế tùy khẩu vị.</li>
+        </ul>
+
+        <h4><strong>Bước 2: Trộn gia vị</strong></h4>
+        <ul>
+            <li>Cho bánh tráng vào tô lớn hoặc thố to để dễ trộn.</li>
+            <li>Thêm muối tôm, nước tắc (hoặc chanh), sa tế, mỡ hành, nước tương vào bánh tráng. Trộn đều để bánh tráng thấm gia vị.</li>
+        </ul>
+
+        <h4><strong>Bước 3: Thêm topping</strong></h4>
+        <ul>
+            <li>Cho tiếp xoài bào, trứng cút, khô bò (hoặc khô gà/khô mực), rau răm, đậu phộng, hành phi vào.</li>
+            <li>Dùng tay đeo găng hoặc đũa lớn để trộn đều hỗn hợp.</li>
+        </ul>
+
+        <h4><strong>Bước 4: Hoàn thành và thưởng thức</strong></h4>
+        <p>Sau khi trộn đều, bạn đã có ngay một bịch bánh tráng trộn thơm ngon đúng chuẩn. Giờ chỉ việc cho ra dĩa, thêm ít hành phi và thưởng thức ngay thôi!</p>
+
+        <h3>💡 Bí quyết để bánh tráng trộn ngon hơn</h3>
+        <ul>
+            <li>Không nên trộn quá lâu để tránh bánh tráng bị nát.</li>
+            <li>Nếu muốn bảo quản lâu, nên trộn gia vị riêng, khi ăn mới thêm bánh tráng vào.</li>
+            <li>Có thể biến tấu bằng cách thêm chà bông, ruốc sấy hoặc tóp mỡ để tăng hương vị.</li>
+        </ul>
+
+        <p>Tự tay làm bánh tráng trộn <strong>vừa ngon, vừa hợp vệ sinh</strong>, lại có thể <strong>tùy chỉnh nguyên liệu theo sở thích</strong> – còn gì tuyệt hơn đúng không nào? 😍 Nếu bạn thấy hấp dẫn, hãy thử ngay công thức này và chia sẻ thành phẩm với mình nhé!</p>
+
+        <p>📌 Đừng quên tag ngay đứa bạn thân để cùng nhau vào bếp làm bánh tráng trộn chuẩn nhà làm nha! ❤️</p>
+      </div>
+  
+      <!-- Related Articles -->
+      <div class="space-y-8">
+        <h2 class="text-2xl font-semibold hover:text-[#FF9413] transition-colors duration-300">Bài viết liên quan</h2>
+        
+        <!-- Article 1 -->
+        <div class="flex gap-4 items-start group cursor-pointer">
+          <img src="assets/images/articles/tay_ninh_special.jpg" 
+               alt="Bánh tráng Tây Ninh"
+               class="w-24 h-24 object-cover rounded-lg transition-all duration-300 group-hover:scale-105"/>
+          <div class="flex-1">
+            <div class="text-sm font-medium uppercase text-[#0F7A60]">Chuyện kể từ nguyên liệu</div>
+            <h4 class="text-xl font-bold mt-2 transition-colors duration-300 group-hover:text-[#FF9413]">
+              Bánh tráng Tây Ninh - đặc sản khó cưỡng
+            </h4>
+            <div class="flex gap-3 mt-2 text-sm">
+              <div class="flex items-center gap-1 px-2 py-1 rounded border border-[#0F7A60]">
+                <img src="assets/images/icons/comment.svg" class="w-4" alt="comments"/>
+                4 luận
+              </div>
+              <div class="flex items-center gap-1 px-2 py-1 rounded border border-[#0F7A60]">
+                <img src="assets/images/icons/time.svg" class="w-4" alt="time"/>
+                15 min prep
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Article 2 -->
+        <div class="flex gap-4 items-start group cursor-pointer">
+          <img src="assets/images/articles/culture_food.jpg" 
+               alt="Ẩm thực trong văn hóa"
+               class="w-24 h-24 object-cover rounded-lg transition-all duration-300 group-hover:scale-105"/>
+          <div class="flex-1">
+            <div class="text-sm font-medium uppercase text-[#0F7A60]">bí quyết ăn vặt ngon miệng</div>
+            <h4 class="text-xl font-bold mt-2 transition-colors duration-300 group-hover:text-[#FF9413]">
+              Ẩm thực trong văn hóa - Hơn cả một bữa ăn
+            </h4>
+            <div class="flex gap-3 mt-2 text-sm">
+              <div class="flex items-center gap-1 px-2 py-1 rounded border border-[#0F7A60]">
+                <img src="assets/images/icons/comment.svg" class="w-4" alt="comments"/>
+                10 bình luận
+              </div>
+              <div class="flex items-center gap-1 px-2 py-1 rounded border border-[#0F7A60]">
+                <img src="assets/images/icons/time.svg" class="w-4" alt="time"/>
+                45 phút trước
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <h4 class="mt-3 text-2xl font-medium transition-colors duration-300 group-hover:text-[#FF9413]">
-      {{post.title}}
-    </h4>
+  
+    <!-- More Articles Section -->
+    <section class="bg-[#febd88] px-32 py-12 max-md:px-5">
+      <h3 class="text-4xl md:text-6xl font-bold hover:text-[#0F7A60] transition-colors duration-300">Các bài viết khác</h3>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
+        <!-- Article 1 -->
+        <div class="group cursor-pointer">
+          <div class="overflow-hidden rounded-lg">
+            <img src="assets/images/articles/cheese_roll.jpg"
+                 alt="Bánh tráng cuộn phô mai"
+                 class="w-full h-64 object-cover transition-all duration-300 group-hover:scale-110"/>
+          </div>
+          <div class="flex gap-2 mt-3">
+            <div class="flex items-center gap-1 px-2 py-1 rounded border border-[#0F7A60]">
+              <img src="assets/images/icons/comment.svg" class="w-4" alt="comments"/>
+              6 Bình luận
+            </div>
+            <div class="flex items-center gap-1 px-2 py-1 rounded border border-[#0F7A60]">
+              <img src="assets/images/icons/time.svg" class="w-4" alt="time"/>
+              20 phút trước
+            </div>
+          </div>
+          <h4 class="mt-3 text-2xl font-medium transition-colors duration-300 group-hover:text-[#FF9413]">
+            Tự làm bánh tráng cuộn phô mai giòn rụm siêu dễ
+          </h4>
+        </div>
+  
+        <!-- Other articles with similar structure... -->
+         <!-- Article 1 -->
+        <div class="group cursor-pointer">
+          <div class="overflow-hidden rounded-lg">
+            <img src="assets/images/articles/cheese_roll.jpg"
+                 alt="Bánh tráng cuộn phô mai"
+                 class="w-full h-64 object-cover transition-all duration-300 group-hover:scale-110"/>
+          </div>
+          <div class="flex gap-2 mt-3">
+            <div class="flex items-center gap-1 px-2 py-1 rounded border border-[#0F7A60]">
+              <img src="assets/images/icons/comment.svg" class="w-4" alt="comments"/>
+              6 Bình luận
+            </div>
+            <div class="flex items-center gap-1 px-2 py-1 rounded border border-[#0F7A60]">
+              <img src="assets/images/icons/time.svg" class="w-4" alt="time"/>
+              20 phút trước
+            </div>
+          </div>
+          <h4 class="mt-3 text-2xl font-medium transition-colors duration-300 group-hover:text-[#FF9413]">
+            Tự làm bánh tráng cuộn phô mai giòn rụm siêu dễ
+          </h4>
+        </div>
+        <!-- Article 1 -->
+        <div class="group cursor-pointer">
+          <div class="overflow-hidden rounded-lg">
+            <img src="assets/images/articles/cheese_roll.jpg"
+                 alt="Bánh tráng cuộn phô mai"
+                 class="w-full h-64 object-cover transition-all duration-300 group-hover:scale-110"/>
+          </div>
+          <div class="flex gap-2 mt-3">
+            <div class="flex items-center gap-1 px-2 py-1 rounded border border-[#0F7A60]">
+              <img src="assets/images/icons/comment.svg" class="w-4" alt="comments"/>
+              6 Bình luận
+            </div>
+            <div class="flex items-center gap-1 px-2 py-1 rounded border border-[#0F7A60]">
+              <img src="assets/images/icons/time.svg" class="w-4" alt="time"/>
+              20 phút trước
+            </div>
+          </div>
+          <h4 class="mt-3 text-2xl font-medium transition-colors duration-300 group-hover:text-[#FF9413]">
+            Tự làm bánh tráng cuộn phô mai giòn rụm siêu dễ
+          </h4>
+        </div>
+      </div>
+  
+      <!-- <button 
+        class="px-4 py-2 mt-10 text-sm font-medium uppercase rounded border-2 border-[#0F7A60] 
+               transition-all duration-300 hover:bg-[#0F7A60] hover:text-white"
+        aria-label="Load more articles">
+        Tiếp theo
+      </button> -->
+    </section>
   </div>
-</div>

@@ -16,7 +16,7 @@
   
 @font-face {
     font-family: 'FontCookies';
-    src: url('/assets/fonts/UTM COOKIES.TTF') format('TTF');
+    src: url('/assets/fonts/UTM-COOKIES.TTF') format('truetype');
 }
   
 .special-font {
