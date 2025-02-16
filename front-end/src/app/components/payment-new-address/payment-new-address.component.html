@@ -1,0 +1,82 @@
+<div class="flex flex-col items-center px-24 pt-12 bg-orange-50 max-md:px-5">
+    <div class="bg-[#e7f4e5] w-full h-8 pl-[50px] flex items-center text-black gap-x-2 mb-8">
+      <a routerLink="/" class="hover:underline">TRANG CHỦ</a> &#8260;
+      <p routerLink="/payment" class="text-[#23562A] hover:underline">THANH TOÁN</p> &#8260;
+      <p class="text-[#23562A]">ĐỊA CHỈ MỚI</p>
+    </div>
+    
+    <h1 class="px-16 w-full text-4xl font-bold text-center text-black max-md:px-5">ĐỊA CHỈ MỚI</h1>
+    
+    <form [formGroup]="addressForm" (ngSubmit)="onSubmit()" class="flex flex-col mt-12 w-full max-md:mt-10">
+      <h2 class="text-3xl font-bold text-black">Liên hệ</h2>
+      <div class="flex flex-col items-start px-11 py-6 mt-5 text-2xl text-black bg-amber-500 bg-opacity-10 max-md:px-5">
+        <input type="text" id="fullName" formControlName="fullName" 
+          class="w-full bg-transparent focus:outline-none" 
+          placeholder="Họ và tên" />
+        <div class="w-full mt-5 h-px border border-amber-500"></div>
+        <input type="tel" id="phoneNumber" formControlName="phoneNumber" 
+          class="w-full bg-transparent focus:outline-none mt-6" 
+          placeholder="Số điện thoại" />
+      </div>
+      
+      <div class="mt-12 max-md:mt-10">
+        <h2 class="text-3xl font-bold text-black">Tỉnh/ Thành phố</h2>
+        <select formControlName="province" 
+          class="px-11 py-6 mt-5 text-2xl text-black bg-amber-500 bg-opacity-10 max-md:px-5 w-full">
+          <option value="">Chọn Tỉnh/Thành phố</option>
+          <option *ngFor="let province of provinces" [value]="province.name">
+            {{province.name}}
+          </option>
+        </select>
+      </div>
+      
+      <div class="mt-12 max-md:mt-10" *ngIf="addressForm.get('province')?.value">
+        <h2 class="text-3xl font-bold text-black">Quận/ Huyện</h2>
+        <select formControlName="district" 
+          class="px-11 py-6 mt-5 text-2xl text-black bg-amber-500 bg-opacity-10 max-md:px-5 w-full">
+          <option value="">Chọn Quận/Huyện</option>
+          <option *ngFor="let district of districts" [value]="district.name">
+            {{district.name}}
+          </option>
+        </select>
+      </div>
+      
+      <div class="mt-12 max-md:mt-10" *ngIf="addressForm.get('district')?.value">
+        <h2 class="text-3xl font-bold text-black">Phường/ Xã</h2>
+        <select formControlName="ward" 
+          class="px-11 py-6 mt-5 text-2xl text-black bg-amber-500 bg-opacity-10 max-md:px-5 w-full">
+          <option value="">Chọn Phường/Xã</option>
+          <option *ngFor="let ward of wards" [value]="ward.name">
+            {{ward.name}}
+          </option>
+        </select>
+      </div>
+      
+      <div class="mt-12 max-md:mt-10">
+        <h2 class="text-3xl font-bold text-black">Địa chỉ</h2>
+        <div class="flex flex-col px-11 pt-7 pb-1.5 mt-6 w-full text-2xl bg-amber-500 bg-opacity-10 max-md:px-5">
+          <input type="text" id="street" formControlName="street" 
+            class="w-full bg-transparent focus:outline-none" 
+            placeholder="Tên đường, Tòa nhà, Số nhà" />
+          <div class="w-full mt-5 h-px border border-amber-500"></div>
+          <div class="flex flex-wrap justify-between font-semibold text-black mt-4">
+            <label class="flex items-center cursor-pointer">
+              <input type="checkbox" formControlName="isDefault" class="mr-2" />
+              Đặt làm địa chỉ mặc định
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex flex-wrap gap-8 justify-center mt-12 w-full text-2xl text-black max-md:mt-10">
+        <button type="button" (click)="goBack()" 
+          class="w-40 font-semibold rounded-lg bg-neutral-400 px-4 py-5 text-center hover:bg-neutral-500">
+          QUAY LẠI
+        </button>
+        <button type="submit" [disabled]="!addressForm.valid"
+          class="w-40 font-medium rounded-lg bg-amber-500 px-4 py-5 text-center hover:bg-amber-600 disabled:bg-gray-300">
+          HOÀN THÀNH
+        </button>
+      </div>
+    </form>
+  </div>

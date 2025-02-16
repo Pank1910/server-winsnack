@@ -39,7 +39,7 @@
         <div class="flex flex-col grow shrink font-medium text-[#FF9413] min-w-[240px] w-[575px] max-md:max-w-full">
           <div class="flex w-full bg-[#FFF8EC] min-h-[80px] max-md:max-w-full" role="banner"></div>
           <div class="flex flex-col justify-center px-32 w-full min-h-[520px] max-md:px-5 max-md:max-w-full">
-            <h1 class="text-7xl leading-[86px] max-md:text-4xl max-md:leading-[53px]">
+            <h1 class="text-7xl leading-[86px] max-md:text-4xl max-md:leading-[53px] special-font">
               HÀNH TRÌNH<br />HƯƠNG VỊ
             </h1>
             <p class="mt-6 text-2xl leading-10">
@@ -72,9 +72,9 @@
                 </div>
                 
                 <div class="flex flex-col mt-6 w-full text-[#FFF8EC] max-w-[481px]">
-                <h2 class="text-4xl font-bold leading-10">
+                <a [routerLink]="['/read-blog']" class="text-4xl font-bold leading-10 cursor-pointer">
                     {{ blog.title }}
-                </h2>
+                </a>
                 <div class="flex gap-2 items-start mt-3">
                     <div class="flex gap-1 items-center px-3 py-2 rounded border border-[#FFF8EC]">
                     <img loading="lazy"
@@ -126,11 +126,11 @@
       <section
       class="flex flex-col py-20 pr-24 pl-32 w-full leading-tight text-[#0F7A60] bg-[#FFF8EC] max-md:px-5 max-md:max-w-full"
       >
-      <h2 class="text-7xl w-[581px] max-md:text-4xl">BÀI VIẾT MỚI NHẤT</h2>
-      <div class="flex overflow-hidden gap-10 items-start mt-10 text-xl w-[1220px] max-md:max-w-full">
-        <article
+      <h2 class="text-7xl w-[650px] max-md:text-4xl special-font">BÀI VIẾT MỚI NHẤT</h2>
+      <div class="flex overflow-hidden gap-10 items-start mt-10 text-xl w-[1220px] max-md:max-w-full ">
+        <a [routerLink]="['/read-blog']"
           *ngFor="let blog of newBlogs"
-          class="flex flex-col justify-center p-3 bg-[#daf1dc] rounded min-h-[259px] w-[212px]"
+          class="flex flex-col justify-center p-3 bg-[#daf1dc] rounded min-h-[259px] w-[212px]  cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg mb-6"
         >
           <img
             loading="lazy"
@@ -139,7 +139,7 @@
             [alt]="blog.title"
           />
           <h3 class="self-center mt-3">{{ blog.title }}</h3>
-        </article>
+        </a>
       </div>
       </section>
 
@@ -156,7 +156,7 @@
               alt="Click to view more"
               class="object-contain w-[60px] aspect-[0.98] transition-transform duration-300 ease-in-out hover:scale-110 hover:opacity-80"
             />
-            <div class="flex-1 transition duration-300 ease-in-out hover:underline hover:tracking-wide">
+            <div class="special-font flex-1 transition duration-300 ease-in-out hover:underline hover:tracking-wide">
               BÍ QUYẾT ĂN VẶT NGON MIỆNG
             </div>
           </div>
@@ -173,7 +173,7 @@
               alt="Click to view more"
               class="object-contain w-[60px] aspect-[0.98] transition-transform duration-300 ease-in-out hover:scale-110 hover:opacity-80"
             />
-            <div class="flex-1 transition duration-300 ease-in-out hover:underline hover:tracking-wide">
+            <div class="special-font flex-1 transition duration-300 ease-in-out hover:underline hover:tracking-wide">
               CHUYỆN KỂ TỪ NGUYÊN LIỆU
             </div>
           </div>
@@ -190,7 +190,7 @@
               alt="Click to view more"
               class="object-contain w-[60px] aspect-[0.98] transition-transform duration-300 ease-in-out hover:scale-110 hover:opacity-80"
             />
-            <div class="flex-1 transition duration-300 ease-in-out hover:underline hover:tracking-wide">
+            <div class="special-font flex-1 transition duration-300 ease-in-out hover:underline hover:tracking-wide">
               CÔNG THỨC DIY (DO IT YOURSELF)
             </div>
           </div>
@@ -207,7 +207,7 @@
               alt="Click to view more"
               class="object-contain w-[60px] aspect-[0.98] transition-transform duration-300 ease-in-out hover:scale-110 hover:opacity-80"
             />
-            <div class="flex-1 transition duration-300 ease-in-out hover:underline hover:tracking-wide">
+            <div class="special-font flex-1 transition duration-300 ease-in-out hover:underline hover:tracking-wide">
               ĐÁNH GIÁ & FEEDBACK KHÁCH HÀNG
             </div>
           </div>
@@ -224,7 +224,7 @@
               alt="Click to view more"
               class="object-contain w-[60px] aspect-[0.98] transition-transform duration-300 ease-in-out hover:scale-110 hover:opacity-80"
             />
-            <div class="flex-1 transition duration-300 ease-in-out hover:underline hover:tracking-wide">
+            <div class="special-font flex-1 transition duration-300 ease-in-out hover:underline hover:tracking-wide">
               GÓC SỨC KHỎE VÀ DINH DƯỠNG
             </div>
           </div>
@@ -284,12 +284,12 @@
         <section class="flex flex-wrap items-start">
           <div class="flex flex-col grow shrink min-w-[240px] w-[676px] max-md:max-w-full">
             <h1
-              class="py-28 pr-24 pl-32 text-7xl text-[#FFF8EC] bg-[#F8CD42] leading-[96px] min-h-[412px] tracking-[4px] w-[803px] max-md:px-5 max-md:py-24 max-md:text-4xl max-md:leading-[53px]"
+              class="special-font py-28 pr-24 pl-32 text-7xl text-[#FFF8EC] bg-[#F8CD42] leading-[96px] min-h-[412px] tracking-[4px] w-[803px] max-md:px-5 max-md:py-24 max-md:text-4xl max-md:leading-[53px]"
             >
               HÔM NAY BẠN<br />THÈM GÌ ?
             </h1>
             <nav
-              class="flex flex-col justify-center items-start py-20 pl-32 w-full text-3xl font-medium leading-tight text-[#376F38] bg-[#FFE0C3] max-w-[803px] min-h-[367px] max-md:pl-5 max-md:max-w-full"
+              class="flex flex-col justify-center items-start py-20 pl-32 w-full text-2xl font-medium leading-tight text-[#376F38] bg-[#FFE0C3] max-w-[803px] min-h-[367px] max-md:pl-5 max-md:max-w-full"
               aria-label="Food categories"
             >
             <ul class="flex flex-wrap gap-6 items-center w-full min-h-[200px] list-none p-0">
@@ -325,7 +325,7 @@
             class="flex relative grow shrink gap-2.5 items-start px-20 py-20 min-h-[779px] min-w-[240px] w-[510px] max-md:px-5 max-md:max-w-full"
           >
             <div
-              class="flex absolute right-0 bottom-0 z-0 flex-col h-[779px] min-w-[240px] w-[637px] max-md:max-w-full"
+              class="flex absolute right-0 bottom-0 z-0 flex-col h-[779px] min-w-[240px] w-[500px] max-md:max-w-full"
             >
               <div class="flex shrink-0 bg-[#F8CD42] h-[412px]"></div>
               <div class="flex shrink-0 bg-[#FFE0C3] h-[367px]"></div>
@@ -334,7 +334,7 @@
               loading="lazy"
               src="assets/images/blog/decorative-food.png"
               alt="Decorative food image"
-              class="object-contain z-0 my-auto w-[477px] aspect-[0.79] max-md:max-w-full"
+              class="object-contain z-0 my-auto w-[500px] max-md:max-w-full"
             />
           </div>
         </section>

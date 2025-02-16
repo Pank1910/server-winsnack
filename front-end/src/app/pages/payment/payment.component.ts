@@ -1,6 +1,12 @@
 import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
+import { OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+// import { AddressService } from '../services/address.service';
+// import { AuthService } from '../services/auth.service';
+// import { Address } from '../models/address.model';
+// import { User } from '../models/user.model';
 
 interface Product {
   id: number;
@@ -18,6 +24,58 @@ interface Product {
   imports: [CommonModule, FormsModule] // Thêm các module cần thiết
 })
 export class PaymentPageComponent {
+  // implements OnInit 
+  //   user: User;
+  //   defaultAddress: Address = new Address();
+  //   selectedAddress: string;
+    
+  //   constructor(
+  //     private addressService: AddressService,
+  //     private authService: AuthService,
+  //     private router: Router
+  //   ) { }
+  
+  //   ngOnInit() {
+  //     this.selectedAddress = localStorage.getItem('chosenAddress') || '';
+  //     this.getUser();
+  //     this.getDefaultAddress();
+  //   }
+  
+  //   getUser() {
+  //     this.authService.checkUser().subscribe(data => {
+  //       try {
+  //         this.user = new User(data['data']);
+  //       } catch (e) {
+  //         this.router.navigate(['/login']);
+  //       }
+  //     });
+  //   }
+  
+  //   getDefaultAddress() {
+  //     this.addressService.getUserAddress().subscribe(data => {
+  //       const addresses: Address[] = [];
+  //       data['data'].forEach((element: { [key: string]: any }) => {
+  //         const address = new Address(element);
+  //         addresses.push(address);
+  //         if (element['default'] === true) {
+  //           this.defaultAddress = address;
+  //         }
+  //       });
+  
+  //       if (addresses.length === 0) {
+  //         this.router.navigate(['/payment-address']);
+  //       }
+  
+  //       // Nếu có địa chỉ được chọn từ localStorage
+  //       addresses.forEach(address => {
+  //         if (address.addressID === this.selectedAddress) {
+  //           this.defaultAddress = address;
+  //         }
+  //       });
+  //     });
+  //   }
+  // }
+
   // Promo Code
   promoCode: string = '';
   
