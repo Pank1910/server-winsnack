@@ -1,9 +1,22 @@
+// module.exports = {
+//   content: [
+//     "./src/**/*.{html,ts}",
+//   ],
+//   theme: {
+//     extend: {},
+//   },
+//   plugins: [],
+// }
+
 module.exports = {
-  content: [
-    "./src/**/*.{html,ts}",
-  ],
   theme: {
-    extend: {},
+    extend: {
+      // Thêm các variants nếu cần thiết
+    }
   },
-  plugins: [],
-}
+  variants: {
+    extend: {
+      // Đảm bảo rằng bạn đã khai báo các variants cần thiết
+    }
+  }
+};
