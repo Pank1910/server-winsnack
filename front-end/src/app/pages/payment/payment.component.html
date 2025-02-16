@@ -15,21 +15,28 @@
         <meta property="og:image" content="/front-end/src/assets/images/payment/banner.png">
         <meta property="og:url" content="https://winsnack.vn/thanh-toan">
 
-        <!-- Embed fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-            rel="stylesheet"
-        />
-
         <!-- Styles -->
         <link rel="stylesheet" href="./payment.component.css" />
         
         <!-- TailwindCSS -->
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
-    <body class="bg-[#FFF8EC] px-52 py-12 flex flex-col items-center">
+    <body>
+        <!-- Các section chính: Breadcrumb -->
+        <nav class="flex flex-wrap gap-3.5 items-center px-20 py-3.5 w-full text-xl bg-[#FFE0C2] min-h-[50px] max-md:px-5 max-md:max-w-full" aria-label="Breadcrumb">
+            <a routerLink="['/homepage']" class="self-stretch my-auto font-medium cursor-pointer text-center text-black text-opacity-50 transition duration-300 hover:text-[#FF9413]"
+            >Trang chủ</a>
+            <img
+                loading="lazy"
+                src="/front-end/src/assets/images/blog/arrow-right.png"
+                class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square"
+                alt="Breadcrumb arrow"
+            />
+            <span class="self-stretch my-auto font-semibold text-[#FF9413]">
+                Thanh toán
+            </span>
+        </nav>
+        <div class="bg-[#FFF8EC] px-52 py-12 flex flex-col items-center">
         <!-- Header Section -->
         <h1 class="text-[#F7941D] text-6xl font-bold max-md:text-4xl">THANH TOÁN</h1>
         
@@ -40,7 +47,7 @@
                     <img src="/front-end/src/assets/images/payment/address-icon.png" alt="Biểu tượng địa chỉ" class="w-[35px]">
                     <span>Địa chỉ nhận hàng</span>
                 </div>
-                <button class="focus:outline-none focus:ring-2 focus:ring-[#F7941D]">
+                <button [routerLink]="'/payment-address'" class="focus:outline-none focus:ring-2 focus:ring-[#F7941D] cursor-pointer">
                     <img src="/front-end/src/assets/images/payment/edit-icon.png" alt="Icon chỉnh sửa" class="w-[35px]">
                 </button>
             </div>
@@ -48,6 +55,11 @@
                 <span class="font-bold">{{ defaultAddress.name }}</span>  &#10072; <span class="font-medium">{{ defaultAddress.phone }}</span>
             </div>
             <div class="mt-8">{{ defaultAddress.full_address }}</div>
+            <!-- Thêm *ngIf để kiểm tra có defaultAddress -->
+            <div *ngIf="defaultAddress" class="mt-8 text-3xl">
+                <span class="font-bold">{{ defaultAddress.name }}</span> &#10072; <span class="font-medium">{{ defaultAddress.phone }}</span>
+            </div>
+            <div *ngIf="defaultAddress" class="mt-8">{{ defaultAddress.full_address() }}</div>
         </div>
         
         <!-- Cart Section -->
@@ -135,5 +147,6 @@
                 (click)="onPlaceOrder()">ĐẶT HÀNG
             </button>
         </div>
+    </div>
   </body>
 </html>

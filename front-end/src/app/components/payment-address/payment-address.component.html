@@ -1,0 +1,55 @@
+<script src="https://cdn.tailwindcss.com"></script>
+
+<nav class="flex flex-wrap items-center gap-3.5 px-20 py-3.5 w-full text-xl bg-[#FFE0C2] min-h-[50px] max-md:px-5 max-md:max-w-full" aria-label="Breadcrumb">
+    <a routerLink="/homepage" class="font-medium cursor-pointer text-center text-black text-opacity-50 transition duration-300 hover:text-[#FF9413]">Trang chủ</a>
+    <img src="assets/images/payment/arrow-right.png" class="w-4 aspect-square object-contain" alt="Breadcrumb arrow"/>
+    <a routerLink="/payment" class="font-medium cursor-pointer text-center text-black text-opacity-50 transition duration-300 hover:text-[#FF9413]">Thanh toán</a>
+    <img src="assets/images/payment/arrow-right.png" class="w-4 aspect-square object-contain" alt="Breadcrumb arrow"/>
+    <span class="font-semibold text-[#FF9413]">Địa chỉ giao hàng</span>
+  </nav>
+  
+  <div class="flex flex-col items-center px-24 py-14 bg-[#FFF8EC] max-md:px-5">
+    <h1 class="px-4 py-3 text-4xl font-bold text-black">THAY ĐỔI ĐỊA CHỈ</h1>
+    
+    <div class="flex flex-col justify-center mt-5 max-w-full min-h-[336px] w-[1235px]">
+        <!-- Thêm *ngIf để kiểm tra có addressList -->
+        <div *ngIf="addressList && addressList.length > 0">
+            <div *ngFor="let address of addressList; let i = index" class="flex flex-col w-full rounded-md border border-[#DDDDDD] bg-[#FEFFF8] max-md:max-w-full mb-8">
+                <div class="flex flex-wrap gap-5 justify-between items-center py-px pr-11 rounded-md border border-[#DDDDDD] bg-[#9A9898] bg-opacity-20 max-md:pr-5">
+                    <div class="px-16 py-16 text-xl font-bold text-center text-black bg-[#FFE0C2] rounded-md border border-[#DDDDDD] max-md:px-5">
+                        {{ address.name }}
+                    </div>
+                    <div class="flex flex-col text-xl text-black">
+                        <div>Số điện thoại:</div>
+                        <div class="mt-5">Địa chỉ:</div>
+                    </div>
+                    <div class="flex flex-col max-md:max-w-full">
+                        <div class="flex flex-wrap gap-5 justify-between w-full max-md:max-w-full">
+                            <div class="my-auto text-2xl text-black">{{ address.phone }}</div>
+                            <div *ngIf="address.isDefault" class="flex gap-6 items-center text-xl font-bold text-black">
+                                <div class="px-2 py-1.5 rounded-md border border-[#F7941D]">Địa chỉ mặc định</div>
+                                <img loading="lazy" src="assets/images/icons/edit.png" class="w-[25px] cursor-pointer hover:opacity-80 transition" (click)="editAddress(address.addressID)" alt="Edit" />
+                                <img loading="lazy" src="assets/images/icons/delete.png" class="w-[25px] cursor-pointer hover:opacity-80 transition" (click)="deleteAddress(address.addressID)" alt="Delete" />
+                            </div>
+                        </div>
+                        <div class="mt-3.5 text-2xl text-black max-md:max-w-full">{{ address.full_address() }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="w-[230px] p-4 text-2xl font-bold text-black border border-[#F7941D] rounded-md hover:bg-[#F7941D] hover:text-white transition" (click)="addNewAddress()">
+        Thêm địa chỉ mới
+    </button>
+
+    <div class="flex flex-wrap gap-8 justify-center items-start self-stretch px-96 mt-5 w-full text-2xl text-center text-black max-md:px-5 max-md:max-w-full">
+        <button class="flex-grow w-40 px-4 py-5 font-semibold bg-gray-400 rounded-lg hover:bg-gray-500 transition" (click)="goBack()">
+            QUAY LẠI
+        </button>
+        <button class="flex-grow w-40 px-4 py-5 font-medium bg-[#F7941D] rounded-lg hover:bg-[#FF9413] transition" (click)="complete()">
+            HOÀN THÀNH
+        </button>
+    </div>
+</div>
+  
