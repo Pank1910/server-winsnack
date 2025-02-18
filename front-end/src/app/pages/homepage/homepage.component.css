@@ -1,3 +1,33 @@
-:host {
-  display: contents;
+/* File homepage.component.css */
+.custom-nav {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 0 4px rgba(255, 165, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.custom-nav::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid #FF5B00;
+  border-right: 2px solid #FF5B00;
+}
+
+.swiper-button-prev.custom-nav::after {
+  transform: rotate(-135deg);
+  margin-right: 2px;
+}
+
+.swiper-button-next.custom-nav::after {
+  transform: rotate(45deg);
+  margin-left: 2px;
+}
+
+.custom-nav:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 6px rgba(255, 165, 0, 0.5);
+  background-color: rgba(255, 255, 255, 1);
 }

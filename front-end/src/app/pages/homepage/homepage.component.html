@@ -11,7 +11,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="./homepage.component.css" />
-
+    
 </head>
 
 <body>
@@ -31,37 +31,49 @@
                 </h2>
 
                 <!-- View More Button -->
-                <a routerLink="/categories"
-                    class="flex items-center gap-2 px-4 py-1.5 bg-white border-2 border-[#F7941D] rounded-lg font-bold text-[#F7941D] hover:bg-[#FFF8EC] transition-colors">
+                <a routerLink="/product-category"
+                    class="flex items-center gap-2 px-4 py-1.5 bg-white border-2 border-[#F7941D] rounded-lg font-bold text-[#F7941D] hover:bg-[#FFF8EC] transition-colors duration-300 ease-in-out transform hover:scale-105">
                     <span>XEM THÊM</span>
                     <img src="assets/images/homepage/arrow-right.svg" class="w-6 h-6" alt="" loading="lazy" />
                 </a>
             </div>
 
             <!-- Category Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10 h-[348px]">
-                <div *ngFor="let card of categoryCards"
-                    class="relative rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.1)] h-full">
-                    <img [src]="card.imageUrl" [alt]="card.altText"
-                        class="absolute inset-0 w-full h-full object-cover rounded-xl" loading="lazy" />
-
-                    <div
-                        class="relative h-full flex flex-col justify-end p-5 bg-gradient-to-t from-[rgba(0,0,0,0.6)] to-transparent rounded-xl">
-                        <h3 class="text-3xl text-white mb-5">{{ card.title }}</h3>
-                        <div class="text-white">
-                            <span class="text-base">từ</span>
-                            <span class="text-4xl font-bold text-[#FF5B00] ml-2">
-                                {{ card.price}}Đ
-                            </span>
+            <section class="overflow-hidden whitespace-nowrap relative w-full">
+                <swiper-container 
+                    init="false"
+                    class="!overflow-visible"
+                >
+                    <swiper-slide *ngFor="let card of categoryCards" class="!h-auto">
+                        <div class="relative rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.1)] h-full overflow-hidden group">
+                            <img [src]="card.imageUrl" [alt]="card.altText"
+                                class="absolute inset-0 w-full h-full object-cover rounded-xl transition-transform duration-500 ease-in-out group-hover:scale-110" 
+                                loading="lazy" />
+            
+                            <div class="relative h-full flex flex-col justify-end p-5 bg-gradient-to-t from-[rgba(0,0,0,0.6)] to-transparent rounded-xl transition-opacity duration-300 ease-in-out group-hover:opacity-90">
+                                <h3 class="text-3xl text-white mb-5 group-hover:text-[#FF5B00] transition-colors duration-300">
+                                    {{ card.title }}
+                                </h3>
+                                <div class="text-white">
+                                    <span class="text-2xl">từ</span>
+                                    <span class="text-4xl font-bold text-[#FF5B00] ml-1">
+                                        {{ card.price }}Đ
+                                    </span>
+                                </div>
+                                <a routerLink="/product-detail">
+                                    <button
+                                        class="w-full mt-5 py-3 bg-[#FF5B00] rounded-lg shadow-[0_0_39px_rgba(255,91,0,0.23)] hover:bg-[#E95924] transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-[0_0_50px_rgba(255,91,0,0.4)] text-white font-bold">
+                                        Mua ngay
+                                    </button>
+                                </a>
+                            </div>
                         </div>
-                        <button
-                            class="w-full mt-5 py-3 bg-[#FF5B00] rounded-lg shadow-[0_0_39px_rgba(255,91,0,0.23)] hover:bg-[#E95924] transition-colors text-white font-bold">
-                            Mua ngay
-                        </button>
-                    </div>
-                </div>
-            </div>
+                    </swiper-slide>
+                </swiper-container>
+            </section>
+
         </section>
+
 
         <!-- New Product Section -->
         <section class="mt-12 w-full text-center relative h-[431px]">
@@ -75,10 +87,12 @@
                     Bánh tráng phơi sương
                 </h1>
 
-                <button
-                    class="text-3xl mt-4 px-12 py-4 bg-[#FFFFFF] text-[#FF5B00] rounded-full font-bold hover:bg-[#E95924] hover:text-white transition-colors">
-                    Mua liền
-                </button>
+                <a routerLink="/product-detail">
+                    <button
+                        class="text-3xl mt-4 px-12 py-4 bg-[#FFFFFF] text-[#FF5B00] rounded-full font-bold hover:bg-[#E95924] hover:text-white transition-colors">
+                        Mua liền
+                    </button>
+                </a>
             </div>
         </section>
 
@@ -96,7 +110,7 @@
             <!-- Products Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div *ngFor="let product of products"
-                    class="bg-white rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.1)] overflow-hidden hover:shadow-lg transition-shadow">
+                    class="bg-white rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.1)] overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
                     <div class="relative aspect-square">
                         <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-full object-cover"
                             loading="lazy" />
@@ -136,10 +150,12 @@
 
             <!-- Blog Posts Grid -->
             <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 justify-center max-w-6xl mx-auto py-8">
-                <div *ngFor="let post of blogPosts" class="flex flex-col pb-5 min-w-[280px] w-[350px] mx-auto">
+                <div *ngFor="let post of blogPosts" 
+                class="flex flex-col pb-5 min-w-[280px] w-[350px] mx-auto"
+                routerLink="['/product-details', product.id]">
                     <!-- Hình ảnh bài viết -->
                     <img loading="lazy" [src]="post.image" [alt]="post.title"
-                        class="object-cover w-full rounded-lg aspect-[0.79] transition-transform duration-300 hover:scale-105" />
+                        class="object-cover w-full rounded-lg aspect-[0.79] transition-transform duration-300 hover:scale-105 cursor-not-allowed"/>
 
                     <!-- Thông tin meta: Comments & Time -->
                     <div class="flex gap-3 items-center mt-3 text-sm text-amber-500">
