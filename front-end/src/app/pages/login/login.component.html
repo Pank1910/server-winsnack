@@ -27,7 +27,7 @@
         <!-- Left Section (Banner) -->
         <div class="flex-1 mr-8">
             <div class="flex justify-center mb-6">
-                <img src="image.png" alt="Win Snack Banner" class="w-full h-auto rounded-lg">
+                <img src="/front-end/src/assets/images/login-register/event-tet.png" alt="Win Snack Banner" class="w-full h-auto rounded-lg">
             </div>
         </div>
 
@@ -36,6 +36,21 @@
             <div class="text-center mb-6">
                 <h1 class="text-3xl font-bold text-orange-600">Chào mừng đến với <span class="text-green-500">Win Snack!</span></h1>
             </div>
+
+            <!-- Register & Login Buttons -->
+            <div class="flex justify-center space-x-4 mb-6">
+                <button 
+                    class="w-32 py-2 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600" 
+                    routerLink="/login">
+                    Đăng nhập
+                </button>
+                <button 
+                    class="w-32 py-2 bg-[#ff9a76] text-white font-semibold rounded-full hover:bg-[#ff8b60]" 
+                    routerLink="/register">
+                    Đăng ký
+                </button>
+            </div>
+            
 
             <!-- Add the new text above the form -->
             <div class="text-lg font-semibold text-gray-700 mb-4">
@@ -58,7 +73,7 @@
                         <div class="relative">
                             <input type="password" id="password" name="password" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Nhập mật khẩu của bạn" required>
                             <button type="button" id="toggle-password" class="absolute right-3 top-1/2 transform -translate-y-1/2">
-                                <img src="eye-icon.png" alt="Show/Hide" class="w-6 h-6">
+                                <img src="/front-end/src/assets/images/login-register/invisible-icon.png" alt="Show/Hide" class="w-6 h-6">
                             </button>
                         </div>
                         <span id="password-error" class="text-red-500 text-xs"></span>
@@ -81,11 +96,11 @@
                     <!-- Social Media Login -->
                     <div class="text-center mt-4">
                         <button type="button" class="w-full py-3 bg-[#ffb74d] text-white font-semibold rounded-lg hover:bg-[#ff9e3f] mb-2 flex items-center justify-center space-x-2">
-                            <img src="google-icon.png" alt="Google" class="w-5 h-5">
+                            <img src="/front-end/src/assets/images/login-register/google-icon.png" alt="Google" class="w-5 h-5">
                             <span>Đăng nhập với Google</span>
                         </button>
                         <button type="button" class="w-full py-3 bg-[#ffb74d] text-white font-semibold rounded-lg hover:bg-[#ff9e3f] flex items-center justify-center space-x-2">
-                            <img src="facebook-icon.png" alt="Facebook" class="w-5 h-5">
+                            <img src="/front-end/src/assets/images/login-register/facebook-icon.png" alt="Facebook" class="w-5 h-5">
                             <span>Đăng nhập với Facebook</span>
                         </button>
                     </div>
