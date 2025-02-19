@@ -6,7 +6,7 @@ import { AboutComponent } from './pages/about/about.component';
 import { BlogComponent } from './pages/blog/blog.component';
 import { AllBlogsComponent } from './components/all-blogs/all-blogs.component';
 import { ReadBlogComponent } from './components/read-blog/read-blog.component';
-// import { CartComponent } from './pages/cart/cart.component';
+import { CartComponent } from './pages/cart/cart.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
 // import { EventsComponent } from './pages/events/events.component';
@@ -44,7 +44,7 @@ export const routes: Routes = [
         ]
     },   // { path: 'account', component: AccountComponent },
 
-    // { path: 'cart', component: CartComponent },
+    { path: 'cart', component: CartComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'login', component: LoginComponent },
     { path: 'contact', component: ContactComponent },
