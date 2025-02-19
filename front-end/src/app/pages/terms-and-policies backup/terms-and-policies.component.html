@@ -1,0 +1,33 @@
+<div class="flex">
+
+    <!-- Sidebar -->
+    <div class="w-1/4 bg-[#FFF8EC] p-6">
+        <h2 class="text-[22px] font-semibold text-[#FF9413] mb-6">ĐIỀU KHOẢN & CHÍNH SÁCH</h2>
+        <ul>
+            <li class="mb-4">
+                <a routerLink="refund-policy" routerLinkActive="font-bold text-[#FF9413]"
+                   class="block px-4 py-2 text-lg text-[#333] hover:text-[#F7941D]">
+                    Chính sách bán hàng & Đổi trả
+                </a>
+            </li>
+            <li class="mb-4">
+                <a routerLink="shipping-policy" routerLinkActive="font-bold text-[#FF9413]"
+                   class="block px-4 py-2 text-lg text-[#333] hover:text-[#F7941D]">
+                    Chính sách vận chuyển
+                </a>
+            </li>
+            <li class="mb-4">
+                <a routerLink="privacy-policy" routerLinkActive="font-bold text-[#FF9413]"
+                   class="block px-4 py-2 text-lg text-[#333] hover:text-[#F7941D]">
+                    Chính sách bảo mật
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Nội dung trang -->
+    <div class="w-3/4 p-6 bg-[#FFF8EC]">
+        <router-outlet></router-outlet>
+    </div>
+
+</div>

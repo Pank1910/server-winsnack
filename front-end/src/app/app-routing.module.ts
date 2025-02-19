@@ -17,18 +17,18 @@
 // })
 // export class AppRoutingModule {}
 
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { TermsAndPoliciesComponent } from './pages/terms-and-policies/sales-and-return-policy/terms-and-policies.component1';  // Import your component
+// import { NgModule } from '@angular/core';
+// import { RouterModule, Routes } from '@angular/router';
+// // // import { TermsAndPoliciesComponent } from './pages/terms-and-policies2/sales-and-return-policy/terms-and-policies.component';  // Import your component
 
-const routes: Routes = [
-  { path: '', redirectTo: '/terms-and-policies', pathMatch: 'full' },
-  { path: 'terms-and-policies', component: TermsAndPoliciesComponent },
-  // Other routes
-];
+// // const routes: Routes = [
+// //   { path: '', redirectTo: '/terms-and-policies', pathMatch: 'full' },
+// //   // { path: 'terms-and-policies', component: TermsAndPoliciesComponent },
+// //   // Other routes
+// // ];
 
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }
+// @NgModule({
+//   imports: [RouterModule.forRoot(routes)],
+//   exports: [RouterModule]
+// })
+// export class AppRoutingModule { }
