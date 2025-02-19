@@ -1,0 +1,24 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: 'MyFont';
+    src: url('/assets/fonts/MONTSERRAT-REGULAR.TTF') format('TTF');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  body {
+    font-family: 'MyFont', sans-serif;
+  }
+  
+@font-face {
+    font-family: 'FontCookies';
+    src: url('/assets/fonts/UTM-COOKIES.TTF') format('truetype');
+}
+  
+.special-font {
+  font-family: 'FontCookies', sans-serif;
+}/* You can add global styles to this file, and also import other style files */
