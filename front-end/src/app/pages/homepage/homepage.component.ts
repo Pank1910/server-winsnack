@@ -1,23 +1,45 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SubscriptionComponent } from '../../components/subscription/subscription.component';
+import { SwiperOptions } from 'swiper/types';
+import { Navigation } from 'swiper/modules';
+import { SwiperContainer } from 'swiper/element';
+import { register } from 'swiper/element/bundle';
+
 // import { slideInOutAnimation } from 'src/app/models/slide-in-out.animation';
 // import { scaleInOutAnimation } from 'src/app/models/scale-in-out.animation';
 // import { fadeInOutAnimation } from 'src/app/models/fade-in-out.animation';
+
+register(); // Đăng ký Swiper custom elements
+
 @Component({
   selector: 'app-homepage',
   standalone: true,
   imports: [RouterModule, CommonModule, SubscriptionComponent],
   templateUrl: './homepage.component.html',
-  styleUrls: ['./homepage.component.css'],
+  styleUrls: ['swiper/swiper-bundle.min.css','./homepage.component.css'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
   // animations: [slideInOutAnimation ,scaleInOutAnimation,fadeInOutAnimation,
   // ],
 
 })
-export class HomepageComponent {
+export class HomepageComponent implements OnInit {
    constructor(private router: Router) { }
+
+   swiperParams: SwiperOptions = {
+    modules: [Navigation],
+    slidesPerView: 1,
+    spaceBetween: 20,
+    navigation: true,
+    breakpoints: {
+      640: { slidesPerView: 2 },
+      1024: { slidesPerView: 3 },
+      1280: { slidesPerView: 4 }
+    }
+  };
+
   // Data for Category Section
   categoryCards = [
     {
@@ -43,6 +65,24 @@ export class HomepageComponent {
       altText: 'Bánh tráng chấm',
       title: 'Bánh tráng chấm',
       price: 18000
+    },
+    {
+      imageUrl: 'assets/images/homepage/category-1.png',
+      altText: 'Bánh tráng trộn',
+      title: 'Bánh tráng trộn',
+      price: 15000
+    },
+    {
+      imageUrl: '/assets/images/homepage/category-2.png',
+      altText: 'Bánh tráng nướng',
+      title: 'Bánh tráng nướng',
+      price: 20000
+    },
+    {
+      imageUrl: '/assets/images/homepage/category-1.png',
+      altText: 'Snack Hàn Quốc',
+      title: 'Snack Hàn Quốc',
+      price: 25000
     }
   ];
 
@@ -114,6 +154,16 @@ export class HomepageComponent {
       time: '5 giờ trước'
     }
   ];
+
+  ngOnInit() {
+    // Khởi tạo Swiper thủ công
+    const swiperEl = document.querySelector('swiper-container');
+    if (swiperEl) {
+      Object.assign(swiperEl, this.swiperParams);
+      swiperEl.initialize();
+    }
+  }
+
   // navigateToEvent() {
   //   this.router.navigate(['/event']);
   // }
