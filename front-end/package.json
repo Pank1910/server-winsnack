@@ -29,6 +29,7 @@
     "@angular/compiler-cli": "^19.0.0",
     "@tailwindcss/postcss": "^4.0.6",
     "@types/jasmine": "~5.1.0",
+    "@types/swiper": "^5.4.3",
     "autoprefixer": "^10.4.20",
     "jasmine-core": "~5.4.0",
     "karma": "~6.4.0",

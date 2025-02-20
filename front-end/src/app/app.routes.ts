@@ -12,9 +12,9 @@ import { LoginComponent } from './pages/login/login.component';
 // import { EventsComponent } from './pages/events/events.component';
 // import { ContactComponent } from './pages/contact/contact.component';
 // import { AccountComponent } from './pages/account/account.component';
-// import { MinigameComponent } from './pages/minigame/minigame.component';
+import { MinigameComponent } from './pages/minigame/minigame.component';
 // import { PaymentPageComponent } from './pages/payment/payment.component';
-// import { ProductCategoryComponent } from './pages/product-category/product-category.component';
+import { ProductCategoryComponent } from './pages/product-category/product-category.component';
 // // import { ProductDetailComponent } from './pages/product-detail/product-detail.component';
 
 import { ContactComponent } from './pages/contact/contact.component';
@@ -32,6 +32,7 @@ export const routes: Routes = [
     { path: 'read-blog', component: ReadBlogComponent },
     { path: 'header', component: HeaderComponent },
     { path: 'footer', component: FooterComponent },
+    { path: 'product-category', component: ProductCategoryComponent },
   
     { 
         path: 'terms-and-policies', 
@@ -52,7 +53,7 @@ export const routes: Routes = [
     // { path: 'events', component: EventsComponent },
     // { path: 'contact', component: ContactComponent },
     // { path: 'account', component: AccountComponent },
-    // { path: 'minigame', component: MinigameComponent },
+    { path: 'minigame', component: MinigameComponent },
     // { path: 'product-category', component: ProductCategoryComponent },
     // { path: 'product-detail', component: ProductDetailComponent },
 
