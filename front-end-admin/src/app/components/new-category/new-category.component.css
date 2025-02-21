@@ -1,0 +1,14 @@
+:host {
+    display: block;
+  }
+  
+  ngx-dropzone {
+    &:hover {
+      background-color: #FFF8EC !important;
+    }
+  }
+  
+  .custom-dropzone {
+    border: none !important;
+    background: transparent !important;
+  }
