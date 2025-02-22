@@ -1,0 +1,66 @@
+<script src="https://cdn.tailwindcss.com"></script>
+<div class="flex flex-col">
+    <!-- Action Bar -->
+    <div class="flex justify-between items-center px-12 py-4 mt-2.5 w-full bg-[#FFF8EC]">
+      <a [routerLink]="['/new-category']" class="px-4 py-3 text-2xl font-bold text-[#FF9413] bg-white border border-[#FF9413] rounded-lg min-w-[240px] transition hover:bg-[#FFE0C3] cursor-pointer">
+        THÊM DANH MỤC MỚI
+      </a>
+      <div class="flex justify-between self-stretch my-auto min-w-[240px] w-[497px] max-md:max-w-full mt-3">
+        <form class="flex overflow-hidden gap-3 items-center p-3 text-sm rounded-sm bg-gray-200 min-w-[240px] w-[455px] max-md:max-w-full">
+          <div class="font-semibold">Tất cả sản phẩm</div>
+          <img src="assets/icons/arrow-down-black.png" alt="Dropdown" class="w-4">
+          <div class="flex gap-3 items-center font-medium">
+            <img src="assets/icons/divider.png" alt="Divider" class="w-px h-6">
+            <input id="postSearch" type="text" placeholder="Tìm kiếm" class="bg-transparent border-none outline-none flex-1" />
+          </div>
+        </form>
+        <button class="flex items-center justify-center w-[55px] h-[42px] bg-[#FF9413] transition hover:bg-[#FFE0C3]">
+          <img src="assets/icons/search.png" alt="Search" class="w-6">
+        </button>
+      </div>
+    </div>
+  
+    <!-- Table -->
+    <div class="flex flex-wrap justify-between items-start self-center max-w-full bg-orange-50 min-h-[566px] w-[1101px]">
+        <div class="flex flex-wrap gap-2.5 items-center text-xl font-semibold text-center text-white bg-[#FF9413] min-w-[240px] w-[1101px] max-md:max-w-full">
+            <div class="self-stretch px-2.5 py-6 my-auto whitespace-nowrap min-h-[67px] w-[118px]">ID</div>
+            <div class="self-stretch px-2.5 py-6 my-auto whitespace-nowrap min-h-[67px] w-[220px]">Tên danh mục</div>
+            <div class="self-stretch px-2.5 py-6 my-auto whitespace-nowrap min-h-[67px] w-[220px]">Hình ảnh</div>
+            <div class="self-stretch px-2.5 py-6 my-auto min-h-[67px] w-[203px]">Số lượng sản phẩm</div>
+            <div class="self-stretch px-2.5 py-6 my-auto min-h-[67px] w-[140px]">Hiển thị</div>
+            <div class="self-stretch px-2.5 py-6 my-auto min-h-[67px] w-[120px]">Tác vụ</div>
+        </div>
+        
+        <ng-container *ngFor="let category of categories; let i = index">
+            <div [ngClass]="{'bg-[#FFE0C3]': i % 2 === 0, 'bg-[#FFF8EC]': i % 2 !== 0}" class="flex flex-wrap gap-2.5 items-center min-w-[240px] w-[1100px] max-md:max-w-full text-xl font-medium text-center text-black">
+                <div class="self-stretch px-2.5 py-10 my-auto whitespace-nowrap min-h-[100px] w-[118px]">
+                    {{ category.id }}
+                </div>
+                <div class="self-stretch px-2.5 py-10 my-auto whitespace-nowrap min-h-[100px] w-[220px]">
+                    {{ category.name }}
+                </div>
+                <div class="self-stretch px-2.5 py-10 my-auto whitespace-nowrap min-h-[100px] w-[231px] flex justify-center">
+                    <img [src]="category.imageUrl" [alt]="category.name" class="w-[198px] h-[80px] object-cover rounded-md">
+                </div>
+                <div class="self-stretch px-2.5 py-10 my-auto min-h-[100px] w-[203px]">
+                    {{ category.productCount }} sản phẩm
+                </div>
+                <div class="self-stretch px-2.5 py-10 my-auto min-h-[100px] w-[130px] flex justify-center">
+                  <input type="checkbox" [checked]="category.isVisible" (change)="toggleVisibility(category.id)"
+                  class="w-6 h-6 border-2 border-[#FF9413] rounded-md cursor-pointer 
+                  appearance-none checked:bg-[#FF9413] checked:border-[#FF9413] 
+                  checked:bg-[url('assets/icons/tick-icon.png')] checked:bg-center checked:bg-no-repeat">
+                </div>
+                <div class="flex gap-4 justify-center items-center self-stretch py-8 my-auto min-h-[80px] w-[90px] ml-5">
+                    <button class="transition hover:scale-110" aria-label="Edit category">
+                        <img src="assets/icons/edit.png" alt="Edit" class="object-contain shrink-0 self-stretch my-auto aspect-square w-[35px]" />
+                    </button>
+                    <button class="transition hover:scale-110" aria-label="Delete category">
+                        <img src="assets/icons/delete.png" alt="Delete" class="object-contain shrink-0 self-stretch my-auto aspect-square w-[35px]" />
+                    </button>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+  </div>
+  

@@ -1,0 +1,21 @@
+<script src="https://cdn.tailwindcss.com"></script>
+<header class="flex justify-between items-center px-14 py-2 w-full text-base font-semibold text-black bg-[#FF9413] min-h-[55px] rounded-none max-md:px-5 max-md:max-w-full">
+    <div></div> <!-- Placeholder to keep balance -->
+    <div class="flex gap-4 items-center">
+      <div class="relative">
+        <div class="flex gap-1.5 items-center cursor-pointer" (click)="isNotificationOpen = !isNotificationOpen">
+          <img loading="lazy" src="assets/images/icons/notification.png" alt="Thông báo" class="w-[30px] aspect-square object-contain" />
+          <span>Thông báo</span>
+        </div>
+        <div *ngIf="isNotificationOpen" class="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-md p-4">
+          <p class="text-gray-500">Không có thông báo mới</p>
+        </div>
+      </div>
+      <div class="flex gap-1.5 items-center whitespace-nowrap cursor-pointer">
+        <img loading="lazy" [src]="account.images" alt="Admin profile" class="w-10 rounded-full aspect-square" />
+        <span>{{ account.name }}</span>
+        <img loading="lazy" src="assets/images/icons/arrow-down-black.png" alt="Settings" class="w-[18px] aspect-square" />
+      </div>
+    </div>
+</header>
+
