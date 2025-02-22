@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Win Snack - Thưởng thức những món snack ngon nhất với hương vị hấp dẫn">
+    <meta name="keywords" content="snack, bánh tráng, đồ ăn vặt, Win Snack">
+    <meta name="author" content="Win Snack">
+    <title>Đăng Nhập Win Snack</title>
+
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Tùy chỉnh font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-[#fff8e5] text-[#333] flex justify-center items-center min-h-screen">
+
+    <div class="w-full max-w-6xl flex bg-white p-8 rounded-lg shadow-xl">
+        <!-- Left Section (Banner) -->
+        <div class="flex-1 mr-8">
+            <div class="flex justify-center mb-6">
+                <img src="/front-end-admin/src/assets/images/login-register/event-tet.png" alt="Win Snack Banner" class="w-full h-auto rounded-lg">
+            </div>
+        </div>
+
+        <!-- Right Section (Form) -->
+        <div class="flex-1">
+            <div class="text-center mb-6">
+                <h1 class="text-3xl font-bold text-orange-600">Chào mừng đến với <span class="text-green-500">Win Snack!</span></h1>
+            </div>
+
+            <!-- Register & Login Buttons -->
+            <div class="flex justify-center space-x-4 mb-6">
+                <button 
+                    class="w-32 py-2 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600" 
+                    routerLink="/login">
+                    Đăng nhập
+                </button>
+                <button 
+                    class="w-32 py-2 bg-[#ff9a76] text-white font-semibold rounded-full hover:bg-[#ff8b60]" 
+                    routerLink="/register">
+                    Đăng ký
+                </button>
+            </div>
+            
+
+            <!-- Add the new text above the form -->
+            <div class="text-lg font-semibold text-gray-700 mb-4">
+                Bạn đang thèm gì? Ghé ngay <span class="text-orange-600">Win Snack</span>! – nơi hội tụ những món ăn vặt đỉnh cao. Đảm bảo <span class="font-bold text-black">Ăn là ghiền!</span>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" action="#" method="POST">
+                <div class="space-y-6">
+                    <!-- Username Field -->
+                    <div class="text-sm text-gray-700">
+                        <label for="username" class="block">Tên đăng nhập</label>
+                        <input type="text" id="username" name="username" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Nhập tên đăng nhập của bạn" required>
+                        <span id="username-error" class="text-red-500 text-xs"></span>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="text-sm text-gray-700">
+                        <label for="password" class="block">Mật khẩu</label>
+                        <div class="relative">
+                            <input type="password" id="password" name="password" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Nhập mật khẩu của bạn" required>
+                            <button type="button" id="toggle-password" class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                <img src="/front-end-admin/src/assets/images/login-register/invisible-icon.png" alt="Show/Hide" class="w-6 h-6">
+                            </button>
+                        </div>
+                        <span id="password-error" class="text-red-500 text-xs"></span>
+                    </div>
+
+                    <!-- Remember me Checkbox -->
+                    <div class="flex items-center space-x-3">
+                        <input type="checkbox" id="remember-me" class="w-4 h-4 text-orange-500 focus:ring-orange-500">
+                        <label for="remember-me" class="text-[#ffb74d]">Lưu mật khẩu</label>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div class="text-center text-red-500 mt-2" id="error-message"></div>
+
+                    <!-- Submit Button -->
+                    <div class="mt-6">
+                        <button type="submit" class="w-full py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600">Đăng nhập</button>
+                    </div>
+
+                    <!-- Social Media Login -->
+                    <div class="text-center mt-4">
+                        <button type="button" class="w-full py-3 bg-[#ffb74d] text-white font-semibold rounded-lg hover:bg-[#ff9e3f] mb-2 flex items-center justify-center space-x-2">
+                            <img src="/front-end-admin/src/assets/images/login-register/google-icon.png" alt="Google" class="w-5 h-5">
+                            <span>Đăng nhập với Google</span>
+                        </button>
+                        <button type="button" class="w-full py-3 bg-[#ffb74d] text-white font-semibold rounded-lg hover:bg-[#ff9e3f] flex items-center justify-center space-x-2">
+                            <img src="/front-end-admin/src/assets/images/login-register/facebook-icon.png" alt="Facebook" class="w-5 h-5">
+                            <span>Đăng nhập với Facebook</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript for handling password visibility and validation -->
+    <script>
+        // Toggle password visibility
+        document.getElementById('toggle-password').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            const passwordType = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = passwordType;
+        });
+
+        // Handle form submission
+        document.getElementById('login-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Clear previous errors
+            document.getElementById('username-error').textContent = '';
+            document.getElementById('password-error').textContent = '';
+            document.getElementById('error-message').textContent = '';
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Fake user data for demonstration (you can replace this with actual validation from a database or API)
+            const fakeUserData = {
+                username: "winsnack@gmail.com",
+                password: "123456"
+            };
+
+            // Validate form
+            if (!username.trim()) {
+                document.getElementById('username-error').textContent = 'Tên đăng nhập không được để trống';
+                return;
+            } else if (username !== fakeUserData.username) {
+                document.getElementById('username-error').textContent = 'Tên đăng nhập không tồn tại';
+                return;
+            }
+
+            if (!password.trim()) {
+                document.getElementById('password-error').textContent = 'Mật khẩu không được để trống';
+                return;
+            } else if (password !== fakeUserData.password) {
+                document.getElementById('password-error').textContent = 'Mật khẩu không chính xác';
+                return;
+            }
+
+            // If form is valid
+            console.log('Form Submitted');
+            // Proceed with login logic here...
+        });
+    </script>
+
+</body>
+
+</html>
