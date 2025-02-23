@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài khoản Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-orange-500 py-3 px-6 flex justify-end items-center gap-8">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+            <span class="text-white font-medium">Thông báo</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <img src="/api/placeholder/32/32" alt="Admin" class="w-8 h-8 rounded-full"/>
+            <span class="text-white font-medium">Admin101</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto p-6">
+        <h1 class="text-4xl font-bold text-orange-500 mb-8 text-center">TÀI KHOẢN ADMIN</h1>
+
+        <!-- Profile Section - Horizontal Layout -->
+        <div class="flex justify-center items-center gap-20 mb-12">
+            <!-- Profile Image -->
+            <div class="flex flex-col items-center">
+                <img src="/front-end/src/assets/images/account/avatar.png" alt="Profile" class="rounded-full w-24 h-24 object-cover"/>
+            </div>
+
+            <!-- Profile Info -->
+            <div class="flex flex-col items-center">
+                <h2 class="text-xl font-bold">Linh Linh</h2>
+                <p class="text-gray-600">Admin 1</p>
+                <p class="text-gray-500">khanhlinh@gmail.com</p>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex gap-4">
+                <button class="bg-orange-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-orange-600 transition-colors">Cập nhật ảnh</button>
+                <button class="border-2 border-orange-500 text-orange-500 px-6 py-2 rounded-lg font-medium hover:bg-orange-50 transition-colors">Chỉnh sửa</button>
+            </div>
+        </div>
+
+        <!-- Rest of the content remains the same -->
+        <div class="space-y-4 mb-8">
+            <div>
+                <label class="text-gray-600">Họ và tên:</label>
+                <p>Linh Linh</p>
+            </div>
+            <div>
+                <label class="text-gray-600">Email:</label>
+                <p>khanhlinh@gmail.com</p>
+            </div>
+            <div>
+                <label class="text-gray-600">Số điện thoại:</label>
+                <p>0123456789</p>
+            </div>
+        </div>
+
+        <!-- Password Section -->
+        <div class="bg-orange-50 p-6 rounded-lg mb-8">
+            <h2 class="text-2xl font-bold text-orange-500 mb-6">MẬT KHẨU</h2>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold">Mật khẩu</h3>
+                        <p class="text-lg">••••••••</p>
+                    </div>
+                    <button class="text-orange-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold">SMS</h3>
+                        <p class="text-gray-600">Nhận mã SMS cho mỗi lần đăng nhập</p>
+                    </div>
+                    <button class="text-orange-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold">Thông báo SMS</h3>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer" checked>
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Display Section -->
+        <div class="bg-orange-50 p-6 rounded-lg">
+            <h2 class="text-2xl font-bold text-orange-500 mb-6">DISPLAY</h2>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold">Ngôn ngữ</h3>
+                        <p>Tiếng Việt</p>
+                    </div>
+                    <button class="text-orange-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold">Đơn vị</h3>
+                        <p>Việt Nam đồng</p>
+                    </div>
+                    <button class="text-orange-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
