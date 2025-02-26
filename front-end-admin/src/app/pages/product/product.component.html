@@ -15,23 +15,42 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* Tùy chỉnh font */
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #FFF8EC; /* Màu nền cam nhạt nhất */
+            background-color: #FFF8EC;
         }
 
-        /* Màu sắc tùy chỉnh */
         .bg-orange-dark { background-color: #FF9413; }
         .bg-orange-medium { background-color: #FFE0C3; }
         .bg-orange-light { background-color: #FFF8EC; }
         .text-orange-dark { color: #FF9413; }
         .text-orange-medium { color: #FFE0C3; }
 
-        /* Các border và focus tùy chỉnh cho input và select */
         .focus-ring {
             border-color: #FF9413;
             box-shadow: 0 0 0 2px rgba(255, 148, 19, 0.5);
+        }
+
+        /* Hiệu ứng hover cho nút bấm */
+        .btn-hover {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-hover:hover {
+            transform: scale(1.05);
+        }
+
+        /* Hiệu ứng hover cho hàng trong bảng */
+        .table-row-hover:hover {
+            background-color: #FFD8A8;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        /* Hiệu ứng focus cho input */
+        .input-focus:focus {
+            outline: none;
+            border: 2px solid #FF9413;
+            transition: border 0.3s ease-in-out;
         }
     </style>
 </head>
@@ -39,203 +58,77 @@
 
     <!-- Header -->
     <header class="bg-orange-light text-white p-4 flex justify-between items-center">
-        <!-- Nút Thêm Sản Phẩm -->
-        <button class="px-6 py-2 bg-white text-orange-dark border-2 border-[#FF9413] rounded-md hover:bg-orange-dark hover:text-orange-200 transition duration-300">
-            <b>THÊM SẢN PHẨM</b>
-        </button>
+        <button routerLink="/add-product" 
+        class="px-6 py-2 bg-white text-orange-dark border-2 border-[#FF9413] rounded-md hover:bg-orange-dark hover:text-orange-200 transition duration-300">
+    <b>THÊM SẢN PHẨM</b>
+</button>
+
         
-        
-        <!-- Các phần tử tìm kiếm và danh mục -->
         <div class="flex items-center space-x-6">
-            <!-- Dropdown Danh mục -->
             <select class="p-2 rounded-md bg-orange-light text-black border border-gray-300 focus:ring focus:ring-orange-dark focus:ring-opacity-50">
                 <option value="all-products">Tất cả sản phẩm</option>
                 <option value="category-1">Danh mục 1</option>
                 <option value="category-2">Danh mục 2</option>
             </select>
             
-            <!-- Ô tìm kiếm -->
-            <input type="text" placeholder="Tìm kiếm sản phẩm..." class="p-2 rounded-md border border-gray-300 focus:ring focus:ring-orange-dark focus:ring-opacity-50">
-         <!-- Nút Search với hình kính lúp -->
-         <!-- Nút Search với hình kính lúp -->
-<button class="p-2 rounded-md bg-orange-dark text-orange-dark border border-gray-300 hover:bg-orange-dark hover:text-white transition duration-300">
-    <!-- Hình ảnh kính lúp -->
-    <img src="/front-end-admin/src/assets/images/product/Search.png" class="w-5 h-5" alt="Tìm kiếm">
-</button>
-
+            <input type="text" placeholder="Tìm kiếm sản phẩm..." class="p-2 rounded-md border border-gray-300 input-focus">
+            
+            <button class="p-2 rounded-md bg-orange-dark text-orange-dark border border-gray-300 hover:bg-orange-dark hover:text-white transition duration-300 btn-hover">
+                <img src="assets/images/product/Search.png" class="w-5 h-5" alt="Tìm kiếm">
+            </button>
         </div>
     </header>
 
     <!-- Nội dung chính -->
-<div class="p-6">
-    <table class="min-w-full bg-white rounded-lg shadow-md">
-        <thead>
-            <tr class="bg-orange-dark text-white">
-                <th class="px-4 py-2 text-left">ID</th>
-                <th class="px-4 py-2 text-left">Danh mục</th>
-                <th class="px-4 py-2 text-left">Hình ảnh</th>
-                <th class="px-4 py-2 text-left">Sản phẩm</th>
-                <th class="px-4 py-2 text-left">Đơn giá</th>
-                <th class="px-4 py-2 text-left">Hiển thị</th>
-                <th class="px-4 py-2 text-left">Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="border-b bg-[#FFE0C3] ">
-                <td class="px-4 py-2">BTT01</td>
-                <td class="px-4 py-2">Bánh tráng trộn sần</td>
-                <td class="px-4 py-2"><img src="/front-end-admin/src/assets/images/product/Chabong.png" alt="Bánh tráng" class="w-15 h-15 object-cover"></td>
-                <td class="px-4 py-2">Bánh tráng trộn chà bông</td>
-                <td class="px-4 py-2">25.000</td>
-                <td class="px-4 py-2"><input type="checkbox" checked class="form-checkbox"></td>
-                <td class="px-4 py-2 flex space-x-2">
-                    <!-- Nút Sửa -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/edit.png" alt="Sửa" class="w-7 h-7">
-                    </button>
-                    <!-- Nút Xoá -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/delete.png" alt="Xoá" class="w-7 h-7">
-                    </button>
-                    <!-- Nút Xem Chi Tiết -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/detail.png" alt="Xem Chi Tiết" class="w-7 h-7">
-                    </button>
-                </td>
-            </tr>
-            <tr class="border-b bg-[#FFF8EC] ">
-                <td class="px-4 py-2">BTT01</td>
-                <td class="px-4 py-2">Bánh tráng trộn sần</td>
-                <td class="px-4 py-2"><img src="/front-end-admin/src/assets/images/product/Chabong.png" alt="Bánh tráng" class="w-15 h-15 object-cover"></td>
-                <td class="px-4 py-2">Bánh tráng trộn chà bông</td>
-                <td class="px-4 py-2">25.000</td>
-                <td class="px-4 py-2"><input type="checkbox" checked class="form-checkbox"></td>
-                <td class="px-4 py-2 flex space-x-2">
-                    <!-- Nút Sửa -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/edit.png" alt="Sửa" class="w-7 h-7">
-                    </button>
-                    <!-- Nút Xoá -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/delete.png" alt="Xoá" class="w-7 h-7">
-                    </button>
-                    <!-- Nút Xem Chi Tiết -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/detail.png" alt="Xem Chi Tiết" class="w-7 h-7">
-                    </button>
-                </td>
-            </tr>
-            <tr class="border-b bg-[#FFE0C3] ">
-                <td class="px-4 py-2">BTT01</td>
-                <td class="px-4 py-2">Bánh tráng trộn sần</td>
-                <td class="px-4 py-2"><img src="/front-end-admin/src/assets/images/product/Chabong.png" alt="Bánh tráng" class="w-15 h-15 object-cover"></td>
-                <td class="px-4 py-2">Bánh tráng trộn chà bông</td>
-                <td class="px-4 py-2">25.000</td>
-                <td class="px-4 py-2"><input type="checkbox" checked class="form-checkbox"></td>
-                <td class="px-4 py-2 flex space-x-2">
-                    <!-- Nút Sửa -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/edit.png" alt="Sửa" class="w-7 h-7">
-                    </button>
-                    <!-- Nút Xoá -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/delete.png" alt="Xoá" class="w-7 h-7">
-                    </button>
-                    <!-- Nút Xem Chi Tiết -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/detail.png" alt="Xem Chi Tiết" class="w-7 h-7">
-                    </button>
-                </td>
-            </tr>
-            <tr class="border-b bg-[#FFF8EC] ">
-                <td class="px-4 py-2">BTT01</td>
-                <td class="px-4 py-2">Bánh tráng trộn sần</td>
-                <td class="px-4 py-2"><img src="/front-end-admin/src/assets/images/product/Chabong.png" alt="Bánh tráng" class="w-15 h-15 object-cover"></td>
-                <td class="px-4 py-2">Bánh tráng trộn chà bông</td>
-                <td class="px-4 py-2">25.000</td>
-                <td class="px-4 py-2"><input type="checkbox" checked class="form-checkbox"></td>
-                <td class="px-4 py-2 flex space-x-2">
-                    <!-- Nút Sửa -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/edit.png" alt="Sửa" class="w-7 h-7">
-                    </button>
-                    <!-- Nút Xoá -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/delete.png" alt="Xoá" class="w-7 h-7">
-                    </button>
-                    <!-- Nút Xem Chi Tiết -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/detail.png" alt="Xem Chi Tiết" class="w-7 h-7">
-                    </button>
-                </td>
-            </tr>
-            <tr class="border-b bg-[#FFE0C3] ">
-                <td class="px-4 py-2">BTT01</td>
-                <td class="px-4 py-2">Bánh tráng trộn sần</td>
-                <td class="px-4 py-2"><img src="/front-end-admin/src/assets/images/product/Chabong.png" alt="Bánh tráng" class="w-15 h-15 object-cover"></td>
-                <td class="px-4 py-2">Bánh tráng trộn chà bông</td>
-                <td class="px-4 py-2">25.000</td>
-                <td class="px-4 py-2"><input type="checkbox" checked class="form-checkbox"></td>
-                <td class="px-4 py-2 flex space-x-2">
-                    <!-- Nút Sửa -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/edit.png" alt="Sửa" class="w-7 h-7">
-                    </button>
-                    <!-- Nút Xoá -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/delete.png" alt="Xoá" class="w-7 h-7">
-                    </button>
-                    <!-- Nút Xem Chi Tiết -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/detail.png" alt="Xem Chi Tiết" class="w-7 h-7">
-                    </button>
-                </td>
-            </tr>
-            <tr class="border-b bg-[#FFF8EC] ">
-                <td class="px-4 py-2">BTT01</td>
-                <td class="px-4 py-2">Bánh tráng trộn sần</td>
-                <td class="px-4 py-2"><img src="/front-end-admin/src/assets/images/product/Chabong.png" alt="Bánh tráng" class="w-15 h-15 object-cover"></td>
-                <td class="px-4 py-2">Bánh tráng trộn chà bông</td>
-                <td class="px-4 py-2">25.000</td>
-                <td class="px-4 py-2"><input type="checkbox" checked class="form-checkbox"></td>
-                <td class="px-4 py-2 flex space-x-2">
-                    <!-- Nút Sửa -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/edit.png" alt="Sửa" class="w-7 h-7">
-                    </button>
-                    <!-- Nút Xoá -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/delete.png" alt="Xoá" class="w-7 h-7">
-                    </button>
-                    <!-- Nút Xem Chi Tiết -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/detail.png" alt="Xem Chi Tiết" class="w-7 h-7">
-                    </button>
-                </td>
-            </tr>
-            <tr class="border-b bg-[#FFE0C3] ">
-                <td class="px-4 py-2">BTT01</td>
-                <td class="px-4 py-2">Bánh tráng trộn sần</td>
-                <td class="px-4 py-2"><img src="/front-end-admin/src/assets/images/product/Chabong.png" alt="Bánh tráng" class="w-15 h-15 object-cover"></td>
-                <td class="px-4 py-2">Bánh tráng trộn chà bông</td>
-                <td class="px-4 py-2">25.000</td>
-                <td class="px-4 py-2"><input type="checkbox" checked class="form-checkbox"></td>
-                <td class="px-4 py-2 flex space-x-2">
-                    <!-- Nút Sửa -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/edit.png" alt="Sửa" class="w-7 h-7">
-                    </button>
-                    <!-- Nút Xoá -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/delete.png" alt="Xoá" class="w-7 h-7">
-                    </button>
-                    <!-- Nút Xem Chi Tiết -->
-                    <button >
-                        <img src="/front-end-admin/src/assets/icons/detail.png" alt="Xem Chi Tiết" class="w-7 h-7">
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+    <div class="p-6">
+        <table class="min-w-full bg-white rounded-lg shadow-md">
+            <thead>
+                <tr class="bg-orange-dark text-white">
+                    <th class="px-4 py-2 text-left">ID</th>
+                    <th class="px-4 py-2 text-left">Danh mục</th>
+                    <th class="px-4 py-2 text-left">Hình ảnh</th>
+                    <th class="px-4 py-2 text-left">Sản phẩm</th>
+                    <th class="px-4 py-2 text-left">Đơn giá</th>
+                    <th class="px-4 py-2 text-left">Hiển thị</th>
+                    <th class="px-4 py-2 text-left">Tác vụ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let product of filteredProducts; let i = index" [ngClass]="{'bg-[#FFE0C3]': i % 2 === 0, 'bg-[#FFF8EC]': i % 2 !== 0}" class="border-b table-row-hover">
+                    <td class="px-4 py-2">{{ product.id }}</td>
+                    <td class="px-4 py-2">{{ product.category }}</td>
+                    <td class="px-4 py-2"><img [src]="product.image" alt="Bánh tráng" class="w-15 h-15 object-cover"></td>
+                    <td class="px-4 py-2">{{ product.name }}</td>
+                    <td class="px-4 py-2">{{ product.price | currency:'VND' }}</td>
+                    <td class="px-4 py-2"><input type="checkbox" [checked]="product.visible" class="form-checkbox"></td>
+                    <td class="px-4 py-2 flex space-x-2">
+                        <!-- Nút Sửa -->
+                        <button [routerLink]="['/update-product', product.id]"
+                                class="p-2 rounded-md hover:bg-orange-medium transition duration-300">
+                            <img src="assets/icons/edit.png" alt="Sửa" class="w-7 h-7">
+                        </button>
+                        
+                        <!-- Nút Xóa -->
+                        <button (click)="deleteProduct(product.id)" 
+                                class="p-2 rounded-md hover:bg-red-500 transition duration-300">
+                            <img src="assets/icons/delete.png" alt="Xoá" class="w-7 h-7">
+                        </button>
+                        
+                        <!-- Nút Xem Chi Tiết -->
+                        <button [routerLink]="['/product-detail', product.id]" 
+                                class="p-2 rounded-md hover:bg-orange-light transition duration-300">
+                            <img src="assets/icons/detail.png" alt="Xem Chi Tiết" class="w-7 h-7">
+                        </button>
+                    </td>
+                      
+                        
+                        
+                        
 
+        
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,228 +1,71 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Chi tiết sản phẩm">
-    <meta name="keywords" content="snack, bánh tráng, Win Snack">
-    <meta name="author" content="Win Snack">
-    <title>Chi Tiết Sản Phẩm - Win Snack</title>
+<!-- Tiêu Đề -->
+<body class="bg-[#FFF8EC]">
 
-    <!-- TailwindCSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <style>
-        /* Tùy chỉnh font */
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #FFF8EC; /* Màu nền cam nhạt nhất */
-        }
+<h1 class="text-3xl font-bold text-orange-dark mb-6 text-center">
+    CHI TIẾT SẢN PHẨM
+</h1>
 
-        /* Màu sắc tùy chỉnh */
-        .bg-orange-dark { background-color: #FF9413; }
-        .bg-orange-medium { background-color: #FFE0C3; }
-        .bg-orange-light { background-color: #FFF8EC; }
-        .text-orange-dark { color: #FF9413; }
-        .text-orange-medium { color: #FFE0C3; }
+<!-- Thông tin sản phẩm -->
+<div class="mb-6">
+    <p class="text-lg mt-2">Tên sản phẩm: 
+        <span class="text-xl font-semibold text-orange-dark">{{ product.name }}</span>
+    </p>
+    <p class="text-lg mt-2">Số lượng đánh giá: <span class="font-semibold">{{ product.reviewsCount }}</span></p>
+    <p class="mt-2 flex items-center">
+        Chất lượng:
+        <span class="flex space-x-1 ml-2 text-yellow-500">{{ getStars(product.rating) }}</span>
+    </p>
+</div>
 
-        /* Các border và focus tùy chỉnh cho input và select */
-        .focus-ring {
-            border-color: #FF9413;
-            box-shadow: 0 0 0 2px rgba(255, 148, 19, 0.5);
-        }
-    </style>
-</head>
-<body>
+<!-- Bảng bình luận -->
+<table class="min-w-full  rounded-lg shadow-md mt-6">
+    <thead>
+        <tr class="bg-orange-dark text-white">
+            <th class="px-4 py-2 text-center">STT</th>
+            <th class="px-4 py-2 text-center">Khách hàng</th>
+            <th class="px-4 py-2 text-center">Ngày</th>
+            <th class="px-4 py-2 text-center">Nội dung</th>
+            <th class="px-4 py-2 text-center">Số sao</th>
+            <th class="px-4 py-2 text-center">Chat</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let review of paginatedReviews; let i = index" class="border-b bg-[#FFE0C3] hover:bg-[#FFD8A8] transition duration-300">
+            <td class="px-4 py-2 text-center">{{ (currentPage - 1) * reviewsPerPage + i + 1 }}</td>
+            <td class="px-4 py-2 text-center">{{ review.customer }}</td>
+            <td class="px-4 py-2 text-center">{{ review.date }}</td>
+            <td class="px-4 py-2">{{ review.content }}</td>
+            <td class="px-4 py-2 text-center text-yellow-500">{{ getStars(review.rating) }}</td>
+            <td class="px-4 py-2 text-center">
+                <button>
+                    <img src="assets/icons/chat.png" alt="Chat" class="w-7 h-7">
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
-    <!-- Chi Tiết Sản Phẩm -->
-    <div class="p-6 rounded-lg shadow-md max-w-5xl mx-auto mt-10">
-        <!-- Tiêu Đề Sản Phẩm -->
-        <h1 class="text-3xl font-bold text-orange-dark mb-6 text-center">
-            CHI TIẾT SẢN PHẨM
-        </h1>
-                <div class="mb-6">
-            <p class="text-lg mt-2">Tên sản phẩm: <span class="text-xl font-semibold text-orange-dark">Bánh tráng vị xoài chính sấy khô</span></p>
-            <p class="text-lg mt-2">Số lượng đánh giá: <span class="font-semibold">599</span></p>
-            <p class="mt-2 flex items-center">
-                Chất lượng:
-                <!-- Đánh giá sao -->
-                <span class="flex space-x-1 ml-2">
-                    <span class="text-yellow-500">★</span>
-                    <span class="text-yellow-500">★</span>
-                    <span class="text-yellow-500">★</span>
-                    <span class="text-yellow-500">★</span>
-                    <span class="text-gray-400">☆</span>
-                </span>
-            </p>
-            
-            
+<!-- Phân trang -->
+<div class="flex justify-center mt-6">
+    <button class="px-4 py-2 bg-[#FF9413] text-white rounded-md hover:bg-orange-medium transition duration-300" (click)="prevPage()">
+        &laquo;
+    </button>
+    <span class="px-4 py-2 font-bold text-orange-dark">{{ currentPage }}</span>
+    <button class="px-4 py-2 bg-[#FF9413] text-white rounded-md hover:bg-orange-medium transition duration-300" (click)="nextPage()">
+        &raquo;
+    </button>
+</div>
 
-        <!-- Bảng bình luận -->
-        <table class="min-w-full bg-white rounded-lg shadow-md mt-6">
-            <thead>
-                <tr class="bg-orange-dark text-white">
-                    <th class="px-4 py-2 text-center">STT</th>
-                    <th class="px-4 py-2 text-center">Khách hàng</th>
-                    <th class="px-4 py-2 text-center">Ngày</th>
-                    <th class="px-4 py-2 text-center">Nội dung</th>
-                    <th class="px-4 py-2 text-center">Số sao</th>
-                    <th class="px-4 py-2 text-center">Chat</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="border-b">
-                    <td class="px-4 py-2 text-center">1</td>
-                    <td class="px-4 py-2 text-center">Thành Tỷ</td>
-                    <td class="px-4 py-2 text-center">26/02/24</td>
-                    <td class="px-4 py-2">Bánh tráng WinSnack đúng là 'Ăn là ghiền' thật luôn! Mình đặc biệt mê combo mix vị – ăn hoài mà không ngán.</td>
-                    <td class="px-4 py-2 text-center flex justify-center space-x-1">
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-gray-400">☆</span>
-                    </td>
-                    <td class="px-4 py-2 text-center">
-                        <!-- Nút chat -->
-                        <button >
-                            <img src="/front-end-admin/src/assets/icons/chat.png" alt="Chat" class="w-7 h-7">
-                        </button>
-                    </td>
-                </tr>
-                <tr class="border-b">
-                    <td class="px-4 py-2 text-center">2</td>
-                    <td class="px-4 py-2 text-center">Thành Tỷ</td>
-                    <td class="px-4 py-2 text-center">26/02/24</td>
-                    <td class="px-4 py-2">Bánh tráng WinSnack đúng là 'Ăn là ghiền' thật luôn! Mình đặc biệt mê combo mix vị – ăn hoài mà không ngán.</td>
-                    <td class="px-4 py-2 text-center flex justify-center space-x-1">
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-gray-400">☆</span>
-                    </td>
-                    <td class="px-4 py-2 text-center">
-                        <!-- Nút chat -->
-                        <button >
-                            <img src="/front-end-admin/src/assets/icons/chat.png" alt="Chat" class="w-7 h-7">
-                        </button>
-                    </td>
-                </tr>
-                <tr class="border-b">
-                    <td class="px-4 py-2 text-center">3</td>
-                    <td class="px-4 py-2 text-center">Thành Tỷ</td>
-                    <td class="px-4 py-2 text-center">26/02/24</td>
-                    <td class="px-4 py-2">Bánh tráng WinSnack đúng là 'Ăn là ghiền' thật luôn! Mình đặc biệt mê combo mix vị – ăn hoài mà không ngán.</td>
-                    <td class="px-4 py-2 text-center flex justify-center space-x-1">
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-gray-400">☆</span>
-                    </td>
-                    <td class="px-4 py-2 text-center">
-                        <!-- Nút chat -->
-                        <button >
-                            <img src="/front-end-admin/src/assets/icons/chat.png" alt="Chat" class="w-7 h-7">
-                        </button>
-                    </td>
-                </tr>
-                <tr class="border-b">
-                    <td class="px-4 py-2 text-center">4</td>
-                    <td class="px-4 py-2 text-center">Thành Tỷ</td>
-                    <td class="px-4 py-2 text-center">26/02/24</td>
-                    <td class="px-4 py-2">Bánh tráng WinSnack đúng là 'Ăn là ghiền' thật luôn! Mình đặc biệt mê combo mix vị – ăn hoài mà không ngán.</td>
-                    <td class="px-4 py-2 text-center flex justify-center space-x-1">
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-gray-400">☆</span>
-                    </td>
-                    <td class="px-4 py-2 text-center">
-                        <!-- Nút chat -->
-                        <button >
-                            <img src="/front-end-admin/src/assets/icons/chat.png" alt="Chat" class="w-7 h-7">
-                        </button>
-                    </td>
-                </tr>
-                <tr class="border-b">
-                    <td class="px-4 py-2 text-center">5</td>
-                    <td class="px-4 py-2 text-center">Thành Tỷ</td>
-                    <td class="px-4 py-2 text-center">26/02/24</td>
-                    <td class="px-4 py-2">Bánh tráng WinSnack đúng là 'Ăn là ghiền' thật luôn! Mình đặc biệt mê combo mix vị – ăn hoài mà không ngán.</td>
-                    <td class="px-4 py-2 text-center flex justify-center space-x-1">
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-yellow-500">★</span>
-                        <span class="text-gray-400">☆</span>
-                    </td>
-                    <td class="px-4 py-2 text-center">
-                        <!-- Nút chat -->
-                        <button >
-                            <img src="/front-end-admin/src/assets/icons/chat.png" alt="Chat" class="w-7 h-7">
-                        </button>
-                    </td>
-                </tr>
-                <!-- Thêm các bình luận khác ở đây -->
-            </tbody>
-        </table>
-        <div class="flex justify-center mt-6">
-            <ul class="flex space-x-4 items-center">
-                <!-- Trang trước -->
-                <li>
-                    <button class="px-4 py-2 text-black bg-transparent hover:text-orange-500 transition duration-300">
-                        &laquo;
-                    </button>
-                </li>
-                <!-- Các trang -->
-                <li>
-                    <button class="px-4 py-2 text-black bg-transparent hover:text-orange-500 transition duration-300">
-                        1
-                    </button>
-                </li>
-                <li>
-                    <button class="px-4 py-2 text-black bg-transparent hover:text-orange-500 transition duration-300">
-                        2
-                    </button>
-                </li>
-                <li>
-                    <button class="px-4 py-2 text-black bg-transparent hover:text-orange-500 transition duration-300">
-                        3
-                    </button>
-                </li>
-                <!-- Trang sau -->
-                <li>
-                    <button class="px-4 py-2 text-black bg-transparent hover:text-orange-500 transition duration-300">
-                        &raquo;
-                    </button>
-                </li>
-            </ul>
-        </div>
-        
-<!-- Thanh phân trang dưới -->
-<div class="h-0.5 bg-[#FF9413] mt-4"></div> <!-- Mỏng hơn -->
-        
-
-       <!-- Form phản hồi -->
-       <div class="mt-6">
-        <h3 class="text-xl font-semibold text-black mb-2">Phản hồi đánh giá</h3>
-        <textarea class="w-full p-4 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark focus:ring-opacity-50" rows="4" placeholder="Hãy chọn đánh giá muốn phản hồi..."></textarea>
-        <div class="mt-4 flex justify-center space-x-4">
-            <!-- Nút Hủy bỏ với hiệu ứng hover -->
-            <button class="px-6 py-2 bg-[#DFDDDD] text-black rounded-md hover:bg-orange-medium hover:text-white transition duration-300">
-                Huỷ bỏ
-            </button>
-            <!-- Nút Thêm với hiệu ứng hover -->
-            <button class="px-6 py-2 bg-orange-dark text-white rounded-md hover:bg-orange-medium hover:text-black transition duration-300">
-                Thêm
-            </button>
-        </div>
+<!-- Phản hồi -->
+<div class="mt-6">
+    <h3 class="text-xl font-semibold text-black mb-2">Phản hồi đánh giá</h3>
+    <textarea [(ngModel)]="replyContent" class="w-full p-4 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark focus:ring-opacity-50" rows="4" placeholder="Nhập phản hồi..."></textarea>
+    <div class="mt-4 flex justify-center space-x-4">
+        <button class="px-6 py-2 bg-[#DFDDDD] text-black rounded-md hover:bg-orange-medium hover:text-white transition duration-300">
+            Huỷ bỏ
+        </button>
+        <button class="px-6 py-2 bg-orange-dark text-white rounded-md hover:bg-orange-medium hover:text-black transition duration-300" (click)="addReply()">
+            Thêm
+        </button>
     </div>
-    
-
-    </div>
-
-    
-
+</div>
