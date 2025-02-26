@@ -1,12 +1,10 @@
-export interface Product {
-  productID: string;       // ID sản phẩm
-  name: string;            // Tên sản phẩm
-  price: number;           // Giá sản phẩm
-  quantity: number;        // Số lượng sản phẩm
-  imageUrl: string;        // Đường dẫn ảnh sản phẩm
-}
-
-export interface Cart {
-  cartID?: string;         // ID giỏ hàng (không bắt buộc)
-  products: Product[];     // Danh sách sản phẩm trong giỏ hàng
+// cart.model.ts
+export interface CartItem {
+  productId: string | null;
+  quantity: number;
+  unit_price: number;
+  product_name: string;
+  image_1: string;
+  stocked_quantity: number;
+  userId?: string; // ID người dùng (nếu có)
 }

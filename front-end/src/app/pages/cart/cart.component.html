@@ -1,6 +1,6 @@
+<!-- cart.component.html -->
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,19 +8,13 @@
   <meta name="keywords" content="snack, bánh tráng, đồ ăn vặt, Win Snack" />
   <meta name="author" content="Win Snack" />
   <title>Giỏ hàng của bạn</title>
-
-  <!-- Reset CSS -->
   <link rel="stylesheet" href="/assets/reset.css" />
-  
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
 <body class="bg-[#fef6f3]">
   <div class="container mx-auto py-10">
     <h2 class="text-2xl font-bold mb-6 text-[#f57c00]">Giỏ hàng của bạn</h2>
     <p class="text-gray-600 mb-6">Các sản phẩm bạn đã thêm vào giỏ hàng, điều chỉnh số lượng và tiến hành thanh toán</p>
-
     <div class="flex gap-6 mt-6">
       <!-- Cart Items Section -->
       <div class="flex-1 bg-white shadow-md rounded-lg p-6 flex flex-col">
@@ -35,24 +29,24 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let product of products" class="border-b border-gray-200">
+            <tr *ngFor="let item of cartItems" class="border-b border-gray-200">
               <td class="py-4 flex items-center">
-                <a [routerLink]="'/product/' + product.productID">
-                  <img [src]="product.imgbase64_reduce" alt="Product" class="w-16 h-16 object-cover mr-4">
+                <a [routerLink]="'/product/' + item.productId">
+                  <img [src]="item.image_1 || 'assets/default-image.png'" alt="Product" class="w-16 h-16 object-cover mr-4">
                 </a>
-                <span>{{ product.title }}</span>
+                <span>{{ item.product_name }}</span>
               </td>
-              <td class="py-4">{{ product.price | currency:'VND' }}</td>
+              <td class="py-4">{{ item.unit_price | currency: 'VND' }}</td>
               <td class="py-4">
                 <div class="flex items-center">
-                  <button class="px-2 border border-gray-300 rounded hover:bg-orange-400" (click)="decreaseQuantity(product.productID)">-</button>
-                  <span class="px-4">{{ product.quantity }}</span>
-                  <button class="px-2 border border-gray-300 rounded hover:bg-orange-400" (click)="increaseQuantity(product.productID)">+</button>
+                  <button class="px-2 border border-gray-300 rounded hover:bg-orange-400" (click)="decreaseQuantity(item)">-</button>
+                  <span class="px-4">{{ item.quantity }}</span>
+                  <button class="px-2 border border-gray-300 rounded hover:bg-orange-400" (click)="increaseQuantity(item)">+</button>
                 </div>
               </td>
-              <td class="py-4">{{ (product.price * product.quantity) | currency:'VND' }}</td>
+              <td class="py-4">{{ (item.unit_price * item.quantity) | currency: 'VND' }}</td>
               <td>
-                <button class="font-medium text-red-600 hover:text-red-800" (click)="onRemoveFromCart(product)">Xóa</button>
+                <button class="font-medium text-red-600 hover:text-red-800" (click)="confirmRemoveFromCart(item.productId)">Xóa</button>
               </td>
             </tr>
           </tbody>
@@ -68,13 +62,13 @@
         <h3 class="text-lg font-bold mb-4 text-[#f57c00]">Cộng giỏ hàng</h3>
         <div class="flex justify-between mb-4">
           <span>Tạm tính</span>
-          <span>{{ totalPrice | currency:'VND' }}</span>
+          <span>{{ totalSelectedPrice | currency: 'VND' }}</span>
         </div>
         <div class="flex justify-between mb-6">
           <span class="font-bold">Tổng</span>
-          <span class="font-bold">{{ totalPrice | currency:'VND' }}</span>
+          <span class="font-bold">{{ totalSelectedPrice | currency: 'VND' }}</span>
         </div>
-        <button class="w-full bg-orange-500 text-white rounded-full py-3 hover:bg-orange-600" (click)="navigateToCheckout()">Tiến hành thanh toán</button>
+        <button class="w-full bg-orange-500 text-white rounded-full py-3 hover:bg-orange-600" (click)="proceedToCheckout()">Tiến hành thanh toán</button>
       </div>
     </div>
   </div>
@@ -88,7 +82,7 @@
       </div>
       <div class="grid grid-cols-5 gap-4">
         <div *ngFor="let product of recommendedProducts" class="bg-white rounded-lg shadow-md p-4">
-          <a [routerLink]="'/products/' + product.productID">
+          <a [routerLink]="'/products/' + product.productId">
             <img [src]="product.imgbase64_reduce" alt="Product" class="w-full h-40 object-cover">
             <h4 class="text-sm font-bold mt-2">{{ product.title }}</h4>
             <p class="text-orange-500 font-bold">{{ product.price | currency:'VND' }}</p>
