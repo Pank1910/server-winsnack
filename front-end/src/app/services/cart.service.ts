@@ -1,44 +1,251 @@
-
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { CartItem } from '../models/cart.model'; // Sửa đúng đường dẫn
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { CartAPIService } from '../cart-api.service';
+import { CartItem } from '../../interface/Cart';
+import { AuthService } from './auth.service';
+import { tap, catchError } from 'rxjs/operators';
+import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
+
+export interface RecommendedProduct {
+  productId: string;
+  title: string;
+  price: number;
+  imgbase64_reduce: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  private apiUrl = '/cart'; // Thay bằng URL của API
+  private cartKey = 'cartItems_guest';
+  private selectedItemsKey = 'selectedItems_guest';
 
-  constructor(private http: HttpClient) {}
+  private cartItems = new BehaviorSubject<
+    (CartItem & { product_name: string; image_1: string; stocked_quantity: number; tempQuantity: number; isSelected: boolean })[]
+  >([]);
+  cartItems$ = this.cartItems.asObservable();
 
-  // Phương thức để lấy danh sách sản phẩm trong giỏ hàng
-  getCartItems(): Observable<CartItem[]> {
-    return this.http.get<CartItem[]>(`${this.apiUrl}/items`);
+  private cartItemsCount = new BehaviorSubject<number>(0);
+  cartItemsCount$ = this.cartItemsCount.asObservable();
+
+  private isUserLoggedIn = false;
+
+  constructor(
+    private cartAPIService: CartAPIService,
+    private authService: AuthService
+  ) {
+    this.authService.isLoggedIn$.subscribe((loggedIn) => {
+      this.isUserLoggedIn = loggedIn;
+      if (loggedIn) {
+        this.loadCartFromDatabase();
+      } else {
+        const items = this.getCartItemsFromSessionStorage();
+        this.cartItems.next(items);
+        this.updateCartCount(items);
+      }
+    });
   }
 
-  // Phương thức để thêm sản phẩm vào giỏ hàng
-  addToCart(productId: string, quantity: number): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/add`, { productId, quantity });
+  private getCartItemsFromSessionStorage(): (CartItem & { product_name: string; image_1: string; stocked_quantity: number; tempQuantity: number; isSelected: boolean })[] {
+    const compressedItems = sessionStorage.getItem(this.cartKey);
+    const items = compressedItems ? JSON.parse(decompressFromUTF16(compressedItems)) : [];
+    return items.map((item: any) => ({
+      ...item,
+      tempQuantity: item.tempQuantity ?? item.quantity,
+      isSelected: item.isSelected ?? true,
+    }));
   }
 
-  // Phương thức để xóa sản phẩm khỏi giỏ hàng
+  private saveCartItemsToSessionStorage(cartItems: (CartItem & { product_name: string; image_1: string; stocked_quantity: number; tempQuantity: number; isSelected: boolean })[]): void {
+    try {
+      const serializedData = JSON.stringify(cartItems);
+      const compressedData = compressToUTF16(serializedData);
+      if (compressedData.length > 5000000) {
+        alert('Không thể lưu giỏ hàng vì dữ liệu quá lớn.');
+        return;
+      }
+      sessionStorage.setItem(this.cartKey, compressedData);
+    } catch (error) {
+      console.error('Error saving to sessionStorage:', error);
+      alert('Lỗi khi lưu dữ liệu vào sessionStorage. Vui lòng thử lại.');
+    }
+  }
+
+  private updateCartCount(cartItems: (CartItem & { product_name: string; image_1: string; stocked_quantity: number })[]): void {
+    const totalCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    this.cartItemsCount.next(totalCount);
+  }
+
+  getCartItems(): Observable<(CartItem & { product_name: string; image_1: string; stocked_quantity: number; tempQuantity: number; isSelected: boolean })[]> {
+    return this.cartItems$;
+  }
+
+  addToCart(
+    productId: string,
+    quantity: number = 1,
+    unit_price: number,
+    product_name: string,
+    image_1: string,
+    stocked_quantity: number
+  ): void {
+    if (this.isUserLoggedIn) {
+      this.cartAPIService
+        .addToCart(productId, quantity, unit_price)
+        .pipe(
+          tap(() => this.loadCartFromDatabase()),
+          catchError((error) => throwError(() => new Error('Error adding to cart: ' + error.message)))
+        )
+        .subscribe();
+    } else {
+      const cartItems = this.getCartItemsFromSessionStorage();
+      const existingItem = cartItems.find((item) => item.productId === productId);
+      if (existingItem) {
+        existingItem.quantity += quantity;
+        existingItem.tempQuantity = existingItem.quantity;
+      } else {
+        cartItems.push({
+          productId,
+          quantity,
+          unit_price,
+          product_name,
+          image_1,
+          stocked_quantity,
+          tempQuantity: quantity,
+          isSelected: true,
+        });
+      }
+      this.saveCartItemsToSessionStorage(cartItems);
+      this.cartItems.next(cartItems);
+      this.updateCartCount(cartItems);
+    }
+  }
+
   removeFromCart(productId: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/remove/${productId}`);
+    if (this.isUserLoggedIn) {
+      return this.cartAPIService.removeFromCart(productId).pipe(
+        tap(() => this.loadCartFromDatabase()),
+        catchError((error) => throwError(() => new Error('Error removing from cart: ' + error.message)))
+      );
+    } else {
+      const cartItems = this.getCartItemsFromSessionStorage().filter((item) => item.productId !== productId);
+      this.saveCartItemsToSessionStorage(cartItems);
+      this.cartItems.next(cartItems);
+      this.updateCartCount(cartItems);
+      return of(null);
+    }
   }
 
-  // Phương thức để cập nhật số lượng sản phẩm trong giỏ hàng
-  updateQuantity(productId: string, quantity: number): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/update`, { productId, quantity });
+  updateQuantity(productId: string, tempQuantity: number): Observable<any> {
+    if (this.isUserLoggedIn) {
+      return this.cartAPIService.updateQuantity(productId, tempQuantity).pipe(
+        tap(() => this.loadCartFromDatabase()),
+        catchError((error) => throwError(() => new Error('Error updating quantity: ' + error.message)))
+      );
+    } else {
+      const cartItems = this.getCartItemsFromSessionStorage();
+      const item = cartItems.find((item) => item.productId === productId);
+      if (item) {
+        item.quantity = tempQuantity;
+        item.tempQuantity = tempQuantity;
+      }
+      this.saveCartItemsToSessionStorage(cartItems);
+      this.cartItems.next(cartItems);
+      this.updateCartCount(cartItems);
+      return of(null);
+    }
   }
 
-  // Phương thức để lưu các sản phẩm đã chọn
-  saveSelectedItems(items: CartItem[]): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/saveSelectedItems`, { items });
+  updateCartItems(cartItems: (CartItem & { product_name: string; image_1: string; stocked_quantity: number; tempQuantity: number; isSelected: boolean })[]): Observable<any> {
+    if (this.isUserLoggedIn) {
+      const itemsToUpdate = cartItems.map(item => ({
+        productId: item.productId!,
+        quantity: item.tempQuantity,
+        unit_price: item.unit_price,
+      }));
+      return this.cartAPIService.updateCartItems(itemsToUpdate).pipe(
+        tap(() => this.loadCartFromDatabase()),
+        catchError((error) => throwError(() => new Error('Error updating cart items: ' + error.message)))
+      );
+    } else {
+      const updatedItems = cartItems.map(item => ({
+        ...item,
+        quantity: item.tempQuantity,
+      }));
+      this.saveCartItemsToSessionStorage(updatedItems);
+      this.cartItems.next(updatedItems);
+      this.updateCartCount(updatedItems);
+      return of(null);
+    }
   }
 
-  // Phương thức để cập nhật lại giỏ hàng
-  updateCartItems(cartItems: CartItem[]): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/update`, cartItems);
+  saveSelectedItems(selectedItems: (CartItem & { product_name: string; image_1: string; stocked_quantity: number; tempQuantity: number; isSelected: boolean })[]): Observable<any> {
+    const itemsToSave = selectedItems.map(item => ({
+      productId: item.productId!,
+      quantity: item.tempQuantity,
+      unit_price: item.unit_price,
+      product_name: item.product_name,
+      image_1: item.image_1,
+      stocked_quantity: item.stocked_quantity,
+    }));
+
+    if (this.isUserLoggedIn) {
+      return this.cartAPIService.saveSelectedItems(itemsToSave).pipe(
+        catchError((error) => throwError(() => new Error('Error saving selected items: ' + error.message)))
+      );
+    } else {
+      const serializedData = JSON.stringify(itemsToSave);
+      const compressedData = compressToUTF16(serializedData);
+      if (compressedData.length > 5000000) {
+        alert('Không thể lưu dữ liệu vì kích thước quá lớn.');
+        return of(null);
+      }
+      localStorage.setItem(this.selectedItemsKey, compressedData);
+      return of(null);
+    }
+  }
+
+  getRecommendedProducts(): Observable<RecommendedProduct[]> {
+    return of([
+      { productId: '1', title: 'Snack A', price: 20000, imgbase64_reduce: 'assets/snack-a.png' },
+      { productId: '2', title: 'Snack B', price: 15000, imgbase64_reduce: 'assets/snack-b.png' },
+    ]);
+  }
+
+  private loadCartFromDatabase(): void {
+    this.cartAPIService
+      .getCartItems()
+      .pipe(
+        tap((cartItems) => {
+          const mappedItems = cartItems.map((item) => ({
+            ...item,
+            product_name: item.product_name || 'Tên sản phẩm',
+            image_1: item.image_1 || 'default-image.jpg',
+            stocked_quantity: item.stocked_quantity ?? 0,
+            tempQuantity: item.quantity,
+            isSelected: true,
+          }));
+          this.cartItems.next(mappedItems);
+          this.updateCartCount(mappedItems);
+        }),
+        catchError((error) => throwError(() => new Error('Error loading cart from database: ' + error.message)))
+      )
+      .subscribe();
+  }
+
+  clearCart(): Observable<any> {
+    if (this.isUserLoggedIn) {
+      return this.cartAPIService.clearCart().pipe(
+        tap(() => {
+          this.cartItems.next([]);
+          this.updateCartCount([]);
+        }),
+        catchError((error) => throwError(() => new Error('Error clearing cart: ' + error.message)))
+      );
+    } else {
+      sessionStorage.removeItem(this.cartKey);
+      this.cartItems.next([]);
+      this.updateCartCount([]);
+      return of(null);
+    }
   }
 }
