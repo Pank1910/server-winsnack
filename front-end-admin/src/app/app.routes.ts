@@ -7,6 +7,7 @@ export const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'login', component: LoginComponent },
+
     { path: '', redirectTo: 'home', pathMatch: 'full' }, // Redirect mặc định
     { path: '**', redirectTo: 'home' } // Xử lý route không tồn tại
 ];

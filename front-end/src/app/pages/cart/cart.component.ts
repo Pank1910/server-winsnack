@@ -1,95 +1,93 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
-interface Product {
-  productID: string;
-  title: string;
-  price: number;
-  quantity: number;
-  imgbase64_reduce: string;
-}
+import { Component, OnInit } from '@angular/core';
+import { CartService } from '../../services/cart.service';
+import { CartItem } from '../../models/cart.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.css']
+  styleUrls: ['./cart.component.css'],
 })
 export class CartComponent implements OnInit {
-  products: Product[] = [ // Sample data
-    {
-      productID: '1',
-      title: 'Bánh tráng trộn',
-      price: 20000,
-      quantity: 2,
-      imgbase64_reduce: 'https://via.placeholder.com/150'
-    },
-    {
-      productID: '2',
-      title: 'Snack khoai tây',
-      price: 30000,
-      quantity: 1,
-      imgbase64_reduce: 'https://via.placeholder.com/150'
-    }
-  ];
-  
-  constructor(private router: Router) {}
+  cartItems: CartItem[] = [];
+  totalSelectedPrice: number = 0;
 
-  ngOnInit() {
-    this.calculateTotalPrice(); // Calculate total price on page load
+  constructor(private cartService: CartService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.loadCartItems();
   }
 
-  // Increase product quantity
-  increaseQuantity(productID: string) {
-    const product = this.products.find(p => p.productID === productID);
-    if (product) {
-      product.quantity++;
-      this.calculateTotalPrice();
+  private loadCartItems(): void {
+    this.cartService.getCartItems().subscribe((items) => {
+      this.cartItems = items;
+      this.updateTotalSelectedPrice();
+    });
+  }
+
+  increaseQuantity(item: CartItem): void {
+    if (item.quantity < item.stocked_quantity) {
+      item.quantity += 1;
+      this.updateTotalSelectedPrice();
     }
   }
 
-  // Decrease product quantity
-  decreaseQuantity(productID: string) {
-    const product = this.products.find(p => p.productID === productID);
-    if (product && product.quantity > 1) {
-      product.quantity--;
-      this.calculateTotalPrice();
+  decreaseQuantity(item: CartItem): void {
+    if (item.quantity > 1) {
+      item.quantity -= 1;
+      this.updateTotalSelectedPrice();
     }
   }
 
-  // Calculate the total price of the cart
-  calculateTotalPrice() {
-    const totalPrice = this.products.reduce((sum, product) => sum + product.price * product.quantity, 0);
-    return totalPrice;
+  saveChanges(productId: string | null): void {
+    if (productId) {
+      const item = this.cartItems.find((item) => item.productId === productId);
+      if (item) {
+        this.cartService.updateQuantity(productId, item.quantity).subscribe(() => {
+          alert('Sản phẩm đã được lưu thành công.');
+          this.loadCartItems();
+        });
+      }
+    }
   }
 
-  // Format price to VND currency format
-  formatPrice(x: number): string {
-    return x.toLocaleString('vi-VN') + ' VND';
+  updateTotalSelectedPrice(): void {
+    this.totalSelectedPrice = this.cartItems.reduce((total, item) => total + item.unit_price * item.quantity, 0);
   }
 
-  // Navigate to checkout page
-  checkout() {
-    this.router.navigate(['/checkout']);
+  proceedToCheckout(): void {
+    this.cartService.saveSelectedItems(this.cartItems).subscribe(() => {
+      this.router.navigate(['/payment']);
+    });
   }
 
-  // Remove product from cart
-  onRemoveFromCart(product: Product) {
-    this.products = this.products.filter(p => p.productID !== product.productID);
-    this.calculateTotalPrice();
+  removeFromCart(productId: string | null): void {
+    if (productId) {
+      this.cartService.removeFromCart(productId).subscribe(() => {
+        this.cartItems = this.cartItems.filter((item) => item.productId !== productId);
+        this.updateTotalSelectedPrice();
+      });
+    }
   }
 
-  // Continue shopping
-  continueShopping() {
+  // Thêm phương thức 'confirmRemoveFromCart'
+  confirmRemoveFromCart(productId: string | null): void {
+    if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?')) {
+      this.removeFromCart(productId);
+    }
+  }
+
+  // Thêm phương thức 'continueShopping'
+  continueShopping(): void {
     this.router.navigate(['/products']);
   }
 
-  // Update cart (if any quantity changes)
-  updateCart() {
-    this.calculateTotalPrice();
-  }
-
-  // Navigate to checkout
-  navigateToCheckout() {
-    this.router.navigate(['/checkout']);
+  // Thêm phương thức 'updateCart'
+  updateCart(): void {
+    this.cartService.updateCartItems(this.cartItems).subscribe(() => {
+      alert('Giỏ hàng đã được cập nhật');
+      this.loadCartItems();
+    });
   }
 }

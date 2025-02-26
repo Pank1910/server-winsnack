@@ -1,43 +1,44 @@
-// import { Injectable, EventEmitter } from '@angular/core';
-// import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-// import { catchError, map, Observable, retry, throwError } from 'rxjs';
-// // import { Address, Coupon } from '../models';
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class CartService {
-//   public chooseAddress = new EventEmitter();
-//   public chooseCoupon = new EventEmitter();
-//   public choosePayment = new EventEmitter();
-//   constructor(private _http: HttpClient,
-//     ) { }
 
-//   chooseAddressEvent(address: string) {
-//     this.chooseAddress.emit(address);
-//   }
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { CartItem } from '../models/cart.model'; // Sửa đúng đường dẫn
 
-//   // chooseCouponEvent(coupon: Coupon) {
-//   //   this.chooseCoupon.emit(coupon);
-//   // }
+@Injectable({
+  providedIn: 'root',
+})
+export class CartService {
+  private apiUrl = '/cart'; // Thay bằng URL của API
 
-//   choosePaymentEvent(payment: any) {
-//     this.choosePayment.emit(payment);
-//   }
+  constructor(private http: HttpClient) {}
 
-//   createOrder(order: any) {
-//     return this._http.post('/api/orders/one', order, { withCredentials: true })
-//   }
+  // Phương thức để lấy danh sách sản phẩm trong giỏ hàng
+  getCartItems(): Observable<CartItem[]> {
+    return this.http.get<CartItem[]>(`${this.apiUrl}/items`);
+  }
 
-//   getCoupons(): Observable<{ [key: string]: [] }> {
-//     return this._http.get<any>('/api/coupons', { withCredentials: true })
-//   }
+  // Phương thức để thêm sản phẩm vào giỏ hàng
+  addToCart(productId: string, quantity: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/add`, { productId, quantity });
+  }
 
-//   getUserCart(): Observable<{ [key: string]: [] }>{
-//     return this._http.get<any>('/api/carts/usercart', { withCredentials: true })
-//   }
+  // Phương thức để xóa sản phẩm khỏi giỏ hàng
+  removeFromCart(productId: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/remove/${productId}`);
+  }
 
-//   updateCart(id:string, cart: any){
-//     return this._http.put('/api/carts/'+id, cart, { withCredentials: true })
-//   }
+  // Phương thức để cập nhật số lượng sản phẩm trong giỏ hàng
+  updateQuantity(productId: string, quantity: number): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/update`, { productId, quantity });
+  }
 
-// }
+  // Phương thức để lưu các sản phẩm đã chọn
+  saveSelectedItems(items: CartItem[]): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/saveSelectedItems`, { items });
+  }
+
+  // Phương thức để cập nhật lại giỏ hàng
+  updateCartItems(cartItems: CartItem[]): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/update`, cartItems);
+  }
+}
