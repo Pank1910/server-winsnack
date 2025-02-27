@@ -6,9 +6,10 @@ import { AboutComponent } from './pages/about/about.component';
 import { BlogComponent } from './pages/blog/blog.component';
 import { AllBlogsComponent } from './components/all-blogs/all-blogs.component';
 import { ReadBlogComponent } from './components/read-blog/read-blog.component';
-// import { CartComponent } from './pages/cart/cart.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
+// import { CartComponent } from './pages/cart/cart.component';
+
 // import { EventsComponent } from './pages/events/events.component';
 // import { ContactComponent } from './pages/contact/contact.component';
 // import { AccountComponent } from './pages/account/account.component';
@@ -26,11 +27,12 @@ export const routes: Routes = [
     { path: 'read-blog', component: ReadBlogComponent },
     { path: 'header', component: HeaderComponent },
     { path: 'footer', component: FooterComponent },
+    // { path: 'cart', component: CartComponent},
+
   
     // { path: 'terms-and-policies', component:  TermsAndPoliciesComponent},
     // { path: 'account', component: AccountComponent },
 
-    // { path: 'cart', component: CartComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'login', component: LoginComponent },
     // { path: 'payment', component: PaymentPageComponent },
@@ -41,6 +43,9 @@ export const routes: Routes = [
     // { path: 'product-category', component: ProductCategoryComponent },
     // { path: 'product-detail', component: ProductDetailComponent },
 
+
     { path: '', redirectTo: 'home', pathMatch: 'full' }, // Redirect mặc định
     { path: '**', redirectTo: 'home' } // Xử lý route không tồn tại
 ];
+
+

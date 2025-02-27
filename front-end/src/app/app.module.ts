@@ -34,3 +34,26 @@
 //   bootstrap: [AppComponent],
 // })
 // export class AppModule {}
+// app.module.ts
+
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';  // Import HttpClientModule
+import { AppComponent } from './app.component';
+import { CartComponent } from './pages/cart/cart.component';
+import { RouterModule } from '@angular/router';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    CartComponent,
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,  // Đảm bảo HttpClientModule được thêm vào
+    RouterModule.forRoot([]),  // Đảm bảo RouterModule được cấu hình
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}
