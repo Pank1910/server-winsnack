@@ -11,11 +11,11 @@
 // }
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';  // Đảm bảo import CommonModule nếu sử dụng các chỉ thị Angular như ngIf, ngFor
-
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-left-menu',
   standalone: true,  // Nếu component này là standalone component
-  imports: [CommonModule],  // Thêm CommonModule vào imports nếu sử dụng các chỉ thị Angular
+  imports: [CommonModule,RouterModule],  // Thêm CommonModule vào imports nếu sử dụng các chỉ thị Angular
   templateUrl: './left-menu.component.html',
   styleUrls: ['./left-menu.component.css']
 })
