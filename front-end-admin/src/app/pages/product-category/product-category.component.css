@@ -1,0 +1,53 @@
+body {
+    background-color: #FFF8EC;
+}
+
+.bg-orange-dark { background-color: #FF9413; }
+.bg-orange-medium { background-color: #FFE0C3; }
+.bg-orange-light { background-color: #FFF8EC; }
+.text-orange-dark { color: #FF9413; }
+.text-orange-medium { color: #FFE0C3; }
+
+.focus-ring {
+    border-color: #FF9413;
+    box-shadow: 0 0 0 2px rgba(255, 148, 19, 0.5);
+}
+
+/* Hiệu ứng hover cho nút bấm */
+.btn-hover {
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-hover:hover {
+    transform: scale(1.05);
+}
+
+/* Hiệu ứng hover cho hàng trong bảng */
+.table-row-hover:hover {
+    background-color: #FFD8A8;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Hiệu ứng focus cho input */
+.input-focus:focus {
+    outline: none;
+    border: 2px solid #FF9413;
+    transition: border 0.3s ease-in-out;
+}
+
+/* Custom checkbox styling */
+input[type="checkbox"] {
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid #FF9413;
+    border-radius: 0.375rem;
+    appearance: none;
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #FF9413;
+    background-image: url('/assets/icons/tick-icon.png');
+    background-position: center;
+    background-repeat: no-repeat;
+}

@@ -1,14 +1,67 @@
-:host {
-    display: block;
-  }
-  
-  ngx-dropzone {
-    &:hover {
-      background-color: #FFF8EC !important;
-    }
-  }
-  
-  .custom-dropzone {
-    border: none !important;
-    background: transparent !important;
-  }
+/* Custom styles for the update category component */
+
+.bg-orange-dark {
+  background-color: #FF9413;
+}
+
+.bg-orange-medium {
+  background-color: #FFA94D;
+}
+
+.bg-orange-50 {
+  background-color: #FFE0C3;
+}
+
+.text-orange-dark {
+  color: #FF9413;
+}
+
+/* Improve the dropzone appearance */
+ngx-dropzone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  min-height: 176px;
+}
+
+/* Make the form inputs consistent */
+input[type="text"], 
+input[type="number"] {
+  padding: 0.5rem 1rem;
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid #AAAAAA;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  outline: none;
+  border-color: #FF9413;
+  box-shadow: 0 0 0 3px rgba(255, 148, 19, 0.2);
+}
+
+/* Custom checkbox styling */
+input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid #FF9413;
+  border-radius: 0.25rem;
+  appearance: none;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #FF9413;
+  background-image: url('/assets/icons/tick-icon.png');
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Button hover effects */
+button:hover {
+  transform: translateY(-1px);
+  transition: transform 0.2s;
+}
+

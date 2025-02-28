@@ -1,128 +1,119 @@
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="./new-category.component.css" />
-<!-- Template -->
-<div class="min-h-screen bg-[#FFF8EC]">
-    <div class="container mx-auto px-4 md:px-8 py-8">
-      <!-- Header -->
-      <h1 class="text-4xl md:text-5xl font-bold text-center text-[#FF9413] mb-8">
-        THÊM DANH MỤC MỚI
-      </h1>
-  
+<body class="bg-[#FFF8EC]"> <!-- Đặt màu nền toàn trang -->
+  <div class="p-6 max-w-5xl mx-auto rounded-lg shadow-md bg-[#FFF8EC]">
+      <!-- Tiêu đề -->
+      <h1 class="text-3xl font-extrabold text-orange-dark text-center mb-6">THÊM DANH MỤC MỚI</h1>
+
       <!-- Form -->
-      <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="max-w-4xl mx-auto space-y-6">
-        <!-- Category Name -->
-        <div class="flex flex-wrap items-center gap-4">
-          <label for="categoryName" class="w-40 font-semibold text-black">
-            Tên danh mục
-          </label>
-          <div class="flex-1">
-            <input
-              type="text"
-              id="categoryName"
-              formControlName="name"
-              placeholder="Nhập Tên danh mục mới"
-              class="w-full px-6 py-3 rounded-xl border border-[#AAAAAA] focus:outline-none focus:border-[#FF9413] transition-colors"
-            />
+      <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          <!-- Category Name -->
+          <div class="mb-4">
+              <label for="categoryName" class="block font-semibold text-black mb-2">Tên danh mục</label>
+              <input
+                  type="text"
+                  id="categoryName"
+                  formControlName="name"
+                  placeholder="Nhập Tên danh mục mới"
+                  class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark focus:outline-none"
+              />
           </div>
-        </div>
-  
-        <!-- Status Toggle -->
-        <div class="flex flex-wrap items-center gap-4">
-            <label class="w-40 font-semibold text-black">
-            Trạng thái
-            </label>
-            <div class="flex items-center gap-3">
-            <input
-                type="checkbox"
-                formControlName="status"
-                (change)="toggleStatus($event)"
-                class="w-5 h-5 rounded border-gray-300 text-[#FF9413] focus:ring-[#FF9413] cursor-pointer"
-            />
-            <span class="text-sm font-medium">Hiển thị sản phẩm trên website</span>
-            </div>
-        </div>
-        
-        <!-- Image Upload -->
-        <div class="flex flex-wrap gap-4">
-            <label class="w-40 font-semibold text-black">
-            Hình ảnh danh mục
-            </label>
-            <div class="flex-1">
-            <div class="relative border border-[#AAAAAA] rounded-xl p-4">
+
+          <!-- Status Toggle -->
+          <div class="mb-4">
+              <label class="block font-semibold text-black mb-2">Trạng thái</label>
+              <div class="flex items-center gap-3">
+                  <input
+                      type="checkbox"
+                      formControlName="status"
+                      (change)="toggleStatus($event)"
+                      class="w-5 h-5 rounded border-gray-300 text-[#FF9413] focus:ring-[#FF9413] cursor-pointer"
+                  />
+                  <span class="text-sm font-medium">Hiển thị sản phẩm trên website</span>
+              </div>
+          </div>
+          
+          <!-- Image Upload -->
+            <div class="mb-4">
+                <label class="block font-semibold text-black mb-2">Hình ảnh danh mục</label>
+                <div class="border border-gray-300 rounded-md p-4">
                 <div class="text-right text-sm mb-2">
-                Kích cỡ tối đa với các tập tin mới: 50MB
+                    Kích cỡ tối đa với các tập tin mới: 50MB
                 </div>
                 <hr class="border-[#AAAAAA] mb-4" />
-                
-                <ngx-dropzone
-                (change)="onFileSelected($event)"
-                [accept]="'image/*'"
-                class="min-h-[176px] bg-[#FFF8EC] border border-dashed border-[#AAAAAA] rounded-xl"
-                >
-                <ngx-dropzone-label class="flex flex-col items-center justify-center">
-                    <img 
-                    src="assets/icons/upload.png" 
-                    alt="Upload icon"
-                    class="w-12 h-12 mb-2"
-                    />
+            
+                <!-- Input file ẩn để chọn ảnh -->
+                <input type="file" #fileInput accept="image/*" class="hidden" (change)="onFileSelected($event)" />
+            
+                <!-- Khu vực hiển thị ảnh hoặc nút chọn file -->
+                <ngx-dropzone 
+                    [accept]="'image/*'" 
+                    (change)="onSelect($event)"
+                    class="min-h-[176px] bg-[#FFF8EC] border border-dashed border-[#AAAAAA] rounded-md p-4 flex flex-col items-center justify-center">
+                    <img src="assets/icons/upload.png" alt="Upload icon" class="w-12 h-12 mb-2" />
                     <span>Thêm tập tin bằng cách kéo thả</span>
-                </ngx-dropzone-label>
+            
+                    <!-- Hiển thị ảnh xem trước -->
+                    <div class="mt-4 flex justify-center">
+                    <img *ngIf="selectedFile" [src]="selectedFile" alt="Preview" class="w-[198px] h-[80px] object-cover rounded-md border">
+                    <button *ngIf="selectedFile" type="button" class="ml-2 bg-red-500 text-white px-2 py-1 rounded" 
+                            (click)="removeFile()">
+                        ✖ Xóa ảnh
+                    </button>
+                    </div>
                 </ngx-dropzone>
-        
+            
+                <!-- Nút bấm mới để mở file picker -->
                 <div class="flex justify-center w-full">
-                <button
-                    type="button"
-                    class="mt-4 px-6 py-2 bg-[#FF9413] text-white text-lg font-bold rounded-xl hover:bg-[#FF9413]/90 transition-colors"
-                >
+                    <button type="button" class="mt-4 px-6 py-2 bg-[#FF9413] text-white text-lg font-bold rounded-md hover:bg-[#FF9413]/90 transition-colors"
+                            (click)="openFilePicker(fileInput)">
                     Đăng tải tệp
-                </button>
+                    </button>
+                </div>
                 </div>
             </div>
-            </div>
-        </div>
-  
-        <!-- Product Section -->
-        <div class="flex flex-wrap items-center justify-between gap-4">
-          <span class="w-50 font-semibold text-black">
-            Sản phẩm thuộc danh mục
-          </span>
-          <button
-            type="button"
-            class="px-6 py-2 text-2xl text-[#FF9413] bg-[#ffffff] font-bold border border-[#FF9413] rounded-lg hover:bg-[#FF9413]/10 transition-colors"
-            (click)="addProduct()"
-          >
-            THÊM SẢN PHẨM
-          </button>
-        </div>
-  
-        <!-- Empty State -->
-        <div *ngIf="!products?.length" class="text-center py-8">
-          <img
-            src="assets/icons/empty-product.png"
-            alt="No products"
-            class="mx-auto w-64 h-64 object-contain"
-          />
-          <p class="mt-4 text-3xl font-semibold">
-            Chưa có sản phẩm nào thuộc danh mục này
-          </p>
-        </div>
-  
-        <!-- Action Buttons -->
-        <div class="flex justify-center gap-4 mt-8">
-          <button
-            type="button"
-            class="px-6 py-2 bg-[#DFDDDD] rounded-lg hover:bg-[#DFDDDD]/80 transition-colors"
-            (click)="cancel()"
-          >
-            Hủy bỏ
-          </button>
-          <button
-            type="submit"
-            class="px-8 py-2 bg-[#FF9413] rounded-xl hover:bg-[#FF9413]/90 transition-colors"
-          >
-            Thêm
-          </button>
-        </div>
+          
+
+          <!-- Product Section -->
+          <div class="mb-4">
+              <div class="flex items-center justify-between mb-2">
+                  <span class="font-semibold text-black">Sản phẩm thuộc danh mục</span>
+                  <button
+                      type="button"
+                      class="px-6 py-2 text-lg text-[#FF9413] bg-white font-bold border border-[#FF9413] rounded-md hover:bg-[#FF9413]/10 transition-colors"
+                      (click)="addProduct()"
+                  >
+                      THÊM SẢN PHẨM
+                  </button>
+              </div>
+
+              <!-- Empty State -->
+              <div *ngIf="!products?.length" class="text-center py-8 bg-white rounded-md border border-gray-200">
+                  <img
+                      src="assets/icons/empty-product.png"
+                      alt="No products"
+                      class="mx-auto w-40 h-40 object-contain"
+                  />
+                  <p class="mt-4 text-xl font-semibold">
+                      Chưa có sản phẩm nào thuộc danh mục này
+                  </p>
+              </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex justify-center gap-4 mt-8">
+              <button
+                  type="button"
+                  class="px-6 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400 transition-colors"
+                  (click)="cancel()"
+              >
+                  Hủy bỏ
+              </button>
+              <button
+                  type="submit"
+                  class="px-8 py-2 bg-[#FF9413] text-white rounded-md hover:bg-[#FF9413]/90 transition-colors"
+              >
+                  Thêm
+              </button>
+          </div>
       </form>
-    </div>
   </div>
+</body>
