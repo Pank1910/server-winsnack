@@ -9,14 +9,15 @@ import { ReadBlogComponent } from './components/read-blog/read-blog.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
 // import { CartComponent } from './pages/cart/cart.component';
+import { ProductDetailBackupComponent } from './pages/product-detail-backup/product-detail-backup.component';
+import { AccountBackupComponent } from './pages/account-backup/account-backup.component';
 
 // import { EventsComponent } from './pages/events/events.component';
 // import { ContactComponent } from './pages/contact/contact.component';
 // import { AccountComponent } from './pages/account/account.component';
 // import { MinigameComponent } from './pages/minigame/minigame.component';
 // import { PaymentPageComponent } from './pages/payment/payment.component';
-// import { ProductCategoryComponent } from './pages/product-category/product-category.component';
-// // import { ProductDetailComponent } from './pages/product-detail/product-detail.component';
+import { ProductCategoryComponent } from './pages/product-category/product-category.component';
 // import { TermsAndPoliciesComponent } from './pages/terms-and-policies/terms-and-policies.component';
 
 export const routes: Routes = [
@@ -40,8 +41,9 @@ export const routes: Routes = [
     // { path: 'contact', component: ContactComponent },
     // { path: 'account', component: AccountComponent },
     // { path: 'minigame', component: MinigameComponent },
-    // { path: 'product-category', component: ProductCategoryComponent },
-    // { path: 'product-detail', component: ProductDetailComponent },
+    { path: 'product-category', component: ProductCategoryComponent },
+    { path: 'product-detail', component: ProductDetailBackupComponent },
+    { path: 'account', component: AccountBackupComponent },
 
 
     { path: '', redirectTo: 'home', pathMatch: 'full' }, // Redirect mặc định
