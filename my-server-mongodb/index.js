@@ -30,6 +30,8 @@ connectDB();
 
 const database = client.db("winsnack");
 const winsnackCollection = database.collection("CARTS");
+// Thêm collection cho sản phẩm
+const productsCollection = database.collection("PRODUCTS");
 
 app.get("/", (req, res) => {
     res.send("This Web server is processed for MongoDB");
@@ -61,4 +63,53 @@ app.get("/check-db", async (req, res) => {
             error: error.toString(),
         });
     }
+});
+
+// Thêm endpoint mới để lấy tất cả sản phẩm
+app.get("/products", async (req, res) => {
+    try {
+        const products = await productsCollection.find({}).toArray();
+        res.json({
+            success: true,
+            data: products,
+            count: products.length
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to fetch products",
+            error: error.toString()
+        });
+    }
+});
+
+// Thêm endpoint để lấy một sản phẩm theo ID
+app.get("/products/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const product = await productsCollection.findOne({ _id: id });
+        
+        if (!product) {
+            return res.status(404).json({
+                success: false,
+                message: "❌ Product not found"
+            });
+        }
+        
+        res.json({
+            success: true,
+            data: product
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to fetch product",
+            error: error.toString()
+        });
+    }
+});
+
+// Khởi động server
+app.listen(port, () => {
+    console.log(`🚀 Server is running at http://localhost:${port}`);
 });
