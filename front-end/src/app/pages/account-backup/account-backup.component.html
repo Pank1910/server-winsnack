@@ -7,11 +7,41 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="font-sans bg-[#FFF8EC] m-0 text-gray-800">
-    <div class="h-[30px] text-gray-600 bg-[#FFE0C2] flex items-center pl-5">
-        <span>Trang chủ</span> &gt; 
-        <span>Tài khoản</span> &gt; 
-        <span class="text-[#ff6b00]">Thông tin tài khoản</span>
-    </div>
+    <div class="flex flex-col">
+    <!-- Breadcrumb -->
+    <nav
+  class="flex flex-wrap gap-3.5 items-center px-20 py-3.5 w-full text-xl bg-[#FFE0C2] min-h-[50px] max-md:px-5 max-md:max-w-full"
+  aria-label="Breadcrumb"
+>
+  <a
+    routerLink="/product-category"
+    class="self-stretch my-auto font-medium text-center text-black text-opacity-50 transition duration-300 hover:text-[#FF9413] hover:font-bold"
+  >
+    Trang chủ
+  </a>
+  <img
+    loading="lazy"
+    src="assets/images/blog/arrow-right.png"
+    class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square"
+    alt="Breadcrumb arrow"
+  />
+  <a
+    routerLink="/product-category"
+    class="self-stretch my-auto font-medium text-center text-black text-opacity-50 transition duration-300 hover:text-[#FF9413] hover:font-bold"
+  >
+    Tài khoản
+  </a>
+  <img
+    loading="lazy"
+    src="assets/images/blog/arrow-right.png"
+    class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square"
+    alt="Breadcrumb arrow"
+  />
+  <span class="self-stretch my-auto font-bold text-[#FF9413]">
+    Thông tin tài khoản
+  </span>
+</nav>
+</div>
 
     <div class="flex bg-white">
         <div class="w-[250px] p-5 bg-[#FFF8EC] border-r-0">

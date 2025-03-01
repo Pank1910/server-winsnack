@@ -8,7 +8,7 @@ import { AllBlogsComponent } from './components/all-blogs/all-blogs.component';
 import { ReadBlogComponent } from './components/read-blog/read-blog.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
-// import { CartComponent } from './pages/cart/cart.component';
+import { CartComponent } from './pages/cart/cart.component';
 import { ProductDetailBackupComponent } from './pages/product-detail-backup/product-detail-backup.component';
 import { AccountBackupComponent } from './pages/account-backup/account-backup.component';
 
@@ -28,7 +28,7 @@ export const routes: Routes = [
     { path: 'read-blog', component: ReadBlogComponent },
     { path: 'header', component: HeaderComponent },
     { path: 'footer', component: FooterComponent },
-    // { path: 'cart', component: CartComponent},
+    { path: 'cart', component: CartComponent},
 
   
     // { path: 'terms-and-policies', component:  TermsAndPoliciesComponent},
