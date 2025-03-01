@@ -1,26 +1,39 @@
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+
+interface Category {
+  id: string;
+  name: string;
+  imageUrl: string;
+  productCount: number;
+  isVisible: boolean;
+}
 
 @Component({
   selector: 'app-product-category',
-  imports: [CommonModule, FormsModule],
+  standalone: true,
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './product-category.component.html',
-  styleUrl: './product-category.component.css'
+  styleUrls: ['./product-category.component.css']
 })
-export class ProductCategoryComponent {
+
+export class ProductCategoryComponent implements OnInit {
+  
   categories= [
     {
       id: "BTT",
       name: "Bánh tráng trộn sẵn",
-      imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/896fdd482ab781db036f93a8a777623d6dc08803d881b2bcb3b276f5b6f0a1a1?placeholderIfAbsent=true&apiKey=083ffd2b40e84598849f8100adb3e8d1",
+      imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/abe7d59de9f49fe6bc26ce4fe8f9e966c7b81ca5f820e4a4744cdcbf8a76ddb4?placeholderIfAbsent=true&apiKey=083ffd2b40e84598849f8100adb3e8d1",
       productCount: 9,
       isVisible: true,
     },
     {
       id: "BTN",
       name: "Bánh tráng nướng",
-      imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/54593322546bbc60c0b1fe55175615cc5f687822b3161abbcf00451e0a034180?placeholderIfAbsent=true&apiKey=083ffd2b40e84598849f8100adb3e8d1",
+      imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/abe7d59de9f49fe6bc26ce4fe8f9e966c7b81ca5f820e4a4744cdcbf8a76ddb4?placeholderIfAbsent=true&apiKey=083ffd2b40e84598849f8100adb3e8d1",
       productCount: 3,
       isVisible: true,
     },
@@ -34,23 +47,86 @@ export class ProductCategoryComponent {
     {
       id: "CB",
       name: "Combo bánh tráng mix gia vị",
-      imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/8284b2fb4a471ae49cc4d5b86a6a16697048cb09a24e568e42ae9f8eded2b0f8?placeholderIfAbsent=true&apiKey=083ffd2b40e84598849f8100adb3e8d1",
+      imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/abe7d59de9f49fe6bc26ce4fe8f9e966c7b81ca5f820e4a4744cdcbf8a76ddb4?placeholderIfAbsent=true&apiKey=083ffd2b40e84598849f8100adb3e8d1",
       productCount: 10,
       isVisible: true,
     },
     {
       id: "NL",
       name: "Nguyên liệu lẻ",
-      imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/5e3bf7e5618c886f2e4aee4b0701b40d5d2f7c14243ef7c7eea329adbcc30856?placeholderIfAbsent=true&apiKey=083ffd2b40e84598849f8100adb3e8d1",
+      imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/abe7d59de9f49fe6bc26ce4fe8f9e966c7b81ca5f820e4a4744cdcbf8a76ddb4?placeholderIfAbsent=true&apiKey=083ffd2b40e84598849f8100adb3e8d1",
       productCount: 10,
       isVisible: true,
     },
   ];
+  filteredCategories: Category[] = [];
+  searchText: string = '';
+  selectedCategory: string = 'all-categories';
+  
+  constructor(private router: Router) {}
+
+  ngOnInit() {
+    // Khởi tạo filteredCategories bằng categories
+    this.filteredCategories = [...this.categories];
+  }
+  
   toggleVisibility(categoryId: string) {
     const category = this.categories.find(c => c.id === categoryId);
     if (category) {
       category.isVisible = !category.isVisible;
       console.log(`Trạng thái hiển thị của ${category.name}:`, category.isVisible);
     }
+  }
+  
+  addCategory() {
+    this.router.navigate(['/add-category']);
+  }
+  
+  editCategory(id: string) {
+    this.router.navigate(['/update-category', id]);
+  }
+  
+  deleteCategory(id: string) {
+    if (confirm('Bạn có chắc chắn muốn xóa danh mục này?')) {
+      this.categories = this.categories.filter(category => category.id !== id);
+      this.filterCategories();
+      console.log(`Xóa danh mục: ${id}`);
+    }
+  }
+  
+  viewCategory(id: string) {
+    console.log(`Xem chi tiết danh mục: ${id}`);
+  }
+  
+  onSearchChange(event: any) {
+    this.searchText = event.target.value.toLowerCase();
+    this.filterCategories();
+  }
+  
+  onCategoryChange(event: any) {
+    this.selectedCategory = event.target.value;
+    this.filterCategories();
+  }
+  
+  filterCategories() {
+    // Bắt đầu với toàn bộ danh mục
+    let tempCategories = [...this.categories];
+    
+    // Lọc theo danh mục đã chọn
+    if (this.selectedCategory !== 'all-categories') {
+      tempCategories = tempCategories.filter(category => 
+        category.id === this.selectedCategory
+      );
+    }
+    
+    // Lọc theo từ khóa tìm kiếm
+    if (this.searchText && this.searchText.trim() !== '') {
+      tempCategories = tempCategories.filter(category =>
+        category.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        category.id.toLowerCase().includes(this.searchText.toLowerCase())
+      );
+    }
+    
+    this.filteredCategories = tempCategories;
   }
 }

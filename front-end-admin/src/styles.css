@@ -5,7 +5,7 @@
 
 @font-face {
     font-family: 'MyFont';
-    src: url('/assets/fonts/MONTSERRAT-REGULAR.TTF') format('TTF');
+    src: url('/assets/fonts/MONTSERRAT-REGULAR.TTF') format('truetype');
     font-weight: normal;
     font-style: normal;
   }

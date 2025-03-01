@@ -1,0 +1,31 @@
+/* Hiệu ứng slide down cho submenu */
+.submenu-enter {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.2s ease;
+  }
+  
+  .submenu-enter-active {
+    max-height: 200px;
+    opacity: 1;
+  }
+  
+  /* Hiệu ứng khi hover vào submenu items */
+  .submenu-item {
+    transition: all 0.2s ease;
+  }
+  
+  .submenu-item:hover {
+    background-color: rgba(255, 148, 19, 0.1);
+    padding-left: 1rem;
+  }
+  
+  /* Hiệu ứng cho icon mũi tên */
+  .arrow-icon {
+    transition: transform 0.3s ease;
+  }
+  
+  .arrow-down {
+    transform: rotate(180deg);
+  }

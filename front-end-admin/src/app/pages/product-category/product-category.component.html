@@ -1,66 +1,88 @@
-<script src="https://cdn.tailwindcss.com"></script>
-<div class="flex flex-col">
-    <!-- Action Bar -->
-    <div class="flex justify-between items-center px-12 py-4 mt-2.5 w-full bg-[#FFF8EC]">
-      <a [routerLink]="['/new-category']" class="px-4 py-3 text-2xl font-bold text-[#FF9413] bg-white border border-[#FF9413] rounded-lg min-w-[240px] transition hover:bg-[#FFE0C3] cursor-pointer">
-        THÊM DANH MỤC MỚI
-      </a>
-      <div class="flex justify-between self-stretch my-auto min-w-[240px] w-[497px] max-md:max-w-full mt-3">
-        <form class="flex overflow-hidden gap-3 items-center p-3 text-sm rounded-sm bg-gray-200 min-w-[240px] w-[455px] max-md:max-w-full">
-          <div class="font-semibold">Tất cả sản phẩm</div>
-          <img src="assets/icons/arrow-down-black.png" alt="Dropdown" class="w-4">
-          <div class="flex gap-3 items-center font-medium">
-            <img src="assets/icons/divider.png" alt="Divider" class="w-px h-6">
-            <input id="postSearch" type="text" placeholder="Tìm kiếm" class="bg-transparent border-none outline-none flex-1" />
-          </div>
-        </form>
-        <button class="flex items-center justify-center w-[55px] h-[42px] bg-[#FF9413] transition hover:bg-[#FFE0C3]">
-          <img src="assets/icons/search.png" alt="Search" class="w-6">
-        </button>
-      </div>
-    </div>
-  
-    <!-- Table -->
-    <div class="flex flex-wrap justify-between items-start self-center max-w-full bg-orange-50 min-h-[566px] w-[1101px]">
-        <div class="flex flex-wrap gap-2.5 items-center text-xl font-semibold text-center text-white bg-[#FF9413] min-w-[240px] w-[1101px] max-md:max-w-full">
-            <div class="self-stretch px-2.5 py-6 my-auto whitespace-nowrap min-h-[67px] w-[118px]">ID</div>
-            <div class="self-stretch px-2.5 py-6 my-auto whitespace-nowrap min-h-[67px] w-[220px]">Tên danh mục</div>
-            <div class="self-stretch px-2.5 py-6 my-auto whitespace-nowrap min-h-[67px] w-[220px]">Hình ảnh</div>
-            <div class="self-stretch px-2.5 py-6 my-auto min-h-[67px] w-[203px]">Số lượng sản phẩm</div>
-            <div class="self-stretch px-2.5 py-6 my-auto min-h-[67px] w-[140px]">Hiển thị</div>
-            <div class="self-stretch px-2.5 py-6 my-auto min-h-[67px] w-[120px]">Tác vụ</div>
-        </div>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Trang quản lý danh mục Win Snack">
+    <meta name="keywords" content="snack, bánh tráng, quản lý danh mục, Win Snack">
+    <meta name="author" content="Win Snack">
+    <title>Quản lý Danh Mục - Win Snack</title>
+    <style>
         
-        <ng-container *ngFor="let category of categories; let i = index">
-            <div [ngClass]="{'bg-[#FFE0C3]': i % 2 === 0, 'bg-[#FFF8EC]': i % 2 !== 0}" class="flex flex-wrap gap-2.5 items-center min-w-[240px] w-[1100px] max-md:max-w-full text-xl font-medium text-center text-black">
-                <div class="self-stretch px-2.5 py-10 my-auto whitespace-nowrap min-h-[100px] w-[118px]">
-                    {{ category.id }}
-                </div>
-                <div class="self-stretch px-2.5 py-10 my-auto whitespace-nowrap min-h-[100px] w-[220px]">
-                    {{ category.name }}
-                </div>
-                <div class="self-stretch px-2.5 py-10 my-auto whitespace-nowrap min-h-[100px] w-[231px] flex justify-center">
-                    <img [src]="category.imageUrl" [alt]="category.name" class="w-[198px] h-[80px] object-cover rounded-md">
-                </div>
-                <div class="self-stretch px-2.5 py-10 my-auto min-h-[100px] w-[203px]">
-                    {{ category.productCount }} sản phẩm
-                </div>
-                <div class="self-stretch px-2.5 py-10 my-auto min-h-[100px] w-[130px] flex justify-center">
-                  <input type="checkbox" [checked]="category.isVisible" (change)="toggleVisibility(category.id)"
-                  class="w-6 h-6 border-2 border-[#FF9413] rounded-md cursor-pointer 
-                  appearance-none checked:bg-[#FF9413] checked:border-[#FF9413] 
-                  checked:bg-[url('assets/icons/tick-icon.png')] checked:bg-center checked:bg-no-repeat">
-                </div>
-                <div class="flex gap-4 justify-center items-center self-stretch py-8 my-auto min-h-[80px] w-[90px] ml-5">
-                    <button class="transition hover:scale-110" aria-label="Edit category">
-                        <img src="assets/icons/edit.png" alt="Edit" class="object-contain shrink-0 self-stretch my-auto aspect-square w-[35px]" />
-                    </button>
-                    <button class="transition hover:scale-110" aria-label="Delete category">
-                        <img src="assets/icons/delete.png" alt="Delete" class="object-contain shrink-0 self-stretch my-auto aspect-square w-[35px]" />
-                    </button>
-                </div>
-            </div>
-        </ng-container>
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="bg-orange-light text-white p-4 flex justify-between items-center">
+        <button routerLink="/new-category" 
+            class="px-6 py-2 bg-white text-orange-dark border-2 border-[#FF9413] rounded-md hover:bg-orange-medium transition duration-300">
+            <b>THÊM DANH MỤC MỚI</b>
+        </button>
+        
+        <div class="flex items-center space-x-6">
+          <!-- // Thay đổi giá trị option trong HTML cho đúng -->
+          <select [(ngModel)]="selectedCategory" (change)="onCategoryChange($event)"
+                  class="p-2 rounded-md bg-orange-light text-black border border-gray-300 focus:ring focus:ring-orange-dark focus:ring-opacity-50">
+              <option value="all-categories">Tất cả danh mục</option>
+              <option value="BTT">Bánh tráng trộn sẵn</option>
+              <option value="BTNG">Bánh tráng ngọt</option>
+              <option value="BTN">Bánh tráng nướng</option>
+              <option value="CB">Combo mix vị</option>
+              <option value="NL">Nguyên liệu lẻ</option>
+          </select>
+          
+          <input type="text" [(ngModel)]="searchText" (input)="onSearchChange($event)"
+                 placeholder="Tìm kiếm danh mục..." 
+                 class="text-black p-2 rounded-md border border-gray-300 input-focus">
+          
+          <button (click)="filterCategories()"
+                  class="p-2 rounded-md bg-orange-dark text-white border border-gray-300 hover:bg-orange-500 transition duration-300 btn-hover">
+              <img src="assets/icons/search.png" class="w-5 h-5" alt="Tìm kiếm">
+          </button>
+      </div>
+    </header>
+
+    <!-- Nội dung chính -->
+    <div class="p-6 flex justify-center">
+        <table class="min-w-full bg-white rounded-lg shadow-md">
+            <thead>
+                <tr class="bg-orange-dark text-white whitespace-nowrap">
+                    <th class="px-4 py-4 text-center">ID</th>
+                    <th class="px-4 py-4 text-center">Tên danh mục</th>
+                    <th class="px-4 py-4 text-center">Hình ảnh</th>
+                    <th class="px-4 py-4 text-center">Số lượng sản phẩm</th>
+                    <th class="px-4 py-4 text-center">Hiển thị</th>
+                    <th class="px-4 py-4 text-center">Tác vụ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let category of filteredCategories; let i = index"
+                    [ngClass]="{'bg-[#FFE0C3]': i % 2 === 0, 'bg-[#FFF8EC]': i % 2 !== 0}"
+                    class="text-center border-b table-row-hover">
+                    <td class="px-4 py-6">{{ category.id }}</td>
+                    <td class="px-4 py-6">{{ category.name }}</td>
+                    <td class="px-4 py-6 flex justify-center">
+                        <img [src]="category.imageUrl" [alt]="category.name" class="w-[198px] h-[80px] object-cover rounded-md">
+                    </td>
+                    <td class="px-4 py-6">{{ category.productCount }} sản phẩm</td>
+                    <td class="px-4 py-6">
+                        <input type="checkbox" [checked]="category.isVisible" (change)="toggleVisibility(category.id)"
+                                class="focus:outline-none focus:ring-2 focus:ring-orange-dark">
+                    </td>
+                    <td class="px-4 py-6">
+                        <div class="flex gap-4 justify-center">
+                            <a [routerLink]="['/update-category', category.id]" class="p-2 rounded-md hover:bg-orange-medium transition duration-300" aria-label="Edit category">
+                                <img src="assets/icons/edit.png" alt="Sửa" class="w-7 h-7">
+                            </a>
+                            <button (click)="deleteCategory(category.id)" class="p-2 rounded-md hover:bg-red-500 transition duration-300" aria-label="Delete category">
+                                <img src="assets/icons/delete.png" alt="Xóa" class="w-7 h-7">
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-  </div>
-  
+</body>
+</html>

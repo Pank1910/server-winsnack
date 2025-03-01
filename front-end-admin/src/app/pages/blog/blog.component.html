@@ -1,75 +1,95 @@
-<script src="https://cdn.tailwindcss.com"></script>
-<div class="flex flex-col">
-    <!-- Toolbar -->
-    <div class="flex flex-wrap justify-between items-center px-12 py-4 w-full bg-[#FFF8EC] max-md:px-5 max-md:max-w-full">
-      <button class="px-4 py-3 text-2xl font-bold text-[#FF9413] bg-white border border-[#FF9413] rounded-lg min-h-[50px] transition hover:bg-[#FFE0C3]">
-        THÊM BÀI VIẾT
-      </button>
-      <div class="flex justify-between self-stretch my-auto min-w-[240px] w-[497px] max-md:max-w-full mt-3">
-        <form class="flex overflow-hidden gap-3 items-center p-3 text-sm rounded-sm bg-gray-200 min-w-[240px] w-[455px] max-md:max-w-full">
-          <label for="postSearch" class="sr-only">Tìm kiếm bài viết</label>
-          <span class="font-semibold text-black">Bài viết</span>
-          <img loading="lazy" src="assets/icons/arrow-down-black.png" alt="Bài viết" class="w-[18px] aspect-square object-contain" />
-          <input id="postSearch" type="text" placeholder="Tìm kiếm" class="bg-transparent border-none outline-none flex-1" />
-        </form>
-        <button class="w-[55px] h-[42px] bg-[#FF9413] flex items-center justify-center transition hover:bg-[#FFE0C3]">
-          <img loading="lazy" src="assets/icons/search.png" alt="Tìm kiếm" class="w-6 aspect-square object-contain" />
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Trang quản lý bài viết Win Snack">
+    <meta name="keywords" content="snack, bánh tráng, quản lý bài viết, Win Snack">
+    <meta name="author" content="Win Snack">
+    <title>Quản lý Sản Phẩm - Win Snack</title>
+    <!-- Styles -->
+    <link rel="stylesheet" href="./blog.component.css" />
+</head>
+<body>
+    <div class="flex flex-col max-md:px-5 max-md:max-w-full">
+    <!-- Header -->
+    <header class="bg-orange-light text-white p-4 flex justify-between items-center">
+        <button routerLink="/blog" 
+            class="px-6 py-2 bg-white text-orange-dark border-2 border-[#FF9413] rounded-md hover:bg-[#FFE0C3] transition duration-300">
+            <b>THÊM BÀI VIẾT</b>
         </button>
-      </div>
-    </div>
-  
-    <!-- Table Wrapper -->
-    <div class="flex flex-wrap justify-between items-start self-center max-w-full bg-orange-50 min-h-[687px] w-[1106px]">
-        <div class="flex flex-wrap gap-2.5 items-center text-xl font-semibold text-center text-white bg-[#FF9413] min-w-[240px] w-[1101px] max-md:max-w-full">
-          <div class="self-stretch px-2.5 py-6 my-auto whitespace-nowrap min-h-[67px] w-[74px]">STT</div>
-          <div class="self-stretch px-2.5 py-6 my-auto whitespace-nowrap min-h-[67px] w-[98px]">ID</div>
-          <div class="self-stretch px-2.5 py-6 my-auto whitespace-nowrap min-h-[67px] w-[120px]">Ngày</div>
-          <div class="self-stretch px-2.5 py-6 my-auto min-h-[67px] w-[229px]">Danh mục</div>
-          <div class="self-stretch px-2.5 py-6 my-auto min-h-[67px] min-w-[240px] w-[330px]">Tiêu đề</div>
-          <div class="self-stretch py-6 my-auto min-h-[67px] w-[74px]">Hiển thị</div>
+        
+        <div class="flex items-center space-x-6">
+            <select [(ngModel)]="selectedCategory" (change)="onCategoryChange($event)" 
+                class="p-2 rounded-md bg-orange-light text-black border border-gray-300 focus:ring focus:ring-orange-dark focus:ring-opacity-50">
+                <option value="all-posts">Tất cả bài viết</option>
+                <option value="category-1">Góc sức khỏe và dinh dưỡng</option>
+                <option value="category-2">Đánh giá và feedback khách hàng</option>
+                <option value="category-3">Chuyện kể từ nguyên liệu</option>
+                <option value="category-4">Bí quyết ăn vặt ngon miệng</option>
+                <option value="category-5">Công thức DIY</option>
+            </select>
+            
+            <input type="text" [(ngModel)]="searchText" (input)="onSearchChange($event)"
+                placeholder="Tìm kiếm bài viết..." 
+                class="text-black p-2 rounded-md border border-gray-300 input-focus">
+            
+            <button (click)="filterPosts()" 
+                class="p-2 rounded-md bg-orange-dark text-orange-dark border border-gray-300 hover:bg-orange-dark hover:text-white transition duration-300 btn-hover">
+                <img src="assets/icons/search.png" class="w-5 h-5" alt="Tìm kiếm">
+            </button>
         </div>
-        <ng-container *ngFor="let post of blogPosts; let i = index">
-          <div [ngClass]="{'bg-[#FFE0C3]': i % 2 === 0, 'bg-[#FFF8EC]': i % 2 !== 0}" class="flex flex-wrap gap-2.5 items-center min-w-[240px] w-[1100px] max-md:max-w-full text-xl font-medium text-center text-black">
-            <div class="grow shrink self-stretch px-2.5 py-10 my-auto whitespace-nowrap min-h-[100px] w-[59px]">
-              {{ i + 1 }}
-            </div>
-            <div class="self-stretch px-2.5 my-auto whitespace-nowrap h-[99px] min-h-[100px] w-[98px]">
-              {{ post.id }}
-            </div>
-            <div class="grow shrink self-stretch px-2.5 py-10 my-auto whitespace-nowrap min-h-[100px] w-[105px]">
-              {{ post.date }}
-            </div>
-            <div class="grow shrink self-stretch pr-2 pl-2 my-auto min-h-[100px] w-[214px]">
-              {{ post.category }}
-            </div>
-            <div class="grow shrink self-stretch px-2.5 my-auto leading-6 min-h-[100px] min-w-[240px] w-[315px]">
-              {{ post.title }}
-            </div>
-            <div class="flex grow shrink justify-center items-center self-stretch px-2.5 py-8 my-auto min-h-[100px] w-[59px]">
-              <input type="checkbox" [checked]="post.isVisible" (change)="toggleVisibility(post.id)"
-              class="w-6 h-6 border-2 border-[#FF9413] rounded-md cursor-pointer 
-              appearance-none checked:bg-[#FF9413] checked:border-[#FF9413] 
-              checked:bg-[url('assets/icons/tick-icon.png')] checked:bg-center checked:bg-no-repeat">
-            </div>
-            <div class="flex grow shrink gap-4 justify-center items-center self-stretch py-8 my-auto min-h-[100px] w-[97px]">
-              <button class="transition hover:scale-110" aria-label="Edit post">
-                <img loading="lazy" src="assets/icons/edit.png" alt="Chỉnh sửa" class="object-contain shrink-0 self-stretch my-auto aspect-square w-[35px]" />
-              </button>
-              <button class="transition hover:scale-110" aria-label="Delete post">
-                <img loading="lazy" src="assets/icons/delete.png" alt="Xóa" class="object-contain shrink-0 self-stretch my-auto aspect-square w-[35px]" />
-              </button>
-            </div>
-          </div>
-        </ng-container>                     
-    
-        <!-- Pagination -->
-        <nav class="flex flex-col items-center text-black text-base font-semibold text-center w-full">
-            <div class="flex gap-3.5">
-              <button class="w-7 font-extrabold">1</button>
-              <button class="w-7">2</button>
-              <button class="w-7">3</button>
-            </div>
-            <div class="h-px w-full border border-[#FF9413]"></div>
-        </nav>
-      </div>
+    </header>
+
+    <!-- Nội dung chính -->
+    <div class="p-6">
+        <table class="min-w-full bg-white rounded-lg shadow-md">
+            <thead>
+                <tr class="bg-orange-dark text-white whitespace-nowrap">
+                    <th class="px-3 py-2 text-center">STT</th>
+                    <th class="px-3 py-2 text-center">ID</th>
+                    <th class="px-3 py-2 text-center">Ngày</th>
+                    <th class="px-3 py-2 text-center">Danh mục</th>
+                    <th class="px-3 py-2 text-center">Tiêu đề</th>
+                    <th class="px-3 py-2 text-center">Hiển thị</th>
+                    <th class="px-3 py-2 text-center">Tác vụ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let post of filteredPosts; let i = index" [ngClass]="{'bg-[#FFE0C3]': i % 2 === 0, 'bg-[#FFF8EC]': i % 2 !== 0}" class="border-b table-row-hover text-center">
+                    <td class="px-3 py-2">{{ i + 1 }}</td>
+                    <td class="px-3 py-2">{{ post.id }}</td>
+                    <td class="px-3 py-2">{{ post.date }}</td>
+                    <td class="px-3 py-2">{{ post.category }}</td>
+                    <td class="px-3 py-2">{{ post.title }}</td>
+                    <td class="px-3 py-2">
+                        <input type="checkbox" [checked]="post.isVisible" 
+                               (change)="toggleVisibility(post.id)" 
+                               class="focus:outline-none focus:ring-2 focus:ring-orange-dark">
+                    </td>
+                    <td class="px-3 py-2 flex justify-center">
+                        <!-- Nút Sửa -->
+                        <button [routerLink]="['/update-post', post.id]"
+                                class="p-2 rounded-md hover:bg-orange-medium transition duration-300">
+                            <img src="assets/icons/edit.png" alt="Sửa" class="w-7 h-7">
+                        </button>
+                        
+                        <!-- Nút Xóa -->
+                        <button (click)="deletePost(post.id)" 
+                                class="p-2 rounded-md hover:bg-red-500 transition duration-300">
+                            <img src="assets/icons/delete.png" alt="Xoá" class="w-7 h-7">
+                        </button>
+                        
+                        <!-- Nút Xem Chi Tiết -->
+                        <button [routerLink]="['/post-detail', post.id]" 
+                                class="p-2 rounded-md hover:bg-orange-light transition duration-300">
+                            <img src="assets/icons/detail.png" alt="Xem Chi Tiết" class="w-7 h-7">
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
+    </div>
+</body>
+</html>
