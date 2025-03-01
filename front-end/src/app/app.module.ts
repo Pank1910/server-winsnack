@@ -42,11 +42,13 @@ import { HttpClientModule } from '@angular/common/http';  // Import HttpClientMo
 import { AppComponent } from './app.component';
 import { CartComponent } from './pages/cart/cart.component';
 import { RouterModule } from '@angular/router';
+import { ProductDetailBackupComponent } from './pages/product-detail-backup/product-detail-backup.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CartComponent,
+    ProductDetailBackupComponent,
   ],
   imports: [
     BrowserModule,
