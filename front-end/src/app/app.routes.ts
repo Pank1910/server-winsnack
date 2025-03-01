@@ -11,6 +11,9 @@ import { LoginComponent } from './pages/login/login.component';
 import { CartComponent } from './pages/cart/cart.component';
 import { ProductDetailBackupComponent } from './pages/product-detail-backup/product-detail-backup.component';
 import { AccountBackupComponent } from './pages/account-backup/account-backup.component';
+import { OrderHistoryComponent } from './pages/account-backup/order-history/order-history.component';
+import { ReviewsComponent } from './pages/account-backup/reviews/reviews.component';
+import { AddressesComponent } from './pages/account-backup/addresses/addresses.component';
 
 // import { EventsComponent } from './pages/events/events.component';
 // import { ContactComponent } from './pages/contact/contact.component';
@@ -43,7 +46,17 @@ export const routes: Routes = [
     // { path: 'minigame', component: MinigameComponent },
     { path: 'product-category', component: ProductCategoryComponent },
     { path: 'product-detail', component: ProductDetailBackupComponent },
-    { path: 'account', component: AccountBackupComponent },
+    {
+        path: 'account',
+        component: AccountBackupComponent,
+        children: [
+          { path: 'info', component: AccountBackupComponent }, // Trang thông tin tài khoản
+          { path: 'order-history', component: OrderHistoryComponent },
+          { path: 'reviews', component: ReviewsComponent },
+          { path: 'addresses', component: AddressesComponent },
+          { path: '', redirectTo: 'info', pathMatch: 'full' }, // Mặc định chuyển hướng đến 'info'
+        ],
+      },
 
 
     { path: '', redirectTo: 'home', pathMatch: 'full' }, // Redirect mặc định
