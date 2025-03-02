@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { Product } from '../../../interface/Product';
-import { ProductService } from './product.service';
+import { Product } from '../../../../../my-server-mongodb/interface/Product';
+import { ProductService } from './product-api.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';

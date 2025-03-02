@@ -31,7 +31,7 @@ connectDB();
 const database = client.db("winsnack");
 const winsnackCollection = database.collection("CARTS");
 // Thêm collection cho sản phẩm
-const productsCollection = database.collection("PRODUCTS");
+const productsCollection = database.collection("Product");
 
 app.get("/", (req, res) => {
     res.send("This Web server is processed for MongoDB");
