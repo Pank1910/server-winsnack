@@ -1,5 +1,5 @@
 
-import { Product } from "../app/models/product.model";
+import { Product } from "../models/product.model";
 
 export class Order {
   constructor(

@@ -1,40 +1,46 @@
-<!-- product-table.component.html -->
 <div class="product-container">
-    <div *ngIf="loading" class="loading">Đang tải dữ liệu...</div>
-    
-    <div *ngIf="error" class="error">{{ error }}</div>
-    
-    <table *ngIf="!loading && !error && products.length > 0" class="product-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Hình ảnh</th>
-          <th>Tên sản phẩm</th>
-          <th>Giá gốc</th>
-          <th>Giảm giá</th>
-          <th>Giá sau giảm</th>
-          <th>Số lượng</th>
-          <th>Là sản phẩm mới</th>
-          <th>Đánh giá</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let product of products">
-          <td>{{ product._id }}</td>
-          <td>
-            <img *ngIf="product.image_1" [src]="product.image_1" [alt]="product.product_name" width="50">
-            <span *ngIf="!product.image_1">Không có hình</span>
-          </td>
-          <td>{{ product.product_name }}</td>
-          <td>{{ product.unit_price | currency:'VND':'symbol':'1.0-0' }}</td>
-          <td>{{ product.discount * 100 }}%</td>
-          <td>{{ product.getDiscountedPrice() | currency:'VND':'symbol':'1.0-0' }}</td>
-          <td>{{ product.stocked_quantity }}</td>
-          <td>{{ product.isNew ? 'Có' : 'Không' }}</td>
-          <td>{{ getStars(product.rating) }}</td>
-        </tr>
-      </tbody>
-    </table>
-    
-    <p *ngIf="!loading && !error && products.length === 0">Không có sản phẩm nào.</p>
-  </div>
+  <div *ngIf="loading" class="loading">Đang tải dữ liệu...</div>
+  
+  <div *ngIf="error" class="error">{{ error }}</div>
+  
+  <table *ngIf="!loading && !error && products.length > 0" class="product-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Hình ảnh</th>
+        <th>Tên sản phẩm</th>
+        <th>Mô tả</th>
+        <th>Giá gốc</th>
+        <th>Giảm giá</th>
+        <th>Giá sau giảm</th>
+        <th>Số lượng</th>
+        <th>Danh mục</th>
+        <th>Ngày tạo</th>
+        <th>Đánh giá</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products">
+        <td>{{ product._id }}</td>
+        <td>
+          <img *ngIf="product.image_1" [src]="product.image_1" [alt]="product.product_name" width="50">
+          <img *ngIf="product.image_2" [src]="product.image_2" [alt]="product.product_name" width="50">
+          <img *ngIf="product.image_3" [src]="product.image_3" [alt]="product.product_name" width="50">
+          <img *ngIf="product.image_4" [src]="product.image_4" [alt]="product.product_name" width="50">
+          <span *ngIf="!product.image_1 && !product.image_2 && !product.image_3 && !product.image_4">Không có hình</span>
+        </td>
+        <td>{{ product.product_name }}</td>
+        <td>{{ product.product_detail }}</td>
+        <td>{{ product.unit_price | currency:'VND':'symbol':'1.0-0' }}</td>
+        <td>{{ product.discount * 100 }}%</td>
+        <td>{{ product.unit_price * (1 - product.discount) | currency:'VND':'symbol':'1.0-0' }}</td>
+        <td>{{ product.stocked_quantity }}</td>
+        <td>{{ product.product_dept }}</td>
+        <td>{{ product.createdAt | date:'dd/MM/yyyy' }}</td>
+        <td>{{ getStars(product.rating) }}</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <p *ngIf="!loading && !error && products.length === 0">Không có sản phẩm nào.</p>
+</div>
