@@ -43,17 +43,20 @@ import { AppComponent } from './app.component';
 import { CartComponent } from './pages/cart/cart.component';
 import { RouterModule } from '@angular/router';
 import { ProductDetailBackupComponent } from './pages/product-detail-backup/product-detail-backup.component';
-
+import { FormsModule } from '@angular/forms';
+import { ProductCategoryComponent } from './pages/product-category/product-category.component';
 @NgModule({
   declarations: [
     AppComponent,
     CartComponent,
     ProductDetailBackupComponent,
+    ProductCategoryComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,  // Đảm bảo HttpClientModule được thêm vào
     RouterModule.forRoot([]),  // Đảm bảo RouterModule được cấu hình
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
