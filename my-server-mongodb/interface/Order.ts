@@ -1,4 +1,3 @@
-
 import { Product } from "../models/product.model";
 
 export class Order {
@@ -11,18 +10,11 @@ export class Order {
       quantity: number;
     }[] = [],
     public totalPrice: number = 0,
-    public address: {
-      street: string;
-      province: string;
-      district: string;
-      ward: string;
-    } = { street: "", province: "", district: "", ward: "" },
+    public address: string = "",  // Chỉ còn một chuỗi thay vì object
     public contact: {
-      firstName: string;
-      lastName: string;
+      name: string;
       phone: string;
-      email: string;
-    } = { firstName: "", lastName: "", phone: "", email: "" },
+    } = { name: "", phone: "" }, // Chỉ giữ lại name và phone
     public additionalNotes: string = "",
     public paymentMethod: string = "cash_on_delivery",
     public createdAt: Date = new Date(),

@@ -4,7 +4,7 @@ const port = 5000;
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 
 app.use(morgan("combined"));
 app.use(bodyParser.json());
@@ -30,19 +30,20 @@ connectDB();
 
 const database = client.db("winsnack");
 const winsnackCollection = database.collection("CARTS");
-// Thêm collection cho sản phẩm
 const productsCollection = database.collection("Product");
+const orderCollection = database.collection("Order"); // ✅ Thêm collection Order
 
+// Trang chủ test server
 app.get("/", (req, res) => {
     res.send("This Web server is processed for MongoDB");
 });
 
+// Check DB và test collection
 app.get("/check-db", async (req, res) => {
     try {
         const collections = await database.listCollections().toArray();
         const collectionNames = collections.map(col => col.name);
         
-        // Kiểm tra nếu collection "CARTS" tồn tại
         if (!collectionNames.includes("CARTS")) {
             return res.status(404).json({ 
                 success: false, 
@@ -65,7 +66,7 @@ app.get("/check-db", async (req, res) => {
     }
 });
 
-// Thêm endpoint mới để lấy tất cả sản phẩm
+// ✅ Endpoint lấy tất cả sản phẩm
 app.get("/products", async (req, res) => {
     try {
         const products = await productsCollection.find({}).toArray();
@@ -83,11 +84,11 @@ app.get("/products", async (req, res) => {
     }
 });
 
-// Thêm endpoint để lấy một sản phẩm theo ID
+// ✅ Endpoint lấy sản phẩm theo ID
 app.get("/products/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const product = await productsCollection.findOne({ _id: id });
+        const product = await productsCollection.findOne({ _id: new ObjectId(id) });
         
         if (!product) {
             return res.status(404).json({
@@ -108,6 +109,96 @@ app.get("/products/:id", async (req, res) => {
         });
     }
 });
+
+// Endpoint lấy tất cả đơn hàng
+app.get("/order", async (req, res) => {
+    try {
+        const orders = await orderCollection.find({}).toArray();
+        res.json({
+            success: true,
+            data: orders,
+            count: orders.length
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to fetch orders",
+            error: error.toString()
+        });
+    }
+});
+
+// // Endpoint lấy đơn hàng theo userId - ĐẶT TRƯỚC endpoint lấy theo ID
+// app.get("/order/user/:userId", async (req, res) => {
+//     try {
+//         const { userId } = req.params;
+//         const orders = await orderCollection.find({ userId: userId }).toArray();
+        
+//         res.json({
+//             success: true,
+//             orders: orders,
+//             hasOrders: orders.length > 0
+//         });
+//     } catch (error) {
+//         res.status(500).json({
+//             success: false,
+//             message: "❌ Failed to fetch user orders",
+//             error: error.toString()
+//         });
+//     }
+// });
+
+// LƯU Ý: Đặt endpoint này TRƯỚC endpoint "/order/:id"
+app.get("/order/user/:userId", async (req, res) => {
+    try {
+        const { userId } = req.params;
+        console.log(`🔍 Tìm đơn hàng cho người dùng: ${userId}`);
+        
+        const orders = await orderCollection.find({ userId: userId }).toArray();
+        console.log(`✅ Tìm thấy ${orders.length} đơn hàng`);
+        
+        res.json({
+            success: true,
+            orders: orders,
+            hasOrders: orders.length > 0
+        });
+    } catch (error) {
+        console.error(`❌ Lỗi khi tìm đơn hàng: ${error}`);
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to fetch user orders",
+            error: error.toString()
+        });
+    }
+});
+
+// Endpoint lấy chi tiết đơn hàng theo ID - ĐẶT SAU endpoint lấy theo userId
+app.get("/order/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const order = await orderCollection.findOne({ _id: new ObjectId(id) });
+        
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: "❌ Order not found"
+            });
+        }
+        
+        res.json({
+            success: true,
+            data: order
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to fetch order",
+            error: error.toString()
+        });
+    }
+});
+
+
 
 // Khởi động server
 app.listen(port, () => {
