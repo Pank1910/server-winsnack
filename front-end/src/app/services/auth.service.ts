@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment.prod';
-import { User } from '../models/user.model';
+import { User } from '../../../../my-server-mongodb/interface/User';
 
 @Injectable({
     providedIn: 'root'

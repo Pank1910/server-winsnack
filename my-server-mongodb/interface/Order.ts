@@ -1,18 +1,9 @@
 import { Product } from "../models/product.model";
 
-export interface OrderItem {
-  product: Product;
-  quantity: number;
-}
-
-export interface OrderContact {
-  name: string;
-  phone: string;
-}
-
 export class Order {
   constructor(
     public _id: string | null = null,
+    public orderID: string="",
     public userId: string = "",
     public userName: string = "",
     public items: {
