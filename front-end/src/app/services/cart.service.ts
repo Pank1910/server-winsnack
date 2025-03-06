@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { CartAPIService } from '../cart-api.service';
-import { CartItem } from '../../interface/Cart';
+import { CartItem } from '../../../../my-server-mongodb/interface/Cart';
 import { AuthService } from './auth.service';
+import { HttpClient } from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
@@ -29,21 +30,15 @@ export class CartService {
   cartItemsCount$ = this.cartItemsCount.asObservable();
 
   private isUserLoggedIn = false;
+  private userId: string = "123456"; // Hardcode userId = "123456" để test
 
   constructor(
     private cartAPIService: CartAPIService,
-    private authService: AuthService
+    private authService: AuthService,
+    private http: HttpClient
   ) {
-    this.authService.isLoggedIn$.subscribe((loggedIn) => {
-      this.isUserLoggedIn = loggedIn;
-      if (loggedIn) {
-        this.loadCartFromDatabase();
-      } else {
-        const items = this.getCartItemsFromSessionStorage();
-        this.cartItems.next(items);
-        this.updateCartCount(items);
-      }
-    });
+    console.log('CartService initialized with userId:', this.userId);
+    this.loadCartFromDatabase();
   }
 
   private getCartItemsFromSessionStorage(): (CartItem & { product_name: string; image_1: string; stocked_quantity: number; tempQuantity: number; isSelected: boolean })[] {
@@ -51,6 +46,10 @@ export class CartService {
     const items = compressedItems ? JSON.parse(decompressFromUTF16(compressedItems)) : [];
     return items.map((item: any) => ({
       ...item,
+      userId: item.userId ?? 'guest',
+      product_name: item.product_name ?? 'Unknown Product',
+      image_1: item.image_1 ?? 'assets/default-image.png',
+      stocked_quantity: item.stocked_quantity ?? 0,
       tempQuantity: item.tempQuantity ?? item.quantity,
       isSelected: item.isSelected ?? true,
     }));
@@ -88,12 +87,15 @@ export class CartService {
     image_1: string,
     stocked_quantity: number
   ): void {
-    if (this.isUserLoggedIn) {
+    if (this.userId) {
       this.cartAPIService
-        .addToCart(productId, quantity, unit_price)
+        .addToCart(this.userId, productId, quantity, unit_price)
         .pipe(
           tap(() => this.loadCartFromDatabase()),
-          catchError((error) => throwError(() => new Error('Error adding to cart: ' + error.message)))
+          catchError((error) => {
+            console.error('Error adding to cart:', error);
+            return throwError(() => new Error('Error adding to cart: ' + error.message));
+          })
         )
         .subscribe();
     } else {
@@ -104,6 +106,7 @@ export class CartService {
         existingItem.tempQuantity = existingItem.quantity;
       } else {
         cartItems.push({
+          userId: this.userId,
           productId,
           quantity,
           unit_price,
@@ -121,8 +124,8 @@ export class CartService {
   }
 
   removeFromCart(productId: string): Observable<any> {
-    if (this.isUserLoggedIn) {
-      return this.cartAPIService.removeFromCart(productId).pipe(
+    if (this.userId) {
+      return this.cartAPIService.removeFromCart(this.userId, productId).pipe(
         tap(() => this.loadCartFromDatabase()),
         catchError((error) => throwError(() => new Error('Error removing from cart: ' + error.message)))
       );
@@ -136,8 +139,8 @@ export class CartService {
   }
 
   updateQuantity(productId: string, tempQuantity: number): Observable<any> {
-    if (this.isUserLoggedIn) {
-      return this.cartAPIService.updateQuantity(productId, tempQuantity).pipe(
+    if (this.userId) {
+      return this.cartAPIService.updateQuantity(this.userId, productId, tempQuantity).pipe(
         tap(() => this.loadCartFromDatabase()),
         catchError((error) => throwError(() => new Error('Error updating quantity: ' + error.message)))
       );
@@ -156,13 +159,13 @@ export class CartService {
   }
 
   updateCartItems(cartItems: (CartItem & { product_name: string; image_1: string; stocked_quantity: number; tempQuantity: number; isSelected: boolean })[]): Observable<any> {
-    if (this.isUserLoggedIn) {
+    if (this.userId) {
       const itemsToUpdate = cartItems.map(item => ({
         productId: item.productId!,
         quantity: item.tempQuantity,
         unit_price: item.unit_price,
       }));
-      return this.cartAPIService.updateCartItems(itemsToUpdate).pipe(
+      return this.cartAPIService.updateCartItems(this.userId, itemsToUpdate).pipe(
         tap(() => this.loadCartFromDatabase()),
         catchError((error) => throwError(() => new Error('Error updating cart items: ' + error.message)))
       );
@@ -180,16 +183,18 @@ export class CartService {
 
   saveSelectedItems(selectedItems: (CartItem & { product_name: string; image_1: string; stocked_quantity: number; tempQuantity: number; isSelected: boolean })[]): Observable<any> {
     const itemsToSave = selectedItems.map(item => ({
+      userId: this.userId,
       productId: item.productId!,
       quantity: item.tempQuantity,
       unit_price: item.unit_price,
       product_name: item.product_name,
       image_1: item.image_1,
       stocked_quantity: item.stocked_quantity,
+      isSelected: item.isSelected ?? true, // Đảm bảo isSelected có giá trị
     }));
 
-    if (this.isUserLoggedIn) {
-      return this.cartAPIService.saveSelectedItems(itemsToSave).pipe(
+    if (this.userId) {
+      return this.cartAPIService.saveSelectedItems(this.userId, itemsToSave).pipe(
         catchError((error) => throwError(() => new Error('Error saving selected items: ' + error.message)))
       );
     } else {
@@ -205,36 +210,64 @@ export class CartService {
   }
 
   getRecommendedProducts(): Observable<RecommendedProduct[]> {
-    return of([
-      { productId: '1', title: 'Snack A', price: 20000, imgbase64_reduce: 'assets/snack-a.png' },
-      { productId: '2', title: 'Snack B', price: 15000, imgbase64_reduce: 'assets/snack-b.png' },
-    ]);
+    return this.http.get<RecommendedProduct[]>('http://localhost:5000/recommended-products').pipe(
+      catchError(() => of([
+        { productId: '1', title: 'Snack A', price: 20000, imgbase64_reduce: 'assets/snack-a.png' },
+        { productId: '2', title: 'Snack B', price: 15000, imgbase64_reduce: 'assets/snack-b.png' },
+      ]))
+    );
   }
 
-  private loadCartFromDatabase(): void {
+  public loadCartFromDatabase(): void {
+    console.log('Loading cart for userId:', this.userId);
     this.cartAPIService
-      .getCartItems()
+      .getCartItems(this.userId)
       .pipe(
-        tap((cartItems) => {
-          const mappedItems = cartItems.map((item) => ({
-            ...item,
-            product_name: item.product_name || 'Tên sản phẩm',
-            image_1: item.image_1 || 'default-image.jpg',
-            stocked_quantity: item.stocked_quantity ?? 0,
-            tempQuantity: item.quantity,
-            isSelected: true,
-          }));
-          this.cartItems.next(mappedItems);
-          this.updateCartCount(mappedItems);
+        tap((response: any) => {
+          console.log('Raw response from API:', response); // Debug raw response
+          let cartItems = response;
+          // Kiểm tra nếu API trả về dạng { success: true, data: [...] }
+          if (response && response.success && Array.isArray(response.data)) {
+            cartItems = response.data;
+          }
+          console.log('Cart items extracted:', cartItems); // Debug extracted items
+          if (cartItems && cartItems.length > 0) {
+            const mappedItems = cartItems.map((item: any) => ({
+              ...item,
+              product_name: item.product_name ?? 'Tên sản phẩm',
+              image_1: item.image_1 ?? 'default-image.jpg',
+              stocked_quantity: item.stocked_quantity ?? 0,
+              tempQuantity: item.quantity ?? 1,
+              isSelected: item.isSelected ?? true,
+            }));
+            console.log('Mapped cart items:', mappedItems);
+            this.cartItems.next(mappedItems);
+          } else {
+            console.log('No cart items found for userId:', this.userId);
+            this.cartItems.next([]);
+          }
         }),
-        catchError((error) => throwError(() => new Error('Error loading cart from database: ' + error.message)))
+        catchError((error) => {
+          console.error('Error loading cart:', error);
+          this.cartItems.next([]);
+          return throwError(() => new Error('Error loading cart from database: ' + error.message));
+        })
       )
       .subscribe();
   }
 
+  private mergeLocalCartToDatabase(localItems: (CartItem & { product_name: string; image_1: string; stocked_quantity: number; tempQuantity: number; isSelected: boolean })[]): void {
+    localItems.forEach(item => {
+      this.cartAPIService
+        .addToCart(this.userId, item.productId!, item.quantity, item.unit_price)
+        .subscribe();
+    });
+    sessionStorage.removeItem(this.cartKey);
+  }
+
   clearCart(): Observable<any> {
-    if (this.isUserLoggedIn) {
-      return this.cartAPIService.clearCart().pipe(
+    if (this.userId) {
+      return this.cartAPIService.clearCart(this.userId).pipe(
         tap(() => {
           this.cartItems.next([]);
           this.updateCartCount([]);

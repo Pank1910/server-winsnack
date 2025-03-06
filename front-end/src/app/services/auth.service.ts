@@ -7,6 +7,9 @@ import { environment } from '../../environments/environment.prod';
     providedIn: 'root'
 })
 export class AuthService {
+    getUserId(): string | null {
+      throw new Error('Method not implemented.');
+    }
     private apiUrl = environment.apiUrl + '/auth';
 
     private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
