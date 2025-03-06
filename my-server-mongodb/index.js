@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 5000;
+const port = 5001;  // hoặc 6000, 7000 đều được, miễn là không bị xung đột.
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -25,91 +25,51 @@ async function connectDB() {
         console.error("❌ MongoDB connection error:", error);
     }
 }
-
 connectDB();
 
 const database = client.db("winsnack");
 const winsnackCollection = database.collection("CARTS");
-// Thêm collection cho sản phẩm
 const productsCollection = database.collection("Product");
 
-app.get("/", (req, res) => {
-    res.send("This Web server is processed for MongoDB");
-});
+app.get("/", (req, res) => res.send("This Web server is processed for MongoDB"));
 
+// Check DB
 app.get("/check-db", async (req, res) => {
     try {
         const collections = await database.listCollections().toArray();
         const collectionNames = collections.map(col => col.name);
-        
-        // Kiểm tra nếu collection "CARTS" tồn tại
         if (!collectionNames.includes("CARTS")) {
-            return res.status(404).json({ 
-                success: false, 
-                message: "❌ Collection 'CARTS' does not exist!" 
-            });
+            return res.status(404).json({ success: false, message: "❌ Collection 'CARTS' does not exist!" });
         }
-
         const sampleDoc = await winsnackCollection.findOne({});
-        res.json({
-            success: true,
-            message: "✅ MongoDB connected successfully!",
-            sampleDocument: sampleDoc || "No documents found in CARTS collection",
-        });
+        res.json({ success: true, message: "✅ MongoDB connected successfully!", sampleDocument: sampleDoc || "No documents found in CARTS collection" });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "❌ MongoDB connection failed",
-            error: error.toString(),
-        });
+        res.status(500).json({ success: false, message: "❌ MongoDB connection failed", error: error.toString() });
     }
 });
 
-// Thêm endpoint mới để lấy tất cả sản phẩm
+// Get all products
 app.get("/products", async (req, res) => {
     try {
         const products = await productsCollection.find({}).toArray();
-        res.json({
-            success: true,
-            data: products,
-            count: products.length
-        });
+        res.json({ success: true, data: products, count: products.length });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "❌ Failed to fetch products",
-            error: error.toString()
-        });
+        res.status(500).json({ success: false, message: "❌ Failed to fetch products", error: error.toString() });
     }
 });
 
-// Thêm endpoint để lấy một sản phẩm theo ID
+// Get product by ID
 app.get("/products/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const product = await productsCollection.findOne({ _id: id });
-        
         if (!product) {
-            return res.status(404).json({
-                success: false,
-                message: "❌ Product not found"
-            });
+            return res.status(404).json({ success: false, message: "❌ Product not found" });
         }
-        
-        res.json({
-            success: true,
-            data: product
-        });
+        res.json({ success: true, data: product });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "❌ Failed to fetch product",
-            error: error.toString()
-        });
+        res.status(500).json({ success: false, message: "❌ Failed to fetch product", error: error.toString() });
     }
 });
 
-// Khởi động server
-app.listen(port, () => {
-    console.log(`🚀 Server is running at http://localhost:${port}`);
-});
+app.listen(port, () => console.log(`🚀 Server running at http://localhost:${port}`));
