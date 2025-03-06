@@ -376,6 +376,11 @@ app.patch('/api/orders/cancel/:orderId', async (req, res) => {
         res.status(500).json({ 
             message: "Lỗi hủy đơn hàng", 
             error: error.toString() 
+        });
+    }
+});
+
+
 // Endpoint lấy tất cả đơn hàng
 app.get("/order", async (req, res) => {
     try {
