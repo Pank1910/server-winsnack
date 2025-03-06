@@ -10,11 +10,11 @@ import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
 // import { CartComponent } from './pages/cart/cart.component';
 import { ProductDetailBackupComponent } from './pages/product-detail-backup/product-detail-backup.component';
-import { AccountBackupComponent } from './pages/account-backup/account-backup.component';
-import { OrderHistoryComponent } from './pages/account-backup/order-history/order-history.component';
-import { ReviewsComponent } from './pages/account-backup/reviews/reviews.component';
-import { AddressesComponent } from './pages/account-backup/addresses/addresses.component';
-import { AccountInfoComponent } from './pages/account-backup/account-info/account-info.component';
+// import { AccountBackupComponent } from './pages/account-backup/account-backup.component';
+// import { OrderHistoryComponent } from './pages/account-backup/order-history/order-history.component';
+// import { ReviewsComponent } from './pages/account-backup/reviews/reviews.component';
+// import { AddressesComponent } from './pages/account-backup/addresses/addresses.component';
+// import { AccountInfoComponent } from './pages/account-backup/account-info/account-info.component';
 
 
 // import { EventsComponent } from './pages/events/events.component';
@@ -64,17 +64,17 @@ export const routes: Routes = [
         ]
     },
     
-      {
-      path: 'account',
-      component: AccountBackupComponent,
-      children: [
-        { path: '', redirectTo: 'info', pathMatch: 'full' },
-        { path: 'info', component: AccountInfoComponent },
-        { path: 'order-history', component: OrderHistoryComponent },
-        { path: 'reviews', component: ReviewsComponent },
-        { path: 'addresses', component: AddressesComponent },
-      ],
-    },
+    //   {
+    //   path: 'account',
+    //   component: AccountBackupComponent,
+    //   children: [
+    //     { path: '', redirectTo: 'info', pathMatch: 'full' },
+    //     { path: 'info', component: AccountInfoComponent },
+    //     // { path: 'order-history', component: OrderHistoryComponent },
+    //     { path: 'reviews', component: ReviewsComponent },
+    //     { path: 'addresses', component: AddressesComponent },
+    //   ],
+    // },
       
 
     { path: '', redirectTo: 'home', pathMatch: 'full' }, // Redirect mặc định

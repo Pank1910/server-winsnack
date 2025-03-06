@@ -2,11 +2,10 @@ import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AddressService } from "../../services/address.service";
-import { Cart2Service } from "../../services/cart2.service";
+import { Cart2Service } from "./cart2.service";
 import { CartItem } from '../../../../../my-server-mongodb/interface/Cart';
-import { User } from '../../../../../my-server-mongodb/interface/User';
 import { OrderAPIService } from "../../order-api.service";
 
 interface DefaultAddress {
@@ -25,7 +24,7 @@ interface ShippingMethod {
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.css'],
   standalone: true, // Bỏ comment nếu dùng standalone component
-  imports: [CommonModule, FormsModule] // Thêm các module cần thiết
+  imports: [CommonModule, FormsModule, RouterModule] // Thêm các module cần thiết
 })
 export class PaymentPageComponent implements OnInit {
 // Danh sách sản phẩm đã chọn
@@ -40,8 +39,8 @@ defaultAddress: DefaultAddress = {
 
 // Phương thức vận chuyển
 shippingMethod: ShippingMethod = {
-  estimated_delivery: 'Dự kiến 3-5 ngày',
-  cost: 30000 // Phí vận chuyển mặc định
+  estimated_delivery: 'dự kiến 3-5 ngày',
+  cost: 20000 // Phí vận chuyển mặc định
 };
 
 // Các thuộc tính thanh toán
@@ -52,6 +51,13 @@ discountAmount: number = 0;
 finalAmount: number = 0;
 Quantity: number = 0;
 
+// Phương thức thanh toán mới
+isPaymentMethodsVisible: boolean = false;
+selectedPaymentMethod: string = 'cod'; // Mặc định là COD
+isQRModalVisible: boolean = false;
+isConfirmModalVisible: boolean = false;
+orderCode: string = '';
+
 constructor(
   private cartService: Cart2Service,
   private addressService: AddressService,
@@ -60,26 +66,54 @@ constructor(
 ) {}
 
 ngOnInit(): void {
-  this.loadSelectedItems();
+  // Subscribe to cart changes
+  this.cartService.cartItems$.subscribe(items => {
+    console.log('Cart items updated:', items);
+    this.selectedItems = items.filter(item => item.quantity > 0);
+    this.Quantity = this.selectedItems.reduce((total, item) => total + item.quantity, 0);
+    this.calculateTotalPrice();
+  });
+  
   this.loadDefaultAddress();
-  this.calculateTotalPrice();
 }
 
 // Tải danh sách sản phẩm đã chọn từ giỏ hàng
+// Trong payment.component.ts
 loadSelectedItems(): void {
   this.selectedItems = this.cartService.getSelectedItems();
+  console.log('Các mục đã chọn để thanh toán:', this.selectedItems);
   this.Quantity = this.selectedItems.reduce((total, item) => total + item.quantity, 0);
+  
+  if (this.selectedItems.length === 0) {
+    console.warn('Không có mục nào được chọn để thanh toán');
+  }
 }
 
 // Tải địa chỉ mặc định
 loadDefaultAddress(): void {
-  // Điều chỉnh để phù hợp với cấu trúc mới của UserAddress
-  const address = this.addressService.getDefaultAddress();
-  this.defaultAddress = {
-    name: address.profileName,
-    phone: address.phone || '',
-    full_address: address.address || 'Chưa có địa chỉ'
-  };
+  // Lấy userId từ localStorage hoặc bất kỳ nguồn nào bạn đang lưu trữ
+  const userId = localStorage.getItem('userId') || '123457';
+  
+  // Nếu bạn muốn lấy từ server
+  this.addressService.getUserAddress(userId).subscribe({
+    next: (address) => {
+      this.defaultAddress = {
+        name: address.profileName,
+        phone: address.phone || '',
+        full_address: address.address || 'Chưa có địa chỉ'
+      };
+    },
+    error: (err) => {
+      console.error('Lỗi khi lấy địa chỉ từ server:', err);
+      // Sử dụng địa chỉ mặc định từ localStorage
+      const defaultAddr = this.addressService.getDefaultAddress();
+      this.defaultAddress = {
+        name: defaultAddr.profileName,
+        phone: defaultAddr.phone || '',
+        full_address: defaultAddr.address || 'Chưa có địa chỉ'
+      };
+    }
+  });
 }
 
 // Tính tổng giá trị đơn hàng
@@ -96,7 +130,7 @@ onSubmitPromoCode(): void {
   // Định nghĩa kiểu cho validPromoCodes
   const validPromoCodes: Record<string, number> = {
     'WINSNACK10': 10000,
-    'GIAMGIA20': 20000,
+    'WINSNACK20': 20000,
     'FIRST ORDER': 15000
   };
 
@@ -111,30 +145,40 @@ onSubmitPromoCode(): void {
   }
 }
 
-// Thuộc tính modal và form mới
-isModalVisible: boolean = false;
-modalPaymentMethod: string = '';
- // Mở modal thanh toán
-openModal(paymentMethod: string): void {
-  this.modalPaymentMethod = paymentMethod;
-  this.isModalVisible = true;
+// Logic mới - Phương thức thanh toán
+togglePaymentMethods(): void {
+  this.isPaymentMethodsVisible = !this.isPaymentMethodsVisible;
 }
 
-// Đóng modal
-closeModal(): void {
-  this.isModalVisible = false;
+// Lấy tên hiển thị của phương thức thanh toán
+getPaymentMethodName(): string {
+  switch (this.selectedPaymentMethod) {
+    case 'cod': return 'khi nhận hàng';
+    case 'banking': return 'chuyển khoản ngân hàng';
+    case 'momo': return 'qua ví MoMo';
+    default: return '';
+  }
 }
 
-// Xử lý phương thức thanh toán
-// const paymentMethod = this.paymentForm.value.paymentMethod;
+// Tạo mã đơn hàng ngẫu nhiên
+generateOrderCode(): string {
+  if (!this.orderCode) {
+    const random = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+    this.orderCode = `WS${random}`;
+  }
+  return this.orderCode;
+}
 
-// if (paymentMethod === 'internet_banking' || paymentMethod === 'momo') {
-//   this.openModal(paymentMethod);
-// } else {
-//   this.processOrder(orderData);
-// }
-// }
+// Hiển thị modal QR code
+showQRModal(): void {
+  this.isQRModalVisible = true;
+  this.generateOrderCode();
+}
 
+// Đóng modal QR code
+closeQRModal(): void {
+  this.isQRModalVisible = false;
+}
 // Xử lý đặt hàng
 onPlaceOrder(): void {
   // Kiểm tra các điều kiện trước khi đặt hàng
@@ -148,34 +192,92 @@ onPlaceOrder(): void {
     return;
   }
 
+  // Tạo mã đơn hàng ngẫu nhiên
+  this.generateOrderCode();
+
+  // Xử lý theo phương thức thanh toán
+  if (this.selectedPaymentMethod === 'banking' || this.selectedPaymentMethod === 'momo') {
+    // Hiển thị QR code để thanh toán
+    this.showQRModal();
+  } else {
+    // Tiến hành lưu đơn hàng ngay (COD)
+    this.processOrder();
+  }
+}
+
+// Phương thức mới để xử lý việc lưu đơn hàng
+processOrder(): void {
   // Tạo đối tượng đơn hàng
   const orderData = {
-    items: this.selectedItems,
-    address: this.defaultAddress,
-    shippingMethod: this.shippingMethod,
-    totalOrder: this.totalOrder,
-    shippingCost: this.shippingMethod.cost,
-    discountAmount: this.discountAmount,
-    finalAmount: this.finalAmount,
-    orderDate: new Date(),
-    orderStatus: 'Đang xử lý'
+    orderId: this.orderCode,
+    userId: localStorage.getItem('userId') || '123457',
+    userName: this.defaultAddress.name,
+    items: this.selectedItems.map(item => ({
+      product: {
+        productId: item.productId,
+        product_name: item.product_name,
+        quantity: item.quantity,
+        unit_price: item.unit_price,
+        discount: this.discountAmount,
+        total_price: item.unit_price * item.quantity
+      },
+      quantity: item.quantity
+    })),
+    shippingMethod: {
+      estimated_delivery: this.shippingMethod.estimated_delivery,
+      cost: this.shippingMethod.cost
+    },
+    totalPrice: this.finalAmount,
+    contact: {
+      address: this.defaultAddress.full_address,
+      phone: this.defaultAddress.phone
+    },
+    additionalNotes: "", // Có thể thêm trường để người dùng nhập ghi chú
+    paymentMethod: this.selectedPaymentMethod,
+    createdAt: new Date(),
+    status: this.selectedPaymentMethod === 'cod' ? 'Đang xử lý' : 'Đã thanh toán'
   };
 
-  // Hiển thị thông tin đơn hàng ngay tại component
-  alert(`
-    Đặt hàng thành công!
-    Tổng số tiền: ${this.finalAmount.toLocaleString()} VNĐ
-    Địa chỉ: ${this.defaultAddress.name}, ${this.defaultAddress.full_address}
-    Số điện thoại: ${this.defaultAddress.phone}
-  `);
+  // Lưu đơn hàng và chuyển hướng
+  this.orderService.saveOrder(orderData).subscribe({
+    next: (response) => {
+      console.log('Đơn hàng được lưu thành công:', response);
+      // Đảm bảo xóa giỏ hàng hoàn thành trước khi chuyển hướng
+      this.cartService.clearCart().subscribe({
+        next: () => {
+          console.log('Giỏ hàng đã được xóa thành công');
+          // Hiển thị modal xác nhận thay vì chuyển hướng ngay
+          this.isConfirmModalVisible = true;
+        },
+        error: (clearError:any) => {
+          console.error('Lỗi khi xóa giỏ hàng:', clearError);
+          // Vẫn hiển thị modal
+          this.isConfirmModalVisible = true;
+        }
+      });
+    },
+    error: (error) => {
+      console.error('Lỗi chi tiết khi lưu đơn hàng:', error);
+      alert('Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại sau.');
+      // Không xóa giỏ hàng hoặc chuyển hướng nếu lưu thất bại
+    }
+  });
+}
 
-  // Xóa giỏ hàng 
-  this.cartService.clearCart();
+// Xác nhận đã thanh toán
+verifyPayment(): void {
+  // Đóng modal QR trước
+  this.isQRModalVisible = false;
+  
+  // Sau đó xử lý đơn hàng và lưu vào database
+  setTimeout(() => {
+    this.processOrder();
+  }, 300);
+}
 
-  // Reset form thanh toán
-  this.selectedItems = [];
-  this.totalOrder = 0;
-  this.finalAmount = 0;
-  this.discountAmount = 0;
+// Đóng modal xác nhận và chuyển hướng
+closeConfirmModal(): void {
+  this.isConfirmModalVisible = false;
+  this.router.navigate(['/order-confirmation', this.orderCode]);
 }
 }

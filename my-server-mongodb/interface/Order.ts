@@ -1,30 +1,24 @@
-import { Product } from "../models/product.model";
-
-export interface OrderItem {
-  product: Product;
-  quantity: number;
-}
-
-export interface OrderContact {
-  name: string;
-  phone: string;
-}
+import { Product } from "../../my-server-mongodb/interface/Product";
 
 export class Order {
   constructor(
     public _id: string | null = null,
+    public orderId: string= "",
     public userId: string = "",
     public userName: string = "",
     public items: {
       product: Product;
       quantity: number;
     }[] = [],
+    public shippingMethod: {
+      estimated_delivery: string;
+      cost: number;
+    }[] = [],
     public totalPrice: number = 0,
-    public address: string = "",  // Chỉ còn một chuỗi thay vì object
     public contact: {
-      name: string;
+      address: string;
       phone: string;
-    } = { name: "", phone: "" }, // Chỉ giữ lại name và phone
+    } = { address: "", phone: "" },
     public additionalNotes: string = "",
     public paymentMethod: string = "",
     public createdAt: Date = new Date(),
