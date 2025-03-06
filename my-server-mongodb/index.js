@@ -5,6 +5,10 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const { MongoClient, ObjectId } = require('mongodb');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
 
 app.use(morgan("combined"));
 app.use(bodyParser.json());
@@ -513,8 +517,12 @@ app.get('/profile', async (req, res) => {
             userId: user.userId,
             profileName: user.profileName,
             email: user.email,
-            role: user.role
+            role: user.role,
+            phone: user.phone,
+            address: user.address,
+            marketing: user.marketing
         });
+        
     } catch (error) {
         res.status(500).json({ message: "Lỗi server", error: error.toString() });
     }
@@ -576,6 +584,161 @@ app.post("/register", async (req, res) => {
         });
     }
 });
+
+// Thay đổi endpoint update-profile
+app.put('/update-profile', async (req, res) => {
+    try {
+      const updatedData = req.body;
+      const userId = updatedData.userId; // Lấy userId trực tiếp từ body request
+      
+      console.log('Received update request:', updatedData);
+      
+      // Kiểm tra xem userId có được cung cấp không
+      if (!userId) {
+        return res.status(400).json({ 
+          success: false,
+          message: 'Thiếu userId trong yêu cầu' 
+        });
+      }
+      
+      const result = await database.collection('User').findOneAndUpdate(
+        { userId: userId },
+        { $set: {
+          profileName: updatedData.profileName,
+          email: updatedData.email,
+          phone: updatedData.phone,
+          address: updatedData.address,
+          marketing: updatedData.marketing
+        }},
+        { returnDocument: 'after' }
+      );
+      
+      if (!result) {
+        console.error('User not found for userId:', userId);
+        return res.status(404).json({ 
+          success: false,
+          message: 'Không tìm thấy người dùng' 
+        });
+      }
+      
+      console.log('Result before sending response:', result);
+        return res.status(200).json({
+        success: true,
+        message: 'Cập nhật thông tin thành công',
+        user: result.value
+        });
+    } catch (error) {
+      console.error('Lỗi khi cập nhật thông tin người dùng:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Đã xảy ra lỗi khi cập nhật thông tin người dùng'
+      });
+    }
+  });
+
+  // ✅ Endpoint lấy thông tin người dùng mới nhất theo userId
+app.get('/user/:userId', async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const user = await database.collection("User").findOne({ userId });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy người dùng'
+            });
+        }
+
+        res.json({
+            success: true,
+            user
+        });
+    } catch (error) {
+        console.error('❌ Lỗi lấy thông tin người dùng:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi server',
+            error: error.toString()
+        });
+    }
+});
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+      const uploadDir = 'public/uploads/avatars';
+      // Create directory if it doesn't exist
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+      cb(null, uploadDir);
+    },
+    filename: function(req, file, cb) {
+      // Create unique filename: userId + timestamp + original extension
+      const fileExt = path.extname(file.originalname);
+      const fileName = `${req.body.userId}-${Date.now()}${fileExt}`;
+      cb(null, fileName);
+    }
+  });
+  
+  // File filter to only allow image files
+  const fileFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Chỉ chấp nhận file hình ảnh!'), false);
+    }
+  };
+  
+  const upload = multer({ 
+    storage: storage,
+    limits: {
+      fileSize: 2 * 1024 * 1024 // 2MB limit
+    },
+    fileFilter: fileFilter
+  });
+  
+  // Avatar upload endpoint
+  app.post('/upload-avatar', upload.single('avatar'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ success: false, message: 'Không có file nào được tải lên' });
+      }
+      
+      const userId = req.body.userId;
+      if (!userId) {
+        return res.status(400).json({ success: false, message: 'UserId không được cung cấp' });
+      }
+      
+      // Create the avatar URL
+      const avatarUrl = `/uploads/avatars/${req.file.filename}`;
+      
+      // Update user in database
+      const user = await User.findOneAndUpdate(
+        { userId: userId },
+        { avatar: avatarUrl },
+        { new: true } // Return updated document
+      );
+      
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'Không tìm thấy người dùng' });
+      }
+      
+      // Return updated user object
+      return res.status(200).json({
+        success: true,
+        message: 'Cập nhật ảnh đại diện thành công',
+        user: user
+      });
+    } catch (error) {
+      console.error('Error uploading avatar:', error);
+      return res.status(500).json({ success: false, message: 'Lỗi server: ' + error.message });
+    }
+  });
+  
+  // Serve static files
+  app.use(express.static('public'));
 
 // Khởi động server
 app.listen(port, () => {

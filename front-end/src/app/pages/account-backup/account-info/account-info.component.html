@@ -1,45 +1,80 @@
 <div class="main-content p-6 bg-[#FFF8EC]">
-    <!-- Thông tin cá nhân -->
-    <div class="profile-header flex items-center justify-between p-5 bg-white rounded-lg shadow-md">
-      <div class="profile-avatar">
-        <img src="assets/images/account/avatar.png" alt="Linh Linh" class="w-24 h-24 rounded-full object-cover" />
+  <!-- Thông tin cá nhân -->
+  <div class="profile-header flex items-center justify-between p-5 bg-white rounded-lg shadow-md">
+    <div class="profile-avatar relative group">
+      <!-- Preview ảnh đã chọn (nếu có) -->
+      <div *ngIf="previewUrl" class="relative">
+        <img [src]="previewUrl" alt="Preview" class="w-24 h-24 rounded-full object-cover border-2 border-[#FF9413]" />
+        <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+          <button class="p-1 bg-white rounded-full text-xs" (click)="cancelImageSelection()">Hủy</button>
+        </div>
       </div>
-      <div class="profile-info text-center">
-        <h2 class="text-2xl font-bold">Linh Linh</h2>
-        <p>0123456789</p>
-        <p>TP. Hồ Chí Minh</p>
+      
+      <!-- Ảnh đại diện hiện tại (nếu không có preview) -->
+      <div *ngIf="!previewUrl" class="relative">
+        <img [src]="user?.avatar || 'assets/images/account/avatar.png'" alt="Avatar" class="w-24 h-24 rounded-full object-cover" />
       </div>
-      <div class="profile-actions space-x-2">
-        <button class="px-4 py-2 bg-[#FF9413] text-white rounded hover:bg-[#E95924]">Cập nhật ảnh</button>
-        <button class="px-4 py-2 bg-[#FF9413] text-white rounded hover:bg-[#E95924]">Chỉnh sửa</button>
-      </div>
+      
+      <!-- File input ẩn -->
+      <input 
+        type="file" 
+        id="avatarFileInput" 
+        style="display: none;" 
+        accept="image/jpeg, image/jpg, image/png, image/gif"
+        (change)="onFileSelected($event)" 
+      />
     </div>
-  
-    <!-- Chi tiết tài khoản -->
-    <div class="account-details mt-6 p-5 bg-white rounded-lg shadow-md space-y-3">
-      <div class="detail-row flex justify-between">
-        <label class="font-semibold">Họ và tên:</label>
-        <span>Linh Linh</span>
-      </div>
-      <div class="detail-row flex justify-between">
-        <label class="font-semibold">Email:</label>
-        <span>khanhhlinh&#64;gmail.com</span>
-      </div>
-      <div class="detail-row flex justify-between">
-        <label class="font-semibold">Số điện thoại:</label>
-        <span>0123456789</span>
-      </div>
-      <div class="detail-row flex justify-between">
-        <label class="font-semibold">Địa chỉ:</label>
-        <span>KTX Khu B, Mac Dinh Chi, Phường Linh Xuân, TP. Thủ Đức, TP. Hồ Chí Minh</span>
-      </div>
+    
+    <div class="profile-info text-center">
+      <h2 class="text-2xl font-bold">{{ user?.profileName || 'Chưa có thông tin' }}</h2>
+      <p>{{ getDisplayValue(user?.phone) }}</p>
+      <p>{{ getDisplayValue(user?.address) }}</p>
     </div>
-  
-    <!-- Tùy chọn nhận thông báo -->
-    <div class="notification-preferences mt-6 p-5 bg-white rounded-lg shadow-md">
-      <label class="flex items-start">
-        <input type="checkbox" checked class="mr-3 mt-1" />
-        <span>Nhận thông báo về các sản phẩm mới, chương trình khuyến mãi hoặc bài viết thú vị qua email của tôi.</span>
-      </label>
+    
+    <div class="profile-actions space-x-2">
+      <!-- Hiển thị nút "Chọn ảnh" khi chưa chọn file và "Lưu ảnh" khi đã chọn file -->
+      <button *ngIf="!selectedFile" class="px-4 py-2 bg-[#FF9413] text-white rounded hover:bg-[#E95924]" (click)="updateAvatar()">Chọn ảnh</button>
+      <button *ngIf="selectedFile" class="px-4 py-2 bg-[#FF9413] text-white rounded hover:bg-[#E95924]" (click)="uploadAvatar()">Lưu ảnh</button>
+      
+      <button *ngIf="!isEditing" class="px-4 py-2 bg-[#FF9413] text-white rounded hover:bg-[#E95924]" (click)="toggleEdit()">Chỉnh sửa</button>
+      <button *ngIf="isEditing" class="px-4 py-2 bg-[#FF9413] text-white rounded hover:bg-[#E95924]" (click)="saveChanges()">Hoàn tất chỉnh sửa</button>
     </div>
-  </div>  
+  </div>
+
+  <!-- Chi tiết tài khoản -->
+  <div class="account-details mt-6 p-5 bg-white rounded-lg shadow-md space-y-3">
+    <div class="detail-row flex justify-between items-center">
+      <label class="font-semibold">Tên đăng nhập:</label>
+      <span *ngIf="!isEditing">{{ user?.profileName || 'Chưa có thông tin' }}</span>
+      <input *ngIf="isEditing" type="text" [(ngModel)]="editedUser!.profileName" 
+             class="border rounded px-2 py-1 w-2/3" />
+    </div>
+    <div class="detail-row flex justify-between items-center">
+      <label class="font-semibold">Email:</label>
+      <span *ngIf="!isEditing">{{ user?.email || 'Chưa có thông tin' }}</span>
+      <input *ngIf="isEditing" type="email" [(ngModel)]="editedUser!.email" 
+             class="border rounded px-2 py-1 w-2/3" />
+    </div>
+    <div class="detail-row flex justify-between items-center">
+      <label class="font-semibold">Số điện thoại:</label>
+      <span *ngIf="!isEditing">{{ getDisplayValue(user?.phone) }}</span>
+      <input *ngIf="isEditing" type="tel" [(ngModel)]="editedUser!.phone" 
+             class="border rounded px-2 py-1 w-2/3" />
+    </div>
+    <div class="detail-row flex justify-between items-center">
+      <label class="font-semibold">Địa chỉ:</label>
+      <span *ngIf="!isEditing" class="w-2/3 text-right">{{ getDisplayValue(user?.address) }}</span>
+      <textarea *ngIf="isEditing" [(ngModel)]="editedUser!.address" 
+                class="border rounded px-2 py-1 w-2/3" rows="2"></textarea>
+    </div>
+  </div>
+
+  <!-- Tùy chọn nhận thông báo -->
+  <div class="notification-preferences mt-6 p-5 bg-white rounded-lg shadow-md">
+    <label class="flex items-start">
+      <input type="checkbox" [(ngModel)]="editedUser!.marketing" 
+             [disabled]="!isEditing" class="mr-3 mt-1" />
+      <span>Nhận thông báo về các sản phẩm mới, chương trình khuyến mãi hoặc bài viết thú vị qua email của tôi.</span>
+    </label>
+  </div>
+</div>
