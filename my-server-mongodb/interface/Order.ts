@@ -7,7 +7,14 @@ export class Order {
     public userId: string = "",
     public userName: string = "",
     public items: {
-      product: Product;
+      product: {
+        productId: string;
+        product_name: string;
+        quantity: number;
+        unit_price: number;
+        discount: number;
+        total_price: number;
+      };
       quantity: number;
     }[] = [],
     public shippingMethod: {
