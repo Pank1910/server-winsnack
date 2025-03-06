@@ -406,34 +406,11 @@ app.get("/order", async (req, res) => {
     }
 });
 
-// // Endpoint lấy đơn hàng theo userId - ĐẶT TRƯỚC endpoint lấy theo ID
-// app.get("/order/user/:userId", async (req, res) => {
-//     try {
-//         const { userId } = req.params;
-//         const orders = await orderCollection.find({ userId: userId }).toArray();
-        
-//         res.json({
-//             success: true,
-//             orders: orders,
-//             hasOrders: orders.length > 0
-//         });
-//     } catch (error) {
-//         res.status(500).json({
-//             success: false,
-//             message: "❌ Failed to fetch user orders",
-//             error: error.toString()
-//         });
-//     }
-// });
-
-// LƯU Ý: Đặt endpoint này TRƯỚC endpoint "/order/:id"
+// Endpoint lấy đơn hàng theo userId - ĐẶT TRƯỚC endpoint lấy theo ID
 app.get("/order/user/:userId", async (req, res) => {
     try {
         const { userId } = req.params;
-        console.log(`🔍 Tìm đơn hàng cho người dùng: ${userId}`);
-        
         const orders = await orderCollection.find({ userId: userId }).toArray();
-        console.log(`✅ Tìm thấy ${orders.length} đơn hàng`);
         
         res.json({
             success: true,
@@ -441,7 +418,6 @@ app.get("/order/user/:userId", async (req, res) => {
             hasOrders: orders.length > 0
         });
     } catch (error) {
-        console.error(`❌ Lỗi khi tìm đơn hàng: ${error}`);
         res.status(500).json({
             success: false,
             message: "❌ Failed to fetch user orders",
@@ -476,7 +452,137 @@ app.get("/order/:id", async (req, res) => {
     }
 });
 
+app.post("/login", async (req, res) => {
+    const { profileName, password } = req.body;
 
+    try {
+        const user = await database.collection("User").findOne({ profileName, password });
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "Tên đăng nhập hoặc mật khẩu không đúng."
+            });
+        }
+
+        res.json({
+            success: true,
+            message: "Đăng nhập thành công!",
+            user: {
+                profileName: user.profileName,
+                role: user.role,
+                userId: user.userId
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Lỗi máy chủ",
+            error: error.toString()
+        });
+    }
+});
+
+app.post('/auth/login', async (req, res) => {
+    const { profileName, password } = req.body;
+    const user = await database.collection('User').findOne({ profileName });
+
+    if (!user || user.password !== password) {
+        return res.status(401).json({ message: "Sai tài khoản hoặc mật khẩu" });
+    }
+
+    res.json({
+        user: {
+            userId: user.userId,
+            profileName: user.profileName,
+            role: user.role,
+            email: user.email
+        }
+    });
+});
+
+
+app.get('/profile', async (req, res) => {
+    try {
+        const userId = req.query.userId; // Lấy userId từ query hoặc header
+
+        if (!userId) {
+            return res.status(400).json({ message: "Thiếu userId" });
+        }
+
+        const user = await database.collection('User').findOne({ userId });
+
+        if (!user) {
+            return res.status(404).json({ message: "Không tìm thấy người dùng" });
+        }
+
+        res.json({
+            userId: user.userId,
+            profileName: user.profileName,
+            email: user.email,
+            role: user.role
+        });
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi server", error: error.toString() });
+    }
+});
+
+// Thêm vào file index.js
+app.post("/register", async (req, res) => {
+    const { profileName, password } = req.body;
+
+    try {
+        // Kiểm tra profileName đã tồn tại chưa
+        const existingUser = await database.collection("User").findOne({ profileName });
+        
+        if (existingUser) {
+            return res.status(400).json({
+                success: false,
+                message: "Tên đăng nhập đã tồn tại."
+            });
+        }
+
+        // Tạo userId mới
+        const userId = new ObjectId().toString();
+        
+        // Tạo user mới
+        const newUser = {
+            userId,
+            profileName,
+            password,
+            email: "",
+            gender: "",
+            birthDate: {
+                day: "",
+                month: "",
+                year: ""
+            },
+            marketing: false,
+            phone: "",
+            address: "",
+            role: "user",
+            action: "just view"
+        };
+
+        // Lưu user vào database
+        const result = await database.collection("User").insertOne(newUser);
+
+        // Trả về thông tin user (không bao gồm password)
+        const { password: _, ...userWithoutPassword } = newUser;
+        
+        res.status(201).json({
+            success: true,
+            message: "Đăng ký thành công!",
+            user: userWithoutPassword
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Lỗi đăng ký tài khoản",
+            error: error.toString()
+        });
+    }
+});
 
 // Khởi động server
 app.listen(port, () => {

@@ -1,57 +1,97 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule
+  ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
-  username: string = '';
-  password: string = '';
-  rememberMe: boolean = false;
+export class LoginComponent implements OnInit {
+  loginForm: FormGroup;
   passwordVisible: boolean = false;
-  errors: { [key: string]: string } = {};
+  isLoading: boolean = false;
+  error: string = '';
 
-  // Fake user data for demo (replace with actual authentication logic)
-  fakeUserData = {
-    username: 'winsnack@gmail.com',
-    password: '123456'
-  };
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
+    this.loginForm = this.fb.group({
+      profileName: ['', [Validators.required]],
+      password: ['', Validators.required],
+      rememberMe: [false]
+    });
+  }
 
-  constructor() { }
+  ngOnInit(): void {
+    if (this.authService.isLoggedIn()) {
+      this.redirectBasedOnRole();
+    }
+  }
 
-  // Toggle password visibility
-  togglePasswordVisibility() {
+  togglePasswordVisibility(): void {
     this.passwordVisible = !this.passwordVisible;
   }
 
-  // Validate the form before submission
-  validateForm(): boolean {
-    this.errors = {};
-
-    // Check if username and password fields are filled
-    if (!this.username.trim()) {
-      this.errors['username'] = 'Tên đăng nhập không được để trống';
-    } else if (this.username !== this.fakeUserData.username) {
-      this.errors['username'] = 'Tên đăng nhập không tồn tại';
+  onSubmit(): void {
+    if (this.loginForm.invalid) {
+      Object.keys(this.loginForm.controls).forEach(key => {
+        this.loginForm.get(key)?.markAsTouched();
+      });
+      return;
     }
 
-    if (!this.password.trim()) {
-      this.errors['password'] = 'Mật khẩu không được để trống';
-    } else if (this.password !== this.fakeUserData.password) {
-      this.errors['password'] = 'Mật khẩu không chính xác';
-    }
+    this.isLoading = true;
+    this.error = '';
 
-    return Object.keys(this.errors).length === 0;
+    const credentials = {
+      profileName: this.loginForm.value.profileName,
+      password: this.loginForm.value.password
+    };
+
+    this.authService.login(credentials).subscribe({
+      next: () => {
+        this.isLoading = false;
+        if (this.loginForm.value.rememberMe) {
+          localStorage.setItem('rememberMe', 'true');
+        } else {
+          localStorage.removeItem('rememberMe');
+        }
+        this.redirectBasedOnRole();
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.error = error.message || 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.';
+      }
+    });
   }
 
-  // Handle form submission
-  onSubmit() {
-    if (this.validateForm()) {
-      console.log('Login successful');
-      // Proceed with actual login logic
-    } else {
-      console.log('Form contains errors');
-    }
+  private redirectBasedOnRole(): void {
+    this.authService.checkUser().subscribe({
+      next: (user) => {
+        if (user.role === 'admin') {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/home']);
+        }
+      },
+      error: (error) => {
+        console.error('Lỗi khi kiểm tra thông tin người dùng:', error);
+        this.authService.logout();
+        this.error = 'Có lỗi xảy ra. Vui lòng đăng nhập lại.';
+      }
+    });
   }
+
+  get profileName() { return this.loginForm.get('profileName'); }
+  get password() { return this.loginForm.get('password'); }
 }

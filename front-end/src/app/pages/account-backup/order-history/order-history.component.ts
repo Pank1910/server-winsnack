@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { OrderService } from '../../../services/order.service';
 import { Order } from '../../../../../../my-server-mongodb/interface/Order';
+import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-order-history',
@@ -19,12 +21,25 @@ export class OrderHistoryComponent implements OnInit {
   loading: boolean = true;
   error: string | null = null;
 
-  constructor(private orderService: OrderService) {}
+  constructor(
+    private orderService: OrderService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    // ID cố định để test
-    const userId = '6728c0ae6192805738f87721';
     
+  const userId = this.authService.getCurrentUserId();
+      
+      if (!userId) {
+        // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
+        this.router.navigate(['/login'], { 
+          queryParams: { returnUrl: '/account/order-history' } 
+        });
+        return;
+      }  
+
+    // Tải đơn hàng của người dùng
     this.orderService.getUserOrders(userId).subscribe({
       next: (result) => {
         console.log('✅ Dữ liệu đơn hàng nhận từ API:', result);
