@@ -9,17 +9,8 @@
         <meta name="keywords" content="bánh tráng, thanh toán, Win Snack">
         <meta name="author" content="Win Snack">
 
-        <!-- Open Graph Meta Tags -->
-        <meta property="og:title" content="Thanh Toán - Win Snack">
-        <meta property="og:description" content="Thanh toán đơn hàng Win Snack - Bánh tráng thế hệ mới">
-        <meta property="og:image" content="/front-end/src/assets/images/payment/banner.png">
-        <meta property="og:url" content="https://winsnack.vn/thanh-toan">
-
         <!-- Styles -->
         <link rel="stylesheet" href="./payment.component.css" />
-        
-        <!-- TailwindCSS -->
-        <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body>
         <!-- Các section chính: Breadcrumb -->
@@ -28,7 +19,7 @@
             >Trang chủ</a>
             <img
                 loading="lazy"
-                src="/front-end/src/assets/images/blog/arrow-right.png"
+                src="/assets/images/blog/arrow-right.png"
                 class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square"
                 alt="Breadcrumb arrow"
             />
@@ -44,11 +35,11 @@
         <div class="bg-[#FFE0C3] bg-opacity-80 px-11 py-5 mt-8 w-full max-w-[1230px] text-[#000000] text-2xl">
             <div class="flex justify-between items-center font-bold text-[#F7941D]">
                 <div class="flex items-center gap-3.5">
-                    <img src="/front-end/src/assets/images/payment/address-icon.png" alt="Biểu tượng địa chỉ" class="w-[35px]">
+                    <img src="/assets/images/payment/address-icon.png" alt="Biểu tượng địa chỉ" class="w-[35px]">
                     <span>Địa chỉ nhận hàng</span>
                 </div>
-                <button [routerLink]="'/payment-address'" class="focus:outline-none focus:ring-2 focus:ring-[#F7941D] cursor-pointer">
-                    <img src="/front-end/src/assets/images/payment/edit-icon.png" alt="Icon chỉnh sửa" class="w-[35px]">
+                <button routerLink="/payment-address" class="focus:outline-none focus:ring-2 focus:ring-[#F7941D] cursor-pointer">
+                    <img src="/assets/images/payment/edit-icon.png" alt="Icon chỉnh sửa" class="w-[35px]">
                 </button>
             </div>
             <div class="mt-8 text-3xl">
@@ -56,28 +47,28 @@
             </div>
             <div class="mt-8">{{ defaultAddress.full_address }}</div>
             <!-- Thêm *ngIf để kiểm tra có defaultAddress -->
-            <div *ngIf="defaultAddress" class="mt-8 text-3xl">
+            <!-- <div *ngIf="defaultAddress" class="mt-8 text-3xl">
                 <span class="font-bold">{{ defaultAddress.name }}</span> &#10072; <span class="font-medium">{{ defaultAddress.phone }}</span>
             </div>
-            <div *ngIf="defaultAddress" class="mt-8">{{ defaultAddress.full_address() }}</div>
+            <div *ngIf="defaultAddress" class="mt-8">{{ defaultAddress.full_address() }}</div> -->
         </div>
         
         <!-- Cart Section -->
         <div class="border border-[#F7941D] mt-8 w-full max-w-[1230px]">
-            <div *ngFor="let product of products" class="border-b border-[#F7941D] flex max-md:flex-col">
+            <div *ngFor="let item of selectedItems" class="border-b border-[#F7941D] flex max-md:flex-col">
                 <div class="w-3/12 flex justify-center items-center p-7 bg-[#FFF8EC]">
-                    <img [src]="product.image" class="w-[180px]" alt="Hình ảnh sản phẩm">
+                    <img [src]="item.image_1" class="w-[180px]" alt="Hình ảnh sản phẩm">
                 </div>
-                <div class="w-3/12 p-8 text-3xl font-medium text-center bg-[#FFF8EC]">{{ product.name }}</div>
-                <div class="w-3/12 p-8 text-3xl font-medium text-center bg-[#FFF8EC]">{{ product.price }}/sp</div>
-                <div class="w-3/12 p-8 text-3xl font-medium text-center bg-[#FFF8EC]">x{{ product.quantity }} sản phẩm</div>
+                <div class="w-3/12 p-8 text-3xl font-medium text-center bg-[#FFF8EC]">{{ item.product_name }}</div>
+                <div class="w-3/12 p-8 text-3xl font-medium text-center bg-[#FFF8EC]">{{ item.unit_price }}/sp</div>
+                <div class="w-3/12 p-8 text-3xl font-medium text-center bg-[#FFF8EC]">x{{ item.quantity }} sản phẩm</div>
             </div>
         </div>
         
         <!-- Shipping Method Section -->
         <div class="border border-[#F7941D] px-11 py-8 mt-8 w-full max-w-[1230px]">
             <div class="flex items-center gap-3.5 text-[#F7941D] text-2xl font-bold">
-                <img src="/front-end/src/assets/images/payment/shipping-method-icon.png" alt="Biểu tượng giao hàng" class="w-[35px]">
+                <img src="/assets/images/payment/shipping-method-icon.png" alt="Biểu tượng giao hàng" class="w-[35px]">
                 <span>Giao hàng tiết kiệm</span>
             </div>
             <div class="flex justify-between text-xl text-[#9A9898] mt-5">
@@ -87,14 +78,14 @@
             <div class="border-t border-[#F7941D] mt-5"></div>
             <div class="flex justify-between text-3xl font-bold text-[#000000] mt-5">
                 <span>Tổng số tiền ({{ Quantity }} sản phẩm):</span>
-                <span class="text-4xl text-[#F7941D]">{{ totalPrice }} VNĐ</span>
+                <span class="text-4xl text-[#F7941D]">{{ totalPrice | currency: 'VND' }}</span>
             </div>
         </div>
         
         <!-- Promo Code Section -->
         <form class="border border-[#F7941D] flex justify-between px-11 py-4 mt-8 w-full max-w-[1230px]" (ngSubmit)="onSubmitPromoCode()">
             <div class="flex items-center gap-3.5 text-[#F7941D] text-2xl font-bold">
-                <img src="/front-end/src/assets/images/payment/promo-icon.png" alt="Biểu tượng khuyến mãi" class="w-[50px]">
+                <img src="/assets/images/payment/promo-icon.png" alt="Biểu tượng khuyến mãi" class="w-[50px]">
             </div>
             <input type="text" id="promoCode" class="bg-[#FFE0C3] px-11 py-4 rounded-lg w-full" placeholder="Nhập mã khuyến mãi của bạn" [(ngModel)]="promoCode" name="promoCode">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -104,18 +95,18 @@
         <!-- Payment Section -->
         <div class="border border-[#F7941D] px-11 py-4 mt-8 w-full max-w-[1230px] text-[#F7941D] text-2xl font-bold flex justify-between">
             <div class="flex items-center gap-3.5 text-[#F7941D] text-2xl font-bold">
-                <img src="/front-end/src/assets/images/payment/payment-method-icon.png" alt="Biểu tượng phương thức" class="w-[35px]">
+                <img src="/assets/images/payment/payment-method-icon.png" alt="Biểu tượng phương thức" class="w-[35px]">
                 <span>Phương thức thanh toán</span>
             </div>
             <button class="focus:outline-none focus:ring-2 focus:ring-[#F7941D]">
-                <img src="/front-end/src/assets/images/payment/more-icon.png" class="w-[15px]" alt="Biểu tượng xem thêm">
+                <img src="/assets/images/payment/more-icon.png" class="w-[15px]" alt="Biểu tượng xem thêm">
             </button>
         </div>
         
         <!-- Payment Details Section -->
         <div class="border border-[#F7941D] px-11 py-6 mt-8 w-full max-w-[1230px] text-[#000000]">
             <div class="flex items-center gap-3.5 text-[#F7941D] text-2xl font-bold">
-                <img src="/front-end/src/assets/images/payment/payment-details-icon.png" alt="Biểu tượng chi tiết" class="w-[35px]">
+                <img src="/assets/images/payment/payment-details-icon.png" alt="Biểu tượng chi tiết" class="w-[35px]">
                 <span>Chi tiết thanh toán</span>
             </div>
             <div class="flex justify-between text-2xl font-medium mt-5">

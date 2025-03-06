@@ -21,8 +21,9 @@ import { AccountInfoComponent } from './pages/account-backup/account-info/accoun
 // import { ContactComponent } from './pages/contact/contact.component';
 // import { AccountComponent } from './pages/account/account.component';
 // import { MinigameComponent } from './pages/minigame/minigame.component';
-// import { PaymentPageComponent } from './pages/payment/payment.component';
 import { ProductCategoryComponent } from './pages/product-category/product-category.component';
+import { ProductTableComponent } from './components/product-table/product-table.component';
+import { PaymentPageComponent } from './pages/payment/payment.component';
 // import { TermsAndPoliciesComponent } from './pages/terms-and-policies/terms-and-policies.component';
 
 export const routes: Routes = [
@@ -41,14 +42,29 @@ export const routes: Routes = [
 
     { path: 'register', component: RegisterComponent },
     { path: 'login', component: LoginComponent },
-    // { path: 'payment', component: PaymentPageComponent },
+    { path: 'payment', component: PaymentPageComponent },
     // { path: 'events', component: EventsComponent },
     // { path: 'contact', component: ContactComponent },
     // { path: 'account', component: AccountComponent },
     // { path: 'minigame', component: MinigameComponent },
     { path: 'product-category', component: ProductCategoryComponent },
     { path: 'product-detail', component: ProductDetailBackupComponent },
-    {
+    { path: 'product-table', component: ProductTableComponent },
+
+
+      {
+        path: 'terms-and-policies',
+        loadComponent: () => import('./pages/terms-and-policies backup/terms-and-policies.component').then(m => 
+            m.TermsAndPoliciesComponent),
+        children: [
+            { path: 'privacy-policy', loadComponent: () => import('./pages/terms-and-policies backup/privacy-policy/privacy-policy.component').then(m => m.PrivacyPolicyComponent) },
+            { path: 'refund-policy', loadComponent: () => import('./pages/terms-and-policies backup/refund-policy/refund-policy.component').then(m => m.RefundPolicyComponent) },
+            { path: 'shipping-policy', loadComponent: () => import('./pages/terms-and-policies backup/shipping-policy/shipping-policy.component').then(m => m.ShippingPolicyComponent) },
+            { path: '', redirectTo: 'privacy-policy', pathMatch: 'full' } // Mặc định mở trang Chính sách bảo mật
+        ]
+    },
+    
+      {
       path: 'account',
       component: AccountBackupComponent,
       children: [
@@ -60,7 +76,6 @@ export const routes: Routes = [
       ],
     },
       
-
 
     { path: '', redirectTo: 'home', pathMatch: 'full' }, // Redirect mặc định
     { path: '**', redirectTo: 'home' } // Xử lý route không tồn tại

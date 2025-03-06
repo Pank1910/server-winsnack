@@ -1,40 +1,44 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+interface UserAddress {
+  profileName: string;
+  phone?: string;
+  address?: string;
+}
+
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class AddressService {
-    private apiUrl = 'http://localhost:8080/api/addresses'; // URL API trực tiếp
+  private apiUrl = 'http://localhost:5000/addresses'; // URL API của bạn
 
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-    private getHeaders(): HttpHeaders {
-        const token = localStorage.getItem('token');
-        return new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        });
-    }
+  // Lấy địa chỉ mặc định của người dùng
+  getDefaultAddress(): UserAddress {
+    // Đọc từ localStorage hoặc trả về địa chỉ mặc định
+    const storedAddress = localStorage.getItem('userAddress');
+    return storedAddress ? JSON.parse(storedAddress) : {
+      profileName: 'Chưa có địa chỉ',
+      phone: '',
+      address: 'Vui lòng thêm địa chỉ giao hàng'
+    };
+  }
 
-    getUserAddress(): Observable<any> {
-        return this.http.get(this.apiUrl, { headers: this.getHeaders() });
-    }
+  // Lấy địa chỉ người dùng từ server
+  getUserAddress(userId: string): Observable<UserAddress> {
+    return this.http.get<UserAddress>(`${this.apiUrl}/user`, {
+      params: { userId: userId }
+    });
+  }
 
-    // addAddress(address: Address): Observable<any> {
-    //     return this.http.post(this.apiUrl, address, { headers: this.getHeaders() });
-    // }
-
-    // updateAddress(addressID: string, address: Address): Observable<any> {
-    //     return this.http.put(`${this.apiUrl}/${addressID}`, address, { headers: this.getHeaders() });
-    // }
-
-    deleteAddress(addressID: string): Observable<any> {
-        return this.http.delete(`${this.apiUrl}/${addressID}`, { headers: this.getHeaders() });
-    }
-
-    setDefaultAddress(addressID: string): Observable<any> {
-        return this.http.patch(`${this.apiUrl}/${addressID}/default`, {}, { headers: this.getHeaders() });
-    }
+  // Cập nhật địa chỉ người dùng
+  updateAddress(userId: string, addressData: UserAddress): Observable<UserAddress> {
+    return this.http.put<UserAddress>(`${this.apiUrl}/update`, {
+      userId,
+      ...addressData
+    });
+  }
 }
