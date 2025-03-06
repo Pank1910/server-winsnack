@@ -1,16 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment.prod';
+import { User } from '../models/user.model';
+
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
     private apiUrl = environment.apiUrl + '/auth';
 
-    private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
-    isLoggedIn$ = this.isLoggedInSubject.asObservable(); // Observable theo dõi trạng thái đăng nhập
+    private isLoggedInSubject = new BehaviorSubject(this.hasToken());
+    isLoggedIn$ = this.isLoggedInSubject.asObservable(); 
+
+    private currentUserSubject = new BehaviorSubject<User | null>(this.getCurrentUserFromStorage());
+    currentUser$ = this.currentUserSubject.asObservable();
 
     constructor(private http: HttpClient) { }
 
@@ -26,26 +31,66 @@ export class AuthService {
     }
 
     login(credentials: { email: string, password: string }): Observable<any> {
-        return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
+        return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
+            tap(response => {
+                if (response && response.token) {
+                    localStorage.setItem('token', response.token);
+                    
+                    // Lưu thông tin người dùng nếu có
+                    if (response.user) {
+                        localStorage.setItem('currentUser', JSON.stringify(response.user));
+                        this.currentUserSubject.next(response.user);
+                    }
+                    
+                    this.isLoggedInSubject.next(true);
+                }
+            }),
             catchError(error => this.handleError(error))
         );
     }
 
     register(userData: any): Observable<any> {
-        return this.http.post(`${this.apiUrl}/register`, userData).pipe(
+        return this.http.post<any>(`${this.apiUrl}/register`, userData).pipe(
             catchError(error => this.handleError(error))
         );
     }
 
-    checkUser(): Observable<any> {
-        return this.http.get(`${this.apiUrl}/profile`, { headers: this.getHeaders() }).pipe(
+    checkUser(): Observable<User> {
+        return this.http.get<User>(`${this.apiUrl}/profile`, { headers: this.getHeaders() }).pipe(
+            tap(user => {
+                if (user) {
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    this.currentUserSubject.next(user);
+                }
+            }),
             catchError(error => this.handleError(error))
         );
     }
 
     logout(): void {
         localStorage.removeItem('token');
-        this.isLoggedInSubject.next(false); // Cập nhật trạng thái đăng nhập
+        localStorage.removeItem('currentUser');
+        this.currentUserSubject.next(null);
+        this.isLoggedInSubject.next(false);
+    }
+
+    // Phương thức để lấy ID người dùng hiện tại
+    getCurrentUserId(): string | null {
+        const user = this.currentUserSubject.value;
+        return user ? user._id : null;
+    }
+
+    // Phương thức để lấy thông tin người dùng từ localStorage
+    private getCurrentUserFromStorage(): User | null {
+        const userStr = localStorage.getItem('currentUser');
+        if (userStr) {
+            try {
+                return JSON.parse(userStr);
+            } catch (e) {
+                return null;
+            }
+        }
+        return null;
     }
 
     private hasToken(): boolean {

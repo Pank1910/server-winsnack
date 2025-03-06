@@ -14,6 +14,8 @@ import { AccountBackupComponent } from './pages/account-backup/account-backup.co
 import { OrderHistoryComponent } from './pages/account-backup/order-history/order-history.component';
 import { ReviewsComponent } from './pages/account-backup/reviews/reviews.component';
 import { AddressesComponent } from './pages/account-backup/addresses/addresses.component';
+import { AccountInfoComponent } from './pages/account-backup/account-info/account-info.component';
+
 
 // import { EventsComponent } from './pages/events/events.component';
 // import { ContactComponent } from './pages/contact/contact.component';
@@ -48,17 +50,8 @@ export const routes: Routes = [
     { path: 'product-category', component: ProductCategoryComponent },
     { path: 'product-detail', component: ProductDetailBackupComponent },
     { path: 'product-table', component: ProductTableComponent },
-    {
-        path: 'account',
-        component: AccountBackupComponent,
-        children: [
-          { path: 'info', component: AccountBackupComponent }, // Trang thông tin tài khoản
-          { path: 'order-history', component: OrderHistoryComponent },
-          { path: 'reviews', component: ReviewsComponent },
-          { path: 'addresses', component: AddressesComponent },
-          { path: '', redirectTo: 'info', pathMatch: 'full' }, // Mặc định chuyển hướng đến 'info'
-        ],
-      },
+
+
       {
         path: 'terms-and-policies',
         loadComponent: () => import('./pages/terms-and-policies backup/terms-and-policies.component').then(m => 
@@ -71,7 +64,18 @@ export const routes: Routes = [
         ]
     },
     
-
+      {
+      path: 'account',
+      component: AccountBackupComponent,
+      children: [
+        { path: '', redirectTo: 'info', pathMatch: 'full' },
+        { path: 'info', component: AccountInfoComponent },
+        { path: 'order-history', component: OrderHistoryComponent },
+        { path: 'reviews', component: ReviewsComponent },
+        { path: 'addresses', component: AddressesComponent },
+      ],
+    },
+      
 
     { path: '', redirectTo: 'home', pathMatch: 'full' }, // Redirect mặc định
     { path: '**', redirectTo: 'home' } // Xử lý route không tồn tại
