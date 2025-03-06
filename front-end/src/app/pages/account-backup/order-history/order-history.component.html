@@ -67,7 +67,6 @@
               </tr>
             </thead>
             <tbody>
-              <ng-container *ngFor="let order of orders">
                 <tr *ngFor="let item of order.items" class="border-b border-[#ffe0cc] hover:bg-[#ffe6cc]">
                   <td class="p-2 text-left">
                     {{ item.product.product_name }}
@@ -85,7 +84,6 @@
                     {{ item.product.total_price | number:'1.0-0' }} đ
                   </td>
                 </tr>
-              </ng-container>            
             </tbody>
           </table>
         </div>
