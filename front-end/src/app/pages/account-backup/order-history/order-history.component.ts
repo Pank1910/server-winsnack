@@ -3,8 +3,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { OrderService } from '../../../services/order.service';
-import { Order } from '../../../models/order.model';
+import { OrderService } from '../../../services/order-api.service';
+import { Order } from '../../../../../../my-server-mongodb/interface/Order';
 
 @Component({
   selector: 'app-order-history',

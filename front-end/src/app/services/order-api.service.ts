@@ -3,7 +3,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Order } from '../models/order.model';
+import { Order } from '../../../../my-server-mongodb/interface/Order';
 
 @Injectable({
   providedIn: 'root'
