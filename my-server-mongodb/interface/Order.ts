@@ -1,10 +1,20 @@
-import { Product } from "../models/product.model";
+import { Product } from "./../models/product.model";
+
+export interface OrderItem {
+  product: Product;
+  quantity: number;
+}
+
+export interface OrderContact {
+  name: string;
+  phone: string;
+}
 
 export class Order {
   constructor(
     public _id: string | null = null,
     public userId: string = "",
-    public userName: string = "Anonymous",
+    public userName: string = "",
     public items: {
       product: Product;
       quantity: number;
@@ -16,8 +26,8 @@ export class Order {
       phone: string;
     } = { name: "", phone: "" }, // Chỉ giữ lại name và phone
     public additionalNotes: string = "",
-    public paymentMethod: string = "cash_on_delivery",
+    public paymentMethod: string = "",
     public createdAt: Date = new Date(),
-    public status: string = "pending"
+    public status: string = ""
   ) { }
 }
