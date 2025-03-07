@@ -868,43 +868,36 @@ const storage = multer.diskStorage({
   // Avatar upload endpoint
   app.post('/upload-avatar', upload.single('avatar'), async (req, res) => {
     try {
-      if (!req.file) {
-        return res.status(400).json({ success: false, message: 'Không có file nào được tải lên' });
-      }
-      
       const userId = req.body.userId;
-      if (!userId) {
-        return res.status(400).json({ success: false, message: 'UserId không được cung cấp' });
+      if (!req.file || !userId) {
+        return res.status(400).json({ success: false, message: 'Thiếu file hoặc userId' });
       }
-      
-      // Create the avatar URL
+  
       const avatarUrl = `/uploads/avatars/${req.file.filename}`;
-      
-      // Update user in database
-      const user = await User.findOneAndUpdate(
+  
+      const result = await usersCollection.findOneAndUpdate(
         { userId: userId },
-        { avatar: avatarUrl },
-        { new: true } // Return updated document
+        { $set: { avatar: avatarUrl } },
+        { returnDocument: 'after' }
       );
-      
-      if (!user) {
-        return res.status(404).json({ success: false, message: 'Không tìm thấy người dùng' });
+  
+      if (!result.value) {
+        return res.status(404).json({ success: false, message: 'Không tìm thấy user' });
       }
-      
-      // Return updated user object
-      return res.status(200).json({
+  
+      res.status(200).json({
         success: true,
         message: 'Cập nhật ảnh đại diện thành công',
-        user: user
+        user: result.value
       });
     } catch (error) {
       console.error('Error uploading avatar:', error);
-      return res.status(500).json({ success: false, message: 'Lỗi server: ' + error.message });
+      res.status(500).json({ success: false, message: 'Lỗi server: ' + error.message });
     }
-  });
+  });  
   
   // Serve static files
-  app.use(express.static('public'));
+  app.use('/uploads/avatars', express.static('public/uploads/avatars'));
 
 // Khởi động server
 app.listen(port, () => {
