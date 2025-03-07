@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 5000;
+const port = 5001;  // hoặc 6000, 7000 đều được, miễn là không bị xung đột.
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -29,7 +29,6 @@ async function connectDB() {
         console.error("❌ MongoDB connection error:", error);
     }
 }
-
 connectDB();
 
 const database = client.db("winsnack");
@@ -37,82 +36,38 @@ const database = client.db("winsnack");
 const productsCollection = database.collection("Product");
 const orderCollection = database.collection("Order"); // ✅ Thêm collection Order
 
+
 // Trang chủ test server
 app.get("/", (req, res) => {
     res.send("This Web server is processed for MongoDB");
 });
 
-// Check DB và test collection
-// app.get("/check-db", async (req, res) => {
-//     try {
-//         const collections = await database.listCollections().toArray();
-//         const collectionNames = collections.map(col => col.name);
-        
-//         if (!collectionNames.includes("CARTS")) {
-//             return res.status(404).json({ 
-//                 success: false, 
-//                 message: "❌ Collection 'CARTS' does not exist!" 
-//             });
-//         }
-
-//         const sampleDoc = await winsnackCollection.findOne({});
-//         res.json({
-//             success: true,
-//             message: "✅ MongoDB connected successfully!",
-//             sampleDocument: sampleDoc || "No documents found in CARTS collection",
-//         });
-//     } catch (error) {
-//         res.status(500).json({
-//             success: false,
-//             message: "❌ MongoDB connection failed",
-//             error: error.toString(),
-//         });
-//     }
-// });
 
 // ✅ Endpoint lấy tất cả sản phẩm
 app.get("/products", async (req, res) => {
     try {
         const products = await productsCollection.find({}).toArray();
-        res.json({
-            success: true,
-            data: products,
-            count: products.length
-        });
+        res.json({ success: true, data: products, count: products.length });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "❌ Failed to fetch products",
-            error: error.toString()
-        });
+        res.status(500).json({ success: false, message: "❌ Failed to fetch products", error: error.toString() });
     }
 });
 
-// ✅ Endpoint lấy sản phẩm theo ID
+// Get product by ID
 app.get("/products/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const product = await productsCollection.findOne({ productId: id });
-        
+        const product = await productsCollection.findOne({ _id: id });
+
         if (!product) {
-            return res.status(404).json({
-                success: false,
-                message: "❌ Product not found"
-            });
+            return res.status(404).json({ success: false, message: "❌ Product not found" });
         }
-        
-        res.json({
-            success: true,
-            data: product
-        });
+        res.json({ success: true, data: product });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "❌ Failed to fetch product",
-            error: error.toString()
-        });
+        res.status(500).json({ success: false, message: "❌ Failed to fetch product", error: error.toString() });
     }
 });
+
 
 // Giả sử usersCollection đã được khai báo từ trước
 const usersCollection = database.collection("User");
