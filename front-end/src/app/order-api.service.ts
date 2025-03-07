@@ -25,12 +25,6 @@ interface PromoCodeValidationResult {
   discountAmount: number;
 }
 
-interface OrderResponse {
-  orderId: string;
-  status: string;
-  message: string;
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -39,9 +33,15 @@ export class OrderAPIService {
 
   constructor(private http: HttpClient) {}
 
+  getUserCart(userId: string): Observable<CartItem[]> {
+    return this.http.get<CartItem[]>(`http://localhost:5000/cart/items`, {
+      params: { userId }
+    });
+  }
+
   // Tạo đơn hàng mới
-  createOrder(orderData: any): Observable<OrderResponse> {
-    return this.http.post<OrderResponse>(`${this.apiUrl}/create`, orderData);
+  createOrder(orderData: any): Observable<CartItem> {
+    return this.http.post<CartItem>(`${this.apiUrl}/create`, orderData);
   }
 
   // Kiểm tra mã khuyến mãi
@@ -56,16 +56,20 @@ export class OrderAPIService {
 
   // Lấy lịch sử đơn hàng
   getOrderHistory(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/history`);
+    const userId = localStorage.getItem('userId') || sessionStorage.getItem('userId') || '123457';
+  
+    return this.http.get<any[]>(`${this.apiUrl}/history`, {
+      params: userId ? { userId } : {}
+    });
   }
-
+  
   // Hủy đơn hàng
-  cancelOrder(orderId: string): Observable<OrderResponse> {
-    return this.http.patch<OrderResponse>(`${this.apiUrl}/cancel/${orderId}`, {});
+  cancelOrder(orderId: string): Observable<CartItem> {
+    return this.http.patch<CartItem>(`${this.apiUrl}/cancel/${orderId}`, {});
   }
 
   // Phương thức lưu đơn hàng
-  saveOrder(orderData: any): Observable<OrderResponse> {
-    return this.http.post<OrderResponse>(`${this.apiUrl}/create`, orderData);
+  saveOrder(orderData: any): Observable<CartItem> {
+    return this.http.post<CartItem>(`${this.apiUrl}/create`, orderData);
   }
 }

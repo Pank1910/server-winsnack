@@ -5,5 +5,5 @@ export interface CartItem {
   product_name: string;
   image_1: string;
   stocked_quantity: number;
-  userId?: string;
+  userId: string;
 }

@@ -226,6 +226,13 @@ app.get('/cart/items', async (req, res) => {
     try {
         const userId = req.query.userId;
         console.log(`Đang tìm các mục giỏ hàng cho người dùng: ${userId}`);
+        // Thêm kiểm tra userId
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: "Missing userId parameter"
+            });
+        }
         const cartItems = await cartCollection.find({ userId }).toArray();
         console.log(`Tìm thấy ${cartItems.length} mục giỏ hàng`);
         res.json(cartItems);

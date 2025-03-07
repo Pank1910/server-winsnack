@@ -66,26 +66,46 @@ constructor(
 ) {}
 
 ngOnInit(): void {
-  // Subscribe to cart changes
+  // First, load the user's default address
+  this.loadDefaultAddress();
+  
+  // Then, load the cart items specifically for this user
+  this.loadSelectedItems();
+  
+  // Subscribe to future cart changes
   this.cartService.cartItems$.subscribe(items => {
     console.log('Cart items updated:', items);
     this.selectedItems = items.filter(item => item.quantity > 0);
     this.Quantity = this.selectedItems.reduce((total, item) => total + item.quantity, 0);
     this.calculateTotalPrice();
   });
-  
-  this.loadDefaultAddress();
 }
 
-// Tải danh sách sản phẩm đã chọn từ giỏ hàng
-// Trong payment.component.ts
 loadSelectedItems(): void {
-  this.selectedItems = this.cartService.getSelectedItems();
-  console.log('Các mục đã chọn để thanh toán:', this.selectedItems);
-  this.Quantity = this.selectedItems.reduce((total, item) => total + item.quantity, 0);
+  // Get the current userId
+  const userId = localStorage.getItem('userId');
   
-  if (this.selectedItems.length === 0) {
-    console.warn('Không có mục nào được chọn để thanh toán');
+  if (userId) {
+    console.log('Loading cart items for authenticated user:', userId);
+    // Use the OrderAPIService to get the user's cart
+    this.orderService.getUserCart(userId).subscribe({
+      next: (items) => {
+        console.log('Cart items fetched successfully:', items);
+        this.selectedItems = items.filter(item => item.quantity > 0);
+        this.Quantity = this.selectedItems.reduce((total, item) => total + item.quantity, 0);
+        this.calculateTotalPrice();
+      },
+      error: (err) => {
+        console.error('Error fetching cart items:', err);
+        // Fallback to cartService if direct fetch fails
+        this.selectedItems = this.cartService.getSelectedItems();
+        this.calculateTotalPrice();
+      }
+    });
+  } else {
+    // If no userId (not logged in), use current cart items
+    this.selectedItems = this.cartService.getSelectedItems();
+    this.calculateTotalPrice();
   }
 }
 
@@ -181,6 +201,7 @@ closeQRModal(): void {
 }
 // Xử lý đặt hàng
 onPlaceOrder(): void {
+  const userId = localStorage.getItem('userId') || sessionStorage.getItem('userId') || '123457';
   // Kiểm tra các điều kiện trước khi đặt hàng
   if (!this.defaultAddress.name) {
     alert('Vui lòng chọn địa chỉ giao hàng');
@@ -208,9 +229,12 @@ onPlaceOrder(): void {
 // Phương thức mới để xử lý việc lưu đơn hàng
 processOrder(): void {
   // Tạo đối tượng đơn hàng
+  // Get the actual userId, with fallback
+  const userId = localStorage.getItem('userId') || sessionStorage.getItem('userId') || '123457';
+  
   const orderData = {
     orderId: this.orderCode,
-    userId: localStorage.getItem('userId') || '123457',
+    userId: userId,
     userName: this.defaultAddress.name,
     items: this.selectedItems.map(item => ({
       product: {
