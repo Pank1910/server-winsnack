@@ -14,6 +14,16 @@
       <div *ngIf="!previewUrl" class="relative">
         <img [src]="'http://localhost:5000' + user?.avatar" alt="Avatar" *ngIf="user?.avatar" alt="Avatar" class="w-24 h-24 rounded-full object-cover" />
       </div>
+
+      <!-- Khung mô phỏng chọn ảnh (chỉ hiện khi KHÔNG có avatar và KHÔNG có preview) -->
+      <div *ngIf="!previewUrl && !user?.avatar"
+      class="w-24 h-24 flex items-center justify-center bg-gray-200 text-gray-500 rounded-full border-2 border-dashed border-[#FF9413]">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+      </div>
       
       <!-- File input ẩn -->
       <input 
