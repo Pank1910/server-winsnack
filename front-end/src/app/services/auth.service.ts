@@ -10,6 +10,9 @@ import { Router } from '@angular/router';
     providedIn: 'root'
 })
 export class AuthService {
+    getUserId(): string | null {
+      throw new Error('Method not implemented.');
+    }
     private apiUrl = 'http://localhost:5000';
 
     private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
@@ -17,6 +20,12 @@ export class AuthService {
 
     private currentUserSubject = new BehaviorSubject<User | null>(this.getCurrentUserFromStorage());
     currentUser$ = this.currentUserSubject.asObservable();
+
+    updateCurrentUser(user: User) {
+        console.log('Updating user in auth service:', user);
+        this.currentUserSubject.next(user);
+        localStorage.setItem('currentUser', JSON.stringify(user));
+      }
 
     constructor(
         private http: HttpClient,

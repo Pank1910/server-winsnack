@@ -1,29 +1,64 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ProductApiService } from '../../product-api.service';
+import { Product } from '../../../../../my-server-mongodb/interface/Product';
 
 @Component({
   selector: 'app-product-detail-backup',
   standalone: true,
   imports: [FormsModule, CommonModule, RouterModule],
   templateUrl: './product-detail-backup.component.html',
-  styleUrl: './product-detail-backup.component.css'
+  styleUrls: ['./product-detail-backup.component.css']
 })
 export class ProductDetailBackupComponent implements OnInit {
+  product!: Product;
+  loading = true;
+  error = '';
+
   activeTab: string = 'description';
-  userRating: number = 0;
-  quantity: number = 1;
-  selectedWeight: number = 100;
-  showPopup: boolean = false;
-  reviewText: string = '';
+  userRating = 0;
+  quantity = 1;
+  selectedWeight = 100;
+  showPopup = false;
+  reviewText = '';
 
-  showReviewSuccessPopup: boolean = false; // Biến điều khiển hiển thị popup thành công
-  showRatingRequiredPopup: boolean = false; // Biến điều khiển hiển thị popup yêu cầu chọn sao
+  showReviewSuccessPopup = false;
+  showRatingRequiredPopup = false;
 
-  constructor(private router: Router) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private productService: ProductApiService
+  ) {}
 
   ngOnInit(): void {
+    const productId = this.route.snapshot.paramMap.get('id');
+    if (productId) {
+      this.fetchProductDetail(productId);
+    } else {
+      this.error = 'Không tìm thấy sản phẩm!';
+    }
+  }
+
+  fetchProductDetail(id: string): void {
+    this.loading = true;
+    this.productService.getProductById(id).subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.product = response.data;
+        } else {
+          this.error = 'Dữ liệu sản phẩm không hợp lệ!';
+        }
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = 'Không thể tải chi tiết sản phẩm. Vui lòng thử lại sau.';
+        console.error('Lỗi:', err);
+        this.loading = false;
+      }
+    });
   }
 
   setActiveTab(tab: string): void {
@@ -44,108 +79,45 @@ export class ProductDetailBackupComponent implements OnInit {
   navigateToProductCategory(): void {
     this.router.navigate(['/product-category']);
   }
-
+  navigateToHomepage(): void {
+    this.router.navigate(['/homepage']);
+  }
   selectWeight(weight: number): void {
     this.selectedWeight = weight;
   }
-  
 
-  // Thêm hàm xử lý khi nhấn nút "THÊM VÀO GIỎ HÀNG"
   addToCart(): void {
-  // Logic thêm vào giỏ hàng ở đây
-  // Ví dụ: gọi API hoặc lưu vào local storage
-  
-  // Hiển thị popup
-  this.showPopup = true;
-}
-
-// Thêm hàm đóng popup
-closePopup(): void {
-  this.showPopup = false;
-}
-
-goToCart(): void {
-  // Chuyển hướng đến trang giỏ hàng
-  this.router.navigate(['/cart']);
-  this.closePopup();
-}
-
-products = [
-  {
-    imageUrl: '/assets/images/homepage/chabong.png',
-    name: 'Bánh tráng trộn đặc biệt',
-    discount: 20,
-    rating: 4.9,
-    reviews: 235,
-    originalPrice: 25000,
-    discountedPrice: 20000,
-    description: 'Kết hợp 6 loại gia vị đặc trưng'
-  },
-  {
-    imageUrl: '/assets/images/homepage/rongbien.png',
-    name: 'Bánh tráng nướng truyền thống',
-    discount: 15,
-    rating: 4.8,
-    reviews: 189,
-    originalPrice: 30000,
-    discountedPrice: 25500,
-    description: 'Công thức gia truyền 3 đời'
-  },
-  {
-    imageUrl: '/assets/images/homepage/chabong.png',
-    name: 'Set snack Hàn Quốc',
-    discount: 30,
-    rating: 4.95,
-    reviews: 356,
-    originalPrice: 120000,
-    discountedPrice: 84000,
-    description: 'Combo 10 gói snack đủ vị'
-  },
-  {
-    imageUrl: '/assets/images/homepage/rongbien.png',
-    name: 'Bánh tráng muối ớt',
-    discount: 10,
-    rating: 4.7,
-    reviews: 156,
-    originalPrice: 15000,
-    discountedPrice: 13500,
-    description: 'Vị cay xé lưỡi đặc trưng'
-  }
-];
-
-
-// Hàm gửi đánh giá
-submitReview(): void {
-  // Kiểm tra xem người dùng đã chọn sao chưa
-  if (!this.userRating || this.userRating === 0) {
-    this.showRatingRequiredPopup = true; // Hiển thị popup yêu cầu chọn sao
-    return; // Dừng hàm nếu chưa chọn sao
+    this.showPopup = true;
   }
 
-  // Xử lý gửi đánh giá (ví dụ: gọi API)
-  // ...
+  closePopup(): void {
+    this.showPopup = false;
+  }
 
-  // Sau khi gửi thành công, hiển thị popup thành công
-  this.showReviewSuccessPopup = true;
+  goToCart(): void {
+    this.router.navigate(['/cart']);
+    this.closePopup();
+  }
 
-  // Làm trống thanh ngôi sao và ô nhập văn bản
-  this.userRating = 0;
-  this.reviewText = '';
+  submitReview(): void {
+    if (!this.userRating) {
+      this.showRatingRequiredPopup = true;
+      return;
+    }
+    this.showReviewSuccessPopup = true;
+    this.userRating = 0;
+    this.reviewText = '';
+  }
 
-  // Tự động đóng popup thành công sau 3 giây
-  // setTimeout(() => {
-  //   this.closeReviewSuccessPopup();
-  // }, 3000);
-}
+  closeReviewSuccessPopup(): void {
+    this.showReviewSuccessPopup = false;
+  }
 
-// Hàm đóng popup thành công
-closeReviewSuccessPopup(): void {
-  this.showReviewSuccessPopup = false;
-}
+  closeRatingRequiredPopup(): void {
+    this.showRatingRequiredPopup = false;
+  }
 
-// Hàm đóng popup yêu cầu chọn sao
-closeRatingRequiredPopup(): void {
-  this.showRatingRequiredPopup = false;
-}
-
+  getDiscountedPrice(): number {
+    return this.product.unit_price * (1 - this.product.discount);
+  }
 }

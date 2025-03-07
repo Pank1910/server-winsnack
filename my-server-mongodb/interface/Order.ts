@@ -1,4 +1,4 @@
-import { Product } from "../models/product.model";
+import { Product } from "../../my-server-mongodb/interface/Product";
 
 export class Order {
   constructor(

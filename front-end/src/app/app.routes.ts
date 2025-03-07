@@ -34,6 +34,7 @@ export const routes: Routes = [
     { path: 'read-blog', component: ReadBlogComponent },
     { path: 'header', component: HeaderComponent },
     { path: 'footer', component: FooterComponent },
+
     // { path: 'cart', component: CartComponent},
 
   
@@ -48,8 +49,21 @@ export const routes: Routes = [
     // { path: 'account', component: AccountComponent },
     // { path: 'minigame', component: MinigameComponent },
     { path: 'product-category', component: ProductCategoryComponent },
-    { path: 'product-detail', component: ProductDetailBackupComponent },
+    { path: 'product-detail/:id', component: ProductDetailBackupComponent },
+    {
+        path: 'account',
+        component: AccountBackupComponent,
+        children: [
+          { path: 'info', component: AccountBackupComponent }, // Trang thông tin tài khoản
+          { path: 'order-history', component: OrderHistoryComponent },
+          { path: 'reviews', component: ReviewsComponent },
+          { path: 'addresses', component: AddressesComponent },
+          { path: '', redirectTo: 'info', pathMatch: 'full' }, // Mặc định chuyển hướng đến 'info'
+        ],
+      },
+
     { path: 'product-table', component: ProductTableComponent },
+
 
 
       {

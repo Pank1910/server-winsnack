@@ -3,441 +3,141 @@
 <div class="flex flex-col">
     <!-- Breadcrumb -->
     <nav
-  class="flex flex-wrap gap-3.5 items-center px-20 py-3.5 w-full text-xl bg-[#FFE0C2] min-h-[50px] max-md:px-5 max-md:max-w-full"
-  aria-label="Breadcrumb"
->
-  <a
-    routerLink="/product-category"
-    class="self-stretch my-auto font-medium text-center text-black text-opacity-50 transition duration-300 hover:text-[#FF9413] hover:font-bold"
-  >
-    Tất cả sản phẩm
-  </a>
-  <img
-    loading="lazy"
-    src="assets/images/blog/arrow-right.png"
-    class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square"
-    alt="Breadcrumb arrow"
-  />
-  <span class="self-stretch my-auto font-bold text-[#FF9413]">
-    Bánh tráng rong biển
-  </span>
-</nav>
-  
+        class="flex flex-wrap gap-3.5 items-center px-20 py-3.5 w-full text-xl bg-[#FFE0C2] min-h-[50px] max-md:px-5 max-md:max-w-full"
+        aria-label="Breadcrumb"
+    >
+        <a
+            routerLink="/product-category"
+            class="self-stretch my-auto font-medium text-center text-black text-opacity-50 transition duration-300 hover:text-[#FF9413] hover:font-bold"
+        >
+            Tất cả sản phẩm
+        </a>
+        <img
+            loading="lazy"
+            src="assets/images/blog/arrow-right.png"
+            class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square"
+            alt="Breadcrumb arrow"
+        />
+        <span class="self-stretch my-auto font-bold text-[#FF9413]">
+            {{ product.product_name }}
+        </span>
+    </nav>
+
     <!-- Main Product Area -->
     <div class="bg-[#FFF8EC] py-8 px-20 max-md:px-5">
-      <div class="flex flex-col md:flex-row  overflow-hidden mb-8">
-        <!-- Product Gallery -->
-        <div class="w-full md:w-1/2 p-6">
-          <div class="mb-4">
-            <img
-              src="assets/images/products/banh-trang-rong-bien.png"
-              alt="Bánh tráng rong biển"
-              class="w-full rounded-lg"
-            />
-          </div>
-          <div class="flex space-x-2">
-            <div class="w-1/4 opacity-100 cursor-pointer">
-              <img
-                src="assets/images/products/banh-trang-rong-bien.png"
-                alt="Thumbnail 1"
-                class="w-full rounded-md"
-              />
+        <div class="flex flex-col md:flex-row overflow-hidden mb-8">
+            <!-- Product Gallery -->
+            <div class="w-full md:w-1/2 p-6">
+                <div class="mb-4">
+                    <img
+                        [src]="product.image_1"
+                        [alt]="product.product_name"
+                        class="w-full rounded-lg"
+                    />
+                </div>
+                <div class="flex space-x-2">
+                    <img *ngFor="let img of [product.image_1, product?.image_2, product?.image_3, product?.image_4, product?.image_5]"
+                        [src]="img" [alt]="product.product_name"
+                        class="w-1/4 rounded-md cursor-pointer hover:opacity-100"
+                        [ngClass]="{'opacity-100': img === product.image_1, 'opacity-60': img !== product.image_1}" />
+                </div>
             </div>
-            <div class="w-1/4 opacity-60 cursor-pointer hover:opacity-100">
-              <img
-                src="assets/images/products/banh-trang-rong-bien.png"
-                alt="Thumbnail 2"
-                class="w-full rounded-md"
-              />
-            </div>
-            <div class="w-1/4 opacity-60 cursor-pointer hover:opacity-100">
-              <img
-                src="assets/images/products/banh-trang-rong-bien.png"
-                alt="Thumbnail 3"
-                class="w-full rounded-md"
-              />
-            </div>
-            <div class="w-1/4 opacity-60 cursor-pointer hover:opacity-100">
-              <img
-                src="assets/images/products/banh-trang-rong-bien.png"
-                alt="Thumbnail 4"
-                class="w-full rounded-md"
-              />
-            </div>
-          </div>
-        </div>
-  
-        <!-- Product Details -->
-        <div class="w-full md:w-1/2 p-6">
-          <h1 class="text-2xl font-bold text-gray-800 mb-2">Bánh tráng rong biển</h1>
-          <div class="mb-4">
-            <span class="text-2xl font-bold text-[#FF9413] mr-2">25.000₫</span>
-            <span class="text-gray-500 line-through">30.000₫</span>
-          </div>
-          <div class="mb-4">
-            <span class="text-[#FF9413] text-xl">★★★★☆</span>
-            <span class="text-gray-600 ml-2">(67 đánh giá)</span>
-            <span class="text-gray-600 ml-2">93% người mua đã thích sản phẩm này</span>
-          </div>
-          <div class="mb-4">
-            <p class="text-gray-700 leading-relaxed">
-              Bánh tráng rong biển được làm từ bánh tráng mỏng giòn, kết hợp với rong biển sấy khô, mè rang và gia vị đậm đà.
-              Mang đến vật thơm ngon, tiện lợi, thích hợp cho mọi lúc mọi nơi.
-            </p>
-          </div>
-  
-          <div class="mb-4">
-            <span class="block mb-2">Chọn phân loại:</span>
-            <div class="flex space-x-3">
-                <button 
-                class="px-3 py-1 border rounded-md" 
-                [ngClass]="{'bg-[#FF9413] text-white': selectedWeight === 100}" 
-                (click)="selectWeight(100)"
-              >
-                100g
-              </button>
-              <button 
-                class="px-3 py-1 border rounded-md" 
-                [ngClass]="{'bg-[#FF9413] text-white': selectedWeight === 200}" 
-                (click)="selectWeight(200)"
-              >
-                200g
-              </button>
-            </div>
-          </div>
-  
-          <div class="flex items-center mb-6">
-            <div class="flex items-center border border-[#FF9413] rounded-full overflow-hidden mr-4">
-              <button class="w-12 h-10 text-[#FF9413] bg-white focus:outline-none" (click)="changeQuantity(-1)">-</button>
-              <input
-                type="number"
-                id="quantity"
-                [(ngModel)]="quantity"
-                min="1"
-                class="w-12 h-10 text-center border-none focus:outline-none"
-              />
-              <button class="w-12 h-10 text-[#FF9413] bg-white focus:outline-none" (click)="changeQuantity(1)">+</button>
-            </div>
-            <button
-              class="flex-grow py-2 px-4 bg-[#FF9413] hover:bg-[#e58000] text-white font-semibold rounded-full focus:outline-none" (click)="addToCart()">
-              THÊM VÀO GIỎ HÀNG
-            </button>
-          </div>
-  
-          <div
-            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-            *ngIf="showPopup"
-            >
-            <div class="bg-white p-6 rounded-lg shadow-lg max-w-md">
-                <div class="text-center">
-                <h3 class="text-lg font-semibold mb-2">Thêm vào giỏ hàng thành công!</h3>
-                <p>Bạn đã thêm {{ quantity }} gói Bánh tráng rong biển loại {{ selectedWeight }} gam vào giỏ hàng thành công.</p>
-                <div class="mt-4 flex justify-center space-x-3">
+
+            <!-- Product Details -->
+            <div class="w-full md:w-1/2 p-6">
+                <h1 class="text-2xl font-bold text-gray-800 mb-2">{{ product.product_name }}</h1>
+                <div class="mb-4">
+                    <span class="text-2xl font-bold text-[#FF9413] mr-2">
+                        {{ getDiscountedPrice() | number }}₫
+                    </span>
+                    <span class="text-gray-500 line-through">
+                        {{ product.unit_price | number }}₫
+                    </span>
+                </div>
+                <div class="mb-4">
+                    <span class="text-[#FF9413] text-xl">★ {{ product.rating }}</span>
+                    <span class="text-gray-600 ml-2">(Chưa có đánh giá)</span>
+                    <span class="text-gray-600 ml-2">Sản phẩm mới: {{ product.isNew ? 'Có' : 'Không' }}</span>
+                </div>
+                <div class="mb-4">
+                    <p class="text-gray-700 leading-relaxed">{{ product.product_detail }}</p>
+                </div>
+
+                <div class="mb-4">
+                    <span class="block mb-2">Chọn phân loại:</span>
+                    <div class="flex space-x-3">
+                        <button class="px-3 py-1 border rounded-md"
+                            [ngClass]="{'bg-[#FF9413] text-white': selectedWeight === 100}"
+                            (click)="selectWeight(100)">100g</button>
+                        <button class="px-3 py-1 border rounded-md"
+                            [ngClass]="{'bg-[#FF9413] text-white': selectedWeight === 200}"
+                            (click)="selectWeight(200)">200g</button>
+                    </div>
+                </div>
+
+                <div class="flex items-center mb-6">
+                    <div class="flex items-center border border-[#FF9413] rounded-full overflow-hidden mr-4">
+                        <button class="w-12 h-10 text-[#FF9413] bg-white focus:outline-none"
+                            (click)="changeQuantity(-1)">-</button>
+                        <input type="number" id="quantity" [(ngModel)]="quantity" min="1"
+                            class="w-12 h-10 text-center border-none focus:outline-none" />
+                        <button class="w-12 h-10 text-[#FF9413] bg-white focus:outline-none"
+                            (click)="changeQuantity(1)">+</button>
+                    </div>
                     <button
-                    class="py-2 px-4 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg"
-                    (click)="closePopup()"
-                    >
-                    Tiếp tục mua sắm
-                    </button>
-                    <button
-                    class="py-2 px-4 bg-[#FF9413] hover:bg-[#e58000] text-white rounded-lg"
-                    (click)="goToCart()"
-                    >
-                    Xem giỏ hàng
+                        class="flex-grow py-2 px-4 bg-[#FF9413] hover:bg-[#e58000] text-white font-semibold rounded-full focus:outline-none"
+                        (click)="addToCart()">
+                        THÊM VÀO GIỎ HÀNG
                     </button>
                 </div>
-                </div>
-            </div>
-        </div>
 
-          <div class="mt-6">
-            <div class="border border-gray-200 rounded-lg overflow-hidden">
-              <div class="flex items-center p-4">
-                <div class="text-3xl mr-4">🚚</div>
-                <div>
-                  <strong class="block mb-1">Miễn phí Ship TP. HCM</strong>
-                  <p class="text-gray-600 text-sm">Bán kính 10km nội thành TP. Hồ Chí Minh</p>
-                </div>
-              </div>
-              <div class="h-px bg-gray-200 mx-auto w-11/12"></div>
-              <div class="flex items-center p-4">
-                <div class="text-3xl mr-4">🔄</div>
-                <div>
-                  <strong class="block mb-1">Đổi trả miễn phí</strong>
-                  <p class="text-gray-600 text-sm">Hoàn trả trong vòng 7 ngày</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Product Tabs -->
-      <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <div class="flex border-b border-gray-200">
-          <button
-            (click)="setActiveTab('description')"
-            class="tab py-3 px-5 font-semibold"
-            [ngClass]="{'text-[#FF9413] border-b-2 border-[#FF9413]': activeTab === 'description', 'text-gray-600 hover:text-[#FF9413]': activeTab !== 'description'}"
-          >
-            Mô tả
-          </button>
-          <button
-            (click)="setActiveTab('reviews')"
-            class="tab py-3 px-5 font-semibold"
-            [ngClass]="{'text-[#FF9413] border-b-2 border-[#FF9413]': activeTab === 'reviews', 'text-gray-600 hover:text-[#FF9413]': activeTab !== 'reviews'}"
-          >
-            Đánh giá
-          </button>
-        </div>
-        <div class="tab-content">
-          <div *ngIf="activeTab === 'description'" class="p-6">
-            <h2 class="text-xl font-semibold mb-4">Mô tả chi tiết</h2>
-            <div class="mb-6">
-              <p class="font-semibold mb-2">Thông tin sản phẩm Bánh tráng rong biển</p>
-              <ul class="list-disc pl-5 space-y-2">
-                <li>Thương hiệu sản xuất: An vật Win Snack</li>
-                <li>Thành phần: Bánh tráng mỏng, giòn, rong biển sấy khô, mè rang, gia vị</li>
-                <li>Trọng lượng: 100g - gói nhỏ hoặc 200g - gói lớn</li>
-                <li>Xuất xứ: Việt Nam</li>
-                <li>HSD: 7 ngày ngoài nhiệt độ phòng và 1 tháng để trong ngăn mát tủ lạnh</li>
-              </ul>
-            </div>
-            <h2 class="text-xl font-semibold mb-4">Cách ăn</h2>
-            <div>
-              <p class="mb-3">
-                BTPS chấm tỏi và đặc biệt rất ngon và đã nêu bạn thưởng thức cách nào. Cụ thể cách ăn cũng khá đơn giản,
-                bạn chỉ cần:
-              </p>
-              <ul class="list-disc pl-5 space-y-2 mb-4">
-                <li>
-                  Ăn trực tiếp: Bánh tráng rong biển giòn rum, đã được nêm gia vị sẵn, bạn chỉ cần mở gói và thưởng thức
-                  ngay. Là cách ăn nhanh gọn, tiện lợi
-                </li>
-                <li>
-                  Cuốn với rau sống: Dùng bánh tráng rong biển của Winsnack cuốn cùng rau sống, bún, và thịt nướng hoặc
-                  tôm luộc. Chấm với nước mắm chua ngọt hoặc sốt mè để tăng thêm hương vị
-                </li>
-              </ul>
-              <p class="text-gray-700">
-                ✔ Win Snack khuyên người dùng lưu ý bảo quản sản phẩm trong khu vực khô ráo và thông thoáng, tránh trực
-                tiếp ánh nắng. Thời hạn sử dụng của sản phẩm là 7 ngày khi để ngoài và có thể lên đến 1 tháng khi giữ
-                trong tủ lạnh.
-              </p>
-            </div>
-
-            <h2 class="text-xl font-semibold mb-4 m-4">Cam kết</h2>
-            <div>
-              <ul>
-                <li>
-                    ✔ Khách hàng có thể vừa mua trực tiếp hoặc đặt hàng qua hệ thống đều được. Giá thành sản phẩm phải chăng, được niêm yết chính hãng nên khách hàng toàn quốc nên khách hàng hoàn toàn an tâm. Ngoài ra, Win Snack còn hỗ trợ giao hàng trên khắp 63 tỉnh thành giúp khách hàng có trải nghiệm mua sắm tiện lợi nhất.
-                </li>
-                <li>
-                    ✔ Cam kết hàng chuẩn và khách hàng được đổi trả sản phẩm nếu có lỗi trong khâu vận chuyển hoặc từ nhà sản xuất.
-                </li>
-                <li>
-                    ✔ Bánh tráng rong biển chỉ có tại Win Snack mang hương vị thơm ngon đang được nhiều bạn trẻ săn lùng hiện nay. Thưởng thức ngay cho đã cái nư nào!
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div *ngIf="activeTab === 'reviews'" class="p-6">
-            <div class="p-4">
-              <div class="flex flex-col md:flex-row mb-8">
-                <div class="flex w-full">
-                  <div class="w-1/3 text-center">
-                    <span class="text-3xl font-bold text-[#FF9413]">4.8</span>
-                    <div class="text-[#FF9413] text-2xl my-2">★★★★★</div>
-                    <span class="text-gray-600">(67 đánh giá)</span>
-                  </div>
-                  <div class="w-2/3">
-                    <div class="flex items-center mb-1">
-                      <span class="w-12">5 ★</span>
-                      <div class="flex-grow h-3 bg-gray-200 rounded-full mx-2">
-                        <div class="h-full bg-[#FF9413] rounded-full" style="width: 90%"></div>
-                      </div>
-                      <span>90%</span>
-                    </div>
-                    <div class="flex items-center mb-1">
-                      <span class="w-12">4 ★</span>
-                      <div class="flex-grow h-3 bg-gray-200 rounded-full mx-2">
-                        <div class="h-full bg-[#FF9413] rounded-full" style="width: 8%"></div>
-                      </div>
-                      <span>8%</span>
-                    </div>
-                    <div class="flex items-center mb-1">
-                      <span class="w-12">3 ★</span>
-                      <div class="flex-grow h-3 bg-gray-200 rounded-full mx-2">
-                        <div class="h-full bg-[#FF9413] rounded-full" style="width: 2%"></div>
-                      </div>
-                      <span>2%</span>
-                    </div>
-                    <div class="flex items-center mb-1">
-                      <span class="w-12">2 ★</span>
-                      <div class="flex-grow h-3 bg-gray-200 rounded-full mx-2">
-                        <div class="h-full bg-[#FF9413] rounded-full" style="width: 0%"></div>
-                      </div>
-                      <span>0%</span>
-                    </div>
-                    <div class="flex items-center mb-1">
-                      <span class="w-12">1 ★</span>
-                      <div class="flex-grow h-3 bg-gray-200 rounded-full mx-2">
-                        <div class="h-full bg-[#FF9413] rounded-full" style="width: 0%"></div>
-                      </div>
-                      <span>0%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-  
-              <div class="space-y-6">
-                <div class="border-b border-gray-200 pb-4">
-                  <div class="flex items-center mb-2">
-                    <div class="font-semibold mr-3">Thanh Tý</div>
-                    <div class="text-[#FF9413] mr-3">★★★★★</div>
-                    <div class="text-gray-500">3 tháng trước</div>
-                  </div>
-                  <div class="text-gray-700">
-                    Mình là người khó tính về đồ ăn vặt nhưng bánh tráng rong biển này thực sự rất ngon. Giòn, vị rong
-                    biển đậm đà, ăn hoài không ngán.
-                  </div>
-                </div>
-  
-                <div class="border-b border-gray-200 pb-4">
-                  <div class="flex items-center mb-2">
-                    <div class="font-semibold mr-3">Bảo Trân</div>
-                    <div class="text-[#FF9413] mr-3">★★★★★</div>
-                    <div class="text-gray-500">5 tháng trước</div>
-                  </div>
-                  <div class="text-gray-700 mb-6">
-                    Sản phẩm đóng gói đẹp, vệ sinh. Mùi thơm, vị ngon, ăn rất cuốn. Đã trở thành món ăn vặt yêu thích của
-                    gia đình mình.
-                  </div>
-  
-                  <div class="bg-gray-50 p-6 rounded-lg">
-                    <h3 class="text-lg font-semibold text-center mb-4">Viết đánh giá của bạn</h3>
-                    <form (ngSubmit)="submitReview()" #reviewForm="ngForm">
-                      <div class="flex items-center mb-4">
-                        <span class="mr-3">Đánh giá của bạn:</span>
-                        <div class="flex">
-                          <span
-                            *ngFor="let star of [1,2,3,4,5]"
-                            (click)="setRating(star)"
-                            class="text-2xl cursor-pointer"
-                            [ngClass]="{'text-[#FF9413]': star <= userRating, 'text-gray-300 hover:text-[#FF9413]': star > userRating}"
-                          >
-                            ★
-                          </span>
-                        </div>
-                      </div>
-                      <textarea
-                        [(ngModel)]="reviewText"
-                        name="reviewText"
-                        placeholder="Chia sẻ đánh giá của bạn về sản phẩm"
-                        class="w-full h-32 p-3 border border-gray-300 rounded-lg resize-y mb-4"
-                      ></textarea>
-                      <div class="text-center">
-                        <button
-                          type="submit"
-                          class="bg-[#FF9413] hover:bg-[#e58000] text-white font-semibold py-2 px-6 rounded-full"
-                        >
-                          Gửi đánh giá
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                  
-                  <!-- Popup thông báo đánh giá thành công -->
-                  <div
-                    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-                    *ngIf="showReviewSuccessPopup"
-                  >
+                <!-- Popup -->
+                <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                    *ngIf="showPopup">
                     <div class="bg-white p-6 rounded-lg shadow-lg max-w-md">
-                      <div class="text-center">
-                        <h3 class="text-lg font-semibold mb-2">Gửi đánh giá thành công!</h3>
-                        <p class="text-gray-600">Những đánh giá của bạn là động lực để Win Snack ngày càng cải thiện và phát triển.</p>
-                        <div class="mt-4">
-                          <button
-                            (click)="closeReviewSuccessPopup()"
-                            class="py-2 px-4 bg-[#FF9413] hover:bg-[#e58000] text-white rounded-lg"
-                          >
-                            Đóng
-                          </button>
+                        <h3 class="text-lg font-semibold mb-2">Thêm vào giỏ hàng thành công!</h3>
+                        <p>Bạn đã thêm {{ quantity }} gói "{{ product.product_name }}" loại {{ selectedWeight }}g vào giỏ hàng.</p>
+                        <div class="mt-4 flex justify-center space-x-3">
+                            <button class="py-2 px-4 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg"
+                                (click)="closePopup()">Tiếp tục mua sắm</button>
+                            <button class="py-2 px-4 bg-[#FF9413] hover:bg-[#e58000] text-white rounded-lg"
+                                (click)="goToCart()">Xem giỏ hàng</button>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <!-- Popup yêu cầu chọn sao -->
-                  <div
-                    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-                    *ngIf="showRatingRequiredPopup"
-                  >
-                    <div class="bg-white p-6 rounded-lg shadow-lg max-w-md">
-                      <div class="text-center">
-                        <h3 class="text-lg font-semibold mb-2">Bạn cho mình bao nhiêu ngôi sao nhỉ?</h3>
-                        <p class="text-gray-600">Vui lòng chọn số sao trước khi gửi đánh giá.</p>
-                        <div class="mt-4">
-                          <button
-                            (click)="closeRatingRequiredPopup()"
-                            class="py-2 px-4 bg-[#FF9413] hover:bg-[#e58000] text-white rounded-lg"
-                          >
-                            Đóng
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-      <section class="py-12 px-[30px]">
-        <div class="text-center mb-14">
-            <h1 class="text-4xl font-montserrat font-semibold text-[#000000]">
-                Bạn có thể thích
-            </h1>
-        </div>
-
-        <!-- Products Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div *ngFor="let product of products"
-                class="bg-white rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.1)] overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
-                <div class="relative aspect-square">
-                    <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-full object-cover"
-                        loading="lazy" />
-                    <div
-                        class="absolute top-6 left-0 bg-[#F00000] text-white text-2xl font-bold px-2 py-1 border-2 border-[#F57474]">
-                        {{product.discount}}%
                     </div>
                 </div>
 
-                <div class="p-4">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="text-yellow-400 text-[40px]">★</span>
-                        <span class="text-black text-3xl">{{product.rating}}</span>
-                        <span class="text-[#8C8C8C] text-xl">| + {{product.reviews}} review</span>
-                    </div>
-
-                    <h3 class="text-xl font-semibold text-black">{{product.name}}</h3>
-                    <p class="text-sm text-[#8C8C8C] mt-2">{{product.description}}</p>
-
-                    <div class="flex justify-between items-center mt-4">
-                        <span class="text-[#8C8C8C] line-through">{{product.originalPrice}}Đ</span>
-                        <span class="text-2xl font-semibold text-[#F00000]">{{product.discountedPrice}}Đ</span>
+                <div class="mt-6">
+                    <div class="border border-gray-200 rounded-lg overflow-hidden">
+                        <div class="flex items-center p-4">
+                            <span class="text-3xl mr-4">🚚</span>
+                            <div>
+                                <strong>Miễn phí Ship TP.HCM</strong>
+                                <p class="text-sm text-gray-600">Trong bán kính 10km nội thành</p>
+                            </div>
+                        </div>
+                        <div class="h-px bg-gray-200 mx-auto w-11/12"></div>
+                        <div class="flex items-center p-4">
+                            <span class="text-3xl mr-4">🔄</span>
+                            <div>
+                                <strong>Đổi trả miễn phí</strong>
+                                <p class="text-sm text-gray-600">Hoàn trả trong vòng 7 ngày</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Load More Button -->
-        <button routerLink="/blog"
-            class="flex items-center gap-2 mx-auto px-4 py-2 mt-10 bg-white border-2 border-[#F7941D] rounded-lg font-montserrat font-bold text-[#F7941D] hover:bg-[#FFF8EC] transition-colors duration-300">
-            XEM THÊM
-            <img src="assets/images/homepage/arrow-right.svg" class="w-6 h-6" alt="Next icon" />
-        </button>
-    </section>
+
+        <!-- Product Description Tab -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="flex border-b">
+                <button (click)="setActiveTab('description')"
+                    [ngClass]="{'text-[#FF9413] border-b-2 border-[#FF9413]': activeTab === 'description'}"
+                    class="py-3 px-5 font-semibold">Mô tả</button>
+            </div>
+            <div class="p-6" *ngIf="activeTab === 'description'">
+                <p>{{ product.product_detail }}</p>
+            </div>
+        </div>
     </div>
-  </div>
+</div>
