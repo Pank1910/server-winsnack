@@ -9,17 +9,8 @@
         <meta name="keywords" content="bánh tráng, thanh toán, Win Snack">
         <meta name="author" content="Win Snack">
 
-        <!-- Open Graph Meta Tags -->
-        <meta property="og:title" content="Thanh Toán - Win Snack">
-        <meta property="og:description" content="Thanh toán đơn hàng Win Snack - Bánh tráng thế hệ mới">
-        <meta property="og:image" content="/front-end/src/assets/images/payment/banner.png">
-        <meta property="og:url" content="https://winsnack.vn/thanh-toan">
-
         <!-- Styles -->
         <link rel="stylesheet" href="./payment.component.css" />
-        
-        <!-- TailwindCSS -->
-        <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body>
         <!-- Các section chính: Breadcrumb -->
@@ -28,7 +19,7 @@
             >Trang chủ</a>
             <img
                 loading="lazy"
-                src="/front-end/src/assets/images/blog/arrow-right.png"
+                src="/assets/images/blog/arrow-right.png"
                 class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square"
                 alt="Breadcrumb arrow"
             />
@@ -44,11 +35,11 @@
         <div class="bg-[#FFE0C3] bg-opacity-80 px-11 py-5 mt-8 w-full max-w-[1230px] text-[#000000] text-2xl">
             <div class="flex justify-between items-center font-bold text-[#F7941D]">
                 <div class="flex items-center gap-3.5">
-                    <img src="/front-end/src/assets/images/payment/address-icon.png" alt="Biểu tượng địa chỉ" class="w-[35px]">
+                    <img src="/assets/images/payment/address-icon.png" alt="Biểu tượng địa chỉ" class="w-[35px]">
                     <span>Địa chỉ nhận hàng</span>
                 </div>
-                <button [routerLink]="'/payment-address'" class="focus:outline-none focus:ring-2 focus:ring-[#F7941D] cursor-pointer">
-                    <img src="/front-end/src/assets/images/payment/edit-icon.png" alt="Icon chỉnh sửa" class="w-[35px]">
+                <button routerLink="/payment-address" class="focus:outline-none focus:ring-2 focus:ring-[#F7941D] cursor-pointer">
+                    <img src="/assets/images/payment/edit-icon.png" alt="Icon chỉnh sửa" class="w-[35px]">
                 </button>
             </div>
             <div class="mt-8 text-3xl">
@@ -56,45 +47,45 @@
             </div>
             <div class="mt-8">{{ defaultAddress.full_address }}</div>
             <!-- Thêm *ngIf để kiểm tra có defaultAddress -->
-            <div *ngIf="defaultAddress" class="mt-8 text-3xl">
+            <!-- <div *ngIf="defaultAddress" class="mt-8 text-3xl">
                 <span class="font-bold">{{ defaultAddress.name }}</span> &#10072; <span class="font-medium">{{ defaultAddress.phone }}</span>
             </div>
-            <div *ngIf="defaultAddress" class="mt-8">{{ defaultAddress.full_address() }}</div>
+            <div *ngIf="defaultAddress" class="mt-8">{{ defaultAddress.full_address() }}</div> -->
         </div>
         
         <!-- Cart Section -->
         <div class="border border-[#F7941D] mt-8 w-full max-w-[1230px]">
-            <div *ngFor="let product of products" class="border-b border-[#F7941D] flex max-md:flex-col">
+            <div *ngFor="let item of selectedItems" class="border-b border-[#F7941D] flex max-md:flex-col items-center">
                 <div class="w-3/12 flex justify-center items-center p-7 bg-[#FFF8EC]">
-                    <img [src]="product.image" class="w-[180px]" alt="Hình ảnh sản phẩm">
+                    <img [src]="item.image_1" class="w-[180px]" alt="Hình ảnh sản phẩm">
                 </div>
-                <div class="w-3/12 p-8 text-3xl font-medium text-center bg-[#FFF8EC]">{{ product.name }}</div>
-                <div class="w-3/12 p-8 text-3xl font-medium text-center bg-[#FFF8EC]">{{ product.price }}/sp</div>
-                <div class="w-3/12 p-8 text-3xl font-medium text-center bg-[#FFF8EC]">x{{ product.quantity }} sản phẩm</div>
+                <div class="w-3/12 p-8 text-3xl font-medium text-center bg-[#FFF8EC]">{{ item.product_name }}</div>
+                <div class="w-3/12 p-8 text-3xl font-medium text-center bg-[#FFF8EC]">{{ item.unit_price }}/sp</div>
+                <div class="w-3/12 p-8 text-3xl font-medium text-center bg-[#FFF8EC]">x{{ item.quantity }} sản phẩm</div>
             </div>
         </div>
         
         <!-- Shipping Method Section -->
         <div class="border border-[#F7941D] px-11 py-8 mt-8 w-full max-w-[1230px]">
             <div class="flex items-center gap-3.5 text-[#F7941D] text-2xl font-bold">
-                <img src="/front-end/src/assets/images/payment/shipping-method-icon.png" alt="Biểu tượng giao hàng" class="w-[35px]">
+                <img src="/assets/images/payment/shipping-method-icon.png" alt="Biểu tượng giao hàng" class="w-[35px]">
                 <span>Giao hàng tiết kiệm</span>
             </div>
             <div class="flex justify-between text-xl text-[#9A9898] mt-5">
-                <span>Nhận hàng vào {{ shippingMethod.estimated_delivery }}</span>
+                <span>Thời gian nhận hàng {{ shippingMethod.estimated_delivery }}</span>
                 <span class="text-2xl text-[#000000]">{{ shippingMethod.cost }} VNĐ</span>
             </div>
             <div class="border-t border-[#F7941D] mt-5"></div>
             <div class="flex justify-between text-3xl font-bold text-[#000000] mt-5">
                 <span>Tổng số tiền ({{ Quantity }} sản phẩm):</span>
-                <span class="text-4xl text-[#F7941D]">{{ totalPrice }} VNĐ</span>
+                <span class="text-4xl text-[#F7941D]">{{ totalPrice | currency: 'VND' }}</span>
             </div>
         </div>
         
         <!-- Promo Code Section -->
         <form class="border border-[#F7941D] flex justify-between px-11 py-4 mt-8 w-full max-w-[1230px]" (ngSubmit)="onSubmitPromoCode()">
             <div class="flex items-center gap-3.5 text-[#F7941D] text-2xl font-bold">
-                <img src="/front-end/src/assets/images/payment/promo-icon.png" alt="Biểu tượng khuyến mãi" class="w-[50px]">
+                <img src="/assets/images/payment/promo-icon.png" alt="Biểu tượng khuyến mãi" class="w-[50px]">
             </div>
             <input type="text" id="promoCode" class="bg-[#FFE0C3] px-11 py-4 rounded-lg w-full" placeholder="Nhập mã khuyến mãi của bạn" [(ngModel)]="promoCode" name="promoCode">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -102,20 +93,122 @@
         </form>
         
         <!-- Payment Section -->
-        <div class="border border-[#F7941D] px-11 py-4 mt-8 w-full max-w-[1230px] text-[#F7941D] text-2xl font-bold flex justify-between">
-            <div class="flex items-center gap-3.5 text-[#F7941D] text-2xl font-bold">
-                <img src="/front-end/src/assets/images/payment/payment-method-icon.png" alt="Biểu tượng phương thức" class="w-[35px]">
-                <span>Phương thức thanh toán</span>
+        <!-- Payment Section with Dropdown -->
+        <div class="border border-[#F7941D] px-11 py-4 mt-8 w-full max-w-[1230px] text-[#F7941D] text-2xl font-bold">
+            <div class="flex items-center justify-between w-full">
+                <div class="flex items-center gap-3.5">
+                    <img src="/assets/images/payment/payment-method-icon.png" alt="Biểu tượng phương thức" class="w-[35px]">
+                    <span>Phương thức thanh toán</span>
+                </div>
+                <button (click)="togglePaymentMethods()" class="focus:outline-none focus:ring-2 focus:ring-[#F7941D]">
+                    <img src="/assets/images/payment/more-icon.png" class="w-[15px]" alt="Biểu tượng xem thêm">
+                </button>
             </div>
-            <button class="focus:outline-none focus:ring-2 focus:ring-[#F7941D]">
-                <img src="/front-end/src/assets/images/payment/more-icon.png" class="w-[15px]" alt="Biểu tượng xem thêm">
-            </button>
+            
+            <!-- Payment Methods Dropdown -->
+            <div *ngIf="isPaymentMethodsVisible" class="mt-5 bg-[#FFE0C3] rounded-lg p-5 transition-all duration-300 ease-in-out">
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-center gap-3">
+                        <input type="radio" id="cod" name="paymentMethod" value="cod" [(ngModel)]="selectedPaymentMethod" class="w-5 h-5 accent-[#F7941D]">
+                        <label for="cod" class="text-[#000000] font-medium cursor-pointer">Thanh toán khi nhận hàng (COD)</label>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <input type="radio" id="banking" name="paymentMethod" value="banking" [(ngModel)]="selectedPaymentMethod" class="w-5 h-5 accent-[#F7941D]">
+                        <label for="banking" class="text-[#000000] font-medium cursor-pointer">Chuyển khoản ngân hàng</label>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <input type="radio" id="momo" name="paymentMethod" value="momo" [(ngModel)]="selectedPaymentMethod" class="w-5 h-5 accent-[#F7941D]">
+                        <label for="momo" class="text-[#000000] font-medium cursor-pointer">Ví điện tử MoMo</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QR Code Modal -->
+        <div *ngIf="isQRModalVisible" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg p-8 max-w-md w-full">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-[#F7941D]">Thanh toán {{ getPaymentMethodName() }}</h2>
+                    <button (click)="closeQRModal()" class="text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="flex flex-col items-center">
+                    <p class="text-lg mb-4">Vui lòng quét mã QR để thanh toán</p>
+                    <p class="font-bold text-xl text-[#F7941D] mb-4">{{ finalAmount.toLocaleString() }} VNĐ</p>
+                    <img src="/assets/images/payment/momo.jpg" alt="Mã QR thanh toán" class="w-64 h-64 mb-6">
+                    <!-- <p class="text-sm text-gray-600 mb-6">Hoặc chuyển khoản đến số tài khoản:</p>
+                    <div class="bg-[#FFE0C3] p-4 rounded-lg w-full mb-6">
+                        <p class="font-medium">Ngân hàng: <span class="font-bold">TECHCOMBANK</span></p>
+                        <p class="font-medium">Số tài khoản: <span class="font-bold">19035963792016</span></p>
+                        <p class="font-medium">Chủ tài khoản: <span class="font-bold">CÔNG TY TNHH WIN SNACK</span></p>
+                        <p class="font-medium">Nội dung: <span class="font-bold">WIN SNACK {{ generateOrderCode() }}</span></p>
+                    </div> -->
+                    <div class="flex gap-4">
+                        <button (click)="verifyPayment()" class="bg-[#F7941D] text-white font-bold py-3 px-6 rounded-lg hover:bg-[#E57E00] transition duration-300">
+                            Đã thanh toán
+                        </button>
+                        <button (click)="closeQRModal()" class="bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded-lg hover:bg-gray-300 transition duration-300">
+                            Hủy
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Confirmation Modal -->
+        <div *ngIf="isConfirmModalVisible" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg p-8 max-w-md w-full">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-[#F7941D]">Xác nhận đơn hàng</h2>
+                    <button (click)="closeConfirmModal()" class="text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="flex flex-col">
+                    <div class="flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4 mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-center">Đặt hàng thành công!</h3>
+                    
+                    <!-- Thông tin chi tiết đơn hàng -->
+                    <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                        <p class="font-medium">Mã đơn hàng: <span class="text-[#F7941D]">{{ orderCode }}</span></p>
+                        <p class="font-medium">Tổng tiền: <span class="text-[#F7941D]">{{ finalAmount.toLocaleString() }} VNĐ</span></p>
+                        <p class="font-medium">Phương thức: <span>Thanh toán {{ getPaymentMethodName() }}</span></p>
+                        <div class="mt-2">
+                            <p class="font-medium">Giao đến:</p>
+                            <p>{{ defaultAddress.name }}</p>
+                            <p>{{ defaultAddress.full_address }}</p>
+                            <p>SĐT: {{ defaultAddress.phone }}</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-center text-gray-600 mb-6">Cảm ơn bạn đã mua hàng tại Win Snack. Đơn hàng của bạn đã được xác nhận.</p>
+                    
+                    <button (click)="closeConfirmModal()" class="bg-[#F7941D] text-white font-bold py-3 px-6 rounded-lg hover:bg-[#E57E00] transition duration-300 w-full mb-2">
+                        Xem chi tiết đơn hàng
+                    </button>
+                    
+                    <button routerLink="/home" class="bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded-lg hover:bg-gray-300 transition duration-300 w-full mt-2">
+                        Trở về trang chủ
+                    </button>
+                </div>
+            </div>
         </div>
         
         <!-- Payment Details Section -->
         <div class="border border-[#F7941D] px-11 py-6 mt-8 w-full max-w-[1230px] text-[#000000]">
             <div class="flex items-center gap-3.5 text-[#F7941D] text-2xl font-bold">
-                <img src="/front-end/src/assets/images/payment/payment-details-icon.png" alt="Biểu tượng chi tiết" class="w-[35px]">
+                <img src="/assets/images/payment/payment-details-icon.png" alt="Biểu tượng chi tiết" class="w-[35px]">
                 <span>Chi tiết thanh toán</span>
             </div>
             <div class="flex justify-between text-2xl font-medium mt-5">

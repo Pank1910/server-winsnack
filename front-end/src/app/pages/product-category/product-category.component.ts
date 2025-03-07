@@ -1,54 +1,94 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { ProductApiService } from '../../product-api.service';
+import { Product } from '../../../../../my-server-mongodb/interface/Product';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-product-category',
-  standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule],
-  templateUrl: './product-category.component.html',
+    selector: 'app-product-category',
+    standalone: true,
+    imports: [CommonModule, RouterModule, FormsModule],
+    templateUrl: './product-category.component.html',
+    styleUrls: ['./product-category.component.css']
 })
-export class ProductCategoryComponent {
-  minPrice: number = 0;
-  maxPrice: number = 250000;
+export class ProductCategoryComponent implements OnInit {
+    products: Product[] = [];
+    filteredProductsList: Product[] = [];
+    minPrice = 0;
+    maxPrice = 250000;
+    selectedCategory = '';
 
-  categories: string[] = [
-    "Bánh tráng trộn sẵn",
-    "Bánh tráng nướng",
-    "Bánh tráng ngọt",
-    "Combo bánh tráng mix vị",
-    "Nguyên liệu ăn vặt"
-  ];
+    categories: string[] = [
+        "Bánh tráng trộn sẵn",
+        "Bánh tráng nướng",
+        "Bánh tráng ngọt",
+        "Combo bánh tráng mix vị",
+        "Nguyên liệu lẻ"
+    ];
 
-  products = [
-    { name: "Bánh tráng chà bông", image: "/assets/images/product-category/Chabong.png", rating: 5.0, reviews: 100, description: "Bánh tráng phơi sương, xoài sấy, gia vị...", oldPrice: 30000, newPrice: 25000, discount: 30 },
-    { name: "Bánh tráng rong biển", image: "/assets/images/product-category/Rongbien.png", rating: 5.0, reviews: 100, description: "Bánh tráng phơi sương, xoài sấy, gia vị...", oldPrice: 30000, newPrice: 25000, discount: 30 },
-    { name: "Bánh tráng sốt bơ", image: "/assets/images/product-category/Bo.png", rating: 5.0, reviews: 100, description: "Bánh tráng phơi sương, xoài sấy, gia vị...", oldPrice: 30000, newPrice: 25000, discount: 30 },
-    { name: "Bánh tráng nướng gà cay", image: "/assets/images/product-category/Ga.png", rating: 4.9, reviews: 10, description: "Bánh tráng phơi sương, xoài sấy, gia vị...", oldPrice: 70000, newPrice: 40000, discount: 30 },
-    { name: "Xoài chín sấy khô", image: "/assets/images/product-category/Xoai.png", rating: 4.9, reviews: 10, description: "Bánh tráng phơi sương, xoài sấy, gia vị...", oldPrice: 90000, newPrice: 65000, discount: 30 },
-    { name: "Bánh tráng nướng sầu riêng", image: "/assets/images/product-category/Saurieng.png", rating: 4.9, reviews: 45, description: "Bánh tráng phơi sương, xoài sấy, gia vị...", newPrice: 55000 },
-    { name: "Bánh tráng gạo lứt", image: "/assets/images/product-category/Gaoluc.png", rating: 4.8, reviews: 20, description: "Bánh tráng phơi sương, xoài sấy, gia vị...", oldPrice: 110000, newPrice: 75000, discount: 30 },
-    { name: "Bánh tráng phơi sương", image: "/assets/images/product-category/Phoisuong.png", rating: 4.9, reviews: 100, description: "Bánh tráng phơi sương, xoài sấy, gia vị...", oldPrice: 75000, newPrice: 50000, discount: 30 },
-    { name: "Trà xanh chanh dây", image: "/assets/images/product-category/Chanhday.png", rating: 4.8, reviews: 30, description: "Thơm ngon, giải khát...", newPrice: 95000 }
-  ];
+    constructor(
+        private productService: ProductApiService,
+        private router: Router
+    ) {}
 
-  filteredProducts() {
-    return this.products.filter(product => product.newPrice >= this.minPrice && product.newPrice <= this.maxPrice);
-  }
-
-  onPriceChange() {
-    if (this.minPrice > this.maxPrice) {
-      this.minPrice = this.maxPrice;
+    ngOnInit(): void {
+        this.loadAllProducts();
     }
-  }
 
-  resetFilter() {
-    this.minPrice = 0;
-    this.maxPrice = 250000;
-  }
+    loadAllProducts(): void {
+        this.productService.getAllProducts().subscribe({
+            next: (response) => {
+                this.products = response.data;
+                this.filteredProductsList = this.products; // Mặc định hiển thị tất cả
+            },
+            error: (err) => {
+                console.error('Lỗi khi tải danh sách sản phẩm:', err);
+            }
+        });
+    }
 
-  formatPrice(value: number): string {
-    return value.toLocaleString("vi-VN");
-  }
+    changeCategory(category: string): void {
+        this.selectedCategory = category;
+        this.filteredProductsList = this.products.filter(p => p.product_dept === category);
+        this.applyPriceFilter();
+    }
+
+    filterPromotion(): void {
+        this.selectedCategory = 'Khuyến mãi';
+        this.filteredProductsList = this.products.filter(p => p.discount > 0);
+        this.applyPriceFilter();
+    }
+
+    filterNewArrival(): void {
+        this.selectedCategory = 'Mới xuất hiện';
+        this.filteredProductsList = this.products.filter(p => p.isNew);
+        this.applyPriceFilter();
+    }
+
+    applyPriceFilter(): void {
+        this.filteredProductsList = this.filteredProductsList.filter(p => {
+            const price = p.unit_price * (1 - p.discount);
+            return price >= this.minPrice && price <= this.maxPrice;
+        });
+    }
+
+    resetFilter(): void {
+        this.minPrice = 0;
+        this.maxPrice = 250000;
+        this.selectedCategory = '';
+        this.filteredProductsList = this.products;
+    }
+
+    filteredProducts(): Product[] {
+        return this.filteredProductsList;
+    }
+
+    formatPrice(price: number): string {
+        return price.toLocaleString('vi-VN');
+    }
+
+    goToProductDetail(productId: string): void {
+        this.router.navigate(['/product-detail', productId]);
+    }
 }

@@ -1,136 +1,24 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { Router } from '@angular/router';
-import { RouterModule } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Product } from '../../../../../my-server-mongodb/interface/Product';
+import { ProductApiService } from '../../product-api.service';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { SubscriptionComponent } from '../../components/subscription/subscription.component';
-import { SwiperOptions } from 'swiper/types';
-import { Navigation } from 'swiper/modules';
-import { SwiperContainer } from 'swiper/element';
-import { register } from 'swiper/element/bundle';
-
-// import { slideInOutAnimation } from 'src/app/models/slide-in-out.animation';
-// import { scaleInOutAnimation } from 'src/app/models/scale-in-out.animation';
-// import { fadeInOutAnimation } from 'src/app/models/fade-in-out.animation';
-
-register(); // Đăng ký Swiper custom elements
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [RouterModule, CommonModule, SubscriptionComponent],
+  imports: [CommonModule, HttpClientModule, SubscriptionComponent, RouterModule],
   templateUrl: './homepage.component.html',
-  styleUrls: ['swiper/swiper-bundle.min.css','./homepage.component.css'],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
-  // animations: [slideInOutAnimation ,scaleInOutAnimation,fadeInOutAnimation,
-  // ],
-
+  styleUrls: ['./homepage.component.css']
 })
 export class HomepageComponent implements OnInit {
-   constructor(private router: Router) { }
+  featuredProducts: Product[] = [];
+  bestSellerProducts: Product[] = [];
+  loading = false;
+  error = '';
 
-   swiperParams: SwiperOptions = {
-    modules: [Navigation],
-    slidesPerView: 1,
-    spaceBetween: 20,
-    navigation: true,
-    breakpoints: {
-      640: { slidesPerView: 2 },
-      1024: { slidesPerView: 3 },
-      1280: { slidesPerView: 4 }
-    }
-  };
-
-  // Data for Category Section
-  categoryCards = [
-    {
-      imageUrl: 'assets/images/homepage/category-1.png',
-      altText: 'Bánh tráng trộn',
-      title: 'Bánh tráng trộn',
-      price: 15000
-    },
-    {
-      imageUrl: '/assets/images/homepage/category-2.png',
-      altText: 'Bánh tráng nướng',
-      title: 'Bánh tráng nướng',
-      price: 20000
-    },
-    {
-      imageUrl: '/assets/images/homepage/category-1.png',
-      altText: 'Snack Hàn Quốc',
-      title: 'Snack Hàn Quốc',
-      price: 25000
-    },
-    {
-      imageUrl: '/assets/images/homepage/category-2.png',
-      altText: 'Bánh tráng chấm',
-      title: 'Bánh tráng chấm',
-      price: 18000
-    },
-    {
-      imageUrl: 'assets/images/homepage/category-1.png',
-      altText: 'Bánh tráng trộn',
-      title: 'Bánh tráng trộn',
-      price: 15000
-    },
-    {
-      imageUrl: '/assets/images/homepage/category-2.png',
-      altText: 'Bánh tráng nướng',
-      title: 'Bánh tráng nướng',
-      price: 20000
-    },
-    {
-      imageUrl: '/assets/images/homepage/category-1.png',
-      altText: 'Snack Hàn Quốc',
-      title: 'Snack Hàn Quốc',
-      price: 25000
-    }
-  ];
-
-  // Data for Best Selling Products
-  products = [
-    {
-      imageUrl: '/assets/images/homepage/chabong.png',
-      name: 'Bánh tráng trộn đặc biệt',
-      discount: 20,
-      rating: 4.9,
-      reviews: 235,
-      originalPrice: 25000,
-      discountedPrice: 20000,
-      description: 'Kết hợp 6 loại gia vị đặc trưng'
-    },
-    {
-      imageUrl: '/assets/images/homepage/rongbien.png',
-      name: 'Bánh tráng nướng truyền thống',
-      discount: 15,
-      rating: 4.8,
-      reviews: 189,
-      originalPrice: 30000,
-      discountedPrice: 25500,
-      description: 'Công thức gia truyền 3 đời'
-    },
-    {
-      imageUrl: '/assets/images/homepage/chabong.png',
-      name: 'Set snack Hàn Quốc',
-      discount: 30,
-      rating: 4.95,
-      reviews: 356,
-      originalPrice: 120000,
-      discountedPrice: 84000,
-      description: 'Combo 10 gói snack đủ vị'
-    },
-    {
-      imageUrl: '/assets/images/homepage/rongbien.png',
-      name: 'Bánh tráng muối ớt',
-      discount: 10,
-      rating: 4.7,
-      reviews: 156,
-      originalPrice: 15000,
-      discountedPrice: 13500,
-      description: 'Vị cay xé lưỡi đặc trưng'
-    }
-  ];
-
-  // Data for Blog Section
   blogPosts = [
     {
       id: 1,
@@ -155,28 +43,40 @@ export class HomepageComponent implements OnInit {
     }
   ];
 
-  ngOnInit() {
-    // Khởi tạo Swiper thủ công
-    const swiperEl = document.querySelector('swiper-container');
-    if (swiperEl) {
-      Object.assign(swiperEl, this.swiperParams);
-      swiperEl.initialize();
-    }
+  constructor(private productService: ProductApiService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.loadProducts();
   }
 
-  // navigateToEvent() {
-  //   this.router.navigate(['/event']);
-  // }
+  loadProducts(): void {
+    this.loading = true;
+    this.error = '';
 
-  // navigateToAboutUs() {
-  //   this.router.navigate(['/about-us']);
-  // }
+    this.productService.getAllProducts().subscribe({
+      next: (response) => {
+        const allProducts = response.data;
+        this.featuredProducts = allProducts.slice(0, 4);
+        this.bestSellerProducts = allProducts.slice(4, 8);
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = 'Không thể tải dữ liệu sản phẩm. Vui lòng thử lại sau.';
+        this.loading = false;
+        console.error('Lỗi tải sản phẩm:', err);
+      }
+    });
+  }
 
-  // navigateToProducts() {
-  //   this.router.navigate(['/product']);
-  // }
+  getDiscountedPrice(product: Product): number {
+    return product.unit_price * (1 - product.discount);
+  }
 
-  // navigateToBlogs() {
-  //   this.router.navigate(['/blog']);
-  // }
+  goToProductDetail(productId: string): void {
+    this.router.navigate(['/product-detail', productId]);
+  }
+
+  goToBlog(postId: number): void {
+    this.router.navigate(['/blog', postId]);
+  }
 }

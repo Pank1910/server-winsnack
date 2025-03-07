@@ -1,8 +1,104 @@
-<div class="bg-[#FFE0C2] mb-5">
-    <h2 class="bg-[#FFE0C2] text-[#ff6b00] text-center py-[15px] m-0 font-bold">LỊCH SỬ MUA HÀNG</h2>
-    <div class="flex flex-row items-center justify-between py-[15px] px-[30px] text-left bg-[#FFE0C2] rounded-bl-lg rounded-br-lg relative">
-        <p class="m-0 pb-[15px] border-b border-[#afa9a9] w-max">Bạn chưa mua đơn hàng nào</p>
-        <button class="bg-[#ff6b00] text-white border-2 border-[#ff6b00] py-2 px-[15px] rounded cursor-pointer mt-[15px] flex items-center transition-all duration-300 hover:bg-white hover:text-[#ff6b00] hover:border-[#ff6b00] after:content-[''] after:inline-block after:w-5 after:h-5 after:ml-[5px] after:bg-[url('/front-end/src/assets/images/account/cart-icon.png')] after:bg-contain after:bg-no-repeat">Mua ngay</button>
+<div class="order-history">
+  <h2 class="text-xl font-bold mb-4">Lịch sử đơn hàng</h2>
+  
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center text-gray-500 py-10">
+    <p>Đang tải đơn hàng...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="text-center text-red-500 py-10">
+    <p>{{ error }}</p>
+  </div>
+  
+  <!-- No Orders State -->
+  <div *ngIf="!loading && !hasOrders" class="text-center text-gray-500 py-10">
+    <p class="text-lg">Bạn chưa có đơn hàng nào!</p>
+    <button 
+      class="mt-4 px-6 py-2 bg-[#FF6B00] text-white rounded-lg hover:bg-[#FF5500] transition-colors"
+    >
+      Bắt đầu mua sắm
+    </button>
+  </div>
+  
+  <!-- Orders List -->
+  <div *ngIf="hasOrders" class="space-y-6">
+    <div *ngFor="let order of orders" class="bg-[#fff9f3] border border-[#ffe0cc] rounded-lg overflow-hidden shadow-sm">
+      <!-- Order Header -->
+      <div class="bg-[#fff2e6] p-4 border-b border-[#ffe0cc]">
+        <div class="flex flex-wrap justify-between items-center">
+          <div class="grid grid-cols-[150px_1fr] gap-2">
+            <p class="font-semibold text-[#FF6B00]">Mã đơn hàng:</p>
+            <p>{{ order.orderId }}</p>
+            <p class="font-semibold text-[#FF6B00]">Ngày đặt:</p>
+            <p>{{ order.createdAt | date:'dd/MM/yyyy' }}</p>
+          </div>
+          <div>
+            <span 
+              class="px-3 py-1 rounded-full text-sm font-medium"
+              [ngClass]="getStatusClass(order.status)"
+            >
+              {{ getStatusText(order.status) }}
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Order Details -->
+      <div class="p-4">
+        <div class="grid grid-cols-[150px_1fr] gap-2 border-b border-dashed border-[#ffd9b3] pb-4 mb-4">
+          <p class="font-semibold text-[#FF6B00]">Tổng tiền:</p>
+          <p>{{ order.totalPrice | number:'1.0-0' }} đ</p>
+          <p class="font-semibold text-[#FF6B00]">Phương thức thanh toán:</p>
+          <p>{{ order.paymentMethod === 'cash_on_delivery' ? 'Thanh toán khi nhận hàng' : order.paymentMethod }}</p>
+        </div>
+        
+        <!-- Order Items -->
+        <div class="mb-4">
+          <h3 class="font-semibold text-[#FF6B00] mb-2">Chi tiết sản phẩm:</h3>
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="bg-[#FF6B00] text-white">
+                <th class="text-left p-2 rounded-tl-lg">Sản phẩm</th>
+                <th class="text-center p-2">Số lượng</th>
+                <th class="text-center p-2 rounded-tr-lg">Đơn giá</th>
+                <th class="text-center p-2 rounded-tr-lg">Giảm giá</th>
+                <th class="text-right p-2 rounded-tr-lg">Tổng cộng</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of order.items" class="border-b border-[#ffe0cc] hover:bg-[#ffe6cc]">
+                  <td class="p-2 text-left">
+                    {{ item.product.product_name }}
+                  </td>
+                  <td class="p-2 text-center">
+                    {{ item.quantity }}
+                  </td>
+                  <td class="p-2 text-center">
+                    {{ item.product.unit_price | number:'1.0-0' }} đ
+                  </td>
+                  <td class="p-2 text-center">
+                    {{ item.product.discount }}
+                  </td>
+                  <td class="p-2 text-right">
+                    {{ item.product.total_price | number:'1.0-0' }} đ
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Contact Info -->
+        <div>
+          <h3 class="font-semibold text-[#FF6B00] mb-2">Thông tin liên hệ:</h3>
+          <div class="grid grid-cols-[150px_1fr] gap-2">
+            <p class="font-semibold">Địa chỉ:</p>
+            <p>{{ order.contact.address }}</p>
+            <p class="font-semibold">Liên hệ:</p>
+            <p>{{ order.contact.phone }}</p>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
-<app-order-history></app-order-history>

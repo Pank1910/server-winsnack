@@ -1,0 +1,104 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f9f5f0;
+    color: #333;
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .order-card {
+    background-color: #fff9f3;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    overflow: hidden;
+    margin-bottom: 30px;
+  }
+  .order-header {
+    background-color: #fff2e6;
+    padding: 15px 20px;
+    border-bottom: 1px solid #ffe0cc;
+  }
+  .order-info {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 8px;
+    padding: 15px 20px;
+  }
+  .order-info-title {
+    color: #F7941D;
+    font-weight: bold;
+  }
+  .status-pending {
+    color: #ff7e00;
+    font-weight: bold;
+  }
+  .recipient-info {
+    margin-top: 10px;
+    border-top: 1px dashed #ffd9b3;
+    padding-top: 15px;
+  }
+  .recipient-title {
+    color: #F7941D;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .product-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  .product-table th {
+    background-color: #F7941D;
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+  }
+  .product-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ffe0cc;
+  }
+  .product-table tr:nth-child(even) {
+    background-color: #fff2e6;
+  }
+  .product-table tr:hover {
+    background-color: #ffe6cc;
+  }
+  .product-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+  }
+  .product-price {
+    text-align: right;
+  }
+  .product-quantity {
+    text-align: center;
+  }
+  .total-row {
+    font-weight: bold;
+    border-top: 2px solid #F7941D;
+  }
+  .btn {
+    background-color: #F7941D;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  .btn:hover {
+    background-color: #ff5500;
+  }
+  .loading, .error, .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+  }
+  .error {
+    color: #e74c3c;
+  }

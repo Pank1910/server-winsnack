@@ -1,1 +1,20 @@
-<p>addresses works!</p>
+<div id="addresses" class="bg-[#FFF8EC] mb-5">
+    <h2 class="bg-[#FFE0C2] text-[#ff6b00] text-center py-[15px] m-0 font-bold">ĐỊA CHỈ</h2>
+    <div class="bg-[#FFF8EC] mb-5 flex gap-[50px] items-stretch p-5 box-border">
+        <div class="overflow-hidden w-fit pb-[15px] border border-gray-300 box-border flex-1 max-w-[calc(50%-25px)]">
+            <div class="p-[15px] text-sm text-gray-800">
+                <p class="my-[5px]">Số điện thoại: {{ phoneNumber }}</p>
+                <p class="my-[5px]">Địa chỉ: {{ address }}</p>
+            </div>
+        </div>
+        <!-- Bản đồ Google -->
+        <div class="w-full rounded-lg overflow-hidden flex-1">
+            <iframe 
+                [src]="mapSrc"
+                class="w-full h-[180px] rounded-lg border-0"
+                allowfullscreen=""
+                loading="lazy">
+            </iframe>
+        </div>
+    </div>
+</div>

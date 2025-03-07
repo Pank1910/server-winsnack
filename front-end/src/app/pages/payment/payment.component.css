@@ -1,5 +1,85 @@
-/* @import "tailwindcss"; */
-:host {
-        display: contents;
-      }
+/* Animation for dropdown */
+.payment-methods-dropdown {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
 
+.payment-methods-dropdown.visible {
+  max-height: 500px;
+}
+
+/* Modal animations */
+.modal-enter {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.modal-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.modal-exit {
+  opacity: 1;
+}
+
+.modal-exit-active {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* QR code container */
+.qr-container {
+  background-color: #FFFFFF;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Radio button styling */
+input[type="radio"] {
+  cursor: pointer;
+}
+
+input[type="radio"]:checked + label {
+  color: #F7941D;
+  font-weight: bold;
+}
+
+/* Payment method buttons */
+.payment-method-button {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border: 2px solid #FFE0C3;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.payment-method-button:hover {
+  border-color: #F7941D;
+  background-color: #FFF8EC;
+}
+
+.payment-method-button.selected {
+  border-color: #F7941D;
+  background-color: #FFF8EC;
+}
+
+/* Bank info container */
+.bank-info {
+  background-color: #FFE0C3;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.bank-info p {
+  margin: 0.5rem 0;
+}
