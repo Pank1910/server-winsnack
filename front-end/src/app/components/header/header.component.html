@@ -127,14 +127,48 @@
     </a>
   </div>
 
-  <!-- Register and Login Buttons -->
+  <!-- User Account Section - Conditionally Rendered -->
   <div class="whitespace-nowrap flex space-x-4 mt-4 ml-4 md:mt-0">
-    <a routerLink="/register" class="border-2 border-[#FF9413] text-[#FF9413] rounded-lg px-2 py-2 text-sm font-semibold hover:bg-[#FF9413] hover:text-white transition-transform duration-300 ease-in-out hover:scale-105 hover:rotate-1">
-      Đăng ký
-    </a>
-    <a routerLink="/login" class="border-2 border-[#FF9413] text-[#FF9413] rounded-lg px-2 py-2 text-sm font-semibold transition-all duration-300 ease-in-out hover:bg-[#FF9413] hover:text-white hover:scale-105 hover:rotate-1">
-      Đăng nhập
-    </a>
+    <!-- Đăng ký / Đăng nhập buttons - Hiển thị khi chưa đăng nhập -->
+    <ng-container *ngIf="!isLoggedIn">
+      <a routerLink="/register" class="border-2 border-[#FF9413] text-[#FF9413] rounded-lg px-2 py-2 text-sm font-semibold hover:bg-[#FF9413] hover:text-white transition-transform duration-300 ease-in-out hover:scale-105 hover:rotate-1">
+        Đăng ký
+      </a>
+      <a routerLink="/login" class="border-2 border-[#FF9413] text-[#FF9413] rounded-lg px-2 py-2 text-sm font-semibold transition-all duration-300 ease-in-out hover:bg-[#FF9413] hover:text-white hover:scale-105 hover:rotate-1">
+        Đăng nhập
+      </a>
+    </ng-container>
+
+    <!-- User Account Icon - Hiển thị khi đã đăng nhập -->
+    <div *ngIf="isLoggedIn" class="relative">
+      <div (click)="toggleUserMenu()" class="flex items-center cursor-pointer">
+        <!-- User Avatar/Icon -->
+        <div class="w-10 h-10 rounded-full bg-[#FF9413] flex items-center justify-center text-white font-bold text-lg shadow-md transition-all duration-300 ease-in-out hover:scale-110 hover:bg-[#E95924]">
+          {{ getProfileInitial() }}
+        </div>
+        <span class="ml-2 text-[#253D4E] font-semibold">{{ currentUser?.profileName }}</span>
+        <img
+          loading="lazy"
+          src="assets/images/header/dropdown.png"
+          alt=""
+          class="w-5 h-4 ml-1"
+        />
+      </div>
+      
+      <!-- User Menu Dropdown -->
+      <div *ngIf="showUserMenu" class="absolute right-0 top-full mt-1 w-48 bg-white shadow-lg rounded-md z-50">
+        <a routerLink="/account" class="block px-4 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
+          Tài khoản của tôi
+        </a>
+
+        <a *ngIf="currentUser?.role === 'admin'" routerLink="/admin" class="block px-4 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
+          Quản trị viên
+        </a>
+        <div (click)="logout()" class="block px-4 py-2 text-sm text-red-500 hover:bg-[#FFF8EC] cursor-pointer">
+          Đăng xuất
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

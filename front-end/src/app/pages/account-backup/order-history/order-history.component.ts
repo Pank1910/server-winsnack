@@ -67,7 +67,7 @@ export class OrderHistoryComponent implements OnInit {
   getStatusClass(status: string): string {
     switch(status) {
       case 'completed': return 'bg-green-200 text-green-800';
-      case 'pending': return 'bg-yellow-200 text-yellow-800';
+      case 'Pending': return 'bg-yellow-200 text-yellow-800';
       case 'cancelled': return 'bg-red-200 text-red-800';
       default: return 'bg-gray-200 text-gray-800';
     }
@@ -76,7 +76,7 @@ export class OrderHistoryComponent implements OnInit {
   getStatusText(status: string): string {
     switch(status) {
       case 'completed': return 'Đã hoàn thành';
-      case 'pending': return 'Đang xử lý';
+      case 'Pending': return 'Đang xử lý';
       case 'cancelled': return 'Đã hủy';
       default: return 'Không xác định';
     }

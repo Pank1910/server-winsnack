@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { CartItem } from '../../../../my-server-mongodb/interface/Cart';
+import { catchError, map, tap } from 'rxjs/operators';
+import { CartItem } from '../../../../../my-server-mongodb/interface/Cart';
+import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +15,17 @@ export class Cart2Service {
   private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
   cartItems$ = this.cartItemsSubject.asObservable();
 
+  private getUserId(): string {
+    return localStorage.getItem('userId') || 
+           sessionStorage.getItem('userId') || 
+           '123457'; // ID dự phòng
+  }
+
   constructor(private http: HttpClient) {
     // Tải giỏ hàng từ server khi khởi tạo service
     this.loadCart();
   }
+
 
   // Tải giỏ hàng từ server
   loadCart(): void {
@@ -25,7 +33,7 @@ export class Cart2Service {
     const userId = 
         localStorage.getItem('userId') || 
         sessionStorage.getItem('userId') || 
-        '67c45736fe6efc45001f9ec6';
+        '123457';
 
     console.log('Attempted userId sources:', {
         localStorageUserId: localStorage.getItem('userId'),
@@ -77,7 +85,11 @@ export class Cart2Service {
 
   // Lấy các sản phẩm đã chọn để thanh toán
   getSelectedItems(): CartItem[] {
-    return this.cartItemsSubject.value.filter(item => item.quantity > 0);
+    const allItems = this.cartItemsSubject.value;
+    console.log('All cart items before filtering:', allItems);
+    const filteredItems = allItems.filter(item => item.quantity > 0);
+    console.log('Items after quantity filter:', filteredItems);
+    return filteredItems;
   }
 
   // Thêm sản phẩm vào giỏ hàng
@@ -106,7 +118,10 @@ export class Cart2Service {
 
   // Xóa sản phẩm khỏi giỏ hàng
   removeFromCart(productId: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/remove/${productId}`).pipe(
+    const userId = this.getUserId();
+    return this.http.delete<void>(`${this.apiUrl}/remove/${productId}`, {
+      params: { userId }
+    }).pipe(
       tap(() => {
         const currentItems = this.cartItemsSubject.value;
         const updatedItems = currentItems.filter(item => item.productId !== productId);
@@ -116,10 +131,23 @@ export class Cart2Service {
   }
 
   // Xóa toàn bộ giỏ hàng
-  clearCart(): void {
-    this.http.delete(`${this.apiUrl}/clear`).subscribe(() => {
-      this.cartItemsSubject.next([]);
-    });
+  clearCart(): Observable<any> {
+    const userId = this.getUserId();
+    const params = new HttpParams().set('userId', userId);
+  
+    return this.http.delete<void>(`${this.apiUrl}/clear`, { params })
+      .pipe(
+        tap(() => {
+          console.log('API xóa giỏ hàng thành công');
+          this.cartItemsSubject.next([]);
+        }),
+        catchError(error => {
+          console.error('Lỗi khi xóa giỏ hàng từ API:', error);
+          // Vẫn xóa giỏ hàng ở local để tránh sự không đồng bộ
+          this.cartItemsSubject.next([]);
+          return throwError(() => error);
+        })
+      );
   }
 
   // Tính tổng số lượng sản phẩm trong giỏ hàng
