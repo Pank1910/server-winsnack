@@ -18,6 +18,12 @@ export class AuthService {
     private currentUserSubject = new BehaviorSubject<User | null>(this.getCurrentUserFromStorage());
     currentUser$ = this.currentUserSubject.asObservable();
 
+    updateCurrentUser(user: User) {
+        console.log('Updating user in auth service:', user);
+        this.currentUserSubject.next(user);
+        localStorage.setItem('currentUser', JSON.stringify(user));
+      }
+
     constructor(
         private http: HttpClient,
         private router: Router
