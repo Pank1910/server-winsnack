@@ -14,13 +14,16 @@ import { AccountBackupComponent } from './pages/account-backup/account-backup.co
 import { OrderHistoryComponent } from './pages/account-backup/order-history/order-history.component';
 import { ReviewsComponent } from './pages/account-backup/reviews/reviews.component';
 import { AddressesComponent } from './pages/account-backup/addresses/addresses.component';
+import { AccountInfoComponent } from './pages/account-backup/account-info/account-info.component';
+
 
 // import { EventsComponent } from './pages/events/events.component';
 // import { ContactComponent } from './pages/contact/contact.component';
 // import { AccountComponent } from './pages/account/account.component';
 // import { MinigameComponent } from './pages/minigame/minigame.component';
-// import { PaymentPageComponent } from './pages/payment/payment.component';
 import { ProductCategoryComponent } from './pages/product-category/product-category.component';
+import { ProductTableComponent } from './components/product-table/product-table.component';
+import { PaymentPageComponent } from './pages/payment/payment.component';
 // import { TermsAndPoliciesComponent } from './pages/terms-and-policies/terms-and-policies.component';
 
 export const routes: Routes = [
@@ -32,13 +35,15 @@ export const routes: Routes = [
     { path: 'header', component: HeaderComponent },
     { path: 'footer', component: FooterComponent },
 
+    // { path: 'cart', component: CartComponent},
+
   
     // { path: 'terms-and-policies', component:  TermsAndPoliciesComponent},
     // { path: 'account', component: AccountComponent },
 
     { path: 'register', component: RegisterComponent },
     { path: 'login', component: LoginComponent },
-    // { path: 'payment', component: PaymentPageComponent },
+    { path: 'payment', component: PaymentPageComponent },
     // { path: 'events', component: EventsComponent },
     // { path: 'contact', component: ContactComponent },
     // { path: 'account', component: AccountComponent },
@@ -57,6 +62,34 @@ export const routes: Routes = [
         ],
       },
 
+    { path: 'product-table', component: ProductTableComponent },
+
+
+
+      {
+        path: 'terms-and-policies',
+        loadComponent: () => import('./pages/terms-and-policies backup/terms-and-policies.component').then(m => 
+            m.TermsAndPoliciesComponent),
+        children: [
+            { path: 'privacy-policy', loadComponent: () => import('./pages/terms-and-policies backup/privacy-policy/privacy-policy.component').then(m => m.PrivacyPolicyComponent) },
+            { path: 'refund-policy', loadComponent: () => import('./pages/terms-and-policies backup/refund-policy/refund-policy.component').then(m => m.RefundPolicyComponent) },
+            { path: 'shipping-policy', loadComponent: () => import('./pages/terms-and-policies backup/shipping-policy/shipping-policy.component').then(m => m.ShippingPolicyComponent) },
+            { path: '', redirectTo: 'privacy-policy', pathMatch: 'full' } // Mặc định mở trang Chính sách bảo mật
+        ]
+    },
+    
+      {
+      path: 'account',
+      component: AccountBackupComponent,
+      children: [
+        { path: '', redirectTo: 'info', pathMatch: 'full' },
+        { path: 'info', component: AccountInfoComponent },
+        { path: 'order-history', component: OrderHistoryComponent },
+        { path: 'reviews', component: ReviewsComponent },
+        { path: 'addresses', component: AddressesComponent },
+      ],
+    },
+      
 
     { path: '', redirectTo: 'home', pathMatch: 'full' }, // Redirect mặc định
     { path: '**', redirectTo: 'home' } // Xử lý route không tồn tại

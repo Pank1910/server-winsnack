@@ -1,189 +1,76 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thông tin tài khoản</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="font-sans bg-[#FFF8EC] m-0 text-gray-800">
-    <div class="flex flex-col">
     <!-- Breadcrumb -->
     <nav
-      class="flex flex-wrap gap-3.5 items-center px-20 py-3.5 w-full text-xl bg-[#FFE0C2] min-h-[50px] max-md:px-5 max-md:max-w-full"
-      aria-label="Breadcrumb"
+    class="flex flex-wrap gap-3.5 items-center px-20 py-3.5 w-full text-xl bg-[#FFE0C2] min-h-[50px] max-md:px-5 max-md:max-w-full"
+    aria-label="Breadcrumb"
     >
-      <a
-        routerLink="/homepage"
-        class="self-stretch my-auto font-medium text-center text-black text-opacity-50 transition duration-300 hover:text-[#FF9413] hover:font-bold"
-      >
-        Trang chủ
-      </a>
-      <img
-        loading="lazy"
-        src="assets/images/blog/arrow-right.png"
-        class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square"
-        alt="Breadcrumb arrow"
-      />
-      <a
-        routerLink="/account"
-        class="self-stretch my-auto font-medium text-center text-black text-opacity-50 transition duration-300 hover:text-[#FF9413] hover:font-bold"
-      >
-        Tài khoản
-      </a>
-      <img
-        loading="lazy"
-        src="assets/images/blog/arrow-right.png"
-        class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square"
-        alt="Breadcrumb arrow"
-      />
-      <span class="self-stretch my-auto font-bold text-[#FF9413]">
-        Thông tin tài khoản
-      </span>
+    <a
+    routerLink="/homepage"
+    class="self-stretch my-auto font-medium text-center text-black text-opacity-50 transition duration-300 hover:text-[#FF9413] hover:font-bold"
+    >
+    Trang chủ
+    </a>
+    <img
+    loading="lazy"
+    src="assets/images/blog/arrow-right.png"
+    class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square"
+    alt="Breadcrumb arrow"
+    />
+    <span class="self-stretch my-auto font-bold text-[#FF9413]">
+    Tài khoản
+    </span>
     </nav>
+<div class="flex bg-white">
+    <!-- Sidebar -->
+    <div class="w-64 p-5 bg-[#FFF8EC] h-screen overflow-y-auto">
+        <h3 class="text-[#ff6b00] text-lg pb-4 mb-4 border-b border-gray-200">TÀI KHOẢN</h3>
+        <ul class="list-none p-0 m-0 flex flex-col gap-1">
+            <li 
+                (click)="scrollToSection('account-info')"
+                [class.active]="activeSection === 'account-info'"
+                class="py-3 px-5 cursor-pointer -mx-5 text-base transition-all duration-200 hover:bg-[#FFE0C2] hover:font-bold"
+            >
+                Thông tin tài khoản
+            </li>
+            <li 
+                (click)="scrollToSection('order-history')"
+                [class.active]="activeSection === 'order-history'"
+                class="py-3 px-5 cursor-pointer -mx-5 text-base transition-all duration-200 hover:bg-[#FFE0C2] hover:font-bold"
+            >
+                Lịch sử mua hàng
+            </li>
+            <li 
+                (click)="scrollToSection('reviews')"
+                [class.active]="activeSection === 'reviews'"
+                class="py-3 px-5 cursor-pointer -mx-5 text-base transition-all duration-200 hover:bg-[#FFE0C2] hover:font-bold"
+            >
+                Đánh giá
+            </li>
+            <li 
+                (click)="scrollToSection('addresses')"
+                [class.active]="activeSection === 'addresses'"
+                class="py-3 px-5 cursor-pointer -mx-5 text-base transition-all duration-200 hover:bg-[#FFE0C2] hover:font-bold"
+            >
+                Danh sách địa chỉ
+            </li>
+            <li class="py-3 px-5 cursor-pointer -mx-5 text-base transition-all duration-200 text-red-600 hover:bg-[#FFE0C2] hover:font-bold">
+                Đăng xuất
+            </li>
+        </ul>
     </div>
-
-    <div class="flex bg-white">
-        <!-- Sidebar navigation -->
-        <div class="w-[250px] p-5 bg-[#FFF8EC] border-r-0">
-            <h3 class="text-[#ff6b00] text-lg pb-[15px] mb-[15px] border-b border-gray-200">TÀI KHOẢN</h3>
-            <ul class="list-none p-0 m-0 flex flex-col gap-[5px]">
-                <li>
-                    <a routerLink="/account" class="block py-3 px-5 cursor-pointer text-gray-800 text-base transition-all duration-200 -mx-5 bg-[#FFE0C2] font-bold">Thông tin tài khoản</a>
-                </li>
-                <li>
-                    <a routerLink="/account/order-history" class="block py-3 px-5 cursor-pointer text-gray-800 text-base transition-all duration-200 -mx-5 hover:bg-[#FFE0C2] hover:font-bold">Lịch sử mua hàng</a>
-                </li>
-                <li>
-                    <a routerLink="/account/reviews" class="block py-3 px-5 cursor-pointer text-gray-800 text-base transition-all duration-200 -mx-5 hover:bg-[#FFE0C2] hover:font-bold">Đánh giá</a>
-                </li>
-                <li>
-                    <a routerLink="/account/addresses" class="block py-3 px-5 cursor-pointer text-gray-800 text-base transition-all duration-200 -mx-5 hover:bg-[#FFE0C2] hover:font-bold">Danh sách địa chỉ</a>
-                </li>
-                <li>
-                    <a routerLink="/logout" class="block py-3 px-5 cursor-pointer text-red-600 text-base transition-all duration-200 -mx-5 hover:bg-[#FFE0C2] hover:font-bold">Đăng xuất</a>
-                </li>
-            </ul>
+   
+    <!-- Nội dung động -->
+    <div class="flex-1 p-5 bg-[#FFF8EC] overflow-y-auto h-screen">
+        <div id="account-info" class="mb-10">
+            <app-account-info></app-account-info>
         </div>
-
-        <!-- Main content area -->
-        <div class="flex-grow p-5 bg-[#FFF8EC]">
-            <!-- Account Information Section -->
-            <section id="account-info" class="mb-8">
-                <div class="flex items-center mb-[30px]">
-                    <div class="mr-5">
-                        <img src="/front-end/src/assets/images/account/avatar.png" alt="Linh Linh" class="w-[100px] h-[100px] rounded-full">
-                    </div>
-                    <div>
-                        <h2>Linh Linh</h2>
-                        <p>0123456789</p>
-                        <p>TP. Hồ Chí Minh</p>
-                    </div>
-                    <div class="ml-auto">
-                        <button class="ml-[10px] py-2 px-[15px] border border-[#ff6b00] rounded bg-[#ff6b00] text-white cursor-pointer transition-all duration-300 hover:bg-white hover:text-[#ff6b00] hover:border-[#ff6b00]">Cập nhật ảnh</button>
-                        <button class="ml-[10px] py-2 px-[15px] border border-[#ff6b00] rounded bg-[#ff6b00] text-white cursor-pointer transition-all duration-300 hover:bg-white hover:text-[#ff6b00] hover:border-[#ff6b00]">Chỉnh sửa</button>
-                    </div>
-                </div>
-
-                <div class="mb-5">
-                    <div class="flex mb-[15px]">
-                        <label class="w-[150px] font-bold text-gray-600">Họ và tên:</label>
-                        <span>Linh Linh</span>
-                    </div>
-                    <div class="flex mb-[15px]">
-                        <label class="w-[150px] font-bold text-gray-600">Email:</label>
-                        <span>khanhhlinh&#64;gmail.com</span>
-                    </div>
-                    <div class="flex mb-[15px]">
-                        <label class="w-[150px] font-bold text-gray-600">Số điện thoại:</label>
-                        <span>0123456789</span>
-                    </div>
-                    <div class="flex mb-[15px]">
-                        <label class="w-[150px] font-bold text-gray-600">Địa chỉ:</label>
-                        <span>KTX Khu B, Mac Dinh Chi, Phường Linh Xuân, TP. Thủ Đức, TP. Hồ Chí Minh</span>
-                    </div>
-                </div>
-                
-                <div class="py-[5px] pb-[25px]">
-                    <label class="flex items-center">
-                        <input type="checkbox" checked class="mr-[10px]">
-                        <span>Nhận thông báo về các sản phẩm mới, chương trình khuyến mãi hoặc bài viết thú vị qua email của tôi.</span>
-                    </label>
-                </div>
-            </section>
-
-            <!-- Order History Section -->
-            <section id="order-history" class="mb-8">
-                
-            </section>
-            
-            <!-- Reviews Section -->
-            <section id="reviews" class="mb-8">
-                <div class="bg-[#FFF8EC] mb-5">
-                    <h2 class="bg-[#FFE0C2] text-[#ff6b00] text-center py-[15px] m-0 font-bold">ĐÁNH GIÁ SẢN PHẨM</h2>
-                    <div class="py-[15px] px-[30px] text-left bg-[#FFE0C2] rounded-bl-lg rounded-br-lg">
-                        <p class="m-0 pb-[15px] border-b border-[#afa9a9] w-max">Bạn chưa có đánh giá nào</p>
-                    </div>
-                </div>
-                <app-reviews></app-reviews>
-            </section>
-            
-            <!-- Addresses Section -->
-            <section id="addresses" class="mb-8">
-                <div class="bg-[#FFF8EC] mb-5">
-                    <h2 class="bg-[#FFE0C2] text-[#ff6b00] text-center py-[15px] m-0 font-bold">ĐỊA CHỈ</h2>
-                    <div class="bg-[#FFF8EC] mb-5 flex gap-[50px] items-stretch p-5 box-border">
-                        <div class="overflow-hidden w-fit pb-[15px] border border-gray-300 box-border flex-1 max-w-[calc(50%-25px)]">
-                            <div class="bg-[#FFE0B2] py-[10px] px-[15px] font-bold text-[#D48806]">
-                                <span>Linh Linh (mặc định)</span>
-                            </div>
-                            <div class="p-[15px] text-sm text-gray-800">
-                                <p class="my-[5px]">Số điện thoại: 0123456789</p>
-                                <p class="my-[5px]">Địa chỉ: KTX Khu B, ĐHQG TP HCM</p>
-                            </div>
-                        </div>
-                        <!-- Bản đồ Google -->
-                        <div class="w-full rounded-lg overflow-hidden flex-1">
-                            <iframe 
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.336509723974!2d106.78134937505632!3d10.862176689292305!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175276fc1db3d7f%3A0x4358f22a0a462f1!2zS2h1IHBo4buRIEIsIMSQSCBRdeG7kWMgR2lhIEPhuqVu!5e0!3m2!1svi!2s!4v1700000000000"
-                                class="w-full h-[180px] rounded-lg border-0"
-                                allowfullscreen=""
-                                loading="lazy">
-                            </iframe>
-                        </div>
-                    </div>
-                </div>
-                <app-addresses></app-addresses>
-            </section>
+        <div id="order-history" class="mb-10">
+            <app-order-history></app-order-history>
+        </div>
+        <div id="reviews" class="mb-10">
+            <app-reviews></app-reviews>
+        </div>
+        <div id="addresses" class="mb-10">
+            <app-addresses></app-addresses>
         </div>
     </div>
-    
-    <script>
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80, // Offset to account for fixed headers
-                        behavior: 'smooth'
-                    });
-                    
-                    // Update active menu item
-                    document.querySelectorAll('.w-[250px] li a').forEach(item => {
-                        item.classList.remove('bg-[#FFE0C2]', 'font-bold');
-                        item.classList.add('hover:bg-[#FFE0C2]', 'hover:font-bold');
-                    });
-                    
-                    this.classList.add('bg-[#FFE0C2]', 'font-bold');
-                    this.classList.remove('hover:bg-[#FFE0C2]', 'hover:font-bold');
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+</div>
