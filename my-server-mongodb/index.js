@@ -1,22 +1,23 @@
 const express = require('express');
 const app = express();
-const port = 5001;  // hoặc 6000, 7000 đều được, miễn là không bị xung đột.
+const port = 5000;
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-
 const { MongoClient, ObjectId } = require('mongodb');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
 app.use(morgan("combined"));
-app.use(express.json()); // Note: Thay body-parser bằng express.json()
-app.use(express.urlencoded({ extended: true })); // Note: Thay body-parser bằng express.urlencoded()
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+
 
 const uri = "mongodb+srv://thanhtylenguyen:WinSnack2025@webcluster.9rruw.mongodb.net/";
 const client = new MongoClient(uri);
+
 
 async function connectDB() {
     try {
@@ -29,11 +30,13 @@ async function connectDB() {
         console.error("❌ MongoDB connection error:", error);
     }
 }
+
+
 connectDB();
+
 
 const database = client.db("winsnack");
 const winsnackCollection = database.collection("Cart");
-
 const productsCollection = database.collection("Product");
 const orderCollection = database.collection("Order"); // ✅ Thêm collection Order
 
@@ -44,28 +47,77 @@ app.get("/", (req, res) => {
 });
 
 
+// Check DB và test collection
+app.get("/check-db", async (req, res) => {
+    try {
+        const collections = await database.listCollections().toArray();
+        const collectionNames = collections.map(col => col.name);
+       
+        if (!collectionNames.includes("Cart")) {
+            return res.status(404).json({
+                success: false,
+                message: "❌ Collection 'Cart' does not exist!"
+            });
+        }
+
+
+        const sampleDoc = await winsnackCollection.findOne({});
+        res.json({
+            success: true,
+            message: "✅ MongoDB connected successfully!",
+            sampleDocument: sampleDoc || "No documents found in CARTS collection",
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "❌ MongoDB connection failed",
+            error: error.toString(),
+        });
+    }
+});
+
+
 // ✅ Endpoint lấy tất cả sản phẩm
 app.get("/products", async (req, res) => {
     try {
         const products = await productsCollection.find({}).toArray();
-        res.json({ success: true, data: products, count: products.length });
+        res.json({
+            success: true,
+            data: products,
+            count: products.length
+        });
     } catch (error) {
-        res.status(500).json({ success: false, message: "❌ Failed to fetch products", error: error.toString() });
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to fetch products",
+            error: error.toString()
+        });
     }
 });
 
-// Get product by ID
+
+// ✅ Endpoint lấy sản phẩm theo ID
 app.get("/products/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const product = await productsCollection.findOne({ _id: id });
-
         if (!product) {
-            return res.status(404).json({ success: false, message: "❌ Product not found" });
+            return res.status(404).json({
+                success: false,
+                message: "❌ Product not found"
+            });
         }
-        res.json({ success: true, data: product });
+       
+        res.json({
+            success: true,
+            data: product
+        });
     } catch (error) {
-        res.status(500).json({ success: false, message: "❌ Failed to fetch product", error: error.toString() });
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to fetch product",
+            error: error.toString()
+        });
     }
 });
 
@@ -73,32 +125,38 @@ app.get("/products/:id", async (req, res) => {
 // Giả sử usersCollection đã được khai báo từ trước
 const usersCollection = database.collection("User");
 
+
 // API cập nhật địa chỉ người dùng
 app.put('/addresses/update', async (req, res) => {
     try {
         const { userId, profileName, phone, address } = req.body;
 
+
         // Kiểm tra userId có tồn tại không
         const user = await usersCollection.findOne({ userId: userId });
-        
+
+
+       
         if (!user) {
-            return res.status(404).json({ 
-                message: "Người dùng không tồn tại" 
+            return res.status(404).json({
+                message: "Người dùng không tồn tại"
             });
         }
+
 
         // Cập nhật thông tin địa chỉ
         const result = await usersCollection.findOneAndUpdate(
             { userId: userId },
-            { 
-                $set: { 
-                    profileName: profileName, 
-                    phone: phone, 
-                    address: address 
-                } 
+            {
+                $set: {
+                    profileName: profileName,
+                    phone: phone,
+                    address: address
+                }
             },
             { returnDocument: 'after' }
         );
+
 
         res.json({
             profileName: result.profileName,
@@ -106,28 +164,32 @@ app.put('/addresses/update', async (req, res) => {
             address: result.address
         });
     } catch (error) {
-        res.status(500).json({ 
-            message: "Lỗi cập nhật địa chỉ", 
-            error: error.toString() 
+        res.status(500).json({
+            message: "Lỗi cập nhật địa chỉ",
+            error: error.toString()
         });
     }
 });
+
 
 // API lấy địa chỉ người dùng
 app.get('/addresses/user', async (req, res) => {
     try {
         const userId = req.query.userId;
 
+
         const user = await usersCollection.findOne(
             { userId: userId },
             { projection: { profileName: 1, phone: 1, address: 1 } }
         );
 
+
         if (!user) {
-            return res.status(404).json({ 
-                message: "Người dùng không tồn tại" 
+            return res.status(404).json({
+                message: "Người dùng không tồn tại"
             });
         }
+
 
         res.json({
             profileName: user.profileName || "",
@@ -135,32 +197,35 @@ app.get('/addresses/user', async (req, res) => {
             address: user.address || ""
         });
     } catch (error) {
-        res.status(500).json({ 
-            message: "Lỗi lấy địa chỉ", 
-            error: error.toString() 
+        res.status(500).json({
+            message: "Lỗi lấy địa chỉ",
+            error: error.toString()
         });
     }
 });
 
+
 // Thêm cart vào file index.js
 const cartCollection = database.collection("Cart");
 
-app.post('/cart/add', async (req, res) => {
+
+app.post('/carts/add', async (req, res) => {
     try {
         const cartItem = req.body;
-        
+       
         // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
         const existingItem = await cartCollection.findOne({
             productId: cartItem.productId,
             userId: cartItem.userId
         });
 
+
         if (existingItem) {
             // Nếu đã tồn tại, cập nhật số lượng
             const result = await cartCollection.findOneAndUpdate(
-                { 
+                {
                     productId: cartItem.productId,
-                    userId: cartItem.userId 
+                    userId: cartItem.userId
                 },
                 { $inc: { quantity: cartItem.quantity } },
                 { returnDocument: 'after' }
@@ -175,35 +240,30 @@ app.post('/cart/add', async (req, res) => {
             });
         }
     } catch (error) {
-        res.status(500).json({ 
-            message: "Lỗi thêm sản phẩm vào giỏ hàng", 
-            error: error.toString() 
+        res.status(500).json({
+            message: "Lỗi thêm sản phẩm vào giỏ hàng",
+            error: error.toString()
         });
     }
 });
+
 
 app.get('/cart/items', async (req, res) => {
     try {
         const userId = req.query.userId;
         console.log(`Đang tìm các mục giỏ hàng cho người dùng: ${userId}`);
-        // Thêm kiểm tra userId
-        if (!userId) {
-            return res.status(400).json({
-                success: false,
-                message: "Missing userId parameter"
-            });
-        }
         const cartItems = await cartCollection.find({ userId }).toArray();
         console.log(`Tìm thấy ${cartItems.length} mục giỏ hàng`);
         res.json(cartItems);
     } catch (error) {
         console.error("Lỗi khi lấy các mục giỏ hàng:", error);
-        res.status(500).json({ 
-            message: "Lỗi lấy danh sách sản phẩm trong giỏ hàng", 
-            error: error.toString() 
+        res.status(500).json({
+            message: "Lỗi lấy danh sách sản phẩm trong giỏ hàng",
+            error: error.toString()
         });
     }
 });
+
 
 app.patch('/cart/update/:productId', async (req, res) => {
     try {
@@ -211,168 +271,72 @@ app.patch('/cart/update/:productId', async (req, res) => {
         const userId = req.query.userId;
         const { quantity } = req.body;
 
+
         const result = await cartCollection.findOneAndUpdate(
-            { 
+            {
                 productId: productId,
-                userId: userId 
+                userId: userId
             },
             { $set: { quantity: quantity } },
             { returnDocument: 'after' }
         );
 
+
         res.json(result);
     } catch (error) {
-        res.status(500).json({ 
-            message: "Lỗi cập nhật số lượng sản phẩm", 
-            error: error.toString() 
+        res.status(500).json({
+            message: "Lỗi cập nhật số lượng sản phẩm",
+            error: error.toString()
         });
     }
 });
+
 
 app.delete('/cart/remove/:productId', async (req, res) => {
     try {
         const productId = req.params.productId;
         const userId = req.query.userId;
 
-        const result = await cartCollection.deleteOne({ 
+
+        const result = await winsnackCollection.deleteOne({
             productId: productId,
-            userId: userId 
+            userId: userId
         });
-        
-        res.json({ 
-            message: "Đã xóa sản phẩm khỏi giỏ hàng", 
-            deletedCount: result.deletedCount 
+       
+        res.json({
+            message: "Đã xóa sản phẩm khỏi giỏ hàng",
+            deletedCount: result.deletedCount
         });
     } catch (error) {
-        res.status(500).json({ 
-            message: "Lỗi xóa sản phẩm khỏi giỏ hàng", 
-            error: error.toString() 
+        res.status(500).json({
+            message: "Lỗi xóa sản phẩm khỏi giỏ hàng",
+            error: error.toString()
         });
     }
 });
+
 
 app.delete('/cart/clear', async (req, res) => {
     try {
         const userId = req.query.userId;
 
+
         const result = await cartCollection.deleteMany({ userId });
-        
-        res.json({ 
-            message: "Đã xóa toàn bộ giỏ hàng", 
-            deletedCount: result.deletedCount 
-        });
-    } catch (error) {
-        res.status(500).json({ 
-            message: "Lỗi xóa giỏ hàng", 
-            error: error.toString() 
-        });
-    }
-});
-
-// Thêm vào file index.js
-const ordersCollection = database.collection("Order");
-
-app.post('/orders/create', async (req, res) => {
-    try {
-        const orderData = req.body;
-        // Đảm bảo createdAt là một Date object nếu chưa phải
-        if (typeof orderData.createdAt === 'string') {
-            orderData.createdAt = new Date(orderData.createdAt);
-        }
-        
-        // Thêm timestamp và trạng thái đơn hàng
-        orderData.createdAt = new Date();
-        orderData.status = 'Pending';
-
-        const result = await ordersCollection.insertOne(orderData);
-        
-        res.status(201).json({
-            orderId: result.insertedId,
-            status: 'Pending',
-            message: "Đơn hàng đã được tạo thành công"
-        });
-    } catch (error) {
-        res.status(500).json({ 
-            message: "Lỗi tạo đơn hàng", 
-            error: error.toString() 
-        });
-    }
-});
-
-app.get('/orders/details/:orderId', async (req, res) => {
-    try {
-        const orderId = req.params.orderId;
-        const order = await ordersCollection.findOne({ 
-            oderId: orderId
-        });
-        
-        res.json(order);
-    } catch (error) {
-        res.status(500).json({ 
-            message: "Lỗi lấy chi tiết đơn hàng", 
-            error: error.toString() 
-        });
-    }
-});
-
-app.get('/orders/history', async (req, res) => {
-    try {
-        const userId = req.query.userId;
-        const orders = await ordersCollection
-            .find({ 'address.userId': userId })
-            .sort({ createdAt: -1 })
-            .toArray();
-        
-        res.json(orders);
-    } catch (error) {
-        res.status(500).json({ 
-            message: "Lỗi lấy lịch sử đơn hàng", 
-            error: error.toString() 
-        });
-    }
-});
-
-app.patch('/orders/cancel/:orderId', async (req, res) => {
-    try {
-        const orderId = req.params.orderId;
-        const result = await ordersCollection.findOneAndUpdate(
-            { oderId: orderId },
-            { $set: { status: 'Cancelled' } },
-            { returnDocument: 'after' }
-        );
-        
+       
         res.json({
-            orderId: result.oderId,
-            status: 'Cancelled',
-            message: "Đơn hàng đã được hủy"
-        });
-    } catch (error) {
-        res.status(500).json({ 
-            message: "Lỗi hủy đơn hàng", 
-            error: error.toString() 
-        });
-    }
-});
-
-
-// Endpoint lấy tất cả đơn hàng
-app.get("/order", async (req, res) => {
-    try {
-        const orders = await orderCollection.find({}).toArray();
-        res.json({
-            success: true,
-            data: orders,
-            count: orders.length
+            message: "Đã xóa toàn bộ giỏ hàng",
+            deletedCount: result.deletedCount
         });
     } catch (error) {
         res.status(500).json({
-            success: false,
-
-            message: "❌ Failed to fetch orders",
+            message: "Lỗi xóa giỏ hàng",
             error: error.toString()
         });
     }
 });
+
+
+
 
 // Note: Thêm endpoint để lấy giỏ hàng của người dùng
 app.get("/cart", async (req, res) => {
@@ -388,120 +352,73 @@ app.get("/cart", async (req, res) => {
         res.json({
             success: true,
             data: cartItems
-
-// Endpoint lấy đơn hàng theo userId - ĐẶT TRƯỚC endpoint lấy theo ID
-app.get("/order/user/:userId", async (req, res) => {
-    try {
-        const { userId } = req.params;
-        const orders = await orderCollection.find({ userId: userId }).toArray();
-        
-        res.json({
-            success: true,
-            orders: orders,
-            hasOrders: orders.length > 0
         });
     } catch (error) {
         res.status(500).json({
             success: false,
             message: "❌ Failed to fetch cart",
-
             error: error.toString()
         });
     }
 });
+
 
 // Note: Thêm endpoint để thêm sản phẩm vào giỏ hàng
-app.post("/cart/add", async (req, res) => {
-    try {
-        const { userId, productId, quantity, unit_price } = req.body;
-        if (!userId || !productId || !quantity || !unit_price) {
-            return res.status(400).json({
-                success: false,
-                message: "❌ userId, productId, quantity, and unit_price are required"
-            });
-        }
+app.post("/cart/add", async (req, res) => {     
+    try {         
+        const { userId, productId, quantity, unit_price } = req.body;         
+        if (!userId || !productId || !quantity || !unit_price) {             
+            return res.status(400).json({                 
+                success: false,                 
+                message: "❌ userId, productId, quantity, and unit_price are required"             
+            });         
+        }           
 
-        // Note: Kiểm tra sản phẩm có tồn tại không
-        const product = await productsCollection.findOne({ _id: new ObjectId(productId) });
-        if (!product) {
-// Endpoint lấy chi tiết đơn hàng theo ID - ĐẶT SAU endpoint lấy theo userId
-app.get("/order/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
-        const order = await orderCollection.findOne({ oderId: new ObjectId(id) });
-        
-        if (!order) {
-            return res.status(404).json({
-                success: false,
-                message: "❌ Order not found"
-            });
-        }
+        // Note: Kiểm tra sản phẩm có tồn tại không         
+        const product = await productsCollection.findOne({ _id: new ObjectId(productId) });         
+        if (!product) {             
+            return res.status(404).json({                 
+                success: false,                 
+                message: "❌ Product not found"             
+            });         
+        }           
 
-        // Note: Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-        const existingItem = await winsnackCollection.findOne({ userId, productId });
-        if (existingItem) {
-            // Nếu đã có, tăng số lượng
+        // Note: Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa         
+        const existingItem = await winsnackCollection.findOne({ userId, productId });         
+        if (existingItem) {             
+            // Nếu đã có, tăng số lượng             
             await winsnackCollection.updateOne(
-                { userId, productId },
-                { $inc: { quantity } }
-            );
-        } else {
-            // Nếu chưa có, thêm mới
-            await winsnackCollection.insertOne({
-                userId,
-                productId,
-                quantity,
-                unit_price,
-                product_name: product.title || "Unknown", // Note: Lấy từ product nếu có
-                image_1: product.image_1 || "", // Note: Lấy từ product nếu có
-                stocked_quantity: product.stocked_quantity || 0 // Note: Lấy từ product nếu có
-            });
-        }
+                { userId, productId },                 
+                { $inc: { quantity } }             
+            );         
+        } else {             
+            // Nếu chưa có, thêm mới             
+            await winsnackCollection.insertOne({                 
+                userId,                 
+                productId,                 
+                quantity,                 
+                unit_price,                 
+                product_name: product.title || "Unknown", // Note: Lấy từ product nếu có                 
+                image_1: product.image_1 || "", // Note: Lấy từ product nếu có                 
+                stocked_quantity: product.stocked_quantity || 0 // Note: Lấy từ product nếu có             
+            });         
+        }           
 
-        res.json({
-            success: true,
-            message: "✅ Product added to cart"
-            data: order
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "❌ Failed to fetch order",
-            error: error.toString()
-        });
-    }
+        res.json({ // Sửa lỗi dấu ngoặc
+            success: true,             
+            message: "✅ Product added to cart"         
+        });     
+    } catch (error) {         
+        res.status(500).json({             
+            success: false,             
+            message: "❌ Failed to add to cart",             
+            error: error.toString()         
+        });     
+    } 
 });
 
-app.post("/login", async (req, res) => {
-    const { profileName, password } = req.body;
 
-    try {
-        const user = await database.collection("User").findOne({ profileName, password });
 
-        if (!user) {
-            return res.status(401).json({
-                success: false,
-                message: "Tên đăng nhập hoặc mật khẩu không đúng."
-            });
-        }
-
-        res.json({
-            success: true,
-            message: "Đăng nhập thành công!",
-            user: {
-                profileName: user.profileName,
-                role: user.role,
-                userId: user.userId
-            }
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "❌ Failed to add to cart",
-            error: error.toString()
-        });
-    }
-});
 
 // Note: Thêm endpoint để xóa sản phẩm khỏi giỏ hàng
 app.delete("/cart/remove/:productId", async (req, res) => {
@@ -515,6 +432,7 @@ app.delete("/cart/remove/:productId", async (req, res) => {
             });
         }
 
+
         const result = await winsnackCollection.deleteOne({ userId, productId });
         if (result.deletedCount === 0) {
             return res.status(404).json({
@@ -522,6 +440,7 @@ app.delete("/cart/remove/:productId", async (req, res) => {
                 message: "❌ Item not found in cart"
             });
         }
+
 
         res.json({
             success: true,
@@ -536,6 +455,7 @@ app.delete("/cart/remove/:productId", async (req, res) => {
     }
 });
 
+
 // Note: Thêm endpoint để cập nhật số lượng sản phẩm trong giỏ hàng
 app.patch("/cart/update", async (req, res) => {
     try {
@@ -547,10 +467,12 @@ app.patch("/cart/update", async (req, res) => {
             });
         }
 
+
         const result = await winsnackCollection.updateOne(
             { userId, productId },
             { $set: { quantity } }
         );
+
 
         if (result.matchedCount === 0) {
             return res.status(404).json({
@@ -558,6 +480,7 @@ app.patch("/cart/update", async (req, res) => {
                 message: "❌ Item not found in cart"
             });
         }
+
 
         res.json({
             success: true,
@@ -572,6 +495,7 @@ app.patch("/cart/update", async (req, res) => {
     }
 });
 
+
 // Note: Thêm endpoint để cập nhật toàn bộ giỏ hàng
 app.put("/cart/update-all", async (req, res) => {
     try {
@@ -582,6 +506,7 @@ app.put("/cart/update-all", async (req, res) => {
                 message: "❌ userId and items (array) are required"
             });
         }
+
 
         // Note: Xóa toàn bộ giỏ hàng hiện tại của user và thay bằng danh sách mới
         await winsnackCollection.deleteMany({ userId });
@@ -596,17 +521,286 @@ app.put("/cart/update-all", async (req, res) => {
             );
         }
 
+
         res.json({
             success: true,
             message: "✅ Cart updated"
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to update cart",
+            error: error.toString()
+        });
+    }
+});
+
+
+// Note: Thêm endpoint để lưu các sản phẩm đã chọn
+app.post("/cart/saveSelectedItems", async (req, res) => {
+    try {
+        const { userId, selectedItems } = req.body;
+        if (!userId || !selectedItems || !Array.isArray(selectedItems)) {
+            return res.status(400).json({
+                success: false,
+                message: "❌ userId and selectedItems (array) are required"
+            });
+        }
+
+
+        // Note: Đây là nơi bạn có thể lưu selectedItems vào một collection khác hoặc xử lý tùy ý
+        // Ví dụ: Chỉ trả về thông báo thành công
+        res.json({
+            success: true,
+            message: "✅ Selected items saved"
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to save selected items",
+            error: error.toString()
+        });
+    }
+});
+
+
+// Note: Thêm endpoint để xóa toàn bộ giỏ hàng
+app.delete("/cart/clear", async (req, res) => {
+    try {
+        const userId = req.query.userId; // Note: Giả định userId qua query
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: "❌ userId is required"
+            });
+        }
+
+
+        await winsnackCollection.deleteMany({ userId });
+        res.json({
+            success: true,
+            message: "✅ Cart cleared"
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to clear cart",
+            error: error.toString()
+        });
+    }
+});
+
+
+
+
+
+
+// Thêm vào file index.js
+const ordersCollection = database.collection("Order");
+
+
+app.post('/orders/create', async (req, res) => {
+    try {
+        const orderData = req.body;
+        // Đảm bảo createdAt là một Date object nếu chưa phải
+        if (typeof orderData.createdAt === 'string') {
+            orderData.createdAt = new Date(orderData.createdAt);
+        }
+       
+        // Thêm timestamp và trạng thái đơn hàng
+        orderData.createdAt = new Date();
+        orderData.status = 'Pending';
+
+
+        const result = await ordersCollection.insertOne(orderData);
+       
+        res.status(201).json({
+            orderId: result.insertedId,
+            status: 'Pending',
+            message: "Đơn hàng đã được tạo thành công"
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Lỗi tạo đơn hàng",
+            error: error.toString()
+        });
+    }
+});
+
+
+app.get('/orders/details/:orderId', async (req, res) => {
+    try {
+        const orderId = req.params.orderId;
+        const order = await ordersCollection.findOne({
+            oderId: orderId
+        });
+       
+        res.json(order);
+    } catch (error) {
+        res.status(500).json({
+            message: "Lỗi lấy chi tiết đơn hàng",
+            error: error.toString()
+        });
+    }
+});
+
+
+app.get('/orders/history', async (req, res) => {
+    try {
+        const userId = req.query.userId;
+        const orders = await ordersCollection
+            .find({ 'address.userId': userId })
+            .sort({ createdAt: -1 })
+            .toArray();
+       
+        res.json(orders);
+    } catch (error) {
+        res.status(500).json({
+            message: "Lỗi lấy lịch sử đơn hàng",
+            error: error.toString()
+        });
+    }
+});
+
+
+app.patch('/orders/cancel/:orderId', async (req, res) => {
+    try {
+        const orderId = req.params.orderId;
+        const result = await ordersCollection.findOneAndUpdate(
+            { oderId: orderId },
+            { $set: { status: 'Cancelled' } },
+            { returnDocument: 'after' }
+        );
+       
+        res.json({
+            orderId: result.oderId,
+            status: 'Cancelled',
+            message: "Đơn hàng đã được hủy"
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Lỗi hủy đơn hàng",
+            error: error.toString()
+        });
+    }
+});
+
+
+
+
+
+
+// Endpoint lấy tất cả đơn hàng
+app.get("/order", async (req, res) => {
+    try {
+        const orders = await orderCollection.find({}).toArray();
+        res.json({
+            success: true,
+            data: orders,
+            count: orders.length
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to fetch orders",
+            error: error.toString()
+        });
+    }
+});
+
+
+// Endpoint lấy đơn hàng theo userId - ĐẶT TRƯỚC endpoint lấy theo ID
+app.get("/order/user/:userId", async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const orders = await orderCollection.find({ userId: userId }).toArray();
+       
+        res.json({
+            success: true,
+            orders: orders,
+            hasOrders: orders.length > 0
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to fetch user orders",
+            error: error.toString()
+        });
+    }
+});
+
+
+// Endpoint lấy chi tiết đơn hàng theo ID - ĐẶT SAU endpoint lấy theo userId
+app.get("/order/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const order = await orderCollection.findOne({ _id: new ObjectId(id) });
+       
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: "❌ Order not found"
+            });
+        }
+       
+        res.json({
+            success: true,
+            data: order
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to fetch order",
+            error: error.toString()
+        });
+    }
+});
+
+
+app.post("/login", async (req, res) => {
+    const { profileName, password } = req.body;
+
+
+    try {
+        const user = await database.collection("User").findOne({ profileName, password });
+
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "Tên đăng nhập hoặc mật khẩu không đúng."
+            });
+        }
+
+
+        res.json({
+            success: true,
+            message: "Đăng nhập thành công!",
+            user: {
+                profileName: user.profileName,
+                role: user.role,
+                userId: user.userId
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Lỗi máy chủ",
+            error: error.toString()
+        });
+    }
+});
+
 
 app.post('/auth/login', async (req, res) => {
     const { profileName, password } = req.body;
     const user = await database.collection('User').findOne({ profileName });
 
+
     if (!user || user.password !== password) {
         return res.status(401).json({ message: "Sai tài khoản hoặc mật khẩu" });
     }
+
 
     res.json({
         user: {
@@ -619,19 +813,25 @@ app.post('/auth/login', async (req, res) => {
 });
 
 
+
+
 app.get('/profile', async (req, res) => {
     try {
         const userId = req.query.userId; // Lấy userId từ query hoặc header
+
 
         if (!userId) {
             return res.status(400).json({ message: "Thiếu userId" });
         }
 
+
         const user = await database.collection('User').findOne({ userId });
+
 
         if (!user) {
             return res.status(404).json({ message: "Không tìm thấy người dùng" });
         }
+
 
         res.json({
             userId: user.userId,
@@ -642,20 +842,22 @@ app.get('/profile', async (req, res) => {
             address: user.address,
             marketing: user.marketing
         });
-        
+       
     } catch (error) {
         res.status(500).json({ message: "Lỗi server", error: error.toString() });
     }
 });
 
+
 // Thêm vào file index.js
 app.post("/register", async (req, res) => {
     const { profileName, password } = req.body;
 
+
     try {
         // Kiểm tra profileName đã tồn tại chưa
         const existingUser = await database.collection("User").findOne({ profileName });
-        
+       
         if (existingUser) {
             return res.status(400).json({
                 success: false,
@@ -663,9 +865,10 @@ app.post("/register", async (req, res) => {
             });
         }
 
+
         // Tạo userId mới
         const userId = new ObjectId().toString();
-        
+       
         // Tạo user mới
         const newUser = {
             userId,
@@ -685,12 +888,14 @@ app.post("/register", async (req, res) => {
             action: "just view"
         };
 
+
         // Lưu user vào database
         const result = await database.collection("User").insertOne(newUser);
 
+
         // Trả về thông tin user (không bao gồm password)
         const { password: _, ...userWithoutPassword } = newUser;
-        
+       
         res.status(201).json({
             success: true,
             message: "Đăng ký thành công!",
@@ -705,68 +910,23 @@ app.post("/register", async (req, res) => {
     }
 });
 
-// Note: Thêm endpoint để lưu các sản phẩm đã chọn
-app.post("/cart/saveSelectedItems", async (req, res) => {
-    try {
-        const { userId, selectedItems } = req.body;
-        if (!userId || !selectedItems || !Array.isArray(selectedItems)) {
-            return res.status(400).json({
-                success: false,
-                message: "❌ userId and selectedItems (array) are required"
-            });
-        }
 
-        // Note: Đây là nơi bạn có thể lưu selectedItems vào một collection khác hoặc xử lý tùy ý
-        // Ví dụ: Chỉ trả về thông báo thành công
-        res.json({
-            success: true,
-            message: "✅ Selected items saved"
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "❌ Failed to save selected items",
-            error: error.toString()
-        });
-    }
-});
-
-// Note: Thêm endpoint để xóa toàn bộ giỏ hàng
-app.delete("/cart/clear", async (req, res) => {
-    try {
-        const userId = req.query.userId; // Note: Giả định userId qua query
-        if (!userId) {
-            return res.status(400).json({
-                success: false,
-                message: "❌ userId is required"
-            });
-        }
-
-        await winsnackCollection.deleteMany({ userId });
-        res.json({
-            success: true,
-            message: "✅ Cart cleared"
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "❌ Failed to clear cart",
 // Thay đổi endpoint update-profile
 app.put('/update-profile', async (req, res) => {
     try {
       const updatedData = req.body;
       const userId = updatedData.userId; // Lấy userId trực tiếp từ body request
-      
+     
       console.log('Received update request:', updatedData);
-      
+     
       // Kiểm tra xem userId có được cung cấp không
       if (!userId) {
-        return res.status(400).json({ 
+        return res.status(400).json({
           success: false,
-          message: 'Thiếu userId trong yêu cầu' 
+          message: 'Thiếu userId trong yêu cầu'
         });
       }
-      
+     
       const result = await database.collection('User').findOneAndUpdate(
         { userId: userId },
         { $set: {
@@ -778,15 +938,15 @@ app.put('/update-profile', async (req, res) => {
         }},
         { returnDocument: 'after' }
       );
-      
+     
       if (!result) {
         console.error('User not found for userId:', userId);
-        return res.status(404).json({ 
+        return res.status(404).json({
           success: false,
-          message: 'Không tìm thấy người dùng' 
+          message: 'Không tìm thấy người dùng'
         });
       }
-      
+     
       console.log('Result before sending response:', result);
         return res.status(200).json({
         success: true,
@@ -802,12 +962,15 @@ app.put('/update-profile', async (req, res) => {
     }
   });
 
+
   // ✅ Endpoint lấy thông tin người dùng mới nhất theo userId
 app.get('/user/:userId', async (req, res) => {
     const { userId } = req.params;
 
+
     try {
         const user = await database.collection("User").findOne({ userId });
+
 
         if (!user) {
             return res.status(404).json({
@@ -815,6 +978,7 @@ app.get('/user/:userId', async (req, res) => {
                 message: 'Không tìm thấy người dùng'
             });
         }
+
 
         res.json({
             success: true,
@@ -830,12 +994,6 @@ app.get('/user/:userId', async (req, res) => {
     }
 });
 
-// Note: Thêm logic đóng kết nối MongoDB khi server dừng
-process.on('SIGINT', async () => {
-    await client.close();
-    console.log("✅ MongoDB connection closed");
-    process.exit(0);
-});
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -854,7 +1012,7 @@ const storage = multer.diskStorage({
       cb(null, fileName);
     }
   });
-  
+ 
   // File filter to only allow image files
   const fileFilter = (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
@@ -863,15 +1021,15 @@ const storage = multer.diskStorage({
       cb(new Error('Chỉ chấp nhận file hình ảnh!'), false);
     }
   };
-  
-  const upload = multer({ 
+ 
+  const upload = multer({
     storage: storage,
     limits: {
       fileSize: 2 * 1024 * 1024 // 2MB limit
     },
     fileFilter: fileFilter
   });
-  
+ 
   // Avatar upload endpoint
   app.post('/upload-avatar', upload.single('avatar'), async (req, res) => {
     try {
@@ -879,19 +1037,19 @@ const storage = multer.diskStorage({
       if (!req.file || !userId) {
         return res.status(400).json({ success: false, message: 'Thiếu file hoặc userId' });
       }
-  
+ 
       const avatarUrl = `/uploads/avatars/${req.file.filename}`;
-  
+ 
       const result = await usersCollection.findOneAndUpdate(
         { userId: userId },
         { $set: { avatar: avatarUrl } },
         { returnDocument: 'after' }
       );
-  
+ 
       if (!result.value) {
         return res.status(404).json({ success: false, message: 'Không tìm thấy user' });
       }
-  
+ 
       res.status(200).json({
         success: true,
         message: 'Cập nhật ảnh đại diện thành công',
@@ -902,11 +1060,12 @@ const storage = multer.diskStorage({
       res.status(500).json({ success: false, message: 'Lỗi server: ' + error.message });
     }
   });  
-  
+ 
   // Serve static files
   app.use('/uploads/avatars', express.static('public/uploads/avatars'));
-
+ 
 // Khởi động server
 app.listen(port, () => {
     console.log(`🚀 Server is running at http://localhost:${port}`);
 });
+
