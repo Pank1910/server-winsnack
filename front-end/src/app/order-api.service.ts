@@ -3,22 +3,22 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CartItem } from '../../../my-server-mongodb/interface/Cart';
 
-interface OrderData {
-  items: CartItem[];
-  address: {
-    name: string;
-    phone: string;
-    full_address: string;
-  };
-  shippingMethod: {
-    estimated_delivery: string;
-    cost: number;
-  };
-  totalOrder: number;
-  shippingCost: number;
-  discountAmount: number;
-  finalAmount: number;
-}
+// interface any {
+//   items: CartItem[];
+//   address: {
+//     name: string;
+//     phone: string;
+//     full_address: string;
+//   };
+//   shippingMethod: {
+//     estimated_delivery: string;
+//     cost: number;
+//   };
+//   totalOrder: number;
+//   shippingCost: number;
+//   discountAmount: number;
+//   finalAmount: number;
+// }
 
 interface PromoCodeValidationResult {
   isValid: boolean;
@@ -35,12 +35,12 @@ interface OrderResponse {
   providedIn: 'root'
 })
 export class OrderAPIService {
-  private apiUrl = 'http://localhost:5000/api/orders'; // Điều chỉnh URL API của bạn
+  private apiUrl = 'http://localhost:5000/orders'; // Điều chỉnh URL API của bạn
 
   constructor(private http: HttpClient) {}
 
   // Tạo đơn hàng mới
-  createOrder(orderData: OrderData): Observable<OrderResponse> {
+  createOrder(orderData: any): Observable<OrderResponse> {
     return this.http.post<OrderResponse>(`${this.apiUrl}/create`, orderData);
   }
 
@@ -50,17 +50,22 @@ export class OrderAPIService {
   }
 
   // Lấy chi tiết đơn hàng
-  getOrderDetails(orderId: string): Observable<OrderData> {
-    return this.http.get<OrderData>(`${this.apiUrl}/details/${orderId}`);
+  getOrderDetails(orderId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/details/${orderId}`);
   }
 
   // Lấy lịch sử đơn hàng
-  getOrderHistory(): Observable<OrderData[]> {
-    return this.http.get<OrderData[]>(`${this.apiUrl}/history`);
+  getOrderHistory(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/history`);
   }
 
   // Hủy đơn hàng
   cancelOrder(orderId: string): Observable<OrderResponse> {
     return this.http.patch<OrderResponse>(`${this.apiUrl}/cancel/${orderId}`, {});
+  }
+
+  // Phương thức lưu đơn hàng
+  saveOrder(orderData: any): Observable<OrderResponse> {
+    return this.http.post<OrderResponse>(`${this.apiUrl}/create`, orderData);
   }
 }

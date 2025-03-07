@@ -29,7 +29,7 @@ async function connectDB() {
 connectDB();
 
 const database = client.db("winsnack");
-const winsnackCollection = database.collection("CARTS");
+// const winsnackCollection = database.collection("CARTS");
 const productsCollection = database.collection("Product");
 const orderCollection = database.collection("Order"); // ✅ Thêm collection Order
 
@@ -39,32 +39,32 @@ app.get("/", (req, res) => {
 });
 
 // Check DB và test collection
-app.get("/check-db", async (req, res) => {
-    try {
-        const collections = await database.listCollections().toArray();
-        const collectionNames = collections.map(col => col.name);
+// app.get("/check-db", async (req, res) => {
+//     try {
+//         const collections = await database.listCollections().toArray();
+//         const collectionNames = collections.map(col => col.name);
         
-        if (!collectionNames.includes("CARTS")) {
-            return res.status(404).json({ 
-                success: false, 
-                message: "❌ Collection 'CARTS' does not exist!" 
-            });
-        }
+//         if (!collectionNames.includes("CARTS")) {
+//             return res.status(404).json({ 
+//                 success: false, 
+//                 message: "❌ Collection 'CARTS' does not exist!" 
+//             });
+//         }
 
-        const sampleDoc = await winsnackCollection.findOne({});
-        res.json({
-            success: true,
-            message: "✅ MongoDB connected successfully!",
-            sampleDocument: sampleDoc || "No documents found in CARTS collection",
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "❌ MongoDB connection failed",
-            error: error.toString(),
-        });
-    }
-});
+//         const sampleDoc = await winsnackCollection.findOne({});
+//         res.json({
+//             success: true,
+//             message: "✅ MongoDB connected successfully!",
+//             sampleDocument: sampleDoc || "No documents found in CARTS collection",
+//         });
+//     } catch (error) {
+//         res.status(500).json({
+//             success: false,
+//             message: "❌ MongoDB connection failed",
+//             error: error.toString(),
+//         });
+//     }
+// });
 
 // ✅ Endpoint lấy tất cả sản phẩm
 app.get("/products", async (req, res) => {
@@ -88,7 +88,7 @@ app.get("/products", async (req, res) => {
 app.get("/products/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const product = await productsCollection.findOne({ _id: new ObjectId(id) });
+        const product = await productsCollection.findOne({ productId: id });
         
         if (!product) {
             return res.status(404).json({
@@ -114,12 +114,12 @@ app.get("/products/:id", async (req, res) => {
 const usersCollection = database.collection("User");
 
 // API cập nhật địa chỉ người dùng
-app.put('/api/addresses/update', async (req, res) => {
+app.put('/addresses/update', async (req, res) => {
     try {
         const { userId, profileName, phone, address } = req.body;
 
         // Kiểm tra userId có tồn tại không
-        const user = await usersCollection.findOne({ _id: new MongoClient.ObjectId(userId) });
+        const user = await usersCollection.findOne({ userId: userId });
         
         if (!user) {
             return res.status(404).json({ 
@@ -129,7 +129,7 @@ app.put('/api/addresses/update', async (req, res) => {
 
         // Cập nhật thông tin địa chỉ
         const result = await usersCollection.findOneAndUpdate(
-            { _id: new MongoClient.ObjectId(userId) },
+            { userId: userId },
             { 
                 $set: { 
                     profileName: profileName, 
@@ -154,12 +154,12 @@ app.put('/api/addresses/update', async (req, res) => {
 });
 
 // API lấy địa chỉ người dùng
-app.get('/api/addresses/user', async (req, res) => {
+app.get('/addresses/user', async (req, res) => {
     try {
         const userId = req.query.userId;
 
         const user = await usersCollection.findOne(
-            { _id: new MongoClient.ObjectId(userId) },
+            { userId: userId },
             { projection: { profileName: 1, phone: 1, address: 1 } }
         );
 
@@ -190,14 +190,14 @@ app.post('/cart/add', async (req, res) => {
         const cartItem = req.body;
         
         // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
-        const existingItem = await winsnackCollection.findOne({
+        const existingItem = await cartCollection.findOne({
             productId: cartItem.productId,
             userId: cartItem.userId
         });
 
         if (existingItem) {
             // Nếu đã tồn tại, cập nhật số lượng
-            const result = await winsnackCollection.findOneAndUpdate(
+            const result = await cartCollection.findOneAndUpdate(
                 { 
                     productId: cartItem.productId,
                     userId: cartItem.userId 
@@ -208,7 +208,7 @@ app.post('/cart/add', async (req, res) => {
             res.json(result);
         } else {
             // Nếu chưa tồn tại, thêm mới
-            const result = await winsnackCollection.insertOne(cartItem);
+            const result = await cartCollection.insertOne(cartItem);
             res.status(201).json({
                 ...cartItem,
                 _id: result.insertedId
@@ -224,10 +224,13 @@ app.post('/cart/add', async (req, res) => {
 
 app.get('/cart/items', async (req, res) => {
     try {
-        const userId = req.query.userId; // Lấy từ query param
-        const cartItems = await winsnackCollection.find({ userId }).toArray();
+        const userId = req.query.userId;
+        console.log(`Đang tìm các mục giỏ hàng cho người dùng: ${userId}`);
+        const cartItems = await cartCollection.find({ userId }).toArray();
+        console.log(`Tìm thấy ${cartItems.length} mục giỏ hàng`);
         res.json(cartItems);
     } catch (error) {
+        console.error("Lỗi khi lấy các mục giỏ hàng:", error);
         res.status(500).json({ 
             message: "Lỗi lấy danh sách sản phẩm trong giỏ hàng", 
             error: error.toString() 
@@ -241,7 +244,7 @@ app.patch('/cart/update/:productId', async (req, res) => {
         const userId = req.query.userId;
         const { quantity } = req.body;
 
-        const result = await winsnackCollection.findOneAndUpdate(
+        const result = await cartCollection.findOneAndUpdate(
             { 
                 productId: productId,
                 userId: userId 
@@ -264,7 +267,7 @@ app.delete('/cart/remove/:productId', async (req, res) => {
         const productId = req.params.productId;
         const userId = req.query.userId;
 
-        const result = await winsnackCollection.deleteOne({ 
+        const result = await cartCollection.deleteOne({ 
             productId: productId,
             userId: userId 
         });
@@ -285,7 +288,7 @@ app.delete('/cart/clear', async (req, res) => {
     try {
         const userId = req.query.userId;
 
-        const result = await winsnackCollection.deleteMany({ userId });
+        const result = await cartCollection.deleteMany({ userId });
         
         res.json({ 
             message: "Đã xóa toàn bộ giỏ hàng", 
@@ -302,9 +305,13 @@ app.delete('/cart/clear', async (req, res) => {
 // Thêm vào file index.js
 const ordersCollection = database.collection("Order");
 
-app.post('/api/orders/create', async (req, res) => {
+app.post('/orders/create', async (req, res) => {
     try {
         const orderData = req.body;
+        // Đảm bảo createdAt là một Date object nếu chưa phải
+        if (typeof orderData.createdAt === 'string') {
+            orderData.createdAt = new Date(orderData.createdAt);
+        }
         
         // Thêm timestamp và trạng thái đơn hàng
         orderData.createdAt = new Date();
@@ -325,11 +332,11 @@ app.post('/api/orders/create', async (req, res) => {
     }
 });
 
-app.get('/api/orders/details/:orderId', async (req, res) => {
+app.get('/orders/details/:orderId', async (req, res) => {
     try {
         const orderId = req.params.orderId;
         const order = await ordersCollection.findOne({ 
-            _id: new MongoClient.ObjectId(orderId) 
+            oderId: orderId
         });
         
         res.json(order);
@@ -341,7 +348,7 @@ app.get('/api/orders/details/:orderId', async (req, res) => {
     }
 });
 
-app.get('/api/orders/history', async (req, res) => {
+app.get('/orders/history', async (req, res) => {
     try {
         const userId = req.query.userId;
         const orders = await ordersCollection
@@ -358,17 +365,17 @@ app.get('/api/orders/history', async (req, res) => {
     }
 });
 
-app.patch('/api/orders/cancel/:orderId', async (req, res) => {
+app.patch('/orders/cancel/:orderId', async (req, res) => {
     try {
         const orderId = req.params.orderId;
         const result = await ordersCollection.findOneAndUpdate(
-            { _id: new MongoClient.ObjectId(orderId) },
+            { oderId: orderId },
             { $set: { status: 'Cancelled' } },
             { returnDocument: 'after' }
         );
         
         res.json({
-            orderId: result._id,
+            orderId: result.oderId,
             status: 'Cancelled',
             message: "Đơn hàng đã được hủy"
         });
@@ -423,7 +430,7 @@ app.get("/order/user/:userId", async (req, res) => {
 app.get("/order/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const order = await orderCollection.findOne({ _id: new ObjectId(id) });
+        const order = await orderCollection.findOne({ oderId: new ObjectId(id) });
         
         if (!order) {
             return res.status(404).json({
