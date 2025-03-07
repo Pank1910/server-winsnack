@@ -7,12 +7,14 @@ import { HttpClient } from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
+
 export interface RecommendedProduct {
   productId: string;
   title: string;
   price: number;
   imgbase64_reduce: string;
 }
+
 
 @Injectable({
   providedIn: 'root',
@@ -21,16 +23,20 @@ export class CartService {
   private cartKey = 'cartItems_guest';
   private selectedItemsKey = 'selectedItems_guest';
 
+
   private cartItems = new BehaviorSubject<
     (CartItem & { product_name: string; image_1: string; stocked_quantity: number; tempQuantity: number; isSelected: boolean })[]
   >([]);
   cartItems$ = this.cartItems.asObservable();
 
+
   private cartItemsCount = new BehaviorSubject<number>(0);
   cartItemsCount$ = this.cartItemsCount.asObservable();
 
+
   private isUserLoggedIn = false;
   private userId: string = "123456"; // Hardcode userId = "123456" để test
+
 
   constructor(
     private cartAPIService: CartAPIService,
@@ -40,6 +46,7 @@ export class CartService {
     console.log('CartService initialized with userId:', this.userId);
     this.loadCartFromDatabase();
   }
+
 
   private getCartItemsFromSessionStorage(): (CartItem & { product_name: string; image_1: string; stocked_quantity: number; tempQuantity: number; isSelected: boolean })[] {
     const compressedItems = sessionStorage.getItem(this.cartKey);
@@ -54,6 +61,7 @@ export class CartService {
       isSelected: item.isSelected ?? true,
     }));
   }
+
 
   private saveCartItemsToSessionStorage(cartItems: (CartItem & { product_name: string; image_1: string; stocked_quantity: number; tempQuantity: number; isSelected: boolean })[]): void {
     try {
@@ -70,14 +78,17 @@ export class CartService {
     }
   }
 
+
   private updateCartCount(cartItems: (CartItem & { product_name: string; image_1: string; stocked_quantity: number })[]): void {
     const totalCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     this.cartItemsCount.next(totalCount);
   }
 
+
   getCartItems(): Observable<(CartItem & { product_name: string; image_1: string; stocked_quantity: number; tempQuantity: number; isSelected: boolean })[]> {
     return this.cartItems$;
   }
+
 
   addToCart(
     productId: string,
@@ -123,6 +134,7 @@ export class CartService {
     }
   }
 
+
   removeFromCart(productId: string): Observable<any> {
     if (this.userId) {
       return this.cartAPIService.removeFromCart(this.userId, productId).pipe(
@@ -137,6 +149,7 @@ export class CartService {
       return of(null);
     }
   }
+
 
   updateQuantity(productId: string, tempQuantity: number): Observable<any> {
     if (this.userId) {
@@ -157,6 +170,7 @@ export class CartService {
       return of(null);
     }
   }
+
 
   updateCartItems(cartItems: (CartItem & { product_name: string; image_1: string; stocked_quantity: number; tempQuantity: number; isSelected: boolean })[]): Observable<any> {
     if (this.userId) {
@@ -181,6 +195,7 @@ export class CartService {
     }
   }
 
+
   saveSelectedItems(selectedItems: (CartItem & { product_name: string; image_1: string; stocked_quantity: number; tempQuantity: number; isSelected: boolean })[]): Observable<any> {
     const itemsToSave = selectedItems.map(item => ({
       userId: this.userId,
@@ -192,6 +207,7 @@ export class CartService {
       stocked_quantity: item.stocked_quantity,
       isSelected: item.isSelected ?? true, // Đảm bảo isSelected có giá trị
     }));
+
 
     if (this.userId) {
       return this.cartAPIService.saveSelectedItems(this.userId, itemsToSave).pipe(
@@ -209,6 +225,7 @@ export class CartService {
     }
   }
 
+
   getRecommendedProducts(): Observable<RecommendedProduct[]> {
     return this.http.get<RecommendedProduct[]>('http://localhost:5000/recommended-products').pipe(
       catchError(() => of([
@@ -217,6 +234,7 @@ export class CartService {
       ]))
     );
   }
+
 
   public loadCartFromDatabase(): void {
     console.log('Loading cart for userId:', this.userId);
@@ -256,6 +274,7 @@ export class CartService {
       .subscribe();
   }
 
+
   private mergeLocalCartToDatabase(localItems: (CartItem & { product_name: string; image_1: string; stocked_quantity: number; tempQuantity: number; isSelected: boolean })[]): void {
     localItems.forEach(item => {
       this.cartAPIService
@@ -264,6 +283,7 @@ export class CartService {
     });
     sessionStorage.removeItem(this.cartKey);
   }
+
 
   clearCart(): Observable<any> {
     if (this.userId) {
@@ -282,3 +302,4 @@ export class CartService {
     }
   }
 }
+

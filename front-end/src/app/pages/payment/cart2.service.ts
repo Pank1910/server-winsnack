@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { CartItem } from '../../../../../my-server-mongodb/interface/Cart';
 import { throwError } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,17 +16,21 @@ export class Cart2Service {
   private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
   cartItems$ = this.cartItemsSubject.asObservable();
 
-  private getUserId(): string {
-    return localStorage.getItem('userId') || 
-           sessionStorage.getItem('userId') || 
-           '123457'; // ID dự phòng
-  }
+  // private getUserId(): string {
+  //   return localStorage.getItem('userId') || 
+  //          sessionStorage.getItem('userId') || 
+  //          '123457'; // ID dự phòng
+  // }
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
     // Tải giỏ hàng từ server khi khởi tạo service
     this.loadCart();
   }
 
+  getUserId(): string | null {
+    const currentUser = this.authService.getCurrentUser(); // Gọi từ instance
+    return currentUser ? currentUser.userId : '123457';
+}
 
   // Tải giỏ hàng từ server
   loadCart(): void {
@@ -117,37 +122,59 @@ export class Cart2Service {
   }
 
   // Xóa sản phẩm khỏi giỏ hàng
-  removeFromCart(productId: string): Observable<void> {
-    const userId = this.getUserId();
-    return this.http.delete<void>(`${this.apiUrl}/remove/${productId}`, {
-      params: { userId }
-    }).pipe(
-      tap(() => {
-        const currentItems = this.cartItemsSubject.value;
-        const updatedItems = currentItems.filter(item => item.productId !== productId);
-        this.cartItemsSubject.next(updatedItems);
-      })
-    );
+  // Fix for removeFromCart method
+removeFromCart(productId: string): Observable<any> {
+  const userId = this.getUserId();
+  
+  // Guard against null userId
+  if (!userId) {
+    console.error('No userId available for cart operation');
+    return throwError(() => new Error('User ID not available'));
   }
+  
+  return this.http.delete(`${this.apiUrl}/remove/${productId}`, {
+    params: { userId },
+    responseType: 'text' // Change response type expectation
+  }).pipe(
+    tap(() => {
+      const currentItems = this.cartItemsSubject.value;
+      const updatedItems = currentItems.filter(item => item.productId !== productId);
+      this.cartItemsSubject.next(updatedItems);
+    }),
+    // Map to void to match return type expectation
+    map(() => undefined)
+  );
+}
 
   // Xóa toàn bộ giỏ hàng
   clearCart(): Observable<any> {
     const userId = this.getUserId();
+    
+    // Guard against null userId
+    if (!userId) {
+      console.error('No userId available for clearing cart');
+      // Still clear the local cart
+      this.cartItemsSubject.next([]);
+      return throwError(() => new Error('User ID not available'));
+    }
+    
     const params = new HttpParams().set('userId', userId);
   
-    return this.http.delete<void>(`${this.apiUrl}/clear`, { params })
-      .pipe(
-        tap(() => {
-          console.log('API xóa giỏ hàng thành công');
-          this.cartItemsSubject.next([]);
-        }),
-        catchError(error => {
-          console.error('Lỗi khi xóa giỏ hàng từ API:', error);
-          // Vẫn xóa giỏ hàng ở local để tránh sự không đồng bộ
-          this.cartItemsSubject.next([]);
-          return throwError(() => error);
-        })
-      );
+    return this.http.delete(`${this.apiUrl}/clear`, { 
+      params,
+      responseType: 'text' // Change response type expectation
+    }).pipe(
+      tap(() => {
+        console.log('API xóa giỏ hàng thành công');
+        this.cartItemsSubject.next([]);
+      }),
+      catchError(error => {
+        console.error('Lỗi khi xóa giỏ hàng từ API:', error);
+        // Vẫn xóa giỏ hàng ở local để tránh sự không đồng bộ
+        this.cartItemsSubject.next([]);
+        return throwError(() => error);
+      })
+    );
   }
 
   // Tính tổng số lượng sản phẩm trong giỏ hàng
