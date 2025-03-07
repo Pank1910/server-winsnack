@@ -12,7 +12,7 @@
       
       <!-- Ảnh đại diện hiện tại (nếu không có preview) -->
       <div *ngIf="!previewUrl" class="relative">
-        <img [src]="user?.avatar || 'assets/images/account/avatar.png'" alt="Avatar" class="w-24 h-24 rounded-full object-cover" />
+        <img [src]="'http://localhost:5000' + user?.avatar" alt="Avatar" *ngIf="user?.avatar" alt="Avatar" class="w-24 h-24 rounded-full object-cover" />
       </div>
       
       <!-- File input ẩn -->
