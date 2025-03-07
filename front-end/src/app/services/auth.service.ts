@@ -10,6 +10,9 @@ import { Router } from '@angular/router';
     providedIn: 'root'
 })
 export class AuthService {
+    getUserId(): string | null {
+      throw new Error('Method not implemented.');
+    }
     private apiUrl = 'http://localhost:5000';
 
     private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());

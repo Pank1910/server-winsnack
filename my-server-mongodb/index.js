@@ -4,15 +4,15 @@ const port = 5001;  // hoặc 6000, 7000 đều được, miễn là không bị
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+
 const { MongoClient, ObjectId } = require('mongodb');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-
 app.use(morgan("combined"));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json()); // Note: Thay body-parser bằng express.json()
+app.use(express.urlencoded({ extended: true })); // Note: Thay body-parser bằng express.urlencoded()
 app.use(cors());
 
 const uri = "mongodb+srv://thanhtylenguyen:WinSnack2025@webcluster.9rruw.mongodb.net/";
@@ -32,7 +32,8 @@ async function connectDB() {
 connectDB();
 
 const database = client.db("winsnack");
-// const winsnackCollection = database.collection("CARTS");
+const winsnackCollection = database.collection("Cart");
+
 const productsCollection = database.collection("Product");
 const orderCollection = database.collection("Order"); // ✅ Thêm collection Order
 
@@ -359,11 +360,27 @@ app.get("/order", async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
+
             message: "❌ Failed to fetch orders",
             error: error.toString()
         });
     }
 });
+
+// Note: Thêm endpoint để lấy giỏ hàng của người dùng
+app.get("/cart", async (req, res) => {
+    try {
+        const userId = req.query.userId; // Note: Giả định userId được gửi qua query (có thể thay bằng header nếu dùng token)
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: "❌ userId is required"
+            });
+        }
+        const cartItems = await winsnackCollection.find({ userId }).toArray();
+        res.json({
+            success: true,
+            data: cartItems
 
 // Endpoint lấy đơn hàng theo userId - ĐẶT TRƯỚC endpoint lấy theo ID
 app.get("/order/user/:userId", async (req, res) => {
@@ -379,12 +396,27 @@ app.get("/order/user/:userId", async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: "❌ Failed to fetch user orders",
+            message: "❌ Failed to fetch cart",
+
             error: error.toString()
         });
     }
 });
 
+// Note: Thêm endpoint để thêm sản phẩm vào giỏ hàng
+app.post("/cart/add", async (req, res) => {
+    try {
+        const { userId, productId, quantity, unit_price } = req.body;
+        if (!userId || !productId || !quantity || !unit_price) {
+            return res.status(400).json({
+                success: false,
+                message: "❌ userId, productId, quantity, and unit_price are required"
+            });
+        }
+
+        // Note: Kiểm tra sản phẩm có tồn tại không
+        const product = await productsCollection.findOne({ _id: new ObjectId(productId) });
+        if (!product) {
 // Endpoint lấy chi tiết đơn hàng theo ID - ĐẶT SAU endpoint lấy theo userId
 app.get("/order/:id", async (req, res) => {
     try {
@@ -397,9 +429,31 @@ app.get("/order/:id", async (req, res) => {
                 message: "❌ Order not found"
             });
         }
-        
+
+        // Note: Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+        const existingItem = await winsnackCollection.findOne({ userId, productId });
+        if (existingItem) {
+            // Nếu đã có, tăng số lượng
+            await winsnackCollection.updateOne(
+                { userId, productId },
+                { $inc: { quantity } }
+            );
+        } else {
+            // Nếu chưa có, thêm mới
+            await winsnackCollection.insertOne({
+                userId,
+                productId,
+                quantity,
+                unit_price,
+                product_name: product.title || "Unknown", // Note: Lấy từ product nếu có
+                image_1: product.image_1 || "", // Note: Lấy từ product nếu có
+                stocked_quantity: product.stocked_quantity || 0 // Note: Lấy từ product nếu có
+            });
+        }
+
         res.json({
             success: true,
+            message: "✅ Product added to cart"
             data: order
         });
     } catch (error) {
@@ -436,11 +490,108 @@ app.post("/login", async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: "Lỗi máy chủ",
+            message: "❌ Failed to add to cart",
             error: error.toString()
         });
     }
 });
+
+// Note: Thêm endpoint để xóa sản phẩm khỏi giỏ hàng
+app.delete("/cart/remove/:productId", async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const userId = req.query.userId; // Note: Giả định userId qua query
+        if (!userId || !productId) {
+            return res.status(400).json({
+                success: false,
+                message: "❌ userId and productId are required"
+            });
+        }
+
+        const result = await winsnackCollection.deleteOne({ userId, productId });
+        if (result.deletedCount === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "❌ Item not found in cart"
+            });
+        }
+
+        res.json({
+            success: true,
+            message: "✅ Product removed from cart"
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to remove from cart",
+            error: error.toString()
+        });
+    }
+});
+
+// Note: Thêm endpoint để cập nhật số lượng sản phẩm trong giỏ hàng
+app.patch("/cart/update", async (req, res) => {
+    try {
+        const { userId, productId, quantity } = req.body;
+        if (!userId || !productId || !quantity) {
+            return res.status(400).json({
+                success: false,
+                message: "❌ userId, productId, and quantity are required"
+            });
+        }
+
+        const result = await winsnackCollection.updateOne(
+            { userId, productId },
+            { $set: { quantity } }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "❌ Item not found in cart"
+            });
+        }
+
+        res.json({
+            success: true,
+            message: "✅ Quantity updated"
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to update quantity",
+            error: error.toString()
+        });
+    }
+});
+
+// Note: Thêm endpoint để cập nhật toàn bộ giỏ hàng
+app.put("/cart/update-all", async (req, res) => {
+    try {
+        const { userId, items } = req.body;
+        if (!userId || !items || !Array.isArray(items)) {
+            return res.status(400).json({
+                success: false,
+                message: "❌ userId and items (array) are required"
+            });
+        }
+
+        // Note: Xóa toàn bộ giỏ hàng hiện tại của user và thay bằng danh sách mới
+        await winsnackCollection.deleteMany({ userId });
+        if (items.length > 0) {
+            await winsnackCollection.insertMany(
+                items.map(item => ({
+                    userId,
+                    productId: item.productId,
+                    quantity: item.quantity,
+                    unit_price: item.unit_price
+                }))
+            );
+        }
+
+        res.json({
+            success: true,
+            message: "✅ Cart updated"
 
 app.post('/auth/login', async (req, res) => {
     const { profileName, password } = req.body;
@@ -547,6 +698,52 @@ app.post("/register", async (req, res) => {
     }
 });
 
+// Note: Thêm endpoint để lưu các sản phẩm đã chọn
+app.post("/cart/saveSelectedItems", async (req, res) => {
+    try {
+        const { userId, selectedItems } = req.body;
+        if (!userId || !selectedItems || !Array.isArray(selectedItems)) {
+            return res.status(400).json({
+                success: false,
+                message: "❌ userId and selectedItems (array) are required"
+            });
+        }
+
+        // Note: Đây là nơi bạn có thể lưu selectedItems vào một collection khác hoặc xử lý tùy ý
+        // Ví dụ: Chỉ trả về thông báo thành công
+        res.json({
+            success: true,
+            message: "✅ Selected items saved"
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to save selected items",
+            error: error.toString()
+        });
+    }
+});
+
+// Note: Thêm endpoint để xóa toàn bộ giỏ hàng
+app.delete("/cart/clear", async (req, res) => {
+    try {
+        const userId = req.query.userId; // Note: Giả định userId qua query
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: "❌ userId is required"
+            });
+        }
+
+        await winsnackCollection.deleteMany({ userId });
+        res.json({
+            success: true,
+            message: "✅ Cart cleared"
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to clear cart",
 // Thay đổi endpoint update-profile
 app.put('/update-profile', async (req, res) => {
     try {
@@ -624,6 +821,13 @@ app.get('/user/:userId', async (req, res) => {
             error: error.toString()
         });
     }
+});
+
+// Note: Thêm logic đóng kết nối MongoDB khi server dừng
+process.on('SIGINT', async () => {
+    await client.close();
+    console.log("✅ MongoDB connection closed");
+    process.exit(0);
 });
 
 // Configure multer for file uploads

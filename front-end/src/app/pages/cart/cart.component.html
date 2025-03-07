@@ -17,7 +17,7 @@
       <div class="flex gap-6 mt-6">
         <!-- Cart Items Section -->
         <div class="flex-1 bg-white shadow-md rounded-lg p-6 flex flex-col">
-          <table class="w-full border-collapse">
+          <table class="w-full border-collapse" *ngIf="cartItems && cartItems.length > 0">
             <thead>
               <tr class="border-b border-gray-300">
                 <th class="text-left pb-4">
@@ -38,10 +38,10 @@
                 </td>
                 <td class="py-4 flex items-center">
                   <a [routerLink]="'/product/' + item.productId">
-                    <img [src]="item.image_1 || 'assets/default-image.png'" alt="{{ item.product_name || 'Sản phẩm' }}" 
+                    <img [src]="item.image_1" alt="{{ item.product_name }}" 
                          class="w-16 h-16 object-cover mr-4" />
                   </a>
-                  <span>{{ item.product_name || 'Queentin' }}</span>
+                  <span>{{ item.product_name }}</span>
                 </td>
                 <td class="py-4">{{ item.unit_price | currency: 'VND' }}</td>
                 <td class="py-4">
@@ -57,7 +57,7 @@
                             [disabled]="item.tempQuantity >= item.stocked_quantity">+</button>
                   </div>
                   <p class="text-sm text-gray-600 mt-1">
-                    {{ item.stocked_quantity && item.stocked_quantity > 0 ? 'Còn hàng' : 'Hết hàng' }}
+                    {{ item.stocked_quantity > 0 ? 'Còn hàng' : 'Hết hàng' }}
                   </p>
                 </td>
                 <td class="py-4">{{ (item.unit_price * item.tempQuantity) | currency: 'VND' }}</td>
@@ -70,6 +70,9 @@
               </tr>
             </tbody>
           </table>
+          <div *ngIf="cartItems.length === 0" class="text-center py-4 text-gray-500">
+            Không có sản phẩm nào trong giỏ hàng.
+          </div>
           <div class="flex justify-between items-center mt-6">
             <button class="bg-gray-200 rounded-full py-2 px-4 text-gray-700 hover:bg-gray-300" (click)="continueShopping()">Quay lại cửa hàng</button>
             <button class="bg-green-600 text-white rounded-full py-2 px-4 hover:bg-green-700" (click)="toggleSelectAll()">Chọn tất cả</button>
