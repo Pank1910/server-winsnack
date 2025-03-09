@@ -10,6 +10,7 @@ import { UpdateProductComponent } from './pages/product/update-product/update-pr
 import { ProductCategoryComponent } from './pages/product-category/product-category.component';
 import { NewCategoryComponent } from './components/new-category/new-category.component';
 import { UpdateCategoryComponent } from './components/update-category/update-category.component';
+import { importProvidersFrom } from '@angular/core';
 
 
 export const routes: Routes = [

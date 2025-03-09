@@ -1,96 +1,56 @@
 <body class="bg-[#FFF8EC]">
   <div class="p-6 max-w-5xl mx-auto rounded-lg shadow-md bg-[#FFF8EC]">
-    <!-- Tiêu đề -->
-    <h1 class="text-3xl font-bold text-orange-dark text-center mb-6">CẬP NHẬT DANH MỤC</h1>
+    <h1 class="text-3xl font-bold text-orange-dark text-center mb-6">{{ pageTitle }}</h1>
 
-    <!-- Form -->
     <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
       <div class="grid grid-cols-2 gap-4 mb-4">
-        <!-- Tên danh mục -->
         <div class="col-span-2">
           <label class="block">Tên danh mục</label>
           <input 
             type="text" 
-            id="categoryName"
-            formControlName="name"
+            formControlName="product_dept"
             placeholder="Nhập tên danh mục"
             class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark"
           >
         </div>
 
-        <!-- Số lượng sản phẩm -->
         <div class="col-span-2">
           <label class="block">Số lượng sản phẩm</label>
           <input 
             type="text" 
-            id="categoryQuantity"
-            formControlName="quantity"
+            formControlName="stocked_quantity"
             placeholder="Nhập số lượng sản phẩm"
             class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark"
           >
         </div>
 
-        <!-- Trạng thái -->
         <div class="col-span-2 flex items-center">
-          <div class="flex items-center">
-            <input 
-              type="checkbox"
-              formControlName="status"
-              (change)="toggleStatus($event)"
-              class="w-5 h-5 rounded border-gray-300 text-[#FF9413] focus:ring-[#FF9413] cursor-pointer"
-            >
-            <label>Hiển thị danh mục trên website</label>
-          </div>
+          <input 
+            type="checkbox"
+            formControlName="isNew"
+            (change)="toggleStatus($event)"
+            class="w-5 h-5 rounded border-gray-300 text-[#FF9413] focus:ring-[#FF9413] cursor-pointer"
+          >
+          <label>Hiển thị danh mục trên website</label>
         </div>
       </div>
 
-      <!-- Hình ảnh danh mục -->
       <div class="mb-4">
         <label class="block text-gray-700 font-semibold mb-2">Hình ảnh danh mục</label>
-        <div class="border border-gray-300 rounded-md p-4">
-          <div class="text-right text-sm mb-2">
-            Kích cỡ tối đa với các tập tin mới: 50MB
-          </div>
-          <hr class="border-gray-300 mb-4" />
-          
-          <ngx-dropzone
-            (change)="onFileSelected($event)"
-            [accept]="'image/*'"
-            class="min-h-[176px] bg-[#FFF8EC] border border-dashed border-gray-300 rounded-md"
-          >
-            <ngx-dropzone-label class="flex flex-col items-center justify-center">
-              <img 
-                [src]="category.img" 
-                alt="Ảnh danh mục"
-                class="w-12 h-12 mb-2"
-              />
-            </ngx-dropzone-label>
-          </ngx-dropzone>
-  
-          <div class="flex justify-center w-full">
-            <button
-              type="button"
-              class="mt-4 px-6 py-2 bg-orange-dark text-white font-bold rounded-md hover:bg-orange-medium transition-colors"
-            >
-              Đăng tải tệp
-            </button>
-          </div>
-        </div>
+        <ngx-dropzone (change)="onFileSelected($event)" [accept]="'image/*'"
+          class="min-h-[176px] bg-[#FFF8EC] border border-dashed border-gray-300 rounded-md">
+          <ngx-dropzone-label>
+            <img [src]="category.image_1" alt="Ảnh danh mục" class="w-12 h-12 mb-2" />
+          </ngx-dropzone-label>
+        </ngx-dropzone>
       </div>
 
-      <!-- Tiêu đề sản phẩm thuộc danh mục -->
       <div class="flex justify-between items-center mb-4">
         <span class="font-semibold">Sản phẩm thuộc danh mục</span>
-        <button
-          type="button"
-          class="px-6 py-2 text-lg text-orange-dark bg-white font-bold border border-orange-dark rounded-md hover:bg-orange-50 transition-colors"
-          (click)="addProduct()"
-        >
-          THÊM SẢN PHẨM
-        </button>
+        <button type="button" class="px-6 py-2 text-orange-dark bg-white font-bold border border-orange-dark rounded-md"
+          (click)="addProduct()">THÊM SẢN PHẨM</button>
       </div>
 
-      <!-- Bảng sản phẩm -->
       <div class="overflow-x-auto mb-6">
         <table class="w-full border-collapse">
           <thead>
@@ -105,47 +65,20 @@
             </tr>
           </thead>
           <tbody>
-            <ng-container *ngFor="let product of products; let i = index">
-              <tr [ngClass]="{'bg-[#FFE0C3]': i % 2 === 0, 'bg-[#fefdfb]': i % 2 !== 0}" class="text-center">
-                <td class="p-3">{{ product.id }}</td>
-                <td class="p-3">{{ product.name }}</td>
-                <td class="p-3 flex justify-center">
-                  <img [src]="product.imageUrl" [alt]="product.name" class="w-20 h-20 object-cover rounded-md">
-                </td>
-                <td class="p-3">{{ product.productCount }} sản phẩm</td>
-                <td class="p-3">{{ product.price }}</td>
-                <td class="p-3">
-                  <input type="checkbox" [checked]="product.isVisible" (change)="toggleVisibility(product.id)"
-                    class="w-6 h-6 border-2 border-orange-dark rounded-md cursor-pointer 
-                    appearance-none checked:bg-orange-dark checked:border-orange-dark 
-                    checked:bg-[url('assets/icons/tick-icon.png')] checked:bg-center checked:bg-no-repeat">
-                </td>
-                <td class="p-3">
-                  <div class="flex gap-4 justify-center">
-                    <button class="p-2 rounded-md hover:bg-orange-medium transition duration-300" aria-label="Edit product" (click)="editProduct(product)">
-                      <img src="assets/icons/edit.png" alt="Edit" class="w-7 h-7" />
-                    </button>
-                    <button class="p-2 rounded-md hover:bg-red-500 transition duration-300" aria-label="Delete product" (click)="deleteProduct(product.id)">
-                      <img src="assets/icons/delete.png" alt="Delete" class="w-7 h-7" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </ng-container>
+            <tr *ngFor="let product of products" class="text-center">
+              <td class="p-3">{{ product._id }}</td>
+              <td class="p-3">{{ product.product_dept }}</td>
+              <td class="p-3 flex justify-center">
+                <img [src]="product.image_1" alt="{{ product.product_dept }}" class="w-20 h-20 object-cover rounded-md">
+              </td>
+              <td class="p-3">{{ product.stocked_quantity }}</td>
+              <td class="p-3">{{ product.unit_price }}</td>
+              <td class="p-3">
+                <input type="checkbox" [checked]="product.isNew" (change)="toggleVisibility(product._id)">
+              </td>
+            </tr>
           </tbody>
         </table>
-      </div>
-
-      <!-- Nút Hủy bỏ và Cập Nhật -->
-      <div class="flex justify-center space-x-6">
-        <button type="button" (click)="cancel()"
-                class="px-6 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400">
-            Hủy bỏ
-        </button>
-        <button type="submit"
-                class="px-6 py-2 bg-orange-dark text-white rounded-md hover:bg-orange-medium">
-            Cập nhật
-        </button>
       </div>
     </form>
   </div>

@@ -1,4 +1,13 @@
-<!-- Tiêu Đề -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Trang quản lý sản phẩm Win Snack">
+    <meta name="keywords" content="snack, bánh tráng, quản lý sản phẩm, Win Snack">
+    <meta name="author" content="Win Snack">
+    <title>Chi Tiết Sản Phẩm - Win Snack</title>
+</head>
 <body class="bg-[#FFF8EC]">
 
 <h1 class="text-3xl font-bold text-orange-dark mb-6 text-center">
@@ -6,11 +15,11 @@
 </h1>
 
 <!-- Thông tin sản phẩm -->
-<div class="mb-6">
+<div class="mb-6" *ngIf="product">
     <p class="text-lg mt-2">Tên sản phẩm: 
-        <span class="text-xl font-semibold text-orange-dark">{{ product.name }}</span>
+        <span class="text-xl font-semibold text-orange-dark">{{ product.product_name }}</span>
     </p>
-    <p class="text-lg mt-2">Số lượng đánh giá: <span class="font-semibold">{{ product.reviewsCount }}</span></p>
+    <p class="text-lg mt-2">Số lượng tồn kho: <span class="font-semibold">{{ product.stocked_quantity }}</span></p>
     <p class="mt-2 flex items-center">
         Chất lượng:
         <span class="flex space-x-1 ml-2 text-yellow-500">{{ getStars(product.rating) }}</span>
@@ -18,7 +27,7 @@
 </div>
 
 <!-- Bảng bình luận -->
-<table class="min-w-full  rounded-lg shadow-md mt-6">
+<table class="min-w-full rounded-lg shadow-md mt-6">
     <thead>
         <tr class="bg-orange-dark text-white">
             <th class="px-4 py-2 text-center">STT</th>
@@ -69,3 +78,5 @@
         </button>
     </div>
 </div>
+</body>
+</html>
