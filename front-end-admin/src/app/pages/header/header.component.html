@@ -11,11 +11,11 @@
           <p class="text-gray-500">Không có thông báo mới</p>
         </div>
       </div>
-      <div class="flex gap-1.5 items-center whitespace-nowrap cursor-pointer">
+      <a routerLink="/account" class="flex gap-1.5 items-center whitespace-nowrap cursor-pointer">
         <img loading="lazy" [src]="account.images" alt="Admin profile" class="w-10 rounded-full aspect-square" />
         <span>{{ account.name }}</span>
         <img loading="lazy" src="assets/icons/arrow-down-black2.png" alt="Settings" class="w-[18px] aspect-square" />
-      </div>
+      </a>
     </div>
 </header>
 
