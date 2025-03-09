@@ -17,6 +17,9 @@
       />
     </div>
   </div>
+    
+  <!-- Linh vật mascot -->
+  <div id="mascot"></div>
 
   <!-- Search Bar -->
   <div class="flex items-center flex-grow max-w-full text-sm mx-4">
@@ -35,20 +38,20 @@
             />
           </div>
           <!-- Dropdown Content: căn lề trái ngay dưới container -->
-          <div *ngIf="showAllProducts" class="absolute left-0 top-full mt-1 w-40 bg-white shadow-lg rounded-md z-10">
-            <a routerLink="/product-category/banh-trang-tron-san" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
+          <div *ngIf="showAllProducts" class="absolute left-0 top-full mt-1 w-40 bg-white shadow-lg rounded-md z-10 cursor-pointer">
+            <a (click)="navigateToCategory('Bánh tráng trộn sẵn', $event)" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
               Bánh tráng trộn sẵn
             </a>
-            <a routerLink="/product-category/banh-trang-nuong" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
+            <a (click)="navigateToCategory('Bánh tráng nướng', $event)" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
               Bánh tráng nướng
             </a>
-            <a routerLink="/product-category/banh-trang-ngot" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
+            <a (click)="navigateToCategory('Bánh tráng ngọt', $event)" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
               Bánh tráng ngọt
             </a>
-            <a routerLink="/product-category/combo-mix-vi" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
+            <a (click)="navigateToCategory('Combo bánh tráng mix vị', $event)" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
               Combo mix vị
             </a>
-            <a routerLink="/product-category/nguyen-lieu-le" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
+            <a (click)="navigateToCategory('Nguyên liệu lẻ', $event)" class="block px-3 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
               Nguyên liệu lẻ
             </a>
           </div>
@@ -62,16 +65,46 @@
             class="w-px h-6"
           />
         </div>
-        <!-- Phần text "Tìm kiếm" -->
-        <div class="w-full ml-2 font-medium text-[#A0A0A0]">
-          <input type="text" placeholder="Tìm kiếm đee" class="w-full max-w-3xl px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF9413] focus:border-[#FF9413] transition-all duration-300">
+        
+        <!-- Phần tìm kiếm với dropdown -->
+        <div class="search-container relative w-full ml-2 font-medium text-[#A0A0A0]">
+          <input 
+            type="text" 
+            [(ngModel)]="searchTerm"
+            (input)="onSearchChange($event)"
+            placeholder="Tìm kiếm" 
+            class="w-full max-w-3xl px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF9413] focus:border-[#FF9413] transition-all duration-300"
+          >
+          
+          <!-- Dropdown kết quả tìm kiếm -->
+          <div *ngIf="showDropdown && searchResults.length > 0" class="absolute left-0 right-0 mt-1 max-h-64 overflow-y-auto bg-white rounded-md shadow-lg z-50 border border-gray-200">
+            <ul>
+              <li *ngFor="let product of searchResults" 
+                  (click)="goToProductDetail(product._id)"
+                  class="px-4 py-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0">
+                <div class="flex items-center">
+                  <img *ngIf="product.image_1" [src]="product.image_1" alt="{{ product.product_name }}" class="w-12 h-12 object-cover mr-3">
+                  <div>
+                    <p class="font-medium text-gray-800">{{ product.product_name }}</p>
+                    <p class="text-sm text-[#FF9413]">{{ product.unit_price | currency:'VND':'symbol':'1.0-0' }}</p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          
+          <!-- Thông báo không tìm thấy kết quả -->
+          <div *ngIf="showDropdown && searchTerm && searchResults.length === 0" class="absolute left-0 right-0 mt-1 p-4 bg-white rounded-md shadow-lg z-50 border border-gray-200">
+            <p class="text-center text-gray-500">Không tìm thấy sản phẩm phù hợp</p>
+          </div>
         </div>
       </div>
     </div>
+    
     <!-- Nút Search -->
     <div>
       <div class="flex items-center bg-[#FF9413] rounded-sm p-2 cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-xl">
-        <a routerLink="/account">
+        <a (click)="performSearch()">
           <img
           loading="lazy"
           src="assets/images/header/search.png"
@@ -102,7 +135,7 @@
       
       <a routerLink="/product-table" class="whitespace-nowrap ml-1">
         <div class="text-[#253D4E] text-xs">Yêu thích</div>
-        <div class="text-[#FF9413] text-xs">{{ header.price | number }}đ</div>
+        <div class="text-[#FF9413] text-xs">350.000đ</div>
       </a>
     </div>
     
@@ -122,7 +155,7 @@
       </div>      
       <div class="whitespace-nowrap ml-1">
         <div class="text-[#253D4E] text-xs">Giỏ hàng</div>
-        <div class="text-[#FF9413] text-xs">25.000đ</div>
+        <div class="text-[#FF9413] text-xs">{{ formatPrice(header.price) }}</div>
       </div>
     </a>
   </div>
@@ -184,43 +217,59 @@
   </div>
 
   <!-- Navigation Links -->
-  <div class="flex flex-wrap md:flex-nowrap items-center space-x-4 text-[#253D4E]">
-    <a routerLink="/home" class="flex items-center text-[#FF9413] hover:underline">
-      <img loading="lazy" src="assets/images/header/home.png" class="w-5 h-5" alt="Home" />
-      <span class="ml-1">Trang chủ</span>
-    </a>
-    <!-- Về chúng tôi Dropdown -->
-    <div class="relative group" (mouseenter)="showAbout = true" (mouseleave)="showAbout = false">
-      <div class="flex items-center gap-1.5 p-2.5 cursor-pointer">
-        <img src="assets/images/header/about.png" class="w-5 h-5" alt="About Icon" />
-        <span class="text-sm md:text-base">Về chúng tôi</span>
-        <i class="fa fa-angle-down ml-1"></i>
+  <div class="flex flex-wrap md:flex-nowrap items-center justify-end gap-6 text-[#253D4E]">
+    <a routerLink="/home" class="nav-link group text-[#FF9413]">
+      <div class="flex items-center">
+        <img loading="lazy" src="assets/images/header/home.png" class="w-5 h-5" alt="Home" />
+        <span class="ml-1.5">Trang chủ</span>
       </div>
+      <span class="block max-w-0 group-hover:max-w-full transition-all duration-300 h-0.5 bg-[#FF9413]"></span>
+    </a>
+    
+    <!-- Về chúng tôi Dropdown -->
+    <div class="relative group nav-link" (mouseenter)="showAbout = true" (mouseleave)="showAbout = false">
+      <div class="flex items-center cursor-pointer">
+        <img src="assets/images/header/about.png" class="w-5 h-5" alt="About Icon" />
+        <span class="ml-1.5 text-sm md:text-base">Về chúng tôi</span>
+        <i class="fa fa-angle-down ml-1.5"></i>
+      </div>
+      <span class="block max-w-0 group-hover:max-w-full transition-all duration-300 h-0.5 bg-[#FF9413]"></span>
 
       <!-- Dropdown Content -->
       <div *ngIf="showAbout" class="absolute left-0 top-full mt-1 w-40 md:w-48 bg-white shadow-lg rounded-md z-50">
         <div class="py-1">
-          <a routerLink="/about" class="block px-4 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
+          <a routerLink="/about" class="block px-4 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC] hover:text-[#FF9413] transition-colors duration-200">
             Giới thiệu
           </a>
-          <a routerLink="/terms-and-policies" class="block px-4 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC]">
+          <a routerLink="/terms-and-policies" class="block px-4 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC] hover:text-[#FF9413] transition-colors duration-200">
             Chính sách & Điều khoản
           </a>
         </div>
       </div>
     </div>
 
-    <a routerLink="/minigame" class="flex items-center hover:underline">
-      <img loading="lazy" src="assets/images/header/event.png" class="w-5 h-5" alt="Events" />
-      <span class="ml-1">Sự kiện</span>
+    <a routerLink="/minigame" class="nav-link group">
+      <div class="flex items-center">
+        <img loading="lazy" src="assets/images/header/event.png" class="w-5 h-5" alt="Events" />
+        <span class="ml-1.5">Sự kiện</span>
+      </div>
+      <span class="block max-w-0 group-hover:max-w-full transition-all duration-300 h-0.5 bg-[#FF9413]"></span>
     </a>
-    <a routerLink="/blog" class="ml-3 flex items-center hover:underline">
-      <img loading="lazy" src="assets/images/header/blog.png" class="w-5 h-5" alt="Blog" />
-      <span class="ml-1">Blog</span>
+    
+    <a routerLink="/blog" class="nav-link group">
+      <div class="flex items-center">
+        <img loading="lazy" src="assets/images/header/blog.png" class="w-5 h-5" alt="Blog" />
+        <span class="ml-1.5">Blog</span>
+      </div>
+      <span class="block max-w-0 group-hover:max-w-full transition-all duration-300 h-0.5 bg-[#FF9413]"></span>
     </a>
-    <a routerLink="/contact" class="flex items-center hover:underline">
-      <img loading="lazy" src="assets/images/header/contact.png" class="w-5 h-5" alt="Contact" />
-      <span class="ml-1">Liên hệ</span>
+    
+    <a routerLink="/contact" class="nav-link group">
+      <div class="flex items-center">
+        <img loading="lazy" src="assets/images/header/contact.png" class="w-5 h-5" alt="Contact" />
+        <span class="ml-1.5">Liên hệ</span>
+      </div>
+      <span class="block max-w-0 group-hover:max-w-full transition-all duration-300 h-0.5 bg-[#FF9413]"></span>
     </a>
   </div>
 

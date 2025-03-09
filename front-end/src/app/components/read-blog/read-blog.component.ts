@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-read-blog',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './read-blog.component.html',
   styleUrl: './read-blog.component.css'
 })
@@ -25,47 +26,45 @@ export class ReadBlogComponent {
   // Related Articles
   relatedArticles = [
     {
-      image: 'assets/images/articles/tay_ninh_special.jpg',
+      blogid: 2,
+      title: 'Bí mật kết hợp các loại snack để tạo nên bữa ăn vặt hoàn hảo',
       category: 'Chuyện kể từ nguyên liệu',
-      title: 'Bánh tráng Tây Ninh - đặc sản khó cưỡng',
-      comments: '4 luận',
-      time: '15 min prep'
+      content: 'Bánh tráng chấm với nhiều loại sốt...',
+      image: 'assets/images/blog/blog3.png',
+      abstract: 'Món ăn vặt phổ biến trong giới trẻ...',
+      time: "2025-02-12",
+      comments: 3,
     },
     {
-      image: 'assets/images/articles/culture_food.jpg',
+      blogid: 3,
+      title: 'Những món ăn vặt siêu hấp dẫn khi xem phim hoặc tụ họp bạn bè',
       category: 'bí quyết ăn vặt ngon miệng',
-      title: 'Ẩm thực trong văn hóa - Hơn cả một bữa ăn',
-      comments: '10 bình luận',
-      time: '45 phút trước'
+      content: 'Bánh ngọt mềm mịn, thơm lừng...',
+      image: 'assets/images/blog/blog4.png',
+      abstract: 'Bánh ngọt hấp dẫn với nhiều hương vị...',
+      time: "2025-03-08",
+      comments: 3,
     }
   ];
 
   // More Articles
   moreArticles = [
-    {
-      image: 'assets/images/articles/cheese_roll.jpg',
-      title: 'Tự làm bánh tráng cuộn phô mai giòn rụm siêu dễ',
-      tags: [
-        { icon: 'assets/images/icons/comment.svg', label: '6 Bình luận' },
-        { icon: 'assets/images/icons/time.svg', label: '20 phút trước' }
-      ]
-    },
-    {
-      image: 'assets/images/articles/dalat_snack.jpg',
-      title: 'Hành trình từ những trái cây Đà Lạt đến gói snack chất lượng',
-      tags: [
-        { icon: 'assets/images/icons/comment.svg', label: '6 Bình luận' },
-        { icon: 'assets/images/icons/time.svg', label: '1 ngày trước' }
-      ]
-    },
-    {
-      image: 'assets/images/articles/combo_deal.jpg',
-      title: 'Khám phá các combo mới với giá ưu đãi siêu hời',
-      tags: [
-        { icon: 'assets/images/icons/comment.svg', label: '6 Bình luận' },
-        { icon: 'assets/images/icons/time.svg', label: '12/01/2025' }
-      ]
+      {
+          image: 'assets/images/blog/blog2.png',
+          title: 'Cách làm bánh tráng trộn thơm ngon chuẩn vị Sài Gòn',
+          comment: '3 Bình luận',
+          time: '08/03/2025'
+      },
+      {
+          image: 'assets/images/blog/blog3.png',
+          title: 'Bí mật kết hợp các loại snack để tạo nên bữa ăn vặt hoàn hảo',
+          comment: '3 Bình luận',
+          time: '01/02/2025'
+      },
+      {
+          image: 'assets/images/blog/blog4.png',
+          title: 'Những món ăn vặt siêu hấp dẫn khi xem phim hoặc tụ họp bạn bè',
+          comment: '3 Bình luận',
+          time: '24/02/2025'
+      }]
     }
-  ];
-
-}

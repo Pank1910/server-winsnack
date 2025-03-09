@@ -121,6 +121,43 @@ app.get("/products/:id", async (req, res) => {
     }
 });
 
+// ✅ Endpoint tìm kiếm sản phẩm
+app.get("/products/search", async (req, res) => {
+    try {
+        const { term } = req.query;
+        
+        if (!term) {
+            return res.json({
+                success: true,
+                data: [],
+                count: 0
+            });
+        }
+
+        // Tạo pattern tìm kiếm không phân biệt hoa thường
+        const searchPattern = new RegExp(term, 'i');
+        
+        // Tìm kiếm sản phẩm theo tên
+        const products = await productsCollection.find({
+            $or: [
+                { product_name: searchPattern },
+                // { category: searchPattern }
+            ]
+        }).toArray();
+        
+        res.json({
+            success: true,
+            data: products,
+            count: products.length
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "❌ Failed to search products",
+            error: error.toString()
+        });
+    }
+});
 
 // Giả sử usersCollection đã được khai báo từ trước
 const usersCollection = database.collection("User");

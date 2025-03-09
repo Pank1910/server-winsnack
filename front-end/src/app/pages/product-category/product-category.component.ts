@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductApiService } from '../../product-api.service';
 import { Product } from '../../../../../my-server-mongodb/interface/Product';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -29,12 +29,27 @@ export class ProductCategoryComponent implements OnInit {
 
     constructor(
         private productService: ProductApiService,
-        private router: Router
+        private router: Router,
+        private route: ActivatedRoute
     ) {}
 
     ngOnInit(): void {
         this.loadAllProducts();
-    }
+        // Đón nhận category từ query params
+        this.route.queryParams.subscribe(params => {
+            const category = params['category'];
+            if (category) {
+            // Tìm category phù hợp trong danh sách
+            const matchedCategory = this.categories.find(
+                c => c === category
+            );
+            
+            if (matchedCategory) {
+                this.changeCategory(matchedCategory);
+            }
+            }
+        });
+        }
 
     loadAllProducts(): void {
         this.productService.getAllProducts().subscribe({
