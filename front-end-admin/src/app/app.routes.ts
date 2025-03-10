@@ -10,12 +10,21 @@ import { UpdateProductComponent } from './pages/product/update-product/update-pr
 import { ProductCategoryComponent } from './pages/product-category/product-category.component';
 import { NewCategoryComponent } from './components/new-category/new-category.component';
 import { UpdateCategoryComponent } from './components/update-category/update-category.component';
-
+import { AccountComponent } from './pages/account/account.component';
+import { CustomerComponent } from './pages/customer/customer.component';
+import { SalesorderComponent } from './pages/salesorder/salesorder.component';
+import { OrderDetailComponent } from './pages/salesorder/order-detail/order-detail.component';
+import { PromotionComponent } from './pages/promotion/promotion.component'
 
 export const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'login', component: LoginComponent },
+    { path: 'account', component: AccountComponent },
+    { path: 'customer', component: CustomerComponent },
+    { path: 'salesorder', component: SalesorderComponent },
+    { path: 'order-detail', component: OrderDetailComponent },
+    { path: 'promotion', component: PromotionComponent },
 
 
     { path: 'blog-list', component: BlogComponent },

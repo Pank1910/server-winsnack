@@ -1,40 +1,22 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khuyến mãi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-orange-50">
-    <div class="bg-orange-400 p-4 flex justify-between items-center">
-        <div></div>
-        <div class="flex items-center gap-4">
-            <div class="flex items-center text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                </svg>
-                <span class="ml-2">Thông báo</span>
-            </div>
-            <div class="flex items-center gap-2">
-                <img src="/api/placeholder/32/32" alt="Admin" class="rounded-full" />
-                <span class="text-white">Admin101</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="container mx-auto p-6">
+<div class="bg-orange-50">
+   <div class="container mx-auto p-6">
         <div class="flex justify-between items-center mb-6">
-            <button class="px-6 py-2 text-orange-500 border-2 border-orange-500 rounded-lg font-bold">
+            <button (click)="addPromotion()" class="px-6 py-2 text-white bg-orange-500 rounded-lg font-bold hover:bg-white hover:text-orange-500 hover:border-orange-500 hover:border-2 transition">
                 THÊM KHUYẾN MÃI
             </button>
             <div class="flex gap-2">
-                <select class="px-4 py-2 rounded bg-white border">
-                    <option>Khuyến mãi</option>
+                <select [(ngModel)]="filterColumn" class="px-4 py-2 rounded bg-white border">
+                    <option>Tất cả</option>
+                    <option>Danh mục</option>
+                    <option>Mã</option>
+                    <option>Tình trạng</option>
+                    <option>Số lượng</option>
+                    <option>Bắt đầu</option>
+                    <option>Kết thúc</option>
                 </select>
                 <div class="relative">
-                    <input type="text" placeholder="Tìm kiếm" class="px-4 py-2 rounded" />
-                    <button class="absolute right-0 top-0 h-full px-4 bg-orange-400 rounded">
+                    <input type="text" [(ngModel)]="searchText" (input)="applyFilter()" placeholder="Tìm kiếm" class="px-4 py-2 rounded" />
+                    <button class="absolute right-0 top-0 h-full px-4 bg-orange-400 rounded hover:bg-orange-500 transition">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                         </svg>
@@ -43,7 +25,7 @@
             </div>
         </div>
 
-        <table class="w-full bg-white rounded-lg overflow-hidden">
+        <table class="w-full bg-white shadow rounded-lg overflow-hidden">
             <thead class="bg-orange-400 text-white">
                 <tr>
                     <th class="py-4 px-4 text-left">STT</th>
@@ -56,111 +38,120 @@
                     <th class="py-4 px-4 text-left"></th>
                 </tr>
             </thead>
-            <!-- Table Body -->
-        <tbody>
-            <!-- Row 1 -->
-            <tr class="bg-orange-50/50">
-                <td class="py-4 px-4">1</td>
-                <td class="py-4 px-4">Mã giảm giá</td>
-                <td class="py-4 px-4">
-                    <div class="promotion-code font-medium">PNTHFG152368</div>
-                    <div class="promotion-description mt-1">Giảm giá 20%, tối đa 30.000 VNĐ</div>
-                </td>
-                <td class="py-4 px-4">
-                    <span class="px-4 py-1.5 rounded-full text-orange-500 border border-orange-500 text-sm inline-block">
-                        On Sales
-                    </span>
-                </td>
-                <td class="py-4 px-4">30/50</td>
-                <td class="py-4 px-4">26/02/24</td>
-                <td class="py-4 px-4">26/02/24</td>
-                <td class="py-4 px-4">
-                    <div class="flex items-center gap-3">
-                        <button class="text-orange-400 hover:text-orange-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                            </svg>
-                        </button>
-                        <button class="text-orange-400 hover:text-orange-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-
-            <!-- Row 2 -->
-            <tr class="bg-white">
-                <td class="py-4 px-4">2</td>
-                <td class="py-4 px-4">Ưu đãi phí vận chuyển</td>
-                <td class="py-4 px-4">
-                    <div class="promotion-code font-medium">PNTHFG152368</div>
-                    <div class="promotion-description mt-1">Giảm giá 20%, tối đa 30.000 VNĐ</div>
-                </td>
-                <td class="py-4 px-4">
-                    <span class="px-4 py-1.5 rounded-full text-red-500 border border-red-500 text-sm inline-block">
-                        Expired
-                    </span>
-                </td>
-                <td class="py-4 px-4">30/50</td>
-                <td class="py-4 px-4">26/02/24</td>
-                <td class="py-4 px-4">26/02/24</td>
-                <td class="py-4 px-4">
-                    <div class="flex items-center gap-3">
-                        <button class="text-orange-400 hover:text-orange-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                            </svg>
-                        </button>
-                        <button class="text-orange-400 hover:text-orange-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-
-            <!-- Row 3 -->
-            <tr class="bg-orange-50/50">
-                <td class="py-4 px-4">3</td>
-                <td class="py-4 px-4">Ưu đãi phí vận chuyển</td>
-                <td class="py-4 px-4">
-                    <div class="promotion-code font-medium">PNTHFG152368</div>
-                    <div class="promotion-description mt-1">Giảm giá 20%, tối đa 30.000 VNĐ</div>
-                </td>
-                <td class="py-4 px-4">
-                    <span class="px-4 py-1.5 rounded-full text-red-500 border border-red-500 text-sm inline-block">
-                        Expired
-                    </span>
-                </td>
-                <td class="py-4 px-4">30/50</td>
-                <td class="py-4 px-4">26/02/24</td>
-                <td class="py-4 px-4">26/02/24</td>
-                <td class="py-4 px-4">
-                    <div class="flex items-center gap-3">
-                        <button class="text-orange-400 hover:text-orange-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                            </svg>
-                        </button>
-                        <button class="text-orange-400 hover:text-orange-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
+            <tbody>
+                <tr *ngFor="let promo of getCurrentPageItems(); let i = index" [ngClass]="{'bg-orange-50/50': i % 2 === 0, 'bg-white': i % 2 !== 0}">
+                    <td class="py-4 px-4">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
+                    <td class="py-4 px-4">{{ promo.category }}</td>
+                    <td class="py-4 px-4">
+                        <div class="promotion-code font-medium">{{ promo.code }}</div>
+                        <div class="promotion-description mt-1">{{ promo.description }}</div>
+                    </td>
+                    <td class="py-4 px-4">
+                        <span [ngClass]="promo.status === 'On Sales' ? 'text-orange-500 border-orange-500' : 'text-red-500 border-red-500'" class="px-4 py-1.5 rounded-full border text-sm inline-block">
+                            {{ promo.status }}
+                        </span>
+                    </td>
+                    <td class="py-4 px-4">{{ promo.used }}/{{ promo.total }}</td>
+                    <td class="py-4 px-4">{{ promo.startDate }}</td>
+                    <td class="py-4 px-4">{{ promo.endDate }}</td>
+                    <td class="py-4 px-4">
+                        <div class="flex items-center gap-3">
+                            <button (click)="editPromotion(promo)" class="text-orange-400 hover:text-orange-500">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                </svg>
+                            </button>
+                            <button (click)="deletePromotion(promo.id)" class="text-orange-400 hover:text-orange-500">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="filteredPromotions.length === 0">
+                    <td colspan="8" class="py-8 text-center text-gray-500">Không tìm thấy khuyến mãi nào</td>
+                </tr>
+            </tbody>
         </table>
 
         <div class="flex justify-center mt-6 gap-2">
-            <button class="w-8 h-8 flex items-center justify-center rounded bg-orange-400 text-white">1</button>
-            <button class="w-8 h-8 flex items-center justify-center rounded hover:bg-orange-400 hover:text-white">2</button>
-            <button class="w-8 h-8 flex items-center justify-center rounded hover:bg-orange-400 hover:text-white">3</button>
+            <button (click)="goToPage(currentPage - 1)" *ngIf="currentPage > 1" class="w-8 h-8 flex items-center justify-center rounded hover:bg-orange-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <button *ngFor="let page of getPageNumbers()" 
+                    [ngClass]="page === currentPage ? 'bg-orange-400 text-white' : ''" 
+                    (click)="goToPage(page)" 
+                    class="w-8 h-8 flex items-center justify-center rounded hover:bg-orange-400 hover:text-white transition">
+                {{ page }}
+            </button>
+            <button (click)="goToPage(currentPage + 1)" *ngIf="currentPage < totalPages" class="w-8 h-8 flex items-center justify-center rounded hover:bg-orange-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
         </div>
     </div>
-</body>
-</html>
+
+    <!-- Modal thêm/chỉnh sửa khuyến mãi -->
+    <div *ngIf="showAddEditForm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-6 w-full max-w-lg">
+            <h2 class="text-xl font-bold mb-4">{{ isEditing ? 'Chỉnh sửa khuyến mãi' : 'Thêm khuyến mãi mới' }}</h2>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Danh mục</label>
+                <select [(ngModel)]="currentPromotion.category" class="w-full p-2 border rounded">
+                    <option value="Mã giảm giá">Mã giảm giá</option>
+                    <option value="Ưu đãi phí vận chuyển">Ưu đãi phí vận chuyển</option>
+                </select>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Mã khuyến mãi</label>
+                <input [(ngModel)]="currentPromotion.code" type="text" class="w-full p-2 border rounded">
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Mô tả</label>
+                <input [(ngModel)]="currentPromotion.description" type="text" class="w-full p-2 border rounded">
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Tình trạng</label>
+                <select [(ngModel)]="currentPromotion.status" class="w-full p-2 border rounded">
+                    <option value="On Sales">On Sales</option>
+                    <option value="Expired">Expired</option>
+                </select>
+            </div>
+            
+            <div class="flex gap-4 mb-4">
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Số lượng đã dùng</label>
+                    <input [(ngModel)]="currentPromotion.used" type="number" min="0" class="w-full p-2 border rounded">
+                </div>
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tổng số lượng</label>
+                    <input [(ngModel)]="currentPromotion.total" type="number" min="1" class="w-full p-2 border rounded">
+                </div>
+            </div>
+            
+            <div class="flex gap-4 mb-6">
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ngày bắt đầu</label>
+                    <input [(ngModel)]="currentPromotion.startDate" type="text" placeholder="DD/MM/YY" class="w-full p-2 border rounded">
+                </div>
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ngày kết thúc</label>
+                    <input [(ngModel)]="currentPromotion.endDate" type="text" placeholder="DD/MM/YY" class="w-full p-2 border rounded">
+                </div>
+            </div>
+            
+            <div class="flex justify-end gap-2">
+                <button (click)="cancelForm()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition">Hủy</button>
+                <button (click)="savePromotion()" class="px-4 py-2 bg-orange-500 text-white rounded hover:bg-white hover:text-orange-500 hover:border-orange-500 hover:border transition">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
