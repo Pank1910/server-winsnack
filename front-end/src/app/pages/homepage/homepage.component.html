@@ -1,57 +1,160 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Win Snack - Thưởng thức những món snack ngon nhất với hương vị hấp dẫn">
+    <meta name="keywords" content="snack, bánh tráng, đồ ăn vặt, Win Snack">
+    <meta name="author" content="Win Snack">
+    <title>Win Snack</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="./homepage.component.css" />
+
+</head>
+
+<body>
+    <!-- Main Container -->
 <div class="flex flex-col bg-[#FFF8EC]">
     <!-- Banner -->
-    <section class="w-full overflow-hidden">
-        <img src="assets/images/homepage/featured-banner.png" class="w-full h-full object-cover" alt="Featured banner" loading="lazy" />
+    <section class="w-full h-[500px] relative overflow-hidden group">
+        <!-- Ảnh nền (sáng lúc đầu, hover vào mới tối đi) -->
+        <img src="assets/images/homepage/featured-banner.png" 
+        class="absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-in-out brightness-100 group-hover:brightness-50 group-hover:scale-105" 
+        alt="Featured banner" loading="lazy" />
+
+        <!-- Overlay (ẩn mặc định, hover vào mới xuất hiện) -->
+        <div class="absolute inset-0 bg-black/0 transition-all duration-700 ease-in-out group-hover:bg-black/40"></div>
+    
+        <!-- Nội dung (ẩn mặc định, chỉ hiện khi hover) -->
+        <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white opacity-0 translate-y-6 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:translate-y-0">
+            <h1 class="text-4xl font-bold opacity-0 translate-y-4 transition-all duration-700 ease-out delay-200 group-hover:opacity-100 group-hover:translate-y-0">
+                Chào mừng bạn đến với thế giới nhiệm màu Win Snack! 🚀
+            </h1>
+            <p class="mt-2 text-lg opacity-0 translate-y-4 transition-all duration-700 ease-out delay-300 group-hover:opacity-100 group-hover:translate-y-0">
+                🌟 Vô vàn những ưu đãi đặc biệt đang chờ bạn khám phá! 🔥
+            </p>
+    
+            <!-- Button kéo xuống -->
+            <button routerLink="/product-category" 
+                    class="mt-4 px-6 py-3 bg-[#FF5B00] text-white font-bold rounded-full hover:bg-orange-700 transition-all">
+                    🕵️‍♂️ Khám phá ngay 🔎
+            </button>
+    
+            <!-- Icon mũi tên scroll xuống -->
+            <div class="mt-6 animate-bounce">
+                ⬇️ **Kéo xuống để thấy điều kỳ diệu** ⬇️
+            </div>
+        </div>
     </section>
 
     <!-- Danh mục nổi bật -->
-    <section class="mt-12 px-[30px] w-full">
-        <div class="flex flex-wrap justify-between items-center mb-5">
-            <h2 class="text-4xl font-montserrat font-semibold text-[#000000]">Danh mục nổi bật</h2>
-
-            <!-- Nút xem thêm -->
-            <a routerLink="/product-category" 
-               class="flex items-center gap-2 px-4 py-2 border-2 border-[#F7941D] rounded-lg text-[#F7941D] font-bold hover:bg-[#FFF8EC] transition">
-                XEM THÊM
-                <img src="assets/images/homepage/arrow-right.svg" class="w-5 h-5" />
-            </a>
+    <section class="mt-12 px-[30px] w-full max-md:mt-10">
+        <div class="flex flex-wrap justify-between items-center mb-16 max-w-[806px] ml-auto">
+            <h2 class="text-4xl  font-semibold text-[#000000]">Danh mục nổi bật</h2>
         </div>
-
-        <div class="grid grid-cols-4 gap-8 mt-5">
-            <div *ngFor="let product of featuredProducts"
-                 class="cursor-pointer bg-white rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition-transform"
-                 (click)="goToProductDetail(product._id)">
-                <img [src]="product.image_1" [alt]="product.product_name" class="w-full h-60 object-cover" />
-                <div class="p-4">
-                    <h3 class="text-xl font-bold">{{ product.product_name }}</h3>
-                    <p class="text-sm text-[#8C8C8C] mt-2">{{ product.product_detail }}</p>
-                    <div class="flex justify-between items-center mt-4">
-                        <span class="line-through">{{ product.unit_price | number }}Đ</span>
-                        <span class="font-bold text-red-600">{{ getDiscountedPrice(product) | number }}Đ</span>
+        
+        <!-- Category Grid -->
+        <section class="overflow-hidden whitespace-nowrap relative w-full">
+            <swiper-container 
+                init="false"
+                class="!overflow-visible"
+                navigation="true" 
+            >
+                <swiper-slide *ngFor="let product of featuredProducts" class="!h-[290px] !w-[320px]">
+                    <div 
+                        class="relative rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.1)] h-full overflow-hidden group cursor-pointer bg-white hover:scale-105 transition-transform"
+                        (click)="goToProductDetail(product._id)">
+                        
+                        <img [src]="product.image_1" [alt]="product.product_name"
+                            class="absolute inset-0 w-full h-full object-cover rounded-xl transition-transform duration-500 ease-in-out group-hover:scale-110" 
+                            loading="lazy" />
+                        
+                        <div class="relative h-full flex flex-col justify-end p-5 bg-gradient-to-t from-[rgba(0,0,0,0.6)] to-transparent rounded-xl transition-opacity duration-300 ease-in-out group-hover:opacity-90">
+                            <h3 class="text-xl font-bold text-white group-hover:text-[#FF5B00] transition-colors duration-300">
+                                {{ product.product_name }}
+                            </h3>
+                            <p class="text-sm text-[#E0E0E0] mt-2">{{ product.product_detail }}</p>
+                            <div class="flex justify-between items-center mt-4">
+                                <span class="line-through text-white">{{ product.unit_price | number }}Đ</span>
+                                <span class="font-bold text-[#FF5B00] text-4xl">{{ getDiscountedPrice(product) | number }}Đ</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </swiper-slide>
+                <!-- Mũi tên điều hướng -->
+                <div class="swiper-button-prev custom-prev"></div>
+                <div class="swiper-button-next custom-next"></div>
+            </swiper-container>
+        </section>
+
+        <!-- Load More Button -->
+        <button routerLink="/product-category"
+        class="flex items-center gap-2 mx-auto px-4 py-2 mt-10 bg-white border-2 border-[#F7941D] rounded-lg font-montserrat font-bold text-[#F7941D] hover:bg-[#FFF8EC] transition-colors duration-300">
+        XEM THÊM
+        <img src="assets/images/homepage/arrow-right.svg" class="w-6 h-6" alt="Next icon" />
+        </button>        
+    </section>
+
+    <!-- New Product Section -->
+    <section class="mt-12 w-full text-center relative h-[431px]">
+        <img src="assets/images/homepage/new-product-bg.png" class="absolute inset-0 w-full h-full object-cover"
+            alt="New product background" loading="lazy" />
+
+        <div class="relative pt-12 px-[30px] flex flex-col items-center">
+            <h1 class="text-5xl text-white mb-4">
+                mới <span class="text-7xl font-bold text-[#FFCF23]">Xuất hiện</span> hôm nay !!!
+                <br />
+                <h3 class="pt-4 text-7xl font-bold"> Bánh tráng vị xoài chín sấy khô </h3>
+            </h1>
+
+            <a routerLink="/product-detail/5">
+                <button
+                    class="text-3xl mt-4 px-12 py-4 bg-[#FFFFFF] text-[#FF5B00] rounded-full font-bold hover:bg-[#E95924] hover:text-white transition-colors">
+                    Mua liền
+                </button>
+            </a>
         </div>
     </section>
 
     <!-- Sản phẩm bán chạy -->
     <section class="py-12 px-[30px]">
-        <h1 class="text-4xl font-montserrat font-semibold text-[#000000] text-center">Sản phẩm bán chạy</h1>
+        <div class="text-center mb-14">
+            <h1 class="text-4xl font-montserrat font-semibold text-[#000000]">
+                Sản phẩm bán chạy
+            </h1>
+            <p class="mt-8 text-xl text-[#8C8C8C]">
+                Top sản phẩm có doanh số cao nhất trong tuần
+            </p>
+        </div>        
+        <!-- Products Grid -->
         <div class="grid grid-cols-4 gap-8 mt-5">
             <div *ngFor="let product of bestSellerProducts"
                  class="cursor-pointer bg-white rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition-transform"
                  (click)="goToProductDetail(product._id)">
-                <img [src]="product.image_1" [alt]="product.product_name" class="w-full h-60 object-cover" />
+                <img [src]="product.image_1" [alt]="product.product_name" class="w-full h-72 object-cover" />
                 <div class="p-4">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-yellow-400 text-[40px]">★</span>
+                        <span class="text-black text-3xl">4.8</span>
+                        <span class="text-[#8C8C8C] text-xl">| + 1111 review</span>
+                    </div>
                     <h3 class="text-xl font-bold">{{ product.product_name }}</h3>
                     <p class="text-sm text-[#8C8C8C] mt-2">{{ product.product_detail }}</p>
                     <div class="flex justify-between items-center mt-4">
                         <span class="line-through">{{ product.unit_price | number }}Đ</span>
-                        <span class="font-bold text-red-600">{{ getDiscountedPrice(product) | number }}Đ</span>
+                        <span class="font-bold text-red-600 text-3xl">{{ getDiscountedPrice(product) | number }}Đ</span>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Load More Button -->
+        <button routerLink="/product-category"
+        class="flex items-center gap-2 mx-auto px-4 py-2 mt-10 bg-white border-2 border-[#F7941D] rounded-lg font-montserrat font-bold text-[#F7941D] hover:bg-[#FFF8EC] transition-colors duration-300">
+        XEM THÊM
+        <img src="assets/images/homepage/arrow-right.svg" class="w-6 h-6" alt="Next icon" />
+        </button>
     </section>
 
     <!-- Blog Section -->
@@ -59,25 +162,27 @@
         <div class="bg-[#FF9413] py-6 text-center text-white text-4xl font-bold">
             Ghé xem Blog hôm nay!
         </div>
-
+        <!-- Linh vật mascot -->
+        <div id="mascot"></div>
+        <!-- Blog Posts Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 px-[30px]">
             <div *ngFor="let post of blogPosts"
                  class="cursor-pointer flex flex-col items-start bg-white rounded-xl overflow-hidden shadow-lg hover:scale-105 transition"
                  (click)="goToBlog(post.id)">
-                <img [src]="post.image" class="w-full object-cover h-52" />
+                <img [src]="post.image" class="object-cover w-full rounded-lg aspect-[0.79] transition-transform duration-300 hover:scale-105"/>
                 <div class="p-4">
-                    <div class="flex gap-3 text-sm text-amber-500">
-                        <div class="flex items-center gap-1">
+                    <div class="flex gap-3 items-center mt-3 text-sm text-amber-500">
+                        <div class="flex gap-2 items-center px-3 py-1 rounded border border-amber-500">
                             <img src="assets/images/homepage/comment-icon.png" class="w-4 h-4" />
                             <span>{{ post.comments }} Bình luận</span>
                         </div>
-                        <div class="flex items-center gap-1">
+                        <div class="flex gap-2 items-center px-3 py-1 rounded border border-amber-500">
                             <img src="assets/images/homepage/time-icon.png" class="w-4 h-4" />
                             <span>{{ post.time }}</span>
                         </div>
                     </div>
                     <h3 class="mt-2 text-xl font-semibold hover:text-orange-600 transition">
-                        {{ post.title }}
+                        <a routerLink="/read-blog"> {{ post.title }}</a>
                     </h3>
                 </div>
             </div>
@@ -92,4 +197,9 @@
     </section>
 
     <app-subscription></app-subscription>
+    
+    <!-- Container chứa hiệu ứng bánh tráng rơi -->
+    <div id="banhTrangContainer"></div>
 </div>
+</body>
+</html>

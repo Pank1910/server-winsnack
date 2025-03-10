@@ -7,82 +7,55 @@
     <meta name="description" content="Win Snack - Thưởng thức những món snack ngon nhất với hương vị hấp dẫn" />
     <meta name="keywords" content="snack, bánh tráng, đồ ăn vặt, Win Snack" />
     <meta name="author" content="Win Snack" />
-    <title>Trang chủ Win Snack</title>
+    <title>Trang chủ Win Snack - Admin</title>
 
     <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Thêm Animate.css cho hiệu ứng -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
     <style>
-        /* Tùy chỉnh font */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
         body {
             font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff8e5 0%, #ffe6cc 100%);
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 
-<body class="bg-[#fff8e5] text-[#333]">
-
-    <header class="bg-orange-500 text-white p-4 flex justify-between items-center">
-        <!-- Logo / Tên Trang -->
-        <div class="text-xl font-bold">Win Snack</div>
-    
-        <!-- Notification & User Info -->
-        <div class="flex items-center space-x-6">
-            <!-- Notification Icon -->
-            <div class="relative">
-                <button>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405a7.974 7.974 0 001.105-4.595C19.8 7.503 16.367 4 12 4S4.2 7.503 4.3 11.995a7.974 7.974 0 001.105 4.595L5 17h5m5 0V9m-2 0V9m2 0H7" />
-                    </svg>
-                </button>
-                <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full"></span> <!-- Notification Badge -->
-            </div>
-    
-            <!-- User Profile Dropdown -->
-            <div class="relative">
-                <button onclick="toggleDropdown()" class="flex items-center space-x-2">
-                    <img src="https://via.placeholder.com/30" alt="Admin" class="w-8 h-8 rounded-full">
-                    <span>Admin101</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-                <!-- Dropdown menu (initially hidden) -->
-                <div id="dropdownMenu" class="absolute right-0 mt-2 bg-white text-black rounded-lg shadow-md w-48 hidden">
-                    <a href="#" class="block px-4 py-2">Profile</a>
-                    <a href="#" class="block px-4 py-2">Settings</a>
-                    <a href="#" class="block px-4 py-2">Logout</a>
-                </div>
-                <script>
-                    function toggleDropdown() {
-                      const dropdownMenu = document.getElementById('dropdownMenu');
-                      dropdownMenu.classList.toggle('hidden');  // Chuyển đổi trạng thái hiển thị của dropdown
-                    }
-                  </script>                  
-            </div>
-        </div>
-    </header>
-    
-    
-    <!-- JavaScript for dropdown toggle -->
-    <script>
-        const dropdownButton = document.querySelector('header .relative button');
-        const dropdownMenu = document.querySelector('header .relative div');
-        
-        dropdownButton.addEventListener('click', () => {
-            dropdownMenu.classList.toggle('hidden');
-        });
-    </script>
-    
-
-    <!-- Thống kê Section -->
-    <div class="p-6 bg-white rounded-lg shadow-lg mt-6">
-        <div class="flex justify-between items-center mb-6">
-            <div class="text-xl font-bold">Xin chào, Admin101</div>
+<body class="text-gray-800">
+    <!-- Dashboard Header -->
+    <header class="bg-gradient-to-r from-orange-500 to-yellow-500 text-white p-6 shadow-lg animate__animated animate__fadeIn">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold gradient-text">Xin chào, Admin101</h1>
             <div class="text-sm">
-                <label for="month" class="mr-2">Xem báo cáo tổng kết:</label>
-                <select id="month" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500" onchange="updateStats()">
+                <label for="month" class="mr-2 font-medium">Xem báo cáo tổng kết:</label>
+                <select id="month" (change)="onMonthChange($event)" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent bg-white text-gray-700 transition duration-200 hover:bg-gray-100">
                     <option value="thang-nay">Tháng này</option>
                     <option value="thang-truoc">Tháng trước</option>
                     <option value="quy-1">Quý 1</option>
@@ -90,234 +63,152 @@
                 </select>
             </div>
         </div>
+    </header>
 
-        <!-- Thống kê các chỉ số -->
-        <div class="grid grid-cols-4 gap-4">
-            <div class="bg-purple-600 text-white p-6 rounded-lg shadow-md flex flex-col items-center" id="order-stat">
-                <div class="mb-4">
-                    <img src="https://img.icons8.com/ios-filled/50/ffffff/shopping-cart.png" alt="Đơn hàng" class="w-8 h-8">
+    <!-- Stats Section -->
+    <div class="container mx-auto p-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="bg-purple-600 text-white p-6 rounded-xl shadow-md flex flex-col items-center card-hover animate__animated animate__fadeInUp">
+                <div class="mb-4 bg-purple-700 rounded-full p-3 animate-pulse">
+                    <img src="assets/images/home/icon-1.png" alt="Đơn hàng" class="w-8 h-8">
                 </div>
-                <p class="text-3xl font-bold">576</p>
-                <p class="text-sm">Đơn hàng</p>
+                <p class="text-3xl font-bold">{{ orderCount }}</p>
+                <p class="text-sm uppercase tracking-wider">Đơn hàng</p>
             </div>
-            <div class="bg-orange-500 text-white p-6 rounded-lg shadow-md flex flex-col items-center" id="customer-stat">
-                <div class="mb-4">
-                    <img src="assets/images/home/customer-icon.jpg" alt="Khách hàng" class="w-8 h-8">
+            <div class="bg-orange-500 text-white p-6 rounded-xl shadow-md flex flex-col items-center card-hover animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                <div class="mb-4 bg-orange-600 rounded-full p-3 animate-pulse">
+                    <img src="assets/images/home/icon-2.png" alt="Khách hàng" class="w-8 h-8">
                 </div>
-                <p class="text-3xl font-bold">1,294</p>
-                <p class="text-sm">Khách hàng</p>
+                <p class="text-3xl font-bold">{{ customerCount }}</p>
+                <p class="text-sm uppercase tracking-wider">Khách hàng</p>
             </div>
-            <div class="bg-teal-400 text-white p-6 rounded-lg shadow-md flex flex-col items-center" id="product-stat">
-                <div class="mb-4">
-                    <img src="https://img.icons8.com/ios-filled/50/ffffff/product.png" alt="Sản phẩm bán chạy" class="w-8 h-8">
+            <div class="bg-teal-400 text-white p-6 rounded-xl shadow-md flex flex-col items-center card-hover animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
+                <div class="mb-4 bg-teal-500 rounded-full p-3 animate-pulse">
+                    <img src="assets/images/home/icon-3.png" alt="Sản phẩm bán chạy" class="w-8 h-8">
                 </div>
-                <p class="text-3xl font-bold">1,303</p>
-                <p class="text-sm">Sản phẩm bán chạy</p>
+                <p class="text-3xl font-bold">{{ productCount }}</p>
+                <p class="text-sm uppercase tracking-wider">Sản phẩm bán chạy</p>
             </div>
-            <div class="bg-indigo-800 text-white p-6 rounded-lg shadow-md flex flex-col items-center" id="revenue-stat">
-                <div class="mb-4">
-                    <img src="https://img.icons8.com/ios-filled/50/ffffff/income.png" alt="Doanh thu" class="w-8 h-8">
+            <div class="bg-indigo-800 text-white p-6 rounded-xl shadow-md flex flex-col items-center card-hover animate__animated animate__fadeInUp" style="animation-delay: 0.6s">
+                <div class="mb-4 bg-indigo-900 rounded-full p-3 animate-pulse">
+                    <img src="assets/images/home/icon-4.png" alt="Doanh thu" class="w-8 h-8">
                 </div>
-                <p class="text-3xl font-bold">10,004,755</p>
-                <p class="text-sm">Doanh thu (VND)</p>
+                <p class="text-3xl font-bold">{{ revenue | number: '1.0-0' }}</p>
+                <p class="text-sm uppercase tracking-wider">Doanh thu (VND)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="container mx-auto p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Doanh thu Section -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover animate__animated animate__fadeInLeft">
+                <h2 class="font-bold text-lg mb-2 text-gray-800">Doanh thu</h2>
+                <div class="chart-container">
+                    <canvas #revenueChart class="w-full" style="height: 400px;"></canvas>
+                </div>
+                <p class="text-center text-xl mt-4 text-gray-600">Doanh thu theo tháng</p>
+            </div>
+
+            <!-- Hoạt động người dùng Section -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover animate__animated animate__fadeInRight">
+                <h2 class="font-bold text-lg mb-2 text-gray-800">Hoạt động người dùng</h2>
+                <div class="chart-container">
+                    <canvas #userActivityChart class="w-full" style="height: 400px;"></canvas>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Cập nhật thống kê theo tháng
-        function updateStats() {
-            const month = document.getElementById('month').value;
-            
-            let orderCount, customerCount, productCount, revenue;
-
-            switch (month) {
-                case 'thang-nay':
-                    orderCount = 576;
-                    customerCount = 1294;
-                    productCount = 1303;
-                    revenue = 10004755;
-                    break;
-                case 'thang-truoc':
-                    orderCount = 500;
-                    customerCount = 1100;
-                    productCount = 1200;
-                    revenue = 9000000;
-                    break;
-                case 'quy-1':
-                    orderCount = 1500;
-                    customerCount = 3500;
-                    productCount = 5000;
-                    revenue = 30000000;
-                    break;
-                case 'quy-2':
-                    orderCount = 1200;
-                    customerCount = 3000;
-                    productCount = 4500;
-                    revenue = 25000000;
-                    break;
-                default:
-                    orderCount = 576;
-                    customerCount = 1294;
-                    productCount = 1303;
-                    revenue = 10004755;
-            }
-
-            // Cập nhật nội dung thống kê
-            document.getElementById('order-stat').querySelector('p.text-3xl').textContent = orderCount;
-            document.getElementById('customer-stat').querySelector('p.text-3xl').textContent = customerCount;
-            document.getElementById('product-stat').querySelector('p.text-3xl').textContent = productCount;
-            document.getElementById('revenue-stat').querySelector('p.text-3xl').textContent = revenue.toLocaleString();
-        }
-        
-        // Cập nhật thống kê khi tải trang
-        window.onload = updateStats;
-    </script>
-
-    <!-- Doanh thu and User Activity Section -->
-    <div class="p-6 max-w-full mx-auto grid grid-cols-2 gap-4">
-        <!-- Doanh thu Section -->
-        <div class="bg-white rounded-lg shadow-lg p-6 w-full">
-            <h2 class="font-bold text-lg mb-2">Doanh thu</h2>
-            <canvas id="revenue-chart" class="w-full h-96"></canvas> <!-- Biểu đồ Doanh thu -->
-            <p class="text-center text-xl mt-4">Doanh thu theo tháng</p>
-        </div>
-
-        <!-- Hoạt động người dùng Section -->
-        <div class="bg-white rounded-lg shadow-lg p-6 w-full">
-            <h2 class="font-bold text-lg mb-2">Hoạt động người dùng</h2>
-            <canvas id="user-activity-chart" class="w-full h-96"></canvas> <!-- Biểu đồ Hoạt động người dùng -->
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Biểu đồ Doanh thu
-        const revenueChart = new Chart(document.getElementById('revenue-chart'), {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [{
-                    label: 'Doanh thu',
-                    data: [50, 60, 70, 60, 80, 90, 85, 75, 90, 95, 100, 85],
-                    borderColor: 'rgba(138, 63, 255, 1)',
-                    backgroundColor: 'rgba(138, 63, 255, 0.2)',
-                    fill: true
-                }]
-            }
-        });
-
-        // Biểu đồ Hoạt động người dùng
-        const userActivityChart = new Chart(document.getElementById('user-activity-chart'), {
-            type: 'bar',
-            data: {
-                labels: ['Aug', 'Jul'],
-                datasets: [{
-                    label: 'Người dùng tự do',
-                    data: [80, 50],
-                    backgroundColor: 'rgba(255, 97, 74, 1)',
-                    borderColor: 'rgba(255, 97, 74, 1)',
-                    borderWidth: 1
-                }, {
-                    label: 'Hội viên',
-                    data: [30, 10],
-                    backgroundColor: 'rgba(240, 179, 112, 1)',
-                    borderColor: 'rgba(240, 179, 112, 1)',
-                    borderWidth: 1
-                }]
-            }
-        });
-    </script>
-
-
-<!-- Sản phẩm bán chạy Section -->
-<div class="p-6 max-w-full mx-auto grid grid-cols-2 gap-6">
-    <!-- Bảng Sản phẩm bán chạy -->
-    <div class="bg-white rounded-lg shadow-lg p-6 w-full">
-        <h2 class="font-bold text-lg mb-4">Sản phẩm bán chạy</h2>
-        <table class="w-full table-auto">
-            <thead>
-                <tr class="bg-orange-500 text-white">
-                    <th class="px-4 py-2 text-left">Hình ảnh</th>
-                    <th class="px-4 py-2 text-left">Sản phẩm</th>
-                    <th class="px-4 py-2 text-left">Đơn giá</th>
-                    <th class="px-4 py-2 text-left">Số lượng</th>
-                    <th class="px-4 py-2 text-left">Tổng tiền</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="border-b">
-                    <td class="px-4 py-2"><img src="assets/images/home/tra-xanh-chanh-day.png" alt="Bánh tráng" class="w-12 h-12 object-cover"></td>
-                    <td class="px-4 py-2">Bánh tráng vị trà xanh chanh dây</td>
-                    <td class="px-4 py-2">40.000</td>
-                    <td class="px-4 py-2">2</td>
-                    <td class="px-4 py-2">80.000</td>
-                </tr>
-                <tr class="border-b">
-                    <td class="px-4 py-2"><img src="assets/images/home/tra-xanh-chanh-day.png" alt="Bánh tráng" class="w-12 h-12 object-cover"></td>
-                    <td class="px-4 py-2">Bánh tráng vị trà xanh chanh dây</td>
-                    <td class="px-4 py-2">40.000</td>
-                    <td class="px-4 py-2">2</td>
-                    <td class="px-4 py-2">80.000</td>
-                </tr>
-                <tr class="border-b">
-                    <td class="px-4 py-2"><img src="assets/images/home/tra-xanh-chanh-day.png" alt="Bánh tráng" class="w-12 h-12 object-cover"></td>
-                    <td class="px-4 py-2">Bánh tráng vị trà xanh chanh dây</td>
-                    <td class="px-4 py-2">40.000</td>
-                    <td class="px-4 py-2">2</td>
-                    <td class="px-4 py-2">80.000</td>
-                </tr>
-                <tr class="border-b">
-                    <td class="px-4 py-2"><img src="assets/images/home/tra-xanh-chanh-day.png" alt="Bánh tráng" class="w-12 h-12 object-cover"></td>
-                    <td class="px-4 py-2">Bánh tráng vị trà xanh chanh dây</td>
-                    <td class="px-4 py-2">40.000</td>
-                    <td class="px-4 py-2">2</td>
-                    <td class="px-4 py-2">80.000</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Sản phẩm bán chạy (cards) -->
-    <div class="bg-white rounded-lg shadow-lg p-6 w-full">
-        <h2 class="font-bold text-lg mb-4">Sản phẩm bán chạy</h2>
-        <div class="grid grid-cols-3 gap-4">
-            <div class="bg-white shadow-lg p-4 rounded-lg">
-                <img src="assets/images/home/tra-xanh-chanh-day.png" alt="Bánh tráng" class="w-full h-32 object-cover mb-4">
-                <p class="font-semibold">Bánh tráng trộn pho mai bò</p>
-                <p class="text-orange-500">25.000 VND</p>
-                <div class="flex justify-between items-center">
-                    <span>⭐⭐⭐⭐⭐</span>
+    <!-- Top Products Section -->
+    <div class="container mx-auto p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Bảng Sản phẩm bán chạy -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover animate__animated animate__fadeInLeft">
+                <h2 class="font-bold text-lg mb-4 text-gray-800">Sản phẩm bán chạy</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full table-auto">
+                        <thead>
+                            <tr class="bg-gradient-to-r from-orange-500 to-yellow-500 text-white">
+                                <th class="px-4 py-2 text-left">Hình ảnh</th>
+                                <th class="px-4 py-2 text-left">Sản phẩm</th>
+                                <th class="px-4 py-2 text-left">Đơn giá</th>
+                                <th class="px-4 py-2 text-left">Số lượng</th>
+                                <th class="px-4 py-2 text-left">Tổng tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b hover:bg-gray-100 transition duration-200">
+                                <td class="px-4 py-2"><img src="assets/images/home/tra-xanh-chanh-day.png" alt="Bánh tráng" class="w-12 h-12 object-cover rounded"></td>
+                                <td class="px-4 py-2">Bánh tráng vị trà xanh chanh dây</td>
+                                <td class="px-4 py-2">40.000</td>
+                                <td class="px-4 py-2">2</td>
+                                <td class="px-4 py-2">80.000</td>
+                            </tr>
+                            <tr class="border-b hover:bg-gray-100 transition duration-200">
+                                <td class="px-4 py-2"><img src="assets/images/home/tra-xanh-chanh-day.png" alt="Bánh tráng" class="w-12 h-12 object-cover rounded"></td>
+                                <td class="px-4 py-2">Bánh tráng vị trà xanh chanh dây</td>
+                                <td class="px-4 py-2">40.000</td>
+                                <td class="px-4 py-2">2</td>
+                                <td class="px-4 py-2">80.000</td>
+                            </tr>
+                            <tr class="border-b hover:bg-gray-100 transition duration-200">
+                                <td class="px-4 py-2"><img src="assets/images/home/tra-xanh-chanh-day.png" alt="Bánh tráng" class="w-12 h-12 object-cover rounded"></td>
+                                <td class="px-4 py-2">Bánh tráng vị trà xanh chanh dây</td>
+                                <td class="px-4 py-2">40.000</td>
+                                <td class="px-4 py-2">2</td>
+                                <td class="px-4 py-2">80.000</td>
+                            </tr>
+                            <tr class="border-b hover:bg-gray-100 transition duration-200">
+                                <td class="px-4 py-2"><img src="assets/images/home/tra-xanh-chanh-day.png" alt="Bánh tráng" class="w-12 h-12 object-cover rounded"></td>
+                                <td class="px-4 py-2">Bánh tráng vị trà xanh chanh dây</td>
+                                <td class="px-4 py-2">40.000</td>
+                                <td class="px-4 py-2">2</td>
+                                <td class="px-4 py-2">80.000</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="bg-white shadow-lg p-4 rounded-lg">
-                <img src="assets/images/home/tra-xanh-chanh-day.png" alt="Bánh tráng" class="w-full h-32 object-cover mb-4">
-                <p class="font-semibold">Bánh tráng trộn pho mai bò</p>
-                <p class="text-orange-500">25.000 VND</p>
-                <div class="flex justify-between items-center">
-                    <span>⭐⭐⭐⭐⭐</span>
-                </div>
-            </div>
-            <div class="bg-white shadow-lg p-4 rounded-lg">
-                <img src="assets/images/home/tra-xanh-chanh-day.png" alt="Bánh tráng" class="w-full h-32 object-cover mb-4">
-                <p class="font-semibold">Bánh tráng trộn pho mai bò</p>
-                <p class="text-orange-500">25.000 VND</p>
-                <div class="flex justify-between items-center">
-                    <span>⭐⭐⭐⭐⭐</span>
+
+            <!-- Sản phẩm bán chạy (cards) -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover animate__animated animate__fadeInRight">
+                <h2 class="font-bold text-lg mb-4 text-gray-800">Sản phẩm bán chạy</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="bg-gradient-to-br from-orange-100 to-white p-4 rounded-xl shadow-md card-hover">
+                        <img src="assets/images/home/tra-xanh-chanh-day.png" alt="Bánh tráng" class="w-full h-32 object-cover rounded-lg mb-4 transition duration-300 hover:scale-105">
+                        <p class="font-semibold text-gray-800">Bánh tráng trộn pho mai bò</p>
+                        <p class="text-orange-600 font-medium mt-1">25.000 VND</p>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-yellow-500">⭐⭐⭐⭐⭐</span>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-br from-orange-100 to-white p-4 rounded-xl shadow-md card-hover">
+                        <img src="assets/images/home/tra-xanh-chanh-day.png" alt="Bánh tráng" class="w-full h-32 object-cover rounded-lg mb-4 transition duration-300 hover:scale-105">
+                        <p class="font-semibold text-gray-800">Bánh tráng trộn pho mai bò</p>
+                        <p class="text-orange-600 font-medium mt-1">25.000 VND</p>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-yellow-500">⭐⭐⭐⭐⭐</span>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-br from-orange-100 to-white p-4 rounded-xl shadow-md card-hover">
+                        <img src="assets/images/home/tra-xanh-chanh-day.png" alt="Bánh tráng" class="w-full h-32 object-cover rounded-lg mb-4 transition duration-300 hover:scale-105">
+                        <p class="font-semibold text-gray-800">Bánh tráng trộn pho mai bò</p>
+                        <p class="text-orange-600 font-medium mt-1">25.000 VND</p>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-yellow-500">⭐⭐⭐⭐⭐</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-
 
     <!-- Footer Section -->
-    <footer class="bg-orange-500 text-white text-center p-4 mt-6">
-        <p>&copy; 2025 Win Snack - Bản quyền thuộc về Group 2</p>
+    <footer class="bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-center p-4 mt-6 shadow-inner animate__animated animate__fadeIn">
+        <p class="text-sm">© 2025 Win Snack - Bản quyền thuộc về Group 2</p>
     </footer>
-
 </body>
 
 </html>
-
