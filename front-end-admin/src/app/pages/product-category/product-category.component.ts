@@ -3,14 +3,8 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
-interface Category {
-  id: string;
-  name: string;
-  imageUrl: string;
-  productCount: number;
-  isVisible: boolean;
-}
+import { ProductApiService } from '../../product-api.service';
+import { Product } from '../../../../../my-server-mongodb/interface/Product';
 
 @Component({
   selector: 'app-product-category',
@@ -19,114 +13,90 @@ interface Category {
   templateUrl: './product-category.component.html',
   styleUrls: ['./product-category.component.css']
 })
-
 export class ProductCategoryComponent implements OnInit {
-  
-  categories= [
-    {
-      id: "BTT",
-      name: "Bánh tráng trộn sẵn",
-      imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/abe7d59de9f49fe6bc26ce4fe8f9e966c7b81ca5f820e4a4744cdcbf8a76ddb4?placeholderIfAbsent=true&apiKey=083ffd2b40e84598849f8100adb3e8d1",
-      productCount: 9,
-      isVisible: true,
-    },
-    {
-      id: "BTN",
-      name: "Bánh tráng nướng",
-      imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/abe7d59de9f49fe6bc26ce4fe8f9e966c7b81ca5f820e4a4744cdcbf8a76ddb4?placeholderIfAbsent=true&apiKey=083ffd2b40e84598849f8100adb3e8d1",
-      productCount: 3,
-      isVisible: true,
-    },
-    {
-      id: "BTNG",
-      name: "Bánh tráng ngọt",
-      imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/abe7d59de9f49fe6bc26ce4fe8f9e966c7b81ca5f820e4a4744cdcbf8a76ddb4?placeholderIfAbsent=true&apiKey=083ffd2b40e84598849f8100adb3e8d1",
-      productCount: 5,
-      isVisible: true,
-    },
-    {
-      id: "CB",
-      name: "Combo bánh tráng mix gia vị",
-      imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/abe7d59de9f49fe6bc26ce4fe8f9e966c7b81ca5f820e4a4744cdcbf8a76ddb4?placeholderIfAbsent=true&apiKey=083ffd2b40e84598849f8100adb3e8d1",
-      productCount: 10,
-      isVisible: true,
-    },
-    {
-      id: "NL",
-      name: "Nguyên liệu lẻ",
-      imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/abe7d59de9f49fe6bc26ce4fe8f9e966c7b81ca5f820e4a4744cdcbf8a76ddb4?placeholderIfAbsent=true&apiKey=083ffd2b40e84598849f8100adb3e8d1",
-      productCount: 10,
-      isVisible: true,
-    },
-  ];
-  filteredCategories: Category[] = [];
+  products: Product[] = []; categories: Product[] = [];
+  filteredCategories: Product[] = [];
   searchText: string = '';
   selectedCategory: string = 'all-categories';
-  
-  constructor(private router: Router) {}
+
+  constructor(private router: Router, private productApiService: ProductApiService) {}
 
   ngOnInit() {
-    // Khởi tạo filteredCategories bằng categories
-    this.filteredCategories = [...this.categories];
+    this.fetchProducts();
   }
-  
-  toggleVisibility(categoryId: string) {
-    const category = this.categories.find(c => c.id === categoryId);
-    if (category) {
-      category.isVisible = !category.isVisible;
-      console.log(`Trạng thái hiển thị của ${category.name}:`, category.isVisible);
+
+  /** Lấy danh sách sản phẩm từ API */
+  fetchProducts() {
+    this.productApiService.getAllProducts().subscribe(
+      (response) => {
+        console.log('Dữ liệu API:', response); // ✅ Kiểm tra dữ liệu API
+        if (response.success) {
+          this.products = response.data;
+          this.filteredCategories = [...this.products];
+          console.log('Dữ liệu sau khi gán:', this.filteredCategories);
+        }
+      },
+      (error) => {
+        console.error('Lỗi khi tải danh sách sản phẩm:', error);
+      }
+    );
+  }
+
+  toggleVisibility(productId: string) {
+    const product = this.products.find(p => p._id === productId);
+    if (product) {
+      product.isNew = !product.isNew;
+      console.log(`Trạng thái sản phẩm mới của ${product.product_name}:`, product.isNew);
     }
   }
-  
-  addCategory() {
-    this.router.navigate(['/add-category']);
+
+  addProduct() {
+    this.router.navigate(['/add-product']);
   }
-  
-  editCategory(id: string) {
-    this.router.navigate(['/update-category', id]);
+
+  editProduct(id: string) {
+    this.router.navigate(['/update-product', id]);
   }
-  
+
   deleteCategory(id: string) {
     if (confirm('Bạn có chắc chắn muốn xóa danh mục này?')) {
-      this.categories = this.categories.filter(category => category.id !== id);
+      this.products = this.products.filter(product => product._id !== id);
       this.filterCategories();
       console.log(`Xóa danh mục: ${id}`);
     }
   }
-  
-  viewCategory(id: string) {
-    console.log(`Xem chi tiết danh mục: ${id}`);
+
+  viewProduct(id: string) {
+    console.log(`Xem chi tiết sản phẩm: ${id}`);
   }
-  
+
   onSearchChange(event: any) {
     this.searchText = event.target.value.toLowerCase();
     this.filterCategories();
   }
-  
+
   onCategoryChange(event: any) {
     this.selectedCategory = event.target.value;
     this.filterCategories();
   }
-  
+
   filterCategories() {
-    // Bắt đầu với toàn bộ danh mục
-    let tempCategories = [...this.categories];
-    
-    // Lọc theo danh mục đã chọn
+    let tempProducts = [...this.products];
+
     if (this.selectedCategory !== 'all-categories') {
-      tempCategories = tempCategories.filter(category => 
-        category.id === this.selectedCategory
+      tempProducts = tempProducts.filter(product => 
+        product.product_dept === this.selectedCategory
       );
     }
-    
-    // Lọc theo từ khóa tìm kiếm
+
     if (this.searchText && this.searchText.trim() !== '') {
-      tempCategories = tempCategories.filter(category =>
-        category.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
-        category.id.toLowerCase().includes(this.searchText.toLowerCase())
+      tempProducts = tempProducts.filter(product =>
+        product.product_name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        product._id.toLowerCase().includes(this.searchText.toLowerCase())
       );
     }
-    
-    this.filteredCategories = tempCategories;
+
+    this.filteredCategories = tempProducts;
+    console.log('Dữ liệu sau khi lọc:', this.filteredCategories);
   }
 }

@@ -7,12 +7,8 @@
     <meta name="keywords" content="snack, bánh tráng, quản lý danh mục, Win Snack">
     <meta name="author" content="Win Snack">
     <title>Quản lý Danh Mục - Win Snack</title>
-    <style>
-        
-    </style>
 </head>
 <body>
-
     <!-- Header -->
     <header class="bg-orange-light text-white p-4 flex justify-between items-center">
         <button routerLink="/new-category" 
@@ -21,26 +17,21 @@
         </button>
         
         <div class="flex items-center space-x-6">
-          <!-- // Thay đổi giá trị option trong HTML cho đúng -->
-          <select [(ngModel)]="selectedCategory" (change)="onCategoryChange($event)"
-                  class="p-2 rounded-md bg-orange-light text-black border border-gray-300 focus:ring focus:ring-orange-dark focus:ring-opacity-50">
-              <option value="all-categories">Tất cả danh mục</option>
-              <option value="BTT">Bánh tráng trộn sẵn</option>
-              <option value="BTNG">Bánh tráng ngọt</option>
-              <option value="BTN">Bánh tráng nướng</option>
-              <option value="CB">Combo mix vị</option>
-              <option value="NL">Nguyên liệu lẻ</option>
-          </select>
-          
-          <input type="text" [(ngModel)]="searchText" (input)="onSearchChange($event)"
-                 placeholder="Tìm kiếm danh mục..." 
-                 class="text-black p-2 rounded-md border border-gray-300 input-focus">
-          
-          <button (click)="filterCategories()"
-                  class="p-2 rounded-md bg-orange-dark text-white border border-gray-300 hover:bg-orange-500 transition duration-300 btn-hover">
-              <img src="assets/icons/search.png" class="w-5 h-5" alt="Tìm kiếm">
-          </button>
-      </div>
+            <select [(ngModel)]="selectedCategory" (change)="onCategoryChange($event)"
+                    class="p-2 rounded-md bg-orange-light text-black border border-gray-300 focus:ring focus:ring-orange-dark focus:ring-opacity-50">
+                <option value="all-categories">Tất cả danh mục</option>
+                <option *ngFor="let category of categories" [value]="category.product_dept">{{ category.product_dept }}</option>
+            </select>
+            
+            <input type="text" [(ngModel)]="searchText" (input)="onSearchChange($event)"
+                   placeholder="Tìm kiếm danh mục..." 
+                   class="text-black p-2 rounded-md border border-gray-300 input-focus">
+            
+            <button (click)="filterCategories()"
+                    class="p-2 rounded-md bg-orange-dark text-white border border-gray-300 hover:bg-orange-500 transition duration-300 btn-hover">
+                <img src="assets/icons/search.png" class="w-5 h-5" alt="Tìm kiếm">
+            </button>
+        </div>
     </header>
 
     <!-- Nội dung chính -->
@@ -60,22 +51,22 @@
                 <tr *ngFor="let category of filteredCategories; let i = index"
                     [ngClass]="{'bg-[#FFE0C3]': i % 2 === 0, 'bg-[#FFF8EC]': i % 2 !== 0}"
                     class="text-center border-b table-row-hover">
-                    <td class="px-4 py-6">{{ category.id }}</td>
-                    <td class="px-4 py-6">{{ category.name }}</td>
+                    <td class="px-4 py-6">{{ category._id }}</td>
+                    <td class="px-4 py-6">{{ category.product_dept }}</td>
                     <td class="px-4 py-6 flex justify-center">
-                        <img [src]="category.imageUrl" [alt]="category.name" class="w-[198px] h-[80px] object-cover rounded-md">
+                        <img [src]="category.image_1" [alt]="category.product_dept" class="w-[198px] h-[80px] object-cover rounded-md">
                     </td>
-                    <td class="px-4 py-6">{{ category.productCount }} sản phẩm</td>
+                    <td class="px-4 py-6">{{ category.stocked_quantity }} sản phẩm</td>
                     <td class="px-4 py-6">
-                        <input type="checkbox" [checked]="category.isVisible" (change)="toggleVisibility(category.id)"
+                        <input type="checkbox" [checked]="category.isNew" (change)="toggleVisibility(category._id)"
                                 class="focus:outline-none focus:ring-2 focus:ring-orange-dark">
                     </td>
                     <td class="px-4 py-6">
                         <div class="flex gap-4 justify-center">
-                            <a [routerLink]="['/update-category', category.id]" class="p-2 rounded-md hover:bg-orange-medium transition duration-300" aria-label="Edit category">
+                            <a [routerLink]="['/update-category', category._id]" class="p-2 rounded-md hover:bg-orange-medium transition duration-300" aria-label="Edit category">
                                 <img src="assets/icons/edit.png" alt="Sửa" class="w-7 h-7">
                             </a>
-                            <button (click)="deleteCategory(category.id)" class="p-2 rounded-md hover:bg-red-500 transition duration-300" aria-label="Delete category">
+                            <button (click)="deleteCategory(category._id)" class="p-2 rounded-md hover:bg-red-500 transition duration-300" aria-label="Delete category">
                                 <img src="assets/icons/delete.png" alt="Xóa" class="w-7 h-7">
                             </button>
                         </div>

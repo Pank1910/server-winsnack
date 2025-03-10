@@ -59,23 +59,13 @@
     <!-- Header -->
     <header class="bg-orange-light text-white p-4 flex justify-between items-center">
         <button routerLink="/add-product" 
-        class="px-6 py-2 bg-white text-orange-dark border-2 border-[#FF9413] rounded-md hover:bg-orange-dark hover:text-orange-200 transition duration-300">
-    <b>THÊM SẢN PHẨM</b>
-</button>
+                class="px-6 py-2 bg-white text-orange-dark border-2 border-[#FF9413] rounded-md hover:bg-orange-dark hover:text-orange-200 transition duration-300">
+            <b>THÊM SẢN PHẨM</b>
+        </button>
 
-        
         <div class="flex items-center space-x-6">
-            <select class="p-2 rounded-md bg-orange-light text-black border border-gray-300 focus:ring focus:ring-orange-dark focus:ring-opacity-50">
-                <option value="all-products">Tất cả sản phẩm</option>
-                <option value="category-1">Danh mục 1</option>
-                <option value="category-2">Danh mục 2</option>
-            </select>
-            
-            <input type="text" placeholder="Tìm kiếm sản phẩm..." class="p-2 rounded-md border border-gray-300 input-focus">
-            
-            <button class="p-2 rounded-md bg-orange-dark text-orange-dark border border-gray-300 hover:bg-orange-dark hover:text-white transition duration-300 btn-hover">
-                <img src="assets/images/product/Search.png" class="w-5 h-5" alt="Tìm kiếm">
-            </button>
+            <input type="text" placeholder="Tìm kiếm sản phẩm..." (input)="searchProduct($event)"
+                   class="p-2 rounded-md border border-gray-300 input-focus">
         </div>
     </header>
 
@@ -94,38 +84,34 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let product of filteredProducts; let i = index" [ngClass]="{'bg-[#FFE0C3]': i % 2 === 0, 'bg-[#FFF8EC]': i % 2 !== 0}" class="border-b table-row-hover">
-                    <td class="px-4 py-2">{{ product.id }}</td>
-                    <td class="px-4 py-2">{{ product.category }}</td>
-                    <td class="px-4 py-2"><img [src]="product.image" alt="Bánh tráng" class="w-15 h-15 object-cover"></td>
-                    <td class="px-4 py-2">{{ product.name }}</td>
-                    <td class="px-4 py-2">{{ product.price | currency:'VND' }}</td>
-                    <td class="px-4 py-2"><input type="checkbox" [checked]="product.visible" class="form-checkbox"></td>
+                <tr *ngFor="let product of filteredProducts; let i = index" 
+                    [ngClass]="{'bg-[#FFE0C3]': i % 2 === 0, 'bg-[#FFF8EC]': i % 2 !== 0}" 
+                    class="border-b table-row-hover">
+                    <td class="px-4 py-2">{{ product._id }}</td>
+                    <td class="px-4 py-2">{{ product.product_dept }}</td>
+                    <td class="px-4 py-2"><img [src]="product.image_1" alt="Hình ảnh sản phẩm" class="w-16 h-16 object-cover"></td>
+                    <td class="px-4 py-2">{{ product.product_name }}</td>
+                    <td class="px-4 py-2">{{ product.unit_price | number }}₫</td>
+                    <td class="px-4 py-2"><input type="checkbox" [checked]="product.isNew" class="form-checkbox"></td>
                     <td class="px-4 py-2 flex space-x-2">
                         <!-- Nút Sửa -->
-                        <button [routerLink]="['/update-product', product.id]"
+                        <button [routerLink]="['/update-product', product._id]"
                                 class="p-2 rounded-md hover:bg-orange-medium transition duration-300">
                             <img src="assets/icons/edit.png" alt="Sửa" class="w-7 h-7">
                         </button>
                         
                         <!-- Nút Xóa -->
-                        <button (click)="deleteProduct(product.id)" 
+                        <button (click)="deleteProduct(product._id)" 
                                 class="p-2 rounded-md hover:bg-red-500 transition duration-300">
                             <img src="assets/icons/delete.png" alt="Xoá" class="w-7 h-7">
                         </button>
                         
                         <!-- Nút Xem Chi Tiết -->
-                        <button [routerLink]="['/product-detail', product.id]" 
+                        <button [routerLink]="['/product-detail', product._id]" 
                                 class="p-2 rounded-md hover:bg-orange-light transition duration-300">
                             <img src="assets/icons/detail.png" alt="Xem Chi Tiết" class="w-7 h-7">
                         </button>
                     </td>
-                      
-                        
-                        
-                        
-
-        
                 </tr>
             </tbody>
         </table>

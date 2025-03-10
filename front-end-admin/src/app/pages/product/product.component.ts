@@ -1,50 +1,82 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'
-import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
+import { Product } from '../../../../../my-server-mongodb/interface/Product';
+import { ProductApiService } from '../../product-api.service';
+import { HttpClient } from '@angular/common/http'; // ✅ Import HttpClient để tránh lỗi
 
 @Component({
   selector: 'app-product-list',
-  standalone: true, // Nếu bạn dùng standalone component, cần bật dòng này
-  imports: [CommonModule,FormsModule,RouterModule], // Import CommonModule để dùng ngFor, ngClass, currency pipe
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './product.component.html',
   styleUrls: []
 })
-export class ProductComponent {
-  products = [
-    { id: 'BTT01', category: 'Bánh tráng trộn sẵn', image: 'assets/images/product/Chabong.png', name: 'Bánh tráng trộn chà bông', price: 25000, visible: true },
-    { id: 'BTT01', category: 'Bánh tráng trộn sẵn', image: 'assets/images/product/Chabong.png', name: 'Bánh tráng trộn chà bông', price: 25000, visible: true },
-    { id: 'BTT01', category: 'Bánh tráng trộn sẵn', image: 'assets/images/product/Chabong.png', name: 'Bánh tráng trộn chà bông', price: 25000, visible: true },
-    { id: 'BTT01', category: 'Bánh tráng trộn sẵn', image: 'assets/images/product/Chabong.png', name: 'Bánh tráng trộn chà bông', price: 25000, visible: true },
-    { id: 'BTT01', category: 'Bánh tráng trộn sẵn', image: 'assets/images/product/Chabong.png', name: 'Bánh tráng trộn chà bông', price: 25000, visible: true },
-    { id: 'BTT01', category: 'Bánh tráng trộn sẵn', image: 'assets/images/product/Chabong.png', name: 'Bánh tráng trộn chà bông', price: 25000, visible: true },
-  ];
+export class ProductComponent implements OnInit {
+  products: Product[] = [];
+  filteredProducts: Product[] = [];
+  loading = false;
+  error = '';
 
-  filteredProducts = [...this.products];
+  constructor(private productService: ProductApiService, private router: Router, private http: HttpClient) {} // ✅ Thêm HttpClient vào constructor
 
-  addProduct() {
+  ngOnInit(): void {
+    this.loadProducts();
+  }
+
+  loadProducts(): void {
+    this.loading = true;
+    this.error = '';
+
+    this.productService.getAllProducts().subscribe({
+      next: (response) => {
+        console.log("Dữ liệu API trả về:", response); // Kiểm tra dữ liệu có đến FE không
+        this.products = response.data;
+        this.filteredProducts = this.products;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error("Lỗi API:", err);
+        this.loading = false;
+      }
+    });
+  }
+
+  addProduct(): void {
     console.log('Thêm sản phẩm mới');
   }
 
-  editProduct(id: string) {
+  editProduct(id: string): void {
     console.log(`Chỉnh sửa sản phẩm: ${id}`);
+    this.router.navigate(['/update-product', id]);
   }
 
-  deleteProduct(id: string) {
-    this.products = this.products.filter(product => product.id !== id);
-    this.filteredProducts = [...this.products];
-    console.log(`Xóa sản phẩm: ${id}`);
+  deleteProduct(id: string): void {
+    if (confirm('Bạn có chắc muốn xóa sản phẩm này?')) {
+      this.productService.deleteProduct(id).subscribe({
+        next: () => {
+          this.products = this.products.filter(product => product._id !== id);
+          this.filteredProducts = [...this.products];
+          console.log(`Xóa sản phẩm: ${id}`);
+        },
+        error: (err) => {
+          console.error('Lỗi khi xóa sản phẩm:', err);
+        }
+      });
+    }
   }
 
-  viewProduct(id: string) {
+  viewProduct(id: string): void {
     console.log(`Xem chi tiết sản phẩm: ${id}`);
+    this.router.navigate(['/product-detail', id]);
   }
 
-  searchProduct(event: any) {
+  searchProduct(event: any): void {
     const searchValue = event.target.value.toLowerCase();
     this.filteredProducts = this.products.filter(product =>
-      product.name.toLowerCase().includes(searchValue) ||
-      product.category.toLowerCase().includes(searchValue)
+      product.product_name.toLowerCase().includes(searchValue) ||
+      product.product_dept.toLowerCase().includes(searchValue)
     );
   }
 }
