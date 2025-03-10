@@ -1,62 +1,98 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.css'],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
 })
-export class RegisterComponent {
-  username: string = '';
-  password: string = '';
-  confirmPassword: string = '';
-  newsletter: boolean = false;
-  terms: boolean = false;
-  passwordVisible: boolean = false;
-  confirmPasswordVisible: boolean = false;
+export class RegisterComponent implements OnInit {
+  registerForm!: FormGroup;
+  isSubmitting = false;
   errors: { [key: string]: string } = {};
 
-  constructor() { }
+  passwordVisible = false;
+  confirmPasswordVisible = false; 
 
-  // Toggle password visibility
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.registerForm = this.fb.group({
+      profileName: ['', Validators.required],
+      password: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
+      newsletter: [false],
+      terms: [false, Validators.requiredTrue],
+    }, {
+      validators: this.passwordMatchValidator
+    });
+  }
+
+  // Custom validator for password matching
+  passwordMatchValidator: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
+    const password = group.get('password')?.value;
+    const confirmPassword = group.get('confirmPassword')?.value;
+    
+    if (password && confirmPassword && password !== confirmPassword) {
+      group.get('confirmPassword')?.setErrors({ passwordMismatch: true });
+      return { passwordMismatch: true };
+    }
+    
+    return null;
+  };
+
   togglePasswordVisibility() {
     this.passwordVisible = !this.passwordVisible;
   }
 
-  // Toggle confirm password visibility
   toggleConfirmPasswordVisibility() {
     this.confirmPasswordVisible = !this.confirmPasswordVisible;
   }
 
-  // Validate the form before submission
-  validateForm(): boolean {
-    this.errors = {};
-
-    if (!this.username.trim()) {
-      this.errors['username'] = 'Thông tin này không được để trống';
-    }
-
-    if (!this.password.trim()) {
-      this.errors['password'] = 'Thông tin này không được để trống';
-    }
-
-    if (this.password !== this.confirmPassword) {
-      this.errors['confirmPassword'] = 'Mật khẩu không khớp';
-    }
-
-    if (!this.confirmPassword.trim()) {
-      this.errors['confirmPassword'] = 'Thông tin này không được để trống';
-    }
-
-    return Object.keys(this.errors).length === 0;
+  toggleNewsletter() {
+    const current = this.registerForm.get('newsletter')?.value;
+    this.registerForm.get('newsletter')?.setValue(!current);
+  }
+  
+  toggleTerms() {
+    const current = this.registerForm.get('terms')?.value;
+    this.registerForm.get('terms')?.setValue(!current);
   }
 
-  // Submit the form
   onSubmit() {
-    if (this.validateForm()) {
-      console.log('Form Submitted');
-      // Proceed with form submission logic
-    } else {
-      console.log('Form contains errors');
+    if (this.registerForm.invalid) {
+      // Mark all form controls as touched to show validation errors
+      Object.keys(this.registerForm.controls).forEach(key => {
+        const control = this.registerForm.get(key);
+        control?.markAsTouched();
+      });
+      this.errors = { general: 'Vui lòng điền đầy đủ thông tin.' };
+      return;
     }
+
+    const { profileName, password } = this.registerForm.value;
+    
+    this.isSubmitting = true;
+    this.errors = {}; // Clear previous errors
+    
+    this.authService.register({ profileName, password }).subscribe({
+      next: () => {
+        this.isSubmitting = false;
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        this.errors = { general: err.error?.message || 'Đăng ký thất bại' };
+        this.isSubmitting = false;
+      },
+    });
   }
 }

@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NgxDropzoneModule } from 'ngx-dropzone'; // Thêm dòng này
 
 @Component({
   selector: 'app-update-product',
   standalone: true, // Nếu dùng Standalone Component
-  imports: [CommonModule, FormsModule], // Thêm FormsModule
+  imports: [CommonModule, FormsModule, NgxDropzoneModule], // Thêm NgxDropzoneModule
   templateUrl: './update-product.component.html',
   styleUrls: []
 })

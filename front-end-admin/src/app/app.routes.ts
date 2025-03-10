@@ -17,6 +17,7 @@ export const routes: Routes = [
     { path: 'register', component: RegisterComponent },
     { path: 'login', component: LoginComponent },
 
+
     { path: 'blog-list', component: BlogComponent },
     { path: 'product-list', component: ProductComponent },
     { path: 'product-detail/:id', component: ProductDetailComponent }, // Route với productId
@@ -26,6 +27,6 @@ export const routes: Routes = [
     { path: 'new-category', component: NewCategoryComponent },
     { path: 'update-category/:id', component: UpdateCategoryComponent },
     // { path: '', redirectTo: '/products', pathMatch: 'full' }, // Mặc định chuyển đến danh sách sản phẩm
-    { path: '', redirectTo: '/home', pathMatch: 'full' }, // Mặc định về trang home
+    { path: '', redirectTo: '/login', pathMatch: 'full' }, // Mặc định về trang home
     { path: '**', redirectTo: '/home' } // Xử lý route không tồn tại
 ];
