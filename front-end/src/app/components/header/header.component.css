@@ -27,7 +27,15 @@ body {
   .text-zinc-400 {
     color: #A0A0A0;
   }
-
+  .nav-link {
+    position: relative;
+    padding: 0.5rem 0;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-link:hover {
+    font-weight: 600;
+  }
 /* Dropdown animation */
 .dropdown-enter {
     opacity: 0;
@@ -58,3 +66,28 @@ body {
       width: 100%;
     }
   }
+
+  #mascot {
+    position: absolute;
+    top: 10%;
+    left: -100px; /* Bắt đầu từ ngoài màn hình bên trái */
+    width: 80px;
+    height: 80px;
+    background-image: url('/assets/images/homepage/mascot.png'); /* Linh vật thứ hai */
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 1; /* Ẩn ban đầu */
+    animation: appearAndMove 6s ease-in-out infinite;
+}
+
+/* Xuất hiện, di chuyển vào màn hình, nghiêng trái phải 2 lần, rồi quay lại */
+@keyframes appearAndMove {
+    0% { left: -100px;}  /* Bắt đầu ngoài màn hình */
+    20% { left: 50px;}   /* Xuất hiện hoàn toàn */
+    40% { transform: rotate(-10deg); } /* Nghiêng trái */
+    50% { transform: rotate(10deg); }  /* Nghiêng phải */
+    60% { transform: rotate(-10deg); } /* Nghiêng trái */
+    70% { transform: rotate(10deg); }  /* Nghiêng phải */
+    85% { left: 0px; transform: rotate(0deg) scaleX(-1); } /* Quay đầu về bên trái */
+    100% { left: -100px;} /* Biến mất ra ngoài bên trái */
+}

@@ -11,12 +11,22 @@ import { ProductCategoryComponent } from './pages/product-category/product-categ
 import { NewCategoryComponent } from './components/new-category/new-category.component';
 import { UpdateCategoryComponent } from './components/update-category/update-category.component';
 import { importProvidersFrom } from '@angular/core';
-
+import { AccountComponent } from './pages/account/account.component';
+import { CustomerComponent } from './pages/customer/customer.component';
+import { SalesorderComponent } from './pages/salesorder/salesorder.component';
+import { OrderDetailComponent } from './pages/salesorder/order-detail/order-detail.component';
+import { PromotionComponent } from './pages/promotion/promotion.component'
 
 export const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'login', component: LoginComponent },
+    { path: 'account', component: AccountComponent },
+    { path: 'customer', component: CustomerComponent },
+    { path: 'salesorder', component: SalesorderComponent },
+    { path: 'order-detail', component: OrderDetailComponent },
+    { path: 'promotion', component: PromotionComponent },
+
 
     { path: 'blog-list', component: BlogComponent },
     { path: 'product-list', component: ProductComponent },
@@ -27,6 +37,6 @@ export const routes: Routes = [
     { path: 'new-category', component: NewCategoryComponent },
     { path: 'update-category/:id', component: UpdateCategoryComponent },
     // { path: '', redirectTo: '/products', pathMatch: 'full' }, // Mặc định chuyển đến danh sách sản phẩm
-    { path: '', redirectTo: '/home', pathMatch: 'full' }, // Mặc định về trang home
+    { path: '', redirectTo: '/login', pathMatch: 'full' }, // Mặc định về trang home
     { path: '**', redirectTo: '/home' } // Xử lý route không tồn tại
 ];

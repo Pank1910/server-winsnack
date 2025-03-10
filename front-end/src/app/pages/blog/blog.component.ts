@@ -21,7 +21,7 @@ export class BlogComponent {
   blogs = [
     {
       blogid: 1,
-      title: 'Bánh tráng xoài',
+      title: 'Cách làm bánh tráng trộn chuẩn vị Sài Gòn',
       content: 'Món ăn vặt đặc sản Nha Trang...',
       images: 'assets/images/blog/blog1.png',
       abstract: 'Bánh tráng xoài dẻo, thơm ngon...',
@@ -32,7 +32,7 @@ export class BlogComponent {
       blogid: 2,
       title: 'Bánh tráng chấm',
       content: 'Bánh tráng chấm với nhiều loại sốt...',
-      images: 'assets/images/blog/blog1.png',
+      images: 'assets/images/blog/blog2.png',
       abstract: 'Món ăn vặt phổ biến trong giới trẻ...',
       post_date: new Date('2024-02-12'),
       comments: 3,
@@ -47,35 +47,14 @@ export class BlogComponent {
       comments: 3,
     }]
 
-  newBlogs = [
-    {
-      blogid: 4,
-      title: 'Muối tôm',
-      content: 'Muối tôm Tây Ninh chấm gì cũng ngon...',
-      images: 'assets/images/blog/blog1.png',
-      abstract: 'Gia vị chấm quốc dân cho các món ăn...',
-      post_date: new Date('2024-02-08'),
-      comments: 3,
-    },
-    {
-      blogid: 5,
-      title: 'Bánh tráng nướng',
-      content: 'Bánh tráng nướng giòn rụm, thơm ngon...',
-      images: 'assets/images/blog/blog1.png',
-      abstract: 'Món ăn đường phố nổi tiếng...',
-      post_date: new Date('2024-02-06'),
-      comments: 3,
-    },
-    {
-      blogid: 6,
-      title: 'Vegan Options',
-      content: 'Các món ăn chay lành mạnh, tốt cho sức khỏe...',
-      images: 'assets/images/blog/blog1.png',
-      abstract: 'Lựa chọn tuyệt vời cho người ăn chay...',
-      post_date: new Date('2024-02-04'),
-      comments: 3,
-    },
+    newBlogs = [
+      { id: 1, title: 'Bánh tráng xoài', images: 'assets/images/blog/new-blog-1.png' },
+      { id: 2, title: 'Bánh tráng chấm', images: 'assets/images/blog/new-blog-2.png' },
+      { id: 3, title: 'Bánh ngọt', images: 'assets/images/blog/new-blog-3.png' },
+      { id: 4, title: 'Muối tôm', images: 'assets/images/blog/new-blog-4.png' },
+      { id: 5, title: 'Bánh tráng nướng', images: 'assets/images/blog/new-blog-5.png' }
   ];
+  
   currentBlogIndex = 0;
 
   previousBlog() {

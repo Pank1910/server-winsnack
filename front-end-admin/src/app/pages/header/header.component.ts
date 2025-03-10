@@ -1,54 +1,46 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
   isNotificationOpen = false;
-  
+  isLoggedIn = false; // Mặc định chưa đăng nhập
+
   account = {
-    name: 'Admin101',
-    images: 'assets/images/header/account-image.png' // Default path, update as needed
+    name: '',
+    images: 'assets/images/header/default-avatar.png' // Ảnh mặc định
   };
 
-  constructor() { }
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
-    // You can fetch the user account info here if needed
-    this.loadUserProfile();
+    this.checkLoginStatus();
   }
 
-  loadUserProfile(): void {
-    // This method would fetch user data from a service
-    // Example implementation:
-    /*
-    this.userService.getCurrentUser().subscribe(
-      (userData) => {
-        this.account.name = userData.name;
-        this.account.images = userData.profileImage || this.account.images;
-      },
-      (error) => {
-        console.error('Error fetching user profile:', error);
-      }
-    );
-    */
+  // Kiểm tra trạng thái đăng nhập
+  checkLoginStatus(): void {
+    // Giả lập kiểm tra từ localStorage hoặc API
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      const user = JSON.parse(userData);
+      this.isLoggedIn = true;
+      this.account.name = user.name;
+      this.account.images = user.profileImage || this.account.images;
+    }
   }
 
   toggleNotifications(): void {
     this.isNotificationOpen = !this.isNotificationOpen;
   }
 
-  // Handle clicking outside to close notifications
-  closeNotifications(event: Event): void {
-    if (!(event.target as HTMLElement).closest('.notification-trigger')) {
-      this.isNotificationOpen = false;
-    }
+  redirectToLogin(): void {
+    this.router.navigate(['/login']);
   }
 }

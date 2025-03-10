@@ -32,4 +32,9 @@ export class ProductApiService {
     return this.http.get<Product[]>(`${this.baseUrl}/bestseller`);
   }
   
+  // Thêm phương thức tìm kiếm sản phẩm theo từ khóa
+  searchProducts(term: string): Observable<{ success: boolean; data: Product[]; count: number }> {
+    const url = `${this.baseUrl}/search?term=${encodeURIComponent(term)}`;
+    return this.http.get<{ success: boolean; data: Product[]; count: number }>(url);
+  }
 }
