@@ -52,16 +52,18 @@ export class ProductComponent implements OnInit {
     this.router.navigate(['/update-product', id]);
   }
 
+  /** 🔥 Xóa sản phẩm qua API */
   deleteProduct(id: string): void {
-    if (confirm('Bạn có chắc muốn xóa sản phẩm này?')) {
-      this.productService.deleteProduct(id).subscribe({
+    if (confirm('❗ Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+      this.http.delete(`http://localhost:5001/products/${id}`).subscribe({
         next: () => {
+          // ✅ Xóa sản phẩm khỏi danh sách hiển thị
           this.products = this.products.filter(product => product._id !== id);
           this.filteredProducts = [...this.products];
-          console.log(`Xóa sản phẩm: ${id}`);
+          console.log(`✅ Đã xóa sản phẩm có ID: ${id}`);
         },
         error: (err) => {
-          console.error('Lỗi khi xóa sản phẩm:', err);
+          console.error('❌ Lỗi khi xóa sản phẩm:', err);
         }
       });
     }

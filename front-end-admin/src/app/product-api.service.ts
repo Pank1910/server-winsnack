@@ -78,4 +78,7 @@ export class ProductApiService {
     console.log("💰 Lọc sản phẩm theo giá:", minPrice, "-", maxPrice, "➡️", url);
     return this.http.get<{ success: boolean; data: Product[]; count: number }>(url);
   }
+  deleteCategory(categoryName: string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/category/${categoryName}`);
+  }
 }

@@ -81,27 +81,33 @@ export class UpdateProductComponent implements OnInit {
 
   updateProduct(): void {
     if (!this.product._id) {
-        console.error("Lỗi: Không có ID sản phẩm!");
+        console.error("❌ Lỗi: Không tìm thấy ID sản phẩm!");
         alert("Lỗi: Không tìm thấy ID sản phẩm!");
         return;
     }
 
-    this.loading = true;
-    
-    console.log("📌 Dữ liệu gửi lên API:", this.product);
+    // 🛑 Nếu ID là số, ép kiểu thành chuỗi
+    const productId = this.product._id.toString();
 
-    this.productService.updateProduct(this.product._id, this.product as Product).subscribe({
-        next: () => {
+    console.log("📌 ID sản phẩm gửi đi:", productId);
+    console.log("📌 Dữ liệu gửi lên API:", JSON.stringify(this.product, null, 2));
+
+    this.productService.updateProduct(productId, this.product as Product).subscribe({
+        next: (res) => {
+            console.log("✅ API cập nhật thành công:", res);
             alert('Sản phẩm đã được cập nhật thành công!');
             this.router.navigate(['/products']);
         },
         error: (err) => {
             console.error("❌ Lỗi API khi cập nhật sản phẩm:", err);
             console.error("📌 Chi tiết lỗi:", err.message);
+            console.error("📌 Response API:", err.error);
             alert("Không thể cập nhật sản phẩm. Vui lòng kiểm tra lại!");
             this.loading = false;
         }
     });
 }
+
+
 
 }

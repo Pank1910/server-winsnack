@@ -14,8 +14,9 @@ import { Product } from '../../../../../my-server-mongodb/interface/Product';
   styleUrls: ['./product-category.component.css']
 })
 export class ProductCategoryComponent implements OnInit {
-  products: Product[] = []; categories: Product[] = [];
-  filteredCategories: Product[] = [];
+  products: Product[] = [];
+  categories: { name: string, count: number, image: string }[] = [];
+  filteredCategories: { name: string, count: number, image: string }[] = [];
   searchText: string = '';
   selectedCategory: string = 'all-categories';
 
@@ -25,15 +26,14 @@ export class ProductCategoryComponent implements OnInit {
     this.fetchProducts();
   }
 
-  /** Lấy danh sách sản phẩm từ API */
+  /** 🔥 Lấy danh sách sản phẩm từ API & nhóm theo danh mục */
   fetchProducts() {
     this.productApiService.getAllProducts().subscribe(
       (response) => {
-        console.log('Dữ liệu API:', response); // ✅ Kiểm tra dữ liệu API
+        console.log('Dữ liệu API:', response); 
         if (response.success) {
           this.products = response.data;
-          this.filteredCategories = [...this.products];
-          console.log('Dữ liệu sau khi gán:', this.filteredCategories);
+          this.groupByCategory();
         }
       },
       (error) => {
@@ -42,32 +42,36 @@ export class ProductCategoryComponent implements OnInit {
     );
   }
 
-  toggleVisibility(productId: string) {
-    const product = this.products.find(p => p._id === productId);
-    if (product) {
-      product.isNew = !product.isNew;
-      console.log(`Trạng thái sản phẩm mới của ${product.product_name}:`, product.isNew);
+  /** 🔥 Nhóm sản phẩm theo danh mục & đếm số lượng */
+  groupByCategory() {
+    const categoryMap = new Map<string, { count: number, image: string }>();
+
+    this.products.forEach(product => {
+      const categoryName = product.product_dept;  // ✅ Lấy danh mục từ API
+      const imageUrl = product.image_1;  // ✅ Dùng ảnh đầu tiên làm đại diện
+
+      if (!categoryMap.has(categoryName)) {
+        categoryMap.set(categoryName, { count: 1, image: imageUrl });
+      } else {
+        categoryMap.get(categoryName)!.count++;
+      }
+    });
+
+    // ✅ Chuyển Map thành mảng danh mục có số lượng sản phẩm
+    this.categories = Array.from(categoryMap, ([name, data]) => ({
+      name, count: data.count, image: data.image
+    }));
+
+    this.filteredCategories = [...this.categories];
+    console.log('Danh sách danh mục sau khi xử lý:', this.categories);
+  }
+
+  deleteCategory(categoryName: string) {
+    if (confirm(`Bạn có chắc chắn muốn xóa danh mục "${categoryName}" không?`)) {
+      this.products = this.products.filter(product => product.product_dept !== categoryName);
+      this.groupByCategory();
+      console.log(`Đã xóa danh mục: ${categoryName}`);
     }
-  }
-
-  addProduct() {
-    this.router.navigate(['/add-product']);
-  }
-
-  editProduct(id: string) {
-    this.router.navigate(['/update-product', id]);
-  }
-
-  deleteCategory(id: string) {
-    if (confirm('Bạn có chắc chắn muốn xóa danh mục này?')) {
-      this.products = this.products.filter(product => product._id !== id);
-      this.filterCategories();
-      console.log(`Xóa danh mục: ${id}`);
-    }
-  }
-
-  viewProduct(id: string) {
-    console.log(`Xem chi tiết sản phẩm: ${id}`);
   }
 
   onSearchChange(event: any) {
@@ -80,23 +84,21 @@ export class ProductCategoryComponent implements OnInit {
     this.filterCategories();
   }
 
+  /** 🔥 Lọc danh mục theo tìm kiếm */
   filterCategories() {
-    let tempProducts = [...this.products];
+    let tempCategories = [...this.categories];
 
     if (this.selectedCategory !== 'all-categories') {
-      tempProducts = tempProducts.filter(product => 
-        product.product_dept === this.selectedCategory
+      tempCategories = tempCategories.filter(cat => cat.name === this.selectedCategory);
+    }
+
+    if (this.searchText.trim() !== '') {
+      tempCategories = tempCategories.filter(cat =>
+        cat.name.toLowerCase().includes(this.searchText.toLowerCase())
       );
     }
 
-    if (this.searchText && this.searchText.trim() !== '') {
-      tempProducts = tempProducts.filter(product =>
-        product.product_name.toLowerCase().includes(this.searchText.toLowerCase()) ||
-        product._id.toLowerCase().includes(this.searchText.toLowerCase())
-      );
-    }
-
-    this.filteredCategories = tempProducts;
-    console.log('Dữ liệu sau khi lọc:', this.filteredCategories);
+    this.filteredCategories = tempCategories;
+    console.log('Danh mục sau khi lọc:', this.filteredCategories);
   }
 }

@@ -20,7 +20,7 @@
             <select [(ngModel)]="selectedCategory" (change)="onCategoryChange($event)"
                     class="p-2 rounded-md bg-orange-light text-black border border-gray-300 focus:ring focus:ring-orange-dark focus:ring-opacity-50">
                 <option value="all-categories">Tất cả danh mục</option>
-                <option *ngFor="let category of categories" [value]="category.product_dept">{{ category.product_dept }}</option>
+                <option *ngFor="let category of categories" [value]="category.name">{{ category.name }}</option>
             </select>
             
             <input type="text" [(ngModel)]="searchText" (input)="onSearchChange($event)"
@@ -39,11 +39,9 @@
         <table class="min-w-full bg-white rounded-lg shadow-md">
             <thead>
                 <tr class="bg-orange-dark text-white whitespace-nowrap">
-                    <th class="px-4 py-4 text-center">ID</th>
                     <th class="px-4 py-4 text-center">Tên danh mục</th>
                     <th class="px-4 py-4 text-center">Hình ảnh</th>
                     <th class="px-4 py-4 text-center">Số lượng sản phẩm</th>
-                    <th class="px-4 py-4 text-center">Hiển thị</th>
                     <th class="px-4 py-4 text-center">Tác vụ</th>
                 </tr>
             </thead>
@@ -51,28 +49,26 @@
                 <tr *ngFor="let category of filteredCategories; let i = index"
                     [ngClass]="{'bg-[#FFE0C3]': i % 2 === 0, 'bg-[#FFF8EC]': i % 2 !== 0}"
                     class="text-center border-b table-row-hover">
-                    <td class="px-4 py-6">{{ category._id }}</td>
-                    <td class="px-4 py-6">{{ category.product_dept }}</td>
+                    <td class="px-4 py-6">{{ category.name }}</td>
                     <td class="px-4 py-6 flex justify-center">
-                        <img [src]="category.image_1" [alt]="category.product_dept" class="w-[198px] h-[80px] object-cover rounded-md">
+                        <img [src]="category.image" [alt]="category.name" class="w-[198px] h-[80px] object-cover rounded-md">
                     </td>
-                    <td class="px-4 py-6">{{ category.stocked_quantity }} sản phẩm</td>
-                    <td class="px-4 py-6">
-                        <input type="checkbox" [checked]="category.isNew" (change)="toggleVisibility(category._id)"
-                                class="focus:outline-none focus:ring-2 focus:ring-orange-dark">
-                    </td>
+                    <td class="px-4 py-6">{{ category.count }} sản phẩm</td>
                     <td class="px-4 py-6">
                         <div class="flex gap-4 justify-center">
-                            <a [routerLink]="['/update-category', category._id]" class="p-2 rounded-md hover:bg-orange-medium transition duration-300" aria-label="Edit category">
+                            <a [routerLink]="['/update-category', category.name]" 
+                               class="p-2 rounded-md hover:bg-orange-medium transition duration-300" aria-label="Edit category">
                                 <img src="assets/icons/edit.png" alt="Sửa" class="w-7 h-7">
                             </a>
-                            <button (click)="deleteCategory(category._id)" class="p-2 rounded-md hover:bg-red-500 transition duration-300" aria-label="Delete category">
+                            <button (click)="deleteCategory(category.name)" 
+                                    class="p-2 rounded-md hover:bg-red-500 transition duration-300" aria-label="Delete category">
                                 <img src="assets/icons/delete.png" alt="Xóa" class="w-7 h-7">
                             </button>
                         </div>
                     </td>
                 </tr>
             </tbody>
+            
         </table>
     </div>
 </body>
