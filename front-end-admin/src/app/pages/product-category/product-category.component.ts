@@ -66,11 +66,18 @@ export class ProductCategoryComponent implements OnInit {
     console.log('Danh sách danh mục sau khi xử lý:', this.categories);
   }
 
+  /** 🔥 Gọi API để xóa danh mục */
   deleteCategory(categoryName: string) {
     if (confirm(`Bạn có chắc chắn muốn xóa danh mục "${categoryName}" không?`)) {
-      this.products = this.products.filter(product => product.product_dept !== categoryName);
-      this.groupByCategory();
-      console.log(`Đã xóa danh mục: ${categoryName}`);
+      this.productApiService.deleteCategory(categoryName).subscribe({
+        next: (response) => {
+          console.log(`Danh mục "${categoryName}" đã được xóa khỏi API`, response);
+          this.fetchProducts(); // ✅ Tải lại danh mục sau khi xóa
+        },
+        error: (error) => {
+          console.error('Lỗi khi xóa danh mục:', error);
+        }
+      });
     }
   }
 
