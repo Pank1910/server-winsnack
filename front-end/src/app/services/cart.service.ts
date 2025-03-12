@@ -35,8 +35,7 @@ export class CartService {
 
 
   private isUserLoggedIn = false;
-  private userId: string = "123456"; // Hardcode userId = "123456" để test
-
+  private userId: string = "123457"; 
 
   constructor(
     private cartAPIService: CartAPIService,
@@ -229,8 +228,12 @@ export class CartService {
   getRecommendedProducts(): Observable<RecommendedProduct[]> {
     return this.http.get<RecommendedProduct[]>('http://localhost:5000/recommended-products').pipe(
       catchError(() => of([
-        { productId: '1', title: 'Snack A', price: 20000, imgbase64_reduce: 'assets/snack-a.png' },
-        { productId: '2', title: 'Snack B', price: 15000, imgbase64_reduce: 'assets/snack-b.png' },
+        { productId: '1', title: 'Sốt me chua ngọt', price: 42500, imgbase64_reduce: 'assets/images/product-category/Sotme.png' },
+        { productId: '2', title: 'Bánh tráng chà bông', price: 25000, imgbase64_reduce: 'assets/images/product-category/Chabong.png' },
+        { productId: '3', title: 'Bánh tráng rong biển', price: 15000, imgbase64_reduce: 'assets/images/product-category/Rongbien.png' },
+        { productId: '4', title: 'Bánh tráng vị bò', price: 20000, imgbase64_reduce: 'assets/images/product-category/Bo.png' },
+        { productId: '5', title: 'Bánh tráng vị gà', price: 15000, imgbase64_reduce: 'assets/images/product-category/Ga.png' },
+
       ]))
     );
   }
