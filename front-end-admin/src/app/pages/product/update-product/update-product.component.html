@@ -1,90 +1,61 @@
-<body class="bg-[#FFF8EC]"> <!-- Đặt màu nền toàn trang -->
+<body class="bg-[#FFF8EC]">
     <div class="p-6 max-w-5xl mx-auto mt-10 rounded-lg shadow-md bg-[#FFF8EC]">
-        <!-- Tiêu đề -->
         <h1 class="text-3xl font-bold text-orange-dark text-center mb-6">CẬP NHẬT SẢN PHẨM</h1>
 
-        <!-- Form -->
+        <!-- Hiển thị lỗi nếu có -->
+        <div *ngIf="error" class="text-red-600 text-center mb-4">{{ error }}</div>
+
         <form (ngSubmit)="updateProduct()">
             <div class="grid grid-cols-2 gap-4 mb-4">
-                <!-- Tên sản phẩm -->
                 <div class="col-span-2">
                     <label class="block">Tên sản phẩm</label>
-                    <input [(ngModel)]="product.name" name="productName" type="text" placeholder="Nhập Tên sản phẩm"
+                    <input [(ngModel)]="product.product_name" name="productName" type="text"
                            class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark">
                 </div>
 
-                <!-- Danh mục -->
                 <div class="col-span-2">
                     <label class="block">Danh mục</label>
-                    <select [(ngModel)]="product.category" name="category"
+                    <select [(ngModel)]="product.product_dept" name="category"
                             class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark">
                         <option value="">Chọn danh mục</option>
                         <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
                     </select>
                 </div>
 
-                <!-- Trạng thái -->
-                <div class="col-span-2 flex items-center space-x-4">
-                    <div class="flex items-center">
-                        <input type="checkbox" [(ngModel)]="product.isVisible" name="isVisible" class="mr-2">
-                        <label>Hiển thị trên website</label>
-                    </div>
-                    <div class="flex items-center">
-                        <input type="checkbox" [(ngModel)]="product.isDiscounted" name="isDiscounted" class="mr-2">
-                        <label>Sản phẩm khuyến mãi</label>
-                    </div>
-                </div>
-
-                <!-- Giá hiện tại -->
-                <div class="col-span-2 sm:col-span-1">
+                <div class="col-span-2">
                     <label class="block">Giá hiện tại</label>
-                    <input [(ngModel)]="product.currentPrice" (input)="calculateFinalPrice()" name="currentPrice" type="number"
-                           placeholder="0" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark">
+                    <input [(ngModel)]="product.unit_price" (input)="calculateFinalPrice()" name="currentPrice" type="number"
+                           class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark">
                 </div>
 
-                <!-- Khuyến mãi -->
-                <div class="col-span-2 sm:col-span-1">
+                <div class="col-span-2">
                     <label class="block">Khuyến mãi (%)</label>
                     <input [(ngModel)]="product.discount" (input)="calculateFinalPrice()" name="discount" type="number"
-                           placeholder="0" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark">
+                           class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark">
                 </div>
 
-                <!-- Giá sau khuyến mãi -->
                 <div class="col-span-2 flex items-center">
                     <label class="block mr-2">Giá sau khuyến mãi:</label>
-                    <span class="text-red-600 font-semibold text-2xl">{{ product.finalPrice | currency:'VND' }}</span>
+                    <span class="text-red-600 font-semibold text-2xl">{{ calculateFinalPrice() | currency:'VND' }}</span>
                 </div>
             </div>
 
-            <!-- Thông tin sản phẩm -->
             <div class="mb-4">
                 <label class="block">Thông tin sản phẩm</label>
-                <textarea [(ngModel)]="product.info" name="productInfo" rows="4" placeholder="Nhập thông tin sản phẩm"
-                          class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark"></textarea>
-            </div>
-            <div class="mb-4">
-                <label class="block">Mô tả sản phẩm</label>
-                <textarea [(ngModel)]="product.description" name="productDescription" rows="4" placeholder="Nhập mô tả sản phẩm"
+                <textarea [(ngModel)]="product.product_detail" name="productInfo" rows="4"
                           class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark"></textarea>
             </div>
 
-            <!-- Hình ảnh sản phẩm -->
             <div class="mb-4">
                 <label class="block text-gray-700 font-semibold mb-2">Hình ảnh sản phẩm</label>
-                <input type="file" (change)="handleImageUpload($event)" multiple class="w-full p-2 border border-gray-300 rounded-md">
 
-                <!-- Hiển thị ảnh đã chọn -->
-                <div class="flex flex-wrap gap-2 mt-2">
-                    <div *ngFor="let img of product.previewImages; let i = index" class="relative w-20 h-20">
-                        <img [src]="img" class="w-full h-full object-cover rounded-md">
-                        <button (click)="removeImage(i)" class="absolute top-0 right-0 bg-red-500 text-white rounded-full px-1">
-                            ✕
-                        </button>
-                    </div>
+                <div *ngFor="let imageField of imageFields">
+                    <input type="file" (change)="handleImageUpload($event, imageField)">
+                    <img *ngIf="getImage(imageField)" [src]="getImage(imageField)" class="w-20 h-20 object-cover rounded-md mt-2">
                 </div>
+                
             </div>
 
-            <!-- Nút Hủy bỏ và Cập Nhật -->
             <div class="flex justify-center space-x-6">
                 <button type="button" (click)="cancelUpdate()"
                         class="px-6 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400">

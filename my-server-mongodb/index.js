@@ -8,11 +8,70 @@ const { MongoClient, ObjectId } = require('mongodb');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+// Configure multer for file uploads
+// File filter to only allow image files
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Chỉ chấp nhận file hình ảnh!'), false);
+    }
+  };
+ 
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+      const uploadDir = 'public/uploads/avatars';
+      // Create directory if it doesn't exist
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+      cb(null, uploadDir);
+    },
+    filename: function(req, file, cb) {
+      // Create unique filename: userId + timestamp + original extension
+      const fileExt = path.extname(file.originalname);
+      const fileName = `${req.body.userId}-${Date.now()}${fileExt}`;
+      cb(null, fileName);
+    }
+  });
+const upload = multer({
+    storage: storage,
+    limits: {
+      fileSize: 2 * 1024 * 1024 // 2MB limit
+    },
+    fileFilter: fileFilter
+  });
+
+ 
+  
+
+
+app.use(cors({
+    origin: '*', // ✅ Cho phép tất cả domain truy cập
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // ✅ Cho phép các phương thức
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+    credentials: true
+}));
+
+// 🔥 Middleware bổ sung để chắc chắn CORS hoạt động
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+
+    if (req.method === "OPTIONS") {
+        return res.status(200).json({});
+    }
+
+    next();
+});
 
 app.use(morgan("combined"));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+app.use(bodyParser.json({ limit: '100mb' }));
+app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
+
+
+
 
 
 const uri = "mongodb+srv://thanhtylenguyen:WinSnack2025@webcluster.9rruw.mongodb.net/";
@@ -39,6 +98,94 @@ const database = client.db("winsnack");
 const winsnackCollection = database.collection("Cart");
 const productsCollection = database.collection("Product");
 const orderCollection = database.collection("Order"); // ✅ Thêm collection Order
+
+app.post("/products", upload.array("images", 5), async (req, res) => {
+    try {
+        console.log("📌 Files uploaded:", req.files);
+        console.log("📌 Body data:", req.body);
+
+        const {
+            product_name, product_dept, stocked_quantity, unit_price,
+            discount, product_detail, rating
+        } = req.body;
+
+        if (!product_name || !product_dept) {
+            return res.status(400).json({ success: false, message: "❌ Thiếu thông tin sản phẩm!" });
+        }
+
+        // 🖼 Lưu danh sách ảnh đã upload
+        const imagePaths = req.files.map((file, index) => ({
+            [`image_${index + 1}`]: `/uploads/${file.filename}`
+        }));
+
+        // 📝 Tạo sản phẩm mới
+        const newProduct = {
+            product_name,
+            product_dept,
+            stocked_quantity: Number(stocked_quantity),
+            unit_price: Number(unit_price),
+            discount: Number(discount),
+            product_detail,
+            rating: Number(rating),
+            createdAt: new Date(),
+            isNew: true,
+            ...Object.assign({}, ...imagePaths) // ✅ Lưu ảnh vào object
+        };
+
+        // 🛠 Thêm vào MongoDB
+        const result = await productsCollection.insertOne(newProduct);
+        res.status(201).json({ success: true, message: "✅ Sản phẩm đã được thêm!", data: newProduct });
+
+    } catch (error) {
+        console.error("❌ Lỗi khi thêm sản phẩm:", error);
+        res.status(500).json({ success: false, message: "❌ Lỗi server khi thêm sản phẩm", error: error.toString() });
+    }
+});
+
+// ✅ API CẬP NHẬT SẢN PHẨM
+app.put("/products/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updateData = req.body;
+
+        console.log("📌 ID nhận được:", id);
+        console.log("📌 Dữ liệu nhận được:", updateData);
+
+        // 🛑 Kiểm tra nếu ID không hợp lệ (nếu ID rỗng hoặc null)
+        if (!id) {
+            console.error("❌ Lỗi: ID không hợp lệ!");
+            return res.status(400).json({ success: false, message: "❌ ID không hợp lệ!" });
+        }
+
+        // 🛑 Kiểm tra xem sản phẩm có tồn tại không trước khi cập nhật
+        const existingProduct = await productsCollection.findOne({ _id: id });
+        if (!existingProduct) {
+            console.error("❌ Lỗi: Không tìm thấy sản phẩm!");
+            return res.status(404).json({ success: false, message: "❌ Không tìm thấy sản phẩm!" });
+        }
+
+        // ✅ Tiến hành cập nhật sản phẩm
+        const updatedProduct = await productsCollection.findOneAndUpdate(
+            { _id: id }, // 🛑 Sử dụng `_id: id` nếu ID là string
+            { $set: updateData },
+            { returnDocument: "after" }
+        );
+
+        console.log("✅ Sản phẩm cập nhật thành công:", updatedProduct);
+
+        // ✅ Bổ sung Header CORS để đảm bảo luôn có
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+
+        res.json({ success: true, message: "✅ Sản phẩm đã cập nhật!", data: updatedProduct });
+
+    } catch (error) {
+        console.error("❌ Lỗi server khi cập nhật sản phẩm:", error);
+        res.status(500).json({ success: false, message: "❌ Lỗi server khi cập nhật sản phẩm", error: error.toString() });
+    }
+});
+
 
 
 // Trang chủ test server
@@ -76,6 +223,31 @@ app.get("/check-db", async (req, res) => {
     }
 });
 
+// ✅ API CẬP NHẬT SẢN PHẨM
+app.put("/products/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updateData = req.body;
+
+        // Chuyển đổi id thành ObjectId (MongoDB yêu cầu đúng format)
+        const objectId = new ObjectId(id);
+
+        const updatedProduct = await productsCollection.findOneAndUpdate(
+            { _id: objectId },
+            { $set: updateData },
+            { returnDocument: "after" } // Trả về dữ liệu sau khi cập nhật
+        );
+
+        if (!updatedProduct) {
+            return res.status(404).json({ success: false, message: "❌ Không tìm thấy sản phẩm để cập nhật!" });
+        }
+
+        res.json({ success: true, message: "✅ Sản phẩm đã được cập nhật!", data: updatedProduct });
+    } catch (error) {
+        console.error("❌ Lỗi khi cập nhật sản phẩm:", error);
+        res.status(500).json({ success: false, message: "❌ Lỗi server khi cập nhật sản phẩm", error: error.toString() });
+    }
+});
 
 // ✅ Endpoint lấy tất cả sản phẩm
 app.get("/products", async (req, res) => {
@@ -1032,40 +1204,8 @@ app.get('/user/:userId', async (req, res) => {
 });
 
 
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-      const uploadDir = 'public/uploads/avatars';
-      // Create directory if it doesn't exist
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      }
-      cb(null, uploadDir);
-    },
-    filename: function(req, file, cb) {
-      // Create unique filename: userId + timestamp + original extension
-      const fileExt = path.extname(file.originalname);
-      const fileName = `${req.body.userId}-${Date.now()}${fileExt}`;
-      cb(null, fileName);
-    }
-  });
- 
-  // File filter to only allow image files
-  const fileFilter = (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Chỉ chấp nhận file hình ảnh!'), false);
-    }
-  };
- 
-  const upload = multer({
-    storage: storage,
-    limits: {
-      fileSize: 2 * 1024 * 1024 // 2MB limit
-    },
-    fileFilter: fileFilter
-  });
+
+  
  
   // Avatar upload endpoint
   app.post('/upload-avatar', upload.single('avatar'), async (req, res) => {

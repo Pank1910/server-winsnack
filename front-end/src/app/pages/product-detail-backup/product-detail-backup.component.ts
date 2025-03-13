@@ -223,4 +223,7 @@ export class ProductDetailBackupComponent implements OnInit {
     }
     return 0;
   }
+
+
+
 }

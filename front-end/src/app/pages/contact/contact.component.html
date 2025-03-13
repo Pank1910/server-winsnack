@@ -12,40 +12,46 @@
       style="background-image: url('/assets/images/contact/Bg.png');">
 
 
-    <div class="flex justify-center items-center min-h-screen px-6 md:px-16">
+      <div class="flex justify-center items-center min-h-screen px-6 md:px-16">
         <!-- Form Container -->
         <div class="relative bg-white p-8 md:p-12 shadow-xl max-w-lg ml-auto md:mr-[20px]">
-
             
             <!-- Form Header -->
             <h2 class="text-lg md:text-xl font-semibold text-black text-right">
                 Gửi những thắc mắc của bạn đến với <br>
                 <span class="text-[#FF9413] font-bold block">Win Snack!</span>
             </h2>
-            
-
+    
             <!-- Form -->
-            <form action="#" method="POST" class="mt-6">
+            <form (ngSubmit)="onSubmit($event)" class="mt-6">
                 <!-- Name -->
                 <label for="name" class="text-[#F7941D] font-medium">Tên *</label>
-                <input type="text" id="name" name="name" placeholder="Nhập tên của bạn"
-                    class="mt-1 mb-4 w-full border-b border-[#F7941D] p-2 focus:outline-none focus:border-orange-500">
-
+                <input type="text" id="name" name="name" [(ngModel)]="name"
+                    placeholder="Nhập tên của bạn"
+                    class="mt-1 mb-4 w-full border-b border-[#F7941D] p-2 focus:outline-none focus:border-orange-500"
+                    required>
+    
                 <!-- Email -->
                 <label for="email" class="text-[#F7941D] font-medium">Email *</label>
-                <input type="email" id="email" name="email" placeholder="Nhập email của bạn"
-                    class="mt-1 mb-4 w-full border-b border-[#F7941D] p-2 focus:outline-none focus:border-orange-500">
-
+                <input type="email" id="email" name="email" [(ngModel)]="email"
+                    placeholder="Nhập email của bạn"
+                    class="mt-1 mb-4 w-full border-b border-[#F7941D] p-2 focus:outline-none focus:border-orange-500"
+                    required>
+    
                 <!-- Phone -->
                 <label for="phone" class="text-[#F7941D] font-medium">Số điện thoại *</label>
-                <input type="text" id="phone" name="phone" placeholder="Nhập số điện thoại của bạn"
-                    class="mt-1 mb-4 w-full border-b border-[#F7941D] p-2 focus:outline-none focus:border-orange-500">
-
+                <input type="text" id="phone" name="phone" [(ngModel)]="phone"
+                    placeholder="Nhập số điện thoại của bạn"
+                    class="mt-1 mb-4 w-full border-b border-[#F7941D] p-2 focus:outline-none focus:border-orange-500"
+                    required>
+    
                 <!-- Message -->
                 <label for="message" class="text-[#F7941D] font-medium">Lời nhắn</label>
-                <textarea id="message" name="message" placeholder="Nhập lời nhắn của bạn"
-                    class="mt-1 mb-4 w-full border-b border-[#F7941D] p-2 focus:outline-none focus:border-orange-500"></textarea>
-
+                <textarea id="message" name="message" [(ngModel)]="message"
+                    placeholder="Nhập lời nhắn của bạn"
+                    class="mt-1 mb-4 w-full border-b border-[#F7941D] p-2 focus:outline-none focus:border-orange-500"
+                    required></textarea>
+    
                 <!-- Submit Button -->
                 <button type="submit"
                     class="w-full py-3 flex justify-center items-center gap-2 text-white font-bold 
@@ -54,12 +60,19 @@
                     <span>➝</span>
                 </button>
             </form>
-
-            
-         
         </div>
     </div>
-
+    
+    <!-- Popup -->
+    <div *ngIf="showPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+            <h2 class="text-lg font-semibold text-black">Thông tin đã gửi thành công!</h2>
+            <p class="mt-2 text-gray-600">Chúng tôi sẽ phản hồi sớm. Cảm ơn bạn!</p>
+            <a routerLink="/" class="mt-4 px-4 py-2 bg-[#FF9413] text-white rounded-full inline-block">
+                OK
+            </a>
+        </div>
+    </div>
 </body>
 
 </html>
