@@ -6,7 +6,7 @@ import { User } from './../../../my-server-mongodb/interface/User';
 
 export interface CustomerResponse {
   success: boolean;
-  data: User[];
+  data: any[];
   message?: string;
 }
 
@@ -28,28 +28,26 @@ export class CustomerApiService {
 
   // Lấy danh sách khách hàng (users có role='user')
   getCustomers(): Observable<CustomerApiUser[]> {
-    return this.http.get<CustomerResponse>(`${this.apiUrl}/customers`)
-      .pipe(
-        map(response => {
-          if (response.success && response.data) {
-            return this.mapUsersToCustomers(response.data);
-          }
-          return [];
-        })
-      );
+    return this.http.get<CustomerResponse>(`${this.apiUrl}/customers`).pipe(
+      map(response => {
+        console.log('API Response:', response); // Log để kiểm tra response
+        if (response.success && response.data) {
+          return this.mapUsersToCustomers(response.data);
+        }
+        return [];
+      })
+    );
   }
 
-  /**
-   * Chuyển đổi từ model User sang CustomerApiUser
-   */
+  //Chuyển đổi từ model User sang CustomerApiUser
   private mapUsersToCustomers(users: User[]): CustomerApiUser[] {
     return users.map(user => {
       return {
-        name: user.profileName,
-        email: user.email,
+        name: user.profileName || 'Không có tên',
+        email: user.email || 'Không có email',
         phone: user.phone || 'Chưa cung cấp',
         address: user.address || 'Chưa cung cấp',
-        orderCount: user.orderCount // Sử dụng orderCount từ server trả về
+        orderCount: user.orderCount !== undefined ? Number(user.orderCount) : 0 // Lấy từ response, không từ User
       };
     });
   }

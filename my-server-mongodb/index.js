@@ -160,7 +160,7 @@ app.get("/products/search", async (req, res) => {
 });
 
 // Giả sử usersCollection đã được khai báo từ trước
-const usersCollection = database.collection("Use");
+const usersCollection = database.collection("User");
 
 
 // API cập nhật địa chỉ người dùng
@@ -1139,8 +1139,6 @@ const storage = multer.diskStorage({
           console.log('User not found for userId:', userId);
           return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
         }
-    
-        console.log('User found:', user);
         res.json({
           success: true,
           user: {
@@ -1214,40 +1212,36 @@ app.get('/get-avatar/:userId', async (req, res) => {
 
 // API lấy danh sách khách hàng (users có role='user')
 app.get("/api/customers", async (req, res) => {
-  try {
-    // Lấy danh sách user có role='user'
-    const users = await usersCollection.find({ role: 'user' }).toArray();
-    
-    // Lấy thông tin đơn hàng cho mỗi user
-    const enhancedUsers = await Promise.all(users.map(async (user) => {
-      // Đếm số đơn hàng của user
-      const orderCount = await orderCollection.countDocuments({ userId: user.userId });
-      
-      return {
-        _id: user._id,
-        userId: user.userId,
-        profileName: user.profileName,
-        email: user.email,
-        phone: user.phone || 'Chưa cung cấp',
-        address: user.address || 'Chưa cung cấp',
-        orderCount: orderCount
-      };
-    }));
-    
-    return res.status(200).json({
-      success: true,
-      data: enhancedUsers,
-      message: 'Lấy danh sách khách hàng thành công'
-    });
-  } catch (error) {
-    console.error('Error fetching customers:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Lỗi server khi lấy danh sách khách hàng',
-      error: error.message
-    });
-  }
-});
+    try {
+      const users = await usersCollection.find({ role: 'user' }).toArray();
+  
+      const enhancedUsers = await Promise.all(users.map(async (user) => {
+        const orderCount = await orderCollection.countDocuments({ userId: user.userId });
+        return {
+          _id: user._id,
+          userId: user.userId,
+          profileName: user.profileName,
+          email: user.email,
+          phone: user.phone || 'Chưa cung cấp',
+          address: user.address || 'Chưa cung cấp',
+          orderCount: orderCount // Tính từ Order
+        };
+      }));
+  
+      return res.status(200).json({
+        success: true,
+        data: enhancedUsers,
+        message: 'Lấy danh sách khách hàng thành công'
+      });
+    } catch (error) {
+      console.error('Error fetching customers:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Lỗi server khi lấy danh sách khách hàng',
+        error: error.message
+      });
+    }
+  });
 
 // API tìm kiếm khách hàng theo từ khóa và loại tìm kiếm
 app.get("/api/search-user", async (req, res) => {
@@ -1323,6 +1317,65 @@ app.get("/api/search-user", async (req, res) => {
     });
   }
 });
+
+// Endpoint lấy danh sách đơn hàng cho admin
+app.get('/api/order-admin', async (req, res) => {
+    try {
+      const orders = await orderCollection.find({}).toArray();
+      return res.status(200).json({
+        success: true,
+        data: orders,
+        message: 'Lấy danh sách đơn hàng thành công'
+      });
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Lỗi server khi lấy danh sách đơn hàng',
+        error: error.message
+      });
+    }
+  });
+  
+  // Endpoint lấy chi tiết đơn hàng theo orderId
+  app.get('/api/order-detail-admin/:orderId', async (req, res) => {
+    try {
+      const { orderId } = req.params;
+      const order = await orderCollection.findOne({ orderId });
+      if (!order) {
+        return res.status(404).json({
+          success: false,
+          message: 'Không tìm thấy đơn hàng'
+        });
+      }
+  
+      // Lấy thông tin người dùng từ collection User (nếu cần)
+      const user = await usersCollection.findOne({ userId: order.userId });
+      if (user) {
+        order.userName = user.profileName || 'Khách vãng lai';
+        if (!order.contact) {
+          order.contact = {
+            name: user.profileName || 'Chưa cung cấp',
+            address: user.address || 'Chưa cung cấp',
+            phone: user.phone || 'Chưa cung cấp'
+          };
+        }
+      }
+  
+      return res.status(200).json({
+        success: true,
+        data: order,
+        message: 'Lấy chi tiết đơn hàng thành công'
+      });
+    } catch (error) {
+      console.error('Error fetching order detail:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Lỗi server khi lấy chi tiết đơn hàng',
+        error: error.message
+      });
+    }
+  });
 
 // Khởi động server
 app.listen(port, () => {

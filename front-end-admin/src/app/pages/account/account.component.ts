@@ -22,6 +22,7 @@ export class AccountComponent implements OnInit {
     phone: '',
     avatar: '',
     action: '',
+    orderCount: ''
   };
 
   editedUserData: User = { ...this.userData };

@@ -46,6 +46,7 @@ export class CustomerComponent implements OnInit {
     
     this.customerApiService.getCustomers().subscribe({
       next: (customers) => {
+        console.log('Customers received:', customers);
         this.allCustomers = customers;
         this.filteredCustomers = [...this.allCustomers];
         this.updatePagination();
@@ -53,6 +54,7 @@ export class CustomerComponent implements OnInit {
       },
       error: (error) => {
         console.error('Lỗi khi tải dữ liệu khách hàng:', error);
+        console.error('Chi tiết lỗi:', error.status, error.statusText, error.error);
         this.errorMessage = 'Không thể tải dữ liệu khách hàng. Vui lòng thử lại sau.';
         this.isLoading = false;
       }

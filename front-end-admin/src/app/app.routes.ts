@@ -28,7 +28,7 @@ export const routes: Routes = [
     { path: 'account', component: AccountComponent, canActivate: [AdminGuard] },
     { path: 'customer', component: CustomerComponent, canActivate: [AdminGuard] },
     { path: 'salesorder', component: SalesorderComponent, canActivate: [AdminGuard] },
-    { path: 'order-detail', component: OrderDetailComponent, canActivate: [AdminGuard] },
+    { path: 'order-detail/:id', component: OrderDetailComponent, canActivate: [AdminGuard] },
     { path: 'promotion', component: PromotionComponent, canActivate: [AdminGuard] },
     { path: 'blog-list', component: BlogComponent, canActivate: [AdminGuard] },
     { path: 'product-list', component: ProductComponent, canActivate: [AdminGuard] },

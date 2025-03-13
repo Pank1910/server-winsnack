@@ -1,4 +1,4 @@
-<div class="bg-orange-50">
+<div class="bg-orange-50 min-h-screen">
     <div class="container mx-auto p-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-orange-500">DANH SÁCH ĐƠN HÀNG</h1>
@@ -14,10 +14,23 @@
                         </svg>
                     </button>
                 </div>
+                <!-- Nút Reload -->
+                <button (click)="reloadOrders()" class="px-4 py-2 bg-orange-400 rounded hover:bg-orange-500 transition-colors text-white relative">
+                    <svg *ngIf="!isLoading" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                    </svg>
+                    <div *ngIf="isLoading" class="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-orange-500"></div>
+                </button>
             </div>
         </div>
 
-        <div class="shadow-lg rounded-lg overflow-hidden">
+        <!-- Loading spinner toàn màn hình -->
+        <div *ngIf="isLoading" class="flex justify-center items-center py-8">
+            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+        </div>
+
+        <!-- Bảng dữ liệu -->
+        <div *ngIf="!isLoading" class="shadow-lg rounded-lg overflow-hidden">
             <table class="w-full bg-white">
                 <thead class="bg-orange-400 text-white">
                     <tr>
@@ -48,8 +61,7 @@
                         </td>
                         <td class="py-4 px-6 text-center">{{ order.payment }}</td>
                         <td class="py-4 px-6 text-center">
-                            <!-- Dòng dưới này mốt sửa lại như này để lấy thông tin đơn hàng theo orderid nhe ['/order-detail', order.id] -->
-                            <a [routerLink]="['/order-detail']" class="text-orange-400 hover:text-orange-600 inline-block cursor-pointer transition-colors">
+                            <a [routerLink]="['/order-detail', order.id]" class="text-orange-400 hover:text-orange-600 inline-block cursor-pointer transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                 </svg>
@@ -64,7 +76,7 @@
             </table>
         </div>
 
-        <div class="flex justify-center mt-6 gap-2" *ngIf="totalPages > 0">
+        <div *ngIf="!isLoading && totalPages > 0" class="flex justify-center mt-6 gap-2">
             <button *ngFor="let page of [].constructor(totalPages); let i = index" 
                     (click)="goToPage(i + 1)" 
                     [ngClass]="currentPage === i + 1 ? 'bg-orange-400 text-white' : 'hover:bg-orange-400 hover:text-white'" 
