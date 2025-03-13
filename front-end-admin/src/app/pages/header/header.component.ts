@@ -1,46 +1,61 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
   isNotificationOpen = false;
-  isLoggedIn = false; // Mặc định chưa đăng nhập
-
+  hasAvatar = false;
+  
   account = {
-    name: '',
-    images: 'assets/images/header/default-avatar.png' // Ảnh mặc định
+    name: 'Admin',
+    images: 'assets/images/header/account-image.png',
   };
-
-  constructor(private router: Router) {}
+  
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.checkLoginStatus();
+    this.loadUserProfile();
   }
-
-  // Kiểm tra trạng thái đăng nhập
-  checkLoginStatus(): void {
-    // Giả lập kiểm tra từ localStorage hoặc API
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      const user = JSON.parse(userData);
-      this.isLoggedIn = true;
-      this.account.name = user.name;
-      this.account.images = user.profileImage || this.account.images;
+  
+  loadUserProfile(): void {
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser) {
+      this.account.name = currentUser.profileName || 'Admin';
+      
+      // Kiểm tra xem có avatar hay không
+      if (currentUser.avatar && currentUser.avatar !== '') {
+        this.account.images = currentUser.avatar;
+        this.hasAvatar = true;
+      } else {
+        this.hasAvatar = false;
+        // Không cần set default image vì chúng ta sẽ hiển thị chữ cái đầu thay thế
+      }
     }
   }
 
-  toggleNotifications(): void {
-    this.isNotificationOpen = !this.isNotificationOpen;
+  // Phương thức để lấy chữ cái đầu tiên của tên người dùng
+  getFirstLetter(): string {
+    if (this.account.name && this.account.name.length > 0) {
+      return this.account.name.charAt(0).toUpperCase();
+    }
+    return 'A'; // Mặc định nếu không có tên
   }
 
-  redirectToLogin(): void {
-    this.router.navigate(['/login']);
+  // Phương thức chuyển hướng đến trang account
+  navigateToAccount(): void {
+    this.router.navigate(['/account']);
   }
 }

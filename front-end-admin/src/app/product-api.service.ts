@@ -7,7 +7,7 @@ import { Product } from '../../../my-server-mongodb/interface/Product';
   providedIn: 'root'
 })
 export class ProductApiService {
-  private baseUrl = 'http://localhost:5001/products';
+  private baseUrl = 'http://localhost:5000/products';
 
   private http = inject(HttpClient); // ✅ Tránh lỗi Circular Dependency
 

@@ -1,172 +1,184 @@
 <div class="bg-orange-light min-h-screen">
-    <!-- Main Content -->
-    <main class="max-w-5xl mx-auto p-6">
-      <h1 class="text-4xl font-bold text-orange-500 mb-8 text-center">TÀI KHOẢN ADMIN</h1>
-  
-      <!-- Profile Section - Horizontal Layout -->
-      <div class="flex justify-between items-start mb-12">
-        <!-- Left side - Profile Image and Info -->
-        <div class="flex items-start gap-6">
-            <div class="relative p-1 border-2 border-orange-500 rounded-full">
-                <img [src]="userData.image || '/api/placeholder/96/96'" alt="Profile" class="rounded-full w-24 h-24 object-cover"/>
-            </div>
-          <div class="flex flex-col text-left">
-            <h2 class="text-xl font-bold">{{ userData.name }}</h2>
-            <p class="text-gray-600">{{ userData.role }}</p>
-            <p class="text-gray-500">{{ userData.email }}</p>
-          </div>
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto p-6">
+    <h1 class="text-4xl font-bold text-orange-500 mb-8 text-center">TÀI KHOẢN ADMIN</h1>
+
+    <!-- Profile Section - Horizontal Layout -->
+    <div class="flex justify-between items-start mb-12">
+      <!-- Left side - Profile Image and Info -->
+      <div class="flex items-start gap-6">
+        <div class="relative p-1 border-2 border-orange-500 rounded-full">
+          <!-- If avatar starts with http or /, use as is; otherwise prepend API URL -->
+          <img 
+            [src]="userData.avatar ? (userData.avatar.startsWith('http') || userData.avatar.startsWith('/') ? userData.avatar : 'http://localhost:5000' + userData.avatar) : '/api/placeholder/96/96'" 
+            alt="Profile" 
+            class="rounded-full w-24 h-24 object-cover"/>
         </div>
-  
-        <!-- Right side - Buttons -->
-        <div class="flex gap-4">
-          <button 
-            (click)="updateProfileImage()" 
-            class="bg-orange-500 text-white px-6 py-2 rounded-lg font-medium transition-colors hover:bg-white hover:text-orange-500 hover:border hover:border-orange-500">
-            Cập nhật ảnh
-          </button>
-          <button 
-            (click)="editProfile()" 
-            class="bg-orange-500 text-white px-6 py-2 rounded-lg font-medium transition-colors hover:bg-white hover:text-orange-500 hover:border hover:border-orange-500">
-            Chỉnh sửa
-          </button>
+        <div class="flex flex-col text-left">
+          <h2 class="text-xl font-bold">{{ userData.profileName }}</h2>
+          <p class="text-gray-600">{{ userData.role }}</p>
+          <p class="text-gray-500">{{ userData.email }}</p>
         </div>
       </div>
-  
-      <!-- User Info Section -->
-      <div class="space-y-4 mb-8" *ngIf="!isEditingProfile">
-        <div class="flex items-center">
-          <label class="text-gray-600 w-28">Họ và tên:</label>
-          <p>{{ userData.name }}</p>
-        </div>
-        <div class="flex items-center">
-          <label class="text-gray-600 w-28">Email:</label>
-          <p>{{ userData.email }}</p>
-        </div>
-        <div class="flex items-center">
-          <label class="text-gray-600 w-28">Số điện thoại:</label>
-          <p>{{ userData.phone }}</p>
-        </div>
+
+      <!-- Right side - Buttons -->
+      <div class="flex gap-4">
+        <button 
+          (click)="updateProfileImage()" 
+          class="bg-orange-500 text-white px-6 py-2 rounded-lg font-medium transition-colors hover:bg-white hover:text-orange-500 hover:border hover:border-orange-500">
+          Cập nhật ảnh
+        </button>
+        <button 
+          (click)="editProfile()" 
+          class="bg-orange-500 text-white px-6 py-2 rounded-lg font-medium transition-colors hover:bg-white hover:text-orange-500 hover:border hover:border-orange-500">
+          Chỉnh sửa
+        </button>
       </div>
-  
-      <!-- Edit Form -->
-      <div class="space-y-4 mb-8" *ngIf="isEditingProfile">
-        <div class="flex items-center">
-          <label class="text-gray-600 w-28">Họ và tên:</label>
-          <input [(ngModel)]="editedUserData.name" class="border border-gray-300 rounded px-2 py-1" />
-        </div>
-        <div class="flex items-center">
-          <label class="text-gray-600 w-28">Email:</label>
-          <input [(ngModel)]="editedUserData.email" class="border border-gray-300 rounded px-2 py-1" />
-        </div>
-        <div class="flex items-center">
-          <label class="text-gray-600 w-28">Số điện thoại:</label>
-          <input [(ngModel)]="editedUserData.phone" class="border border-gray-300 rounded px-2 py-1" />
-        </div>
-        <div class="flex gap-2 mt-4">
-          <button 
-            (click)="saveProfile()" 
-            class="bg-orange-500 text-white px-4 py-1 rounded-lg font-medium transition-colors hover:bg-white hover:text-orange-500 hover:border hover:border-orange-500">
-            Lưu
-          </button>
-          <button 
-            (click)="cancelEdit()" 
-            class="bg-gray-500 text-white px-4 py-1 rounded-lg font-medium transition-colors hover:bg-white hover:text-gray-500 hover:border hover:border-gray-500">
-            Hủy
-          </button>
-        </div>
+    </div>
+
+    <!-- User Info Section -->
+    <div class="space-y-4 mb-8" *ngIf="!isEditingProfile">
+      <div class="flex items-center">
+        <label class="text-gray-600 w-28">Họ và tên:</label>
+        <p>{{ userData.profileName }}</p>
       </div>
-  
-      <!-- Password Section -->
-      <div class="bg-orange-password p-6 rounded-lg mb-8">
-        <h2 class="text-2xl font-extrabold text-orange-500 mb-6 text-center uppercase tracking-wider">MẬT KHẨU</h2>
-        <div class="space-y-4">
-          <div class="flex justify-between items-center">
-            <div>
-              <h3 class="font-bold">Mật khẩu</h3>
-              <p class="text-lg" *ngIf="!isEditingPassword">••••••••</p>
-              <div *ngIf="isEditingPassword" class="space-y-2">
-                <input type="password" [(ngModel)]="newPassword" placeholder="Mật khẩu mới" class="border border-gray-300 rounded px-2 py-1" />
-                <input type="password" [(ngModel)]="confirmPassword" placeholder="Xác nhận mật khẩu" class="border border-gray-300 rounded px-2 py-1" />
-                <div class="flex gap-2">
-                  <button 
-                    (click)="savePassword()" 
-                    class="bg-orange-500 text-white px-4 py-1 rounded-lg font-medium transition-colors hover:bg-white hover:text-orange-500 hover:border hover:border-orange-500">
-                    Lưu
-                  </button>
-                  <button 
-                    (click)="cancelPasswordEdit()" 
-                    class="bg-gray-500 text-white px-4 py-1 rounded-lg font-medium transition-colors hover:bg-white hover:text-gray-500 hover:border hover:border-gray-500">
-                    Hủy
-                  </button>
-                </div>
-              </div>
-            </div>
-            <button class="text-orange-500" (click)="togglePasswordEdit()">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-              </svg>
+      <div class="flex items-center">
+        <label class="text-gray-600 w-28">Email:</label>
+        <p>{{ userData.email }}</p>
+      </div>
+      <div class="flex items-center">
+        <label class="text-gray-600 w-28">Số điện thoại:</label>
+        <p>{{ userData.phone }}</p>
+      </div>
+      <div class="flex items-center">
+        <label class="text-gray-600 w-28">Địa chỉ:</label>
+        <p>{{ userData.address || 'Chưa cung cấp' }}</p>
+      </div>
+    </div>
+
+    <!-- Edit Form -->
+    <div class="space-y-4 mb-8" *ngIf="isEditingProfile">
+      <div class="flex items-center">
+        <label class="text-gray-600 w-28">Họ và tên:</label>
+        <input [(ngModel)]="editedUserData.profileName" class="border border-gray-300 rounded px-2 py-1" />
+      </div>
+      <div class="flex items-center">
+        <label class="text-gray-600 w-28">Email:</label>
+        <input [(ngModel)]="editedUserData.email" class="border border-gray-300 rounded px-2 py-1" />
+      </div>
+      <div class="flex items-center">
+        <label class="text-gray-600 w-28">Số điện thoại:</label>
+        <input [(ngModel)]="editedUserData.phone" class="border border-gray-300 rounded px-2 py-1" />
+      </div>
+      <div class="flex items-center">
+        <label class="text-gray-600 w-28">Địa chỉ:</label>
+        <input [(ngModel)]="editedUserData.address" class="border border-gray-300 rounded px-2 py-1" />
+      </div>
+      <div class="flex gap-2 mt-4">
+        <button 
+          (click)="saveProfile()" 
+          class="bg-orange-500 text-white px-4 py-1 rounded-lg font-medium transition-colors hover:bg-white hover:text-orange-500 hover:border hover:border-orange-500">
+          Lưu
+        </button>
+        <button 
+          (click)="cancelEdit()" 
+          class="bg-gray-500 text-white px-4 py-1 rounded-lg font-medium transition-colors hover:bg-white hover:text-gray-500 hover:border hover:border-gray-500">
+          Hủy
+        </button>
+      </div>
+    </div>
+
+<!-- Password Section -->
+<div class="bg-orange-password p-6 rounded-lg mb-8">
+  <h2 class="text-2xl font-extrabold text-orange-500 mb-6 text-center uppercase tracking-wider">MẬT KHẨU</h2>
+  <div class="space-y-4">
+    <div class="flex justify-between items-center">
+      <div>
+        <h3 class="font-bold">Mật khẩu</h3>
+        <p class="text-lg" *ngIf="!isEditingPassword">••••••••</p>
+        <div *ngIf="isEditingPassword" class="space-y-2">
+          <input type="password" [(ngModel)]="newPassword" placeholder="Mật khẩu mới" class="border border-gray-300 rounded px-2 py-1" />
+          <input type="password" [(ngModel)]="confirmPassword" placeholder="Xác nhận mật khẩu" class="border border-gray-300 rounded px-2 py-1" />
+          <div class="flex gap-2">
+            <button 
+              (click)="savePassword()" 
+              class="bg-orange-500 text-white px-4 py-1 rounded-lg font-medium transition-colors hover:bg-white hover:text-orange-500 hover:border hover:border-orange-500">
+              Lưu
             </button>
-          </div>
-          <div class="flex justify-between items-center">
-            <div>
-              <h3 class="font-bold">SMS</h3>
-              <p class="text-gray-600" *ngIf="!isEditingSMS">Nhận mã SMS cho mỗi lần đăng nhập</p>
-              <input *ngIf="isEditingSMS" [(ngModel)]="userData.smsNumber" placeholder="Số điện thoại nhận SMS" class="border border-gray-300 rounded px-2 py-1" />
-            </div>
-            <button class="text-orange-500" (click)="toggleSMSEdit()">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-              </svg>
-            </button>
-          </div>
-          <div class="flex justify-between items-center">
-            <div>
-              <h3 class="font-bold">Thông báo SMS</h3>
-            </div>
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" [(ngModel)]="userData.smsNotifications" class="sr-only peer">
-              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
-            </label>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Display Section -->
-      <div class="bg-orange-password p-6 rounded-lg">
-        <h2 class="text-2xl font-extrabold text-orange-500 mb-6 text-center uppercase tracking-wider">TÙY CHỌN</h2>
-        <div class="space-y-4">
-          <div class="flex justify-between items-center">
-            <div>
-              <h3 class="font-bold">Ngôn ngữ</h3>
-              <p *ngIf="!isEditingLanguage">{{ userData.language || 'Tiếng Việt' }}</p>
-              <select *ngIf="isEditingLanguage" [(ngModel)]="userData.language" class="border border-gray-300 rounded px-2 py-1">
-                <option value="Tiếng Việt">Tiếng Việt</option>
-                <option value="English">English</option>
-              </select>
-            </div>
-            <button class="text-orange-500" (click)="toggleLanguageEdit()">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-              </svg>
-            </button>
-          </div>
-          <div class="flex justify-between items-center">
-            <div>
-              <h3 class="font-bold">Đơn vị</h3>
-              <p *ngIf="!isEditingCurrency">{{ userData.currency || 'Việt Nam đồng' }}</p>
-              <select *ngIf="isEditingCurrency" [(ngModel)]="userData.currency" class="border border-gray-300 rounded px-2 py-1">
-                <option value="Việt Nam đồng">Việt Nam đồng</option>
-                <option value="USD">USD</option>
-                <option value="EUR">EUR</option>
-              </select>
-            </div>
-            <button class="text-orange-500" (click)="toggleCurrencyEdit()">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-              </svg>
+            <button 
+              (click)="cancelPasswordEdit()" 
+              class="bg-gray-500 text-white px-4 py-1 rounded-lg font-medium transition-colors hover:bg-white hover:text-gray-500 hover:border hover:border-gray-500">
+              Hủy
             </button>
           </div>
         </div>
       </div>
-    </main>
+      <button class="text-orange-500" (click)="togglePasswordEdit()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+        </svg>
+      </button>
+    </div>
+    <div class="flex justify-between items-center">
+      <div>
+        <h3 class="font-bold">SMS</h3>
+        <p class="text-gray-600" *ngIf="!isEditingSMS">Nhận mã SMS cho mỗi lần đăng nhập</p>
+        <input *ngIf="isEditingSMS" [(ngModel)]="sms" placeholder="Số điện thoại nhận SMS" class="border border-gray-300 rounded px-2 py-1" />
+      </div>
+      <button class="text-orange-500" (click)="toggleSMSEdit()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+        </svg>
+      </button>
+    </div>
+    <div class="flex justify-between items-center">
+      <div>
+        <h3 class="font-bold">Thông báo SMS</h3>
+      </div>
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" [(ngModel)]="smsNotifications" class="sr-only peer">
+        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+      </label>
+    </div>
   </div>
+</div>
+
+<!-- Display Section -->
+<div class="bg-orange-password p-6 rounded-lg">
+  <h2 class="text-2xl font-extrabold text-orange-500 mb-6 text-center uppercase tracking-wider">TÙY CHỌN</h2>
+  <div class="space-y-4">
+    <div class="flex justify-between items-center">
+      <div>
+        <h3 class="font-bold">Ngôn ngữ</h3>
+        <p *ngIf="!isEditingLanguage">{{ language }}</p>
+        <select *ngIf="isEditingLanguage" [(ngModel)]="language" class="border border-gray-300 rounded px-2 py-1">
+          <option value="Tiếng Việt">Tiếng Việt</option>
+          <option value="English">English</option>
+        </select>
+      </div>
+      <button class="text-orange-500" (click)="toggleLanguageEdit()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+        </svg>
+      </button>
+    </div>
+    <div class="flex justify-between items-center">
+      <div>
+        <h3 class="font-bold">Đơn vị</h3>
+        <p *ngIf="!isEditingCurrency">{{ currency }}</p>
+        <select *ngIf="isEditingCurrency" [(ngModel)]="currency" class="border border-gray-300 rounded px-2 py-1">
+          <option value="Việt Nam đồng">Việt Nam đồng</option>
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+        </select>
+      </div>
+      <button class="text-orange-500" (click)="toggleCurrencyEdit()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+</main>
+</div>

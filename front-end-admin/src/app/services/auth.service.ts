@@ -21,21 +21,26 @@ export class AuthService {
     private currentUserSubject = new BehaviorSubject<User | null>(this.getCurrentUserFromStorage());
     currentUser$ = this.currentUserSubject.asObservable();
 
-    updateCurrentUser(user: User) {
-        console.log('Updating user in auth service:', user);
-        this.currentUserSubject.next(user);
-        localStorage.setItem('currentUser', JSON.stringify(user));
-      }
-
     constructor(
         private http: HttpClient,
         private router: Router
     ) { 
         // Kiểm tra trạng thái đăng nhập khi khởi tạo service
-        if (this.hasToken()) {
-            this.checkUser().subscribe({
-                error: () => this.logout()
-            });
+        const token = localStorage.getItem('token');
+        const currentUser = localStorage.getItem('currentUser');
+        
+        if (token && currentUser) {
+            try {
+                const user = JSON.parse(currentUser);
+                this.currentUserSubject.next(user);
+                this.isLoggedInSubject.next(true);
+                
+                this.checkUser().subscribe({
+                    error: () => this.logout()
+                });
+            } catch (e) {
+                this.logout();
+            }
         }
     }
 
@@ -52,7 +57,7 @@ export class AuthService {
 
     // Kiểm tra xem người dùng đã đăng nhập chưa
     isLoggedIn(): boolean {
-        return this.isLoggedInSubject.value;
+        return !!localStorage.getItem('token') && this.isLoggedInSubject.value;
     }
 
     // Lấy thông tin người dùng hiện tại
@@ -66,20 +71,20 @@ export class AuthService {
         return !!user && user.role === 'admin';
     }
 
-    login(credentials: { profileName: string, password: string }): Observable<any> {
-        return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
-            tap(response => {
-                if (response && response.user) {
-                    localStorage.setItem('currentUser', JSON.stringify(response.user));
-                    this.currentUserSubject.next(response.user);
-                    this.isLoggedInSubject.next(true);
-                }
-            }),
-            catchError(error => this.handleError(error))
+    login(credentials: { profileName: string; password: string }): Observable<any> {
+        return this.http.post<any>('http://localhost:5000/auth/login', credentials).pipe(
+          tap((response) => {
+            if (response && response.user) {
+              // Lưu token vào localStorage
+              localStorage.setItem('token', response.token);
+              localStorage.setItem('currentUser', JSON.stringify(response.user));
+              this.currentUserSubject.next(response.user);
+              this.isLoggedInSubject.next(true);
+            }
+          })
         );
     }
       
-
     register(userData: { profileName: string, password: string }): Observable<any> {
         return this.http.post<any>(`${this.apiUrl}/register`, userData).pipe(
             tap(response => {
@@ -170,4 +175,8 @@ export class AuthService {
         
         return throwError(() => new Error(errorMessage));
     }
+
+    isAuthenticated(): boolean {
+        return this.isLoggedInSubject.value;
+      }
 }

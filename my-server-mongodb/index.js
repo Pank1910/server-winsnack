@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 5001;
+const port = 5000;
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -1101,6 +1101,116 @@ const storage = multer.diskStorage({
   // Serve static files
   app.use('/uploads/avatars', express.static('public/uploads/avatars'));
  
+  app.put('/update-password', async (req, res) => {
+    try {
+      const { userId, newPassword } = req.body;
+      if (!userId || !newPassword) {
+        return res.status(400).json({ success: false, message: "Thiếu userId hoặc newPassword" });
+      }
+  
+      const result = await database.collection('User').findOneAndUpdate(
+        { userId },
+        { $set: { password: newPassword } },
+        { returnDocument: 'after' }
+      );
+  
+      if (!result.value) {
+        return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
+      }
+  
+      res.json({ success: true, message: "Cập nhật mật khẩu thành công" });
+    } catch (error) {
+      console.error('Error in /update-password:', error);
+      res.status(500).json({ success: false, message: "Lỗi server", error: error.toString() });
+    }
+  });
+
+  app.get('/profile-admin', async (req, res) => {
+    try {
+        const userId = req.query.userId;
+        console.log('Fetching profile for userId:', userId);
+    
+        if (!userId) {
+          return res.status(400).json({ success: false, message: "Thiếu userId" });
+        }
+    
+        const user = await database.collection('User').findOne({ userId });
+        if (!user) {
+          console.log('User not found for userId:', userId);
+          return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
+        }
+    
+        console.log('User found:', user);
+        res.json({
+          success: true,
+          user: {
+            userId: user.userId,
+            profileName: user.profileName,
+            email: user.email,
+            role: user.role,
+            phone: user.phone || '',
+            avatar: user.avatar || '',
+            address: user.address || '',
+            marketing: user.marketing || false
+          }
+        });
+      } catch (error) {
+        console.error('Error in /profile:', error);
+        res.status(500).json({ success: false, message: "Lỗi server", error: error.toString() });
+      }
+    });
+
+    // Endpoint upload avatar
+app.post('/upload-avatar-admin', upload.single('avatar'), async (req, res) => {
+    try {
+        console.log('Received upload request - userId:', req.body.userId);
+        console.log('Uploaded file:', req.file);
+
+        const userId = req.body.userId;
+        if (!req.file || !userId) {
+            return res.status(400).json({ success: false, message: 'Thiếu file hoặc userId' });
+        }
+
+        const avatarUrl = `/uploads/avatars/${req.file.filename}`;
+        console.log('Generated avatar URL:', avatarUrl);
+
+        const result = await usersCollection.findOneAndUpdate(
+            { userId: userId },
+            { $set: { avatar: avatarUrl } },
+            { returnDocument: 'after' }
+        );
+
+        if (!result.value) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy user' });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Cập nhật ảnh đại diện thành công',
+            user: result.value
+        });
+    } catch (error) {
+        console.error('Error uploading avatar:', error);
+        res.status(500).json({ success: false, message: 'Lỗi server: ' + error.message });
+    }
+});
+
+app.get('/get-avatar/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const user = await usersCollection.findOne({ userId });
+        if (!user || !user.avatar) {
+            return res.status(404).json({ message: 'Avatar not found' });
+        }
+
+        const filePath = path.join(__dirname, 'public', user.avatar);
+        res.sendFile(filePath);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.toString() });
+    }
+});
+
 // Khởi động server
 app.listen(port, () => {
     console.log(`🚀 Server is running at http://localhost:${port}`);
