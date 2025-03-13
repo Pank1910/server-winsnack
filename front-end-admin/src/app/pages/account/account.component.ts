@@ -132,9 +132,20 @@ export class AccountComponent implements OnInit {
         this.userApiService.uploadAvatar(formData).subscribe({
           next: (response) => {
             if (response.success) {
-              // Update avatar URL with the one returned from server
+              // Cập nhật URL avatar từ response
               this.userData.avatar = response.user.avatar;
-              console.log('Avatar updated successfully');
+              
+              // Thêm timestamp vào URL để tránh cache
+              const timestamp = new Date().getTime();
+              if (this.userData.avatar.includes('?')) {
+                this.userData.avatar += `&t=${timestamp}`;
+              } else {
+                this.userData.avatar += `?t=${timestamp}`;
+              }
+              
+              // Buộc Angular cập nhật view
+              this.cdr.detectChanges();
+              console.log('Avatar updated successfully:', this.userData.avatar);
             }
           },
           error: (error) => {
@@ -148,6 +159,36 @@ export class AccountComponent implements OnInit {
     document.body.appendChild(fileInput);
     fileInput.click();
     document.body.removeChild(fileInput);
+  }
+
+  // Thêm phương thức này vào account.component.ts
+  getAvatarUrl(): string {
+    if (!this.userData.avatar) {
+      return '/api/placeholder/96/96';
+    }
+    
+    // Nếu avatar đã là URL đầy đủ
+    if (this.userData.avatar.startsWith('http')) {
+      return this.userData.avatar;
+    }
+    
+    // Thêm base URL vào đường dẫn tương đối
+    return 'http://localhost:5000' + this.userData.avatar;
+  }
+
+  previewImage(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+      const file = target.files[0];
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        this.userData.avatar = e.target?.result as string;
+        this.cdr.detectChanges();
+      };
+      
+      reader.readAsDataURL(file);
+    }
   }
 
   // Start editing profile

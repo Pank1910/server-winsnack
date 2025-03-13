@@ -46,7 +46,7 @@ export class UserApiService {
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
-    return this.http.post(`${this.API_URL}/upload-avatar`, formData, { headers });
+    return this.http.post(`${this.API_URL}/upload-avatar-admin`, formData, { headers });
   }
 
   updatePassword(userId: string, newPassword: string): Observable<any> {

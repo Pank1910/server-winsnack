@@ -160,7 +160,7 @@ app.get("/products/search", async (req, res) => {
 });
 
 // Giả sử usersCollection đã được khai báo từ trước
-const usersCollection = database.collection("User");
+const usersCollection = database.collection("Use");
 
 
 // API cập nhật địa chỉ người dùng
@@ -1209,6 +1209,119 @@ app.get('/get-avatar/:userId', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.toString() });
     }
+});
+
+
+// API lấy danh sách khách hàng (users có role='user')
+app.get("/api/customers", async (req, res) => {
+  try {
+    // Lấy danh sách user có role='user'
+    const users = await usersCollection.find({ role: 'user' }).toArray();
+    
+    // Lấy thông tin đơn hàng cho mỗi user
+    const enhancedUsers = await Promise.all(users.map(async (user) => {
+      // Đếm số đơn hàng của user
+      const orderCount = await orderCollection.countDocuments({ userId: user.userId });
+      
+      return {
+        _id: user._id,
+        userId: user.userId,
+        profileName: user.profileName,
+        email: user.email,
+        phone: user.phone || 'Chưa cung cấp',
+        address: user.address || 'Chưa cung cấp',
+        orderCount: orderCount
+      };
+    }));
+    
+    return res.status(200).json({
+      success: true,
+      data: enhancedUsers,
+      message: 'Lấy danh sách khách hàng thành công'
+    });
+  } catch (error) {
+    console.error('Error fetching customers:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server khi lấy danh sách khách hàng',
+      error: error.message
+    });
+  }
+});
+
+// API tìm kiếm khách hàng theo từ khóa và loại tìm kiếm
+app.get("/api/search-user", async (req, res) => {
+  try {
+    const { searchTerm, searchType } = req.query;
+    let query = { role: 'user' };
+    
+    // Xây dựng query dựa trên loại tìm kiếm
+    if (searchTerm && searchType !== 'all') {
+      switch (searchType) {
+        case 'name':
+          query.profileName = { $regex: searchTerm, $options: 'i' };
+          break;
+        case 'email':
+          query.email = { $regex: searchTerm, $options: 'i' };
+          break;
+        case 'phone':
+          query.phone = { $regex: searchTerm, $options: 'i' };
+          break;
+        case 'address':
+          query.address = { $regex: searchTerm, $options: 'i' };
+          break;
+        case 'orderCount':
+          // Trường hợp đặc biệt - xử lý riêng ở dưới
+          break;
+      }
+    } else if (searchTerm) {
+      // Tìm kiếm tất cả các trường
+      query.$or = [
+        { profileName: { $regex: searchTerm, $options: 'i' } },
+        { email: { $regex: searchTerm, $options: 'i' } },
+        { phone: { $regex: searchTerm, $options: 'i' } },
+        { address: { $regex: searchTerm, $options: 'i' } }
+      ];
+    }
+    
+    // Tìm các user phù hợp với query
+    const users = await usersCollection.find(query).toArray();
+    
+    // Lấy thông tin đơn hàng cho mỗi user
+    let enhancedUsers = await Promise.all(users.map(async (user) => {
+      const orderCount = await orderCollection.countDocuments({ userId: user.userId });
+      
+      return {
+        _id: user._id,
+        userId: user.userId,
+        profileName: user.profileName,
+        email: user.email,
+        phone: user.phone || 'Chưa cung cấp',
+        address: user.address || 'Chưa cung cấp',
+        orderCount: orderCount
+      };
+    }));
+    
+    // Xử lý trường hợp tìm kiếm theo orderCount
+    if (searchTerm && searchType === 'orderCount') {
+      enhancedUsers = enhancedUsers.filter(user => 
+        user.orderCount.toString().includes(searchTerm)
+      );
+    }
+    
+    return res.status(200).json({
+      success: true,
+      data: enhancedUsers,
+      message: 'Tìm kiếm khách hàng thành công'
+    });
+  } catch (error) {
+    console.error('Error searching customers:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server khi tìm kiếm khách hàng',
+      error: error.message
+    });
+  }
 });
 
 // Khởi động server

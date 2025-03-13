@@ -1,4 +1,5 @@
 export class User {
+  orderCount: any;
   constructor(
     public _id: string | null = null,
     public avatar: string,
