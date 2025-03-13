@@ -1,22 +1,29 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-contact',
+  standalone: true,
+  imports: [RouterModule, CommonModule, FormsModule],
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.css']
 })
 export class ContactComponent {
-  // Các biến để lưu trữ dữ liệu người dùng nhập vào
   name: string = '';
   email: string = '';
   phone: string = '';
   message: string = '';
+  showPopup: boolean = false; // Biến kiểm soát popup
 
-  // Phương thức để xử lý khi người dùng gửi form
-  onSubmit() {
-    // Kiểm tra dữ liệu nhập vào
+  constructor(private router: Router) {}
+
+  onSubmit(event: Event) {
+    event.preventDefault(); // Ngăn chặn reload trang
+
     if (this.name && this.email && this.phone && this.message) {
-      // Giả lập gửi thông tin (có thể gọi API hoặc xử lý theo yêu cầu)
       console.log('Thông tin đã gửi:', {
         name: this.name,
         email: this.email,
@@ -24,16 +31,9 @@ export class ContactComponent {
         message: this.message
       });
 
-      // Reset form sau khi gửi
-      this.name = '';
-      this.email = '';
-      this.phone = '';
-      this.message = '';
-
-      // Thông báo thành công
-      alert('Cảm ơn bạn đã gửi thông tin, chúng tôi sẽ phản hồi sớm!');
+      // Hiển thị popup
+      this.showPopup = true;
     } else {
-      // Thông báo lỗi nếu thông tin chưa đủ
       alert('Vui lòng điền đầy đủ thông tin!');
     }
   }

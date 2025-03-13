@@ -55,7 +55,7 @@
                 </div>
                 <div class="mb-4">
                     <span class="text-[#FF9413] text-xl">★ {{ product.rating }}</span>
-                    <span class="text-gray-600 ml-2">(Chưa có đánh giá)</span>
+                    <span class="text-gray-600 ml-2">(67 đánh giá)</span>
                     <span class="text-gray-600 ml-2">Sản phẩm mới: {{ product.isNew ? 'Có' : 'Không' }}</span>
                 </div>
                 <div class="mb-4">
@@ -137,15 +137,135 @@
         </div>
 
         <!-- Product Description Tab -->
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <div class="flex border-b">
-                <button (click)="setActiveTab('description')"
-                    [ngClass]="{'text-[#FF9413] border-b-2 border-[#FF9413]': activeTab === 'description'}"
-                    class="py-3 px-5 font-semibold">Mô tả</button>
+<!-- Product Description & Review Tabs -->
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <div class="flex border-b">
+        <button (click)="setActiveTab('description')"
+            [ngClass]="{'text-[#FF9413] border-b-2 border-[#FF9413]': activeTab === 'description'}"
+            class="py-3 px-5 font-semibold">
+            Mô tả
+        </button>
+        <button (click)="setActiveTab('reviews')"
+            [ngClass]="{'text-[#FF9413] border-b-2 border-[#FF9413]': activeTab === 'reviews'}"
+            class="py-3 px-5 font-semibold">
+            Đánh giá
+        </button>
+    </div>
+
+    <!-- Nội dung mô tả sản phẩm -->
+    <div class="p-6" *ngIf="activeTab === 'description'">
+        <h2 class="text-xl font-bold mb-3">Mô tả chi tiết</h2>
+        <p>{{ product.product_detail }}</p>
+
+        <!-- Cách ăn -->
+        <h2 class="text-lg font-semibold mt-4">Cách ăn</h2>
+        <p>Bánh tráng sẽ ngon và đậm đà nếu bạn thưởng thức đúng cách. Cách ăn khá đơn giản, bạn chỉ cần:</p>
+        <ul class="list-disc pl-6">
+            <li><strong>Ăn trực tiếp:</strong> Bánh tráng rong biển giòn rụm, đã được nêm nếm gia vị sẵn, bạn chỉ cần mở gói và thưởng thức ngay. Cách ăn này nhanh gọn, tiện lợi khi đang làm việc, xem phim, hay đi dã ngoại.</li>
+            <li><strong>Cuộn kèm rau và thịt:</strong> Dùng bánh tráng rong biển để cuộn cùng rau sống, bún, và thịt nướng hoặc tôm luộc. Chấm với nước mắm chua ngọt hoặc sốt me để tăng thêm hương vị. Cách này giúp bữa ăn thêm phần sáng tạo và hấp dẫn hơn!</li>
+        </ul>
+        <p class="mt-3">💡 <strong>Win Snack khuyên người dùng</strong> lưu ý bảo quản sản phẩm trong khu vực khô ráo và thoáng mát, tránh tiếp xúc trực tiếp với ánh nắng. Thời hạn sử dụng tối đa của sản phẩm là **7 ngày khi để ở ngoài** và **có thể lên đến 1 tháng nếu cất giữ trong ngăn mát của tủ lạnh**.</p>
+
+        <!-- Cam kết -->
+        <h2 class="text-lg font-semibold mt-6">Cam kết</h2>
+        <ul class="list-disc pl-6">
+            <li>✅ Khách hàng có thể vừa mua trực tiếp hoặc đặt hàng qua hệ thống đều được.</li>
+            <li>✅ Giá thành sản phẩm phải chăng, niêm yết chính hãng, giúp khách hàng toàn quốc yên tâm mua sắm.</li>
+            <li>✅ Win Snack hỗ trợ giao hàng **trên toàn bộ 63 tỉnh thành**, giúp khách hàng có trải nghiệm mua sắm tiện lợi nhất.</li>
+            <li>✅ <strong>Cam kết hàng chuẩn</strong> và **khách hàng được đổi trả sản phẩm nếu có lỗi trong khâu vận chuyển hoặc từ nhà sản xuất**.</li>
+            <li>✅ <strong>Bánh tráng rong biển Win Snack</strong> mang hương vị thơm ngon, **được nhiều bạn trẻ săn lùng hiện nay**. Thưởng thức ngay cho đã cái nư nào! 😋</li>
+        </ul>
+
+        <!-- Thông tin liên hệ -->
+        <h2 class="text-lg font-semibold mt-6">Thông tin liên hệ</h2>
+        <ul class="list-disc pl-6">
+            <li>📍 <strong>Cửa hàng:</strong> 567 đường Cách Mạng Tháng Tám, Phường 9, Quận 10, TP.HCM</li>
+            <li>🏢 <strong>Kho sỉ:</strong> 25/10 Nguyễn Hữu Cảnh, Phường 22, Quận Bình Thạnh, TP.HCM</li>
+            <li>📞 <strong>Hotline:</strong> <a href="tel:1233-7777" class="text-[#FF9413] font-bold">1233-7777</a></li>
+            <li>🌐 <strong>Website:</strong> <a href="https://winsnack.vn.com/" class="text-[#FF9413] font-bold">https://winsnack.vn.com/</a></li>
+        </ul>
+    </div>
+
+    <!-- Phần đánh giá sản phẩm -->
+    
+<!-- Phần đánh giá sản phẩm -->
+<div class="p-6" *ngIf="activeTab === 'reviews'">
+    <h2 class="text-xl font-bold mb-4">Đánh giá sản phẩm</h2>
+
+    <!-- Tổng điểm đánh giá -->
+    <div class="overall-rating flex items-center mb-4">
+        <span class="rating-value text-4xl font-bold text-[#FF9413]">4.8</span>
+        <div class="stars ml-3 text-2xl text-[#FF9413]">
+            ★★★★★
+        </div>
+        <span class="total-reviews ml-3 text-gray-600">(67 đánh giá)</span>
+    </div>
+
+    <!-- Danh sách đánh giá -->
+    <div class="customer-reviews mt-6">
+        <div class="review border-b py-4">
+            <div class="review-header flex items-center mb-2">
+                <div class="reviewer-name font-bold text-gray-800">Thanh Tý</div>
+                <div class="review-stars ml-3 text-[#FF9413]">★★★★★</div>
+                <div class="review-date ml-3 text-gray-500 text-sm">3 tháng trước</div>
             </div>
-            <div class="p-6" *ngIf="activeTab === 'description'">
-                <p>{{ product.product_detail }}</p>
+            <div class="review-content text-gray-700">
+                Mình là người khó tính về đồ ăn vặt nhưng bánh tráng rong biển này thực sự rất ngon. Giòn, vị rong biển đậm đà, ăn hoài không ngán.
+            </div>
+        </div>
+
+        <div class="review border-b py-4">
+            <div class="review-header flex items-center mb-2">
+                <div class="reviewer-name font-bold text-gray-800">Bảo Trân</div>
+                <div class="review-stars ml-3 text-[#FF9413]">★★★★★</div>
+                <div class="review-date ml-3 text-gray-500 text-sm">5 tháng trước</div>
+            </div>
+            <div class="review-content text-gray-700">
+                Sản phẩm đóng gói đẹp, vệ sinh. Mùi thơm, vị ngon, ăn rất cuốn. Đã trở thành món ăn vặt yêu thích của gia đình mình.
+            </div>
+        </div>
+
+        <div class="review border-b py-4">
+            <div class="review-header flex items-center mb-2">
+                <div class="reviewer-name font-bold text-gray-800">Minh Khôi</div>
+                <div class="review-stars ml-3 text-[#FF9413]">★★★★☆</div>
+                <div class="review-date ml-3 text-gray-500 text-sm">1 tháng trước</div>
+            </div>
+            <div class="review-content text-gray-700">
+                Bánh giòn, vị sốt me ngon nhưng mình thích thêm cay hơn một chút. Tổng thể là ổn!
             </div>
         </div>
     </div>
+
+    <!-- Form viết đánh giá -->
+    <div class="review-form-container mt-6">
+        <h3 class="text-lg font-bold mb-3">Viết đánh giá của bạn</h3>
+        <form class="bg-gray-100 p-4 rounded-lg">
+            <div class="star-rating mb-3">
+                <span class="font-medium">Đánh giá của bạn:</span>
+                <div class="star-input flex">
+                    <input type="radio" name="rating" value="5" id="star5">
+                    <label for="star5" class="text-[#FF9413] text-2xl">★</label>
+                    <input type="radio" name="rating" value="4" id="star4">
+                    <label for="star4" class="text-[#FF9413] text-2xl">★</label>
+                    <input type="radio" name="rating" value="3" id="star3">
+                    <label for="star3" class="text-[#FF9413] text-2xl">★</label>
+                    <input type="radio" name="rating" value="2" id="star2">
+                    <label for="star2" class="text-[#FF9413] text-2xl">★</label>
+                    <input type="radio" name="rating" value="1" id="star1">
+                    <label for="star1" class="text-[#FF9413] text-2xl">★</label>
+                </div>
+            </div>
+            <textarea placeholder="Chia sẻ đánh giá của bạn về sản phẩm"
+                class="w-full p-3 rounded-lg border"></textarea>
+            <button type="submit" class="mt-3 px-4 py-2 bg-[#FF9413] text-white rounded-lg">
+                Gửi đánh giá
+            </button>
+        </form>
+    </div>
 </div>
+
+    </div>
+</div>
+
+
