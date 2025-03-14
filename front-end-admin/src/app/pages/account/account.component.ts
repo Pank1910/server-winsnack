@@ -173,6 +173,8 @@ export class AccountComponent implements OnInit {
       return this.userData.avatar;
     }
     
+
+    
     // Thêm base URL vào đường dẫn tương đối
     return 'http://localhost:5000' + this.userData.avatar;
   }
