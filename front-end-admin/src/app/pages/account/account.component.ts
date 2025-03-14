@@ -1,166 +1,297 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface UserData {
-  name: string;
-  role: string;
-  email: string;
-  phone: string;
-  image: string;
-  smsNumber?: string;
-  smsNotifications?: boolean;
-  language?: string;
-  currency?: string;
-}
+import { HttpClientModule } from '@angular/common/http';
+import { User } from './../../../../../my-server-mongodb/interface/User';
+import { UserApiService } from '../../user-api.service';
 
 @Component({
   selector: 'app-account',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.css']
 })
 export class AccountComponent implements OnInit {
-  // Thông tin người dùng
-  userData: UserData = {
-    name: 'Linh Linh',
-    role: 'Admin 1',
-    email: 'khanhlinh@gmail.com',
-    phone: '0123456789',
-    image: '/api/placeholder/96/96',
-    smsNotifications: true,
-    language: 'Tiếng Việt',
-    currency: 'Việt Nam đồng'
+  userData: User = {
+    _id: null,
+    userId: '',
+    profileName: '',
+    role: 'admin',
+    email: '',
+    phone: '',
+    avatar: '',
+    action: '',
+    orderCount: ''
   };
 
-  // Bản sao thông tin người dùng để chỉnh sửa
-  editedUserData: UserData = { ...this.userData };
-
-  // Các trạng thái chỉnh sửa
+  editedUserData: User = { ...this.userData };
+  language: string = 'Tiếng Việt';
+  currency: string = 'Việt Nam đồng';
+  smsNotifications: boolean = true;
+  sms: string = '';
   isEditingProfile: boolean = false;
   isEditingPassword: boolean = false;
   isEditingSMS: boolean = false;
   isEditingLanguage: boolean = false;
   isEditingCurrency: boolean = false;
-
-  // Thông tin mật khẩu
   newPassword: string = '';
   confirmPassword: string = '';
+  selectedFile: File | null = null;
 
-  // Tham chiếu đến file input cho việc tải ảnh lên
-  fileInput!: HTMLInputElement;
-
-  constructor() {}
+  constructor(
+    private userApiService: UserApiService,
+    private cdr: ChangeDetectorRef // Thêm ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    // Trong ứng dụng thực tế, bạn sẽ lấy dữ liệu người dùng từ một dịch vụ
-    this.loadUserData();
-    // Tạo input file ẩn để chọn ảnh
-    this.createFileInput();
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    console.log('Current User from localStorage:', currentUser);
+
+    if (currentUser && currentUser.userId) {
+      this.userData.userId = currentUser.userId;
+      console.log('Attempting to load user with ID:', this.userData.userId);
+      this.loadUserData();
+    } else {
+      console.error('No user information found in localStorage');
+      alert('Vui lòng đăng nhập để xem thông tin tài khoản.');
+      // Có thể thêm redirect tới trang đăng nhập
+      // this.router.navigate(['/login']);
+    }
   }
 
   loadUserData(): void {
-    // Đây thường sẽ là một cuộc gọi đến dịch vụ người dùng
-    // Hiện tại chúng ta sử dụng dữ liệu cứng
-    console.log('User data loaded');
+    this.userApiService.getUserProfile(this.userData.userId).subscribe({
+      next: (response) => {
+        console.log('API Response:', response); // Log để kiểm tra response từ server
+        if (!response.success || !response.user) {
+          console.error('Invalid response from API:', response);
+          alert('Dữ liệu người dùng không hợp lệ.');
+          return;
+        }
+  
+        const user = response.user;
+        this.userData = {
+          ...this.userData,
+          userId: user.userId,
+          profileName: user.profileName || '',
+          role: user.role || 'admin',
+          email: user.email || '',
+          phone: user.phone || '',
+          avatar: user.avatar || '',
+          address: user.address || '',
+          marketing: user.marketing || false,
+          action: user.action || '' // Load action từ dữ liệu
+        };
+        this.editedUserData = { ...this.userData };
+        this.cdr.detectChanges(); // Buộc cập nhật giao diện
+        console.log('Admin user data loaded:', this.userData);
+      },
+      error: (error) => {
+        console.error('Error loading user data:', error);
+        alert('Không thể tải thông tin người dùng: ' + (error.message || 'Lỗi không xác định'));
+      }
+    });
   }
 
-  // Tạo input file ẩn để chọn ảnh
-  createFileInput(): void {
-    this.fileInput = document.createElement('input');
-    this.fileInput.type = 'file';
-    this.fileInput.accept = 'image/*';
-    this.fileInput.style.display = 'none';
-    
-    // Xử lý sự kiện khi người dùng chọn file
-    this.fileInput.addEventListener('change', (event) => {
-      const target = event.target as HTMLInputElement;
-      const file = target.files?.[0];
+  // Handle file selection for avatar upload
+  onFileSelected(event: Event): void {
+    const element = event.target as HTMLInputElement;
+    if (element.files && element.files.length > 0) {
+      this.selectedFile = element.files[0];
       
-      if (file) {
-        // Đọc file và chuyển đổi thành URL
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          if (e.target?.result) {
-            // Cập nhật ảnh đại diện
-            this.userData.image = e.target.result as string;
-            console.log('Profile image updated');
+      // Preview the selected image
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target?.result) {
+          // This is just for preview, not saving to DB yet
+          this.userData.avatar = e.target.result as string;
+        }
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
+  // Upload and update avatar
+  updateProfileImage(): void {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.style.display = 'none';
+    
+    fileInput.addEventListener('change', (event) => {
+      const target = event.target as HTMLInputElement;
+      if (target.files && target.files.length > 0) {
+        this.selectedFile = target.files[0];
+        
+        // Create FormData for file upload
+        const formData = new FormData();
+        formData.append('avatar', this.selectedFile);
+        formData.append('userId', this.userData.userId);
+        
+        // Upload avatar to server
+        this.userApiService.uploadAvatar(formData).subscribe({
+          next: (response) => {
+            if (response.success) {
+              // Cập nhật URL avatar từ response
+              this.userData.avatar = response.user.avatar;
+              
+              // Thêm timestamp vào URL để tránh cache
+              const timestamp = new Date().getTime();
+              if (this.userData.avatar.includes('?')) {
+                this.userData.avatar += `&t=${timestamp}`;
+              } else {
+                this.userData.avatar += `?t=${timestamp}`;
+              }
+              
+              // Buộc Angular cập nhật view
+              this.cdr.detectChanges();
+              console.log('Avatar updated successfully:', this.userData.avatar);
+            }
+          },
+          error: (error) => {
+            console.error('Error uploading avatar:', error);
+            alert('Failed to upload image. Please try again.');
           }
-        };
-        reader.readAsDataURL(file);
+        });
       }
     });
     
-    document.body.appendChild(this.fileInput);
+    document.body.appendChild(fileInput);
+    fileInput.click();
+    document.body.removeChild(fileInput);
   }
 
-  // Mở hộp thoại chọn file để cập nhật ảnh đại diện
-  updateProfileImage(): void {
-    this.fileInput.click();
+  // Thêm phương thức này vào account.component.ts
+  getAvatarUrl(): string {
+    if (!this.userData.avatar) {
+      return '/api/placeholder/96/96';
+    }
+    
+    // Nếu avatar đã là URL đầy đủ
+    if (this.userData.avatar.startsWith('http')) {
+      return this.userData.avatar;
+    }
+    
+    // Thêm base URL vào đường dẫn tương đối
+    return 'http://localhost:5000' + this.userData.avatar;
   }
 
-  // Bắt đầu chỉnh sửa hồ sơ
+  previewImage(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+      const file = target.files[0];
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        this.userData.avatar = e.target?.result as string;
+        this.cdr.detectChanges();
+      };
+      
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Start editing profile
   editProfile(): void {
     this.isEditingProfile = true;
-    // Tạo bản sao của dữ liệu người dùng để chỉnh sửa
+    // Create a copy of user data for editing
     this.editedUserData = { ...this.userData };
   }
 
-  // Lưu các thay đổi đối với hồ sơ
+  // Save profile changes
   saveProfile(): void {
-    // Trong ứng dụng thực tế, bạn sẽ gửi dữ liệu đã chỉnh sửa đến API
-    this.userData = { ...this.editedUserData };
-    this.isEditingProfile = false;
-    console.log('Profile updated', this.userData);
+    // Prepare data for update
+    const updatedData = {
+      userId: this.editedUserData.userId,
+      profileName: this.editedUserData.profileName,
+      email: this.editedUserData.email,
+      phone: this.editedUserData.phone,
+      address: this.editedUserData.address,
+      marketing: this.editedUserData.marketing
+    };
+    
+    // Send update to server
+    this.userApiService.updateUserProfile(updatedData).subscribe({
+      next: (response) => {
+        if (response.success) {
+          // Update local user data with response from server
+          this.userData = { 
+            ...this.userData,
+            profileName: this.editedUserData.profileName,
+            email: this.editedUserData.email,
+            phone: this.editedUserData.phone,
+            address: this.editedUserData.address,
+            marketing: this.editedUserData.marketing
+          };
+          console.log('Profile updated successfully');
+          this.isEditingProfile = false;
+        } else {
+          console.error('Failed to update profile:', response.message);
+          alert('Failed to update profile. Please try again.');
+        }
+      },
+      error: (error) => {
+        console.error('Error updating profile:', error);
+        alert('Failed to update profile. Please try again.');
+      }
+    });
   }
 
-  // Hủy việc chỉnh sửa hồ sơ
+  // Cancel profile editing
   cancelEdit(): void {
     this.isEditingProfile = false;
   }
 
-  // Bật/tắt chỉnh sửa mật khẩu
+  // Toggle password editing
   togglePasswordEdit(): void {
     this.isEditingPassword = !this.isEditingPassword;
     if (!this.isEditingPassword) {
-      // Xóa mật khẩu khi hủy chỉnh sửa
+      // Clear passwords when canceling edit
       this.newPassword = '';
       this.confirmPassword = '';
     }
   }
 
-  // Lưu mật khẩu mới
+  // Save new password
   savePassword(): void {
     if (this.newPassword && this.newPassword === this.confirmPassword) {
-      // Trong ứng dụng thực tế, bạn sẽ gửi mật khẩu mới đến API
-      console.log('Password updated');
-      this.isEditingPassword = false;
-      this.newPassword = '';
-      this.confirmPassword = '';
+      // You would implement a password update endpoint on your server
+      this.userApiService.updatePassword(this.userData.userId, this.newPassword).subscribe({
+        next: (response) => {
+          console.log('Password updated successfully');
+          this.isEditingPassword = false;
+          this.newPassword = '';
+          this.confirmPassword = '';
+        },
+        error: (error) => {
+          console.error('Error updating password:', error);
+          alert('Failed to update password. Please try again.');
+        }
+      });
     } else {
       alert('Mật khẩu không khớp hoặc không hợp lệ!');
     }
   }
 
-  // Hủy việc chỉnh sửa mật khẩu
+  // Cancel password editing
   cancelPasswordEdit(): void {
     this.isEditingPassword = false;
     this.newPassword = '';
     this.confirmPassword = '';
   }
 
-  // Bật/tắt chỉnh sửa SMS
+  // Toggle SMS editing
   toggleSMSEdit(): void {
     this.isEditingSMS = !this.isEditingSMS;
   }
 
-  // Bật/tắt chỉnh sửa ngôn ngữ
+  // Toggle language editing
   toggleLanguageEdit(): void {
     this.isEditingLanguage = !this.isEditingLanguage;
   }
 
-  // Bật/tắt chỉnh sửa đơn vị tiền tệ
+  // Toggle currency editing
   toggleCurrencyEdit(): void {
     this.isEditingCurrency = !this.isEditingCurrency;
   }

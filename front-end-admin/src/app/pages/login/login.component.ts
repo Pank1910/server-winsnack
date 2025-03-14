@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
   isLoading: boolean = false;
   error: string = '';
 
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -36,7 +37,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.authService.isLoggedIn()) {
-      this.redirectBasedOnRole();
+      this.router.navigate(['/home']);
     }
   }
 
@@ -61,38 +62,33 @@ export class LoginComponent implements OnInit {
     };
 
     this.authService.login(credentials).subscribe({
-      next: () => {
+      next: (response) => {
         this.isLoading = false;
+        
+        // Kiểm tra role admin
+        if (response.user.role !== 'admin') {
+          this.error = 'Vui lòng đăng nhập bằng tài khoản Admin!';
+          this.authService.logout(); // Đăng xuất ngay vì không phải admin
+          return;
+        }
+        
         if (this.loginForm.value.rememberMe) {
           localStorage.setItem('rememberMe', 'true');
         } else {
           localStorage.removeItem('rememberMe');
         }
-        this.redirectBasedOnRole();
+        
+        // Đảm bảo cập nhật trạng thái đăng nhập trước khi chuyển hướng
+        setTimeout(() => {
+          this.router.navigate(['/home']);
+        }, 100);
       },
       error: (error) => {
         this.isLoading = false;
         this.error = error.message || 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.';
       }
     });
-  }
-
-  private redirectBasedOnRole(): void {
-    this.authService.checkUser().subscribe({
-      next: (user) => {
-        if (user.role === 'admin') {
-          this.router.navigate(['/admin']);
-        } else {
-          this.router.navigate(['/home']);
-        }
-      },
-      error: (error) => {
-        console.error('Lỗi khi kiểm tra thông tin người dùng:', error);
-        this.authService.logout();
-        this.error = 'Có lỗi xảy ra. Vui lòng đăng nhập lại.';
-      }
-    });
-  }
+}
 
   get profileName() { return this.loginForm.get('profileName'); }
   get password() { return this.loginForm.get('password'); }

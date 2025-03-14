@@ -34,6 +34,7 @@ export class PromotionComponent implements OnInit {
   
   showAddEditForm: boolean = false;
   isEditing: boolean = false;
+  isLoading: boolean = false; // Thêm biến để điều khiển spinner
   
   currentPromotion: Promotion = {
     id: 0,
@@ -48,89 +49,109 @@ export class PromotionComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    // Khởi tạo dữ liệu mẫu
-    this.promotions = [
-      {
-        id: 1,
-        category: 'Mã giảm giá',
-        code: 'PNTHFG152368',
-        description: 'Giảm giá 20%, tối đa 30.000 VNĐ',
-        status: 'On Sales',
-        used: 30,
-        total: 50,
-        startDate: '26/02/24',
-        endDate: '26/03/24'
-      },
-      {
-        id: 2,
-        category: 'Ưu đãi phí vận chuyển',
-        code: 'SHIPFREE123',
-        description: 'Giảm giá 20%, tối đa 30.000 VNĐ',
-        status: 'Expired',
-        used: 30,
-        total: 50,
-        startDate: '26/02/24',
-        endDate: '26/02/24'
-      },
-      {
-        id: 3,
-        category: 'Ưu đãi phí vận chuyển',
-        code: 'SHIPFREE456',
-        description: 'Giảm giá 20%, tối đa 30.000 VNĐ',
-        status: 'Expired',
-        used: 30,
-        total: 50,
-        startDate: '26/02/24',
-        endDate: '26/02/24'
-      },
-      // Thêm nhiều mẫu dữ liệu hơn để kiểm tra phân trang
-      {
-        id: 4,
-        category: 'Mã giảm giá',
-        code: 'SUMMER2024',
-        description: 'Giảm giá 15%, không giới hạn',
-        status: 'On Sales',
-        used: 45,
-        total: 100,
-        startDate: '01/03/24',
-        endDate: '30/04/24'
-      },
-      {
-        id: 5,
-        category: 'Mã giảm giá',
-        code: 'NEWYEAR2024',
-        description: 'Giảm giá 25%, tối đa 50.000 VNĐ',
-        status: 'Expired',
-        used: 98,
-        total: 100,
-        startDate: '01/01/24',
-        endDate: '15/01/24'
-      },
-      {
-        id: 6,
-        category: 'Ưu đãi phí vận chuyển',
-        code: 'SHIP100K',
-        description: 'Miễn phí vận chuyển cho đơn hàng từ 100.000 VNĐ',
-        status: 'On Sales',
-        used: 25,
-        total: 100,
-        startDate: '15/02/24',
-        endDate: '15/04/24'
-      },
-      {
-        id: 7,
-        category: 'Mã giảm giá',
-        code: 'WELCOME10',
-        description: 'Giảm 10% cho khách hàng mới',
-        status: 'On Sales',
-        used: 120,
-        total: 500,
-        startDate: '01/01/24',
-        endDate: '31/12/24'
-      }
-    ];
-    
+    this.loadPromotions();
+  }
+
+  loadPromotions(): void {
+    this.isLoading = true; // Bật spinner
+    const savedPromotions = localStorage.getItem('promotions');
+    if (savedPromotions) {
+      this.promotions = JSON.parse(savedPromotions);
+    } else {
+      this.promotions = [
+        {
+          id: 1,
+          category: 'Mã giảm giá',
+          code: 'PNTHFG152368',
+          description: 'Giảm giá 20%, tối đa 30.000 VNĐ',
+          status: 'On Sales',
+          used: 30,
+          total: 50,
+          startDate: '26/02/24',
+          endDate: '26/03/24'
+        },
+        {
+          id: 2,
+          category: 'Ưu đãi phí vận chuyển',
+          code: 'SHIPFREE123',
+          description: 'Giảm giá 20%, tối đa 30.000 VNĐ',
+          status: 'Expired',
+          used: 30,
+          total: 50,
+          startDate: '26/02/24',
+          endDate: '26/02/24'
+        },
+        {
+          id: 3,
+          category: 'Ưu đãi phí vận chuyển',
+          code: 'SHIPFREE456',
+          description: 'Giảm giá 20%, tối đa 30.000 VNĐ',
+          status: 'Expired',
+          used: 30,
+          total: 50,
+          startDate: '26/02/24',
+          endDate: '26/02/24'
+        },
+        {
+          id: 4,
+          category: 'Mã giảm giá',
+          code: 'SUMMER2024',
+          description: 'Giảm giá 15%, không giới hạn',
+          status: 'On Sales',
+          used: 45,
+          total: 100,
+          startDate: '01/03/24',
+          endDate: '30/04/24'
+        },
+        {
+          id: 5,
+          category: 'Mã giảm giá',
+          code: 'NEWYEAR2024',
+          description: 'Giảm giá 25%, tối đa 50.000 VNĐ',
+          status: 'Expired',
+          used: 98,
+          total: 100,
+          startDate: '01/01/24',
+          endDate: '15/01/24'
+        },
+        {
+          id: 6,
+          category: 'Ưu đãi phí vận chuyển',
+          code: 'SHIP100K',
+          description: 'Miễn phí vận chuyển cho đơn hàng từ 100.000 VNĐ',
+          status: 'On Sales',
+          used: 25,
+          total: 100,
+          startDate: '15/02/24',
+          endDate: '15/04/24'
+        },
+        {
+          id: 7,
+          category: 'Mã giảm giá',
+          code: 'WELCOME10',
+          description: 'Giảm 10% cho khách hàng mới',
+          status: 'On Sales',
+          used: 120,
+          total: 500,
+          startDate: '01/01/24',
+          endDate: '31/12/24'
+        }
+      ];
+      localStorage.setItem('promotions', JSON.stringify(this.promotions));
+    }
     this.applyFilter();
+    setTimeout(() => this.isLoading = false, 500); // Giả lập thời gian tải
+  }
+
+  saveToLocalStorage(): void {
+    localStorage.setItem('promotions', JSON.stringify(this.promotions));
+  }
+
+  reloadPromotions(): void {
+    this.searchText = '';
+    this.filterColumn = 'Tất cả';
+    this.currentPage = 1;
+    this.loadPromotions(); // Tải lại dữ liệu với spinner
   }
 
   applyFilter(): void {
@@ -139,8 +160,6 @@ export class PromotionComponent implements OnInit {
     } else {
       this.filteredPromotions = this.promotions.filter(promo => {
         const searchLower = this.searchText.toLowerCase();
-        
-        // Lọc theo cột được chọn
         switch (this.filterColumn) {
           case 'Danh mục':
             return promo.category.toLowerCase().includes(searchLower);
@@ -168,7 +187,6 @@ export class PromotionComponent implements OnInit {
         }
       });
     }
-    
     this.calculateTotalPages();
     this.goToPage(1);
   }
@@ -217,27 +235,26 @@ export class PromotionComponent implements OnInit {
   deletePromotion(id: number): void {
     if (confirm('Bạn có chắc chắn muốn xóa khuyến mãi này?')) {
       this.promotions = this.promotions.filter(p => p.id !== id);
+      this.saveToLocalStorage();
       this.applyFilter();
     }
   }
 
   savePromotion(): void {
     if (this.isEditing) {
-      // Cập nhật khuyến mãi hiện có
       const index = this.promotions.findIndex(p => p.id === this.currentPromotion.id);
       if (index !== -1) {
         this.promotions[index] = { ...this.currentPromotion };
       }
     } else {
-      // Thêm khuyến mãi mới
       const newId = Math.max(0, ...this.promotions.map(p => p.id)) + 1;
       this.promotions.push({
         ...this.currentPromotion,
         id: newId
       });
     }
-    
     this.showAddEditForm = false;
+    this.saveToLocalStorage();
     this.applyFilter();
   }
 

@@ -17,25 +17,28 @@ import { SalesorderComponent } from './pages/salesorder/salesorder.component';
 import { OrderDetailComponent } from './pages/salesorder/order-detail/order-detail.component';
 import { PromotionComponent } from './pages/promotion/promotion.component'
 
+import { AdminGuard } from './guards/auth.guard';
+
 export const routes: Routes = [
-    { path: 'home', component: HomeComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'login', component: LoginComponent },
-    { path: 'account', component: AccountComponent },
-    { path: 'customer', component: CustomerComponent },
-    { path: 'salesorder', component: SalesorderComponent },
-    { path: 'order-detail', component: OrderDetailComponent },
-    { path: 'promotion', component: PromotionComponent },
 
+// Các route cần bảo vệ
+    { path: 'home', component: HomeComponent, canActivate: [AdminGuard] },
+    { path: 'account', component: AccountComponent, canActivate: [AdminGuard] },
+    { path: 'customer', component: CustomerComponent, canActivate: [AdminGuard] },
+    { path: 'salesorder', component: SalesorderComponent, canActivate: [AdminGuard] },
+    { path: 'order-detail/:id', component: OrderDetailComponent, canActivate: [AdminGuard] },
+    { path: 'promotion', component: PromotionComponent, canActivate: [AdminGuard] },
+    { path: 'blog-list', component: BlogComponent, canActivate: [AdminGuard] },
+    { path: 'product-list', component: ProductComponent, canActivate: [AdminGuard] },
+    { path: 'product-detail/:id', component: ProductDetailComponent, canActivate: [AdminGuard] },
+    { path: 'add-product', component: AddProductComponent, canActivate: [AdminGuard] },
+    { path: 'update-product/:id', component: UpdateProductComponent, canActivate: [AdminGuard] },
+    { path: 'product-category', component: ProductCategoryComponent, canActivate: [AdminGuard] },
+    { path: 'new-category', component: NewCategoryComponent, canActivate: [AdminGuard] },
+    { path: 'update-category/:id', component: UpdateCategoryComponent, canActivate: [AdminGuard] },
 
-    { path: 'blog-list', component: BlogComponent },
-    { path: 'product-list', component: ProductComponent },
-    { path: 'product-detail/:id', component: ProductDetailComponent }, // Route với productId
-    { path: 'add-product', component: AddProductComponent },
-    { path: 'update-product/:id', component: UpdateProductComponent }, // Route cập nhật sản phẩm
-    { path: 'product-category', component: ProductCategoryComponent },
-    { path: 'new-category', component: NewCategoryComponent },
-    { path: 'update-category/:id', component: UpdateCategoryComponent },
     // { path: '', redirectTo: '/products', pathMatch: 'full' }, // Mặc định chuyển đến danh sách sản phẩm
     { path: '', redirectTo: '/login', pathMatch: 'full' }, // Mặc định về trang home
     { path: '**', redirectTo: '/home' } // Xử lý route không tồn tại

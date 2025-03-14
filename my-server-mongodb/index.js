@@ -1241,6 +1241,282 @@ app.get('/user/:userId', async (req, res) => {
   // Serve static files
   app.use('/uploads/avatars', express.static('public/uploads/avatars'));
  
+  app.put('/update-password', async (req, res) => {
+    try {
+      const { userId, newPassword } = req.body;
+      if (!userId || !newPassword) {
+        return res.status(400).json({ success: false, message: "Thiếu userId hoặc newPassword" });
+      }
+  
+      const result = await database.collection('User').findOneAndUpdate(
+        { userId },
+        { $set: { password: newPassword } },
+        { returnDocument: 'after' }
+      );
+  
+      if (!result.value) {
+        return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
+      }
+  
+      res.json({ success: true, message: "Cập nhật mật khẩu thành công" });
+    } catch (error) {
+      console.error('Error in /update-password:', error);
+      res.status(500).json({ success: false, message: "Lỗi server", error: error.toString() });
+    }
+  });
+
+  app.get('/profile-admin', async (req, res) => {
+    try {
+        const userId = req.query.userId;
+        console.log('Fetching profile for userId:', userId);
+    
+        if (!userId) {
+          return res.status(400).json({ success: false, message: "Thiếu userId" });
+        }
+    
+        const user = await database.collection('User').findOne({ userId });
+        if (!user) {
+          console.log('User not found for userId:', userId);
+          return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
+        }
+        res.json({
+          success: true,
+          user: {
+            userId: user.userId,
+            profileName: user.profileName,
+            email: user.email,
+            role: user.role,
+            phone: user.phone || '',
+            avatar: user.avatar || '',
+            address: user.address || '',
+            marketing: user.marketing || false
+          }
+        });
+      } catch (error) {
+        console.error('Error in /profile:', error);
+        res.status(500).json({ success: false, message: "Lỗi server", error: error.toString() });
+      }
+    });
+
+    // Endpoint upload avatar
+app.post('/upload-avatar-admin', upload.single('avatar'), async (req, res) => {
+    try {
+        console.log('Received upload request - userId:', req.body.userId);
+        console.log('Uploaded file:', req.file);
+
+        const userId = req.body.userId;
+        if (!req.file || !userId) {
+            return res.status(400).json({ success: false, message: 'Thiếu file hoặc userId' });
+        }
+
+        const avatarUrl = `/uploads/avatars/${req.file.filename}`;
+        console.log('Generated avatar URL:', avatarUrl);
+
+        const result = await usersCollection.findOneAndUpdate(
+            { userId: userId },
+            { $set: { avatar: avatarUrl } },
+            { returnDocument: 'after' }
+        );
+
+        if (!result.value) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy user' });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Cập nhật ảnh đại diện thành công',
+            user: result.value
+        });
+    } catch (error) {
+        console.error('Error uploading avatar:', error);
+        res.status(500).json({ success: false, message: 'Lỗi server: ' + error.message });
+    }
+});
+
+app.get('/get-avatar/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const user = await usersCollection.findOne({ userId });
+        if (!user || !user.avatar) {
+            return res.status(404).json({ message: 'Avatar not found' });
+        }
+
+        const filePath = path.join(__dirname, 'public', user.avatar);
+        res.sendFile(filePath);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.toString() });
+    }
+});
+
+
+// API lấy danh sách khách hàng (users có role='user')
+app.get("/api/customers", async (req, res) => {
+    try {
+      const users = await usersCollection.find({ role: 'user' }).toArray();
+  
+      const enhancedUsers = await Promise.all(users.map(async (user) => {
+        const orderCount = await orderCollection.countDocuments({ userId: user.userId });
+        return {
+          _id: user._id,
+          userId: user.userId,
+          profileName: user.profileName,
+          email: user.email,
+          phone: user.phone || 'Chưa cung cấp',
+          address: user.address || 'Chưa cung cấp',
+          orderCount: orderCount // Tính từ Order
+        };
+      }));
+  
+      return res.status(200).json({
+        success: true,
+        data: enhancedUsers,
+        message: 'Lấy danh sách khách hàng thành công'
+      });
+    } catch (error) {
+      console.error('Error fetching customers:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Lỗi server khi lấy danh sách khách hàng',
+        error: error.message
+      });
+    }
+  });
+
+// API tìm kiếm khách hàng theo từ khóa và loại tìm kiếm
+app.get("/api/search-user", async (req, res) => {
+  try {
+    const { searchTerm, searchType } = req.query;
+    let query = { role: 'user' };
+    
+    // Xây dựng query dựa trên loại tìm kiếm
+    if (searchTerm && searchType !== 'all') {
+      switch (searchType) {
+        case 'name':
+          query.profileName = { $regex: searchTerm, $options: 'i' };
+          break;
+        case 'email':
+          query.email = { $regex: searchTerm, $options: 'i' };
+          break;
+        case 'phone':
+          query.phone = { $regex: searchTerm, $options: 'i' };
+          break;
+        case 'address':
+          query.address = { $regex: searchTerm, $options: 'i' };
+          break;
+        case 'orderCount':
+          // Trường hợp đặc biệt - xử lý riêng ở dưới
+          break;
+      }
+    } else if (searchTerm) {
+      // Tìm kiếm tất cả các trường
+      query.$or = [
+        { profileName: { $regex: searchTerm, $options: 'i' } },
+        { email: { $regex: searchTerm, $options: 'i' } },
+        { phone: { $regex: searchTerm, $options: 'i' } },
+        { address: { $regex: searchTerm, $options: 'i' } }
+      ];
+    }
+    
+    // Tìm các user phù hợp với query
+    const users = await usersCollection.find(query).toArray();
+    
+    // Lấy thông tin đơn hàng cho mỗi user
+    let enhancedUsers = await Promise.all(users.map(async (user) => {
+      const orderCount = await orderCollection.countDocuments({ userId: user.userId });
+      
+      return {
+        _id: user._id,
+        userId: user.userId,
+        profileName: user.profileName,
+        email: user.email,
+        phone: user.phone || 'Chưa cung cấp',
+        address: user.address || 'Chưa cung cấp',
+        orderCount: orderCount
+      };
+    }));
+    
+    // Xử lý trường hợp tìm kiếm theo orderCount
+    if (searchTerm && searchType === 'orderCount') {
+      enhancedUsers = enhancedUsers.filter(user => 
+        user.orderCount.toString().includes(searchTerm)
+      );
+    }
+    
+    return res.status(200).json({
+      success: true,
+      data: enhancedUsers,
+      message: 'Tìm kiếm khách hàng thành công'
+    });
+  } catch (error) {
+    console.error('Error searching customers:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server khi tìm kiếm khách hàng',
+      error: error.message
+    });
+  }
+});
+
+// Endpoint lấy danh sách đơn hàng cho admin
+app.get('/api/order-admin', async (req, res) => {
+    try {
+      const orders = await orderCollection.find({}).toArray();
+      return res.status(200).json({
+        success: true,
+        data: orders,
+        message: 'Lấy danh sách đơn hàng thành công'
+      });
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Lỗi server khi lấy danh sách đơn hàng',
+        error: error.message
+      });
+    }
+  });
+  
+  // Endpoint lấy chi tiết đơn hàng theo orderId
+  app.get('/api/order-detail-admin/:orderId', async (req, res) => {
+    try {
+      const { orderId } = req.params;
+      const order = await orderCollection.findOne({ orderId });
+      if (!order) {
+        return res.status(404).json({
+          success: false,
+          message: 'Không tìm thấy đơn hàng'
+        });
+      }
+  
+      // Lấy thông tin người dùng từ collection User (nếu cần)
+      const user = await usersCollection.findOne({ userId: order.userId });
+      if (user) {
+        order.userName = user.profileName || 'Khách vãng lai';
+        if (!order.contact) {
+          order.contact = {
+            name: user.profileName || 'Chưa cung cấp',
+            address: user.address || 'Chưa cung cấp',
+            phone: user.phone || 'Chưa cung cấp'
+          };
+        }
+      }
+  
+      return res.status(200).json({
+        success: true,
+        data: order,
+        message: 'Lấy chi tiết đơn hàng thành công'
+      });
+    } catch (error) {
+      console.error('Error fetching order detail:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Lỗi server khi lấy chi tiết đơn hàng',
+        error: error.message
+      });
+    }
+  });
+
 // Khởi động server
 app.listen(port, () => {
     console.log(`🚀 Server is running at http://localhost:${port}`);

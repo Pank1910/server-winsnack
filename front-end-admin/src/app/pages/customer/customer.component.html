@@ -1,4 +1,4 @@
-<div class="container mx-auto p-6 bg-orange-50">
+<div class="container mx-auto min-h-screen p-6 bg-orange-50">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-orange-500">DANH SÁCH KHÁCH HÀNG</h1>
         <div class="flex gap-2">
@@ -18,10 +18,26 @@
                     </svg>
                 </button>
             </div>
+            <button (click)="refreshData()" class="px-4 py-2 bg-orange-400 rounded hover:bg-orange-500 transition-colors text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                </svg>
+            </button>
         </div>
     </div>
 
-    <table class="w-full bg-white rounded-lg overflow-hidden shadow-lg">
+    <!-- Loading indicator -->
+    <div *ngIf="isLoading" class="flex justify-center items-center py-8">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+    </div>
+
+    <!-- Error message -->
+    <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <p>{{ errorMessage }}</p>
+    </div>
+
+    <!-- Data table -->
+    <table *ngIf="!isLoading && !errorMessage" class="w-full bg-white rounded-lg overflow-hidden shadow-lg">
         <thead class="bg-orange-400 text-white">
             <tr>
                 <th class="py-4 px-6 text-center">Họ và tên</th>
@@ -45,7 +61,8 @@
         </tbody>
     </table>
 
-    <div class="flex justify-center mt-6 gap-2">
+    <!-- Pagination -->
+    <div *ngIf="!isLoading && !errorMessage && totalPages > 0" class="flex justify-center mt-6 gap-2">
         <button *ngFor="let page of getPageNumbers()" 
                 [ngClass]="currentPage === page ? 'bg-orange-400 text-white' : 'hover:bg-orange-400 hover:text-white'"
                 (click)="goToPage(page)"

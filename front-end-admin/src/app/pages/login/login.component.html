@@ -39,16 +39,13 @@
                 <div class="text-sm text-gray-700">
                     <label for="profileName" class="block">Tên đăng nhập</label>
                     <input 
-                        type="profileName" 
+                        type="text"
                         id="profileName" 
                         formControlName="profileName" 
                         class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" 
                         placeholder="Nhập Tên đăng nhập của bạn">
                     <span class="text-red-500 text-xs" *ngIf="profileName?.touched && profileName?.errors?.['required']">
-                        Email không được để trống
-                    </span>
-                    <span class="text-red-500 text-xs" *ngIf="profileName?.touched && profileName?.errors?.['profileName']">
-                        Email không đúng định dạng
+                        Tên đăng nhập không được để trống <!-- Sửa nội dung lỗi -->
                     </span>
                 </div>
 
@@ -57,11 +54,13 @@
                     <label for="password" class="block">Mật khẩu</label>
                     <div class="relative">
                         <input 
-                            [type]="passwordVisible ? 'text' : 'password'" 
-                            id="password" 
-                            formControlName="password" 
-                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" 
-                            placeholder="Nhập mật khẩu của bạn">
+                        [type]="passwordVisible ? 'text' : 'password'" 
+                        id="password" 
+                        formControlName="password" 
+                        autocomplete="current-password"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" 
+                        placeholder="Nhập mật khẩu của bạn">
+
                         <button 
                             type="button" 
                             (click)="togglePasswordVisibility()" 

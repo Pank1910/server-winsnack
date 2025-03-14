@@ -1,4 +1,5 @@
 export class User {
+  orderCount: any;
   constructor(
     public _id: string | null = null,
     public avatar: string,
@@ -16,6 +17,6 @@ export class User {
     public phone?: string,
     public address?: string,
     public role: 'user' | 'admin' = 'user',
-    public action: 'edit all' | 'account ctrl' | 'sales ctrl' | 'just view' = 'just view'
+    public action: '' | 'edit all' | 'account ctrl' | 'sales ctrl' | 'just view' = 'just view'
   ) { }
 }

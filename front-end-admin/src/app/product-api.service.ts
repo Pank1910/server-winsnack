@@ -7,7 +7,8 @@ import { Product } from '../../../my-server-mongodb/interface/Product';
   providedIn: 'root'
 })
 export class ProductApiService {
-  private baseUrl = 'http://localhost:5001/products'; // 🔥 Kiểm tra URL API
+
+  private baseUrl = 'http://localhost:5000/products';
 
   constructor(private http: HttpClient) {}
 
