@@ -76,7 +76,7 @@ export class UpdateProductComponent implements OnInit {
   }
 
   cancelUpdate(): void {
-    this.router.navigate(['/products']);
+    this.router.navigate(['/product-list']);
   }
 
   updateProduct(): void {
@@ -96,7 +96,7 @@ export class UpdateProductComponent implements OnInit {
         next: (res) => {
             console.log("✅ API cập nhật thành công:", res);
             alert('Sản phẩm đã được cập nhật thành công!');
-            this.router.navigate(['/products']);
+            this.router.navigate(['/product-list']);
         },
         error: (err) => {
             console.error("❌ Lỗi API khi cập nhật sản phẩm:", err);

@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute,Router } from '@angular/router';
 import { ProductApiService } from '../../../product-api.service';
 import { Product } from '../../../../../../my-server-mongodb/interface/Product';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,RouterModule],
   templateUrl: './product-detail.component.html',
   styleUrls: []
 })
@@ -25,8 +26,10 @@ export class ProductDetailComponent implements OnInit {
   currentPage = 1;
   reviewsPerPage = 3;
   replyContent = '';
+  showPopup = false;
 
-  constructor(private route: ActivatedRoute, private productService: ProductApiService) {}
+  constructor(private route: ActivatedRoute, private productService: ProductApiService,    private router: Router // ✅ Inject Router vào constructor
+  ) {}
 
   ngOnInit(): void {
     const productId = this.route.snapshot.paramMap.get('id');
@@ -72,8 +75,21 @@ export class ProductDetailComponent implements OnInit {
     }
     console.log(`Admin phản hồi: ${this.replyContent}`);
     this.replyContent = '';
-  }
 
+    this.showPopup = true; // ✅ Hiển thị popup
+    setTimeout(() => {
+      this.showPopup = false;
+      this.router.navigate(['/product-list']); // ✅ Quay về danh sách sản phẩm
+    }, 2000);
+  }
+  cancel() {
+    this.router.navigate(['/product-list']); // ✅ Quay về danh sách sản phẩm
+  }
+  /** ✅ Đóng popup và navigate về product-list */
+  closePopup() {
+    this.showPopup = false;
+    this.router.navigate(['/product-list']); // ✅ Quay về danh sách sản phẩm
+  }
   getStars(rating: number): string {
     if (typeof rating !== 'number' || isNaN(rating)) {
       return '☆☆☆☆☆';
