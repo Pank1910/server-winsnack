@@ -110,10 +110,8 @@ export class CartComponent implements OnInit {
   proceedToCheckout(): void {
     const selectedItemsList = this.cartItems.filter((item) => item.isSelected);
     if (selectedItemsList.length > 0) {
-      this.cartService.saveSelectedItems(selectedItemsList).subscribe({
-        next: () => this.router.navigate(['/payment']),
-        error: (err) => alert('Lỗi khi lưu sản phẩm đã chọn: ' + err.message)
-      });
+      // Chuyển hướng sang trang /payment mà không gọi saveSelectedItems
+      this.router.navigate(['/payment']);
     } else {
       alert('Vui lòng tick chọn ít nhất một sản phẩm để thanh toán.');
     }

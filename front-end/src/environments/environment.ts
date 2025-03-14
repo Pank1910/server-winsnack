@@ -6,5 +6,5 @@ export const environment = {
             id: 'YOUR_PHONE_NUMBER'
         }
     },
-    openAiApiKey: 'YOUR_APIKEY'
+    openAiApiKey: 'YOUR_APIKEY',
 };
