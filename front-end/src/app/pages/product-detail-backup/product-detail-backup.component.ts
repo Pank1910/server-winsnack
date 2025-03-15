@@ -7,6 +7,13 @@ import { Product } from '../../../../../my-server-mongodb/interface/Product';
 import { CartService } from '../../components/header/cart3.service';
 import { AuthService } from '../../services/auth.service';
 
+interface Review {
+  reviewerName: string;
+  rating: number; // 1-5
+  reviewDate: string;
+  content: string;
+}
+
 @Component({
   selector: 'app-product-detail-backup',
   standalone: true,
@@ -31,6 +38,29 @@ export class ProductDetailBackupComponent implements OnInit {
   showReviewSuccessPopup = false;
   showRatingRequiredPopup = false;
 
+  // Thuộc tính cho chức năng đánh giá mới
+  reviews: Review[] = [
+    {
+      reviewerName: 'Thanh Tý',
+      rating: 5,
+      reviewDate: '3 tháng trước',
+      content: 'Mình là người khó tính về đồ ăn vặt nhưng bánh tráng rong biển này thực sự rất ngon. Giòn, vị rong biển đậm đà, ăn hoài không ngán.'
+    },
+    {
+      reviewerName: 'Bảo Trân',
+      rating: 5,
+      reviewDate: '5 tháng trước',
+      content: 'Sản phẩm đóng gói đẹp, vệ sinh. Mùi thơm, vị ngon, ăn rất cuốn. Đã trở thành món ăn vặt yêu thích của gia đình mình.'
+    },
+    {
+      reviewerName: 'Minh Khôi',
+      rating: 4,
+      reviewDate: '1 tháng trước',
+      content: 'Bánh giòn, vị sốt me ngon nhưng mình thích thêm cay hơn một chút. Tổng thể là ổn!'
+    }
+  ];
+  showReviewConfirmPopup = false;
+  
   constructor(
     private route: ActivatedRoute,
     private productService: ProductApiService,
@@ -58,6 +88,84 @@ export class ProductDetailBackupComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  
+  // Xử lý khi người dùng submit form đánh giá
+  handleReviewSubmit(event: Event): void {
+    event.preventDefault();
+    
+    // Kiểm tra đã chọn rating chưa
+    if (!this.userRating) {
+      this.showRatingRequiredPopup = true;
+      return;
+    }
+  
+    // Hiển thị popup xác nhận gửi đánh giá
+    this.showReviewConfirmPopup = true;
+  }
+
+  // Xác nhận gửi đánh giá
+  confirmReview(): void {
+    // Tạo đánh giá mới
+    const newReview: Review = {
+      reviewerName: 'Cá voi xanh',
+      rating: this.userRating,
+      reviewDate: 'Vừa xong',
+      content: this.reviewText
+    };
+
+    // Thêm vào đầu danh sách
+    this.reviews.unshift(newReview);
+
+    // Đóng popup xác nhận
+    this.showReviewConfirmPopup = false;
+
+    // Hiển thị popup thành công
+    this.showReviewSuccessPopup = true;
+
+    // Reset form
+    this.resetReviewForm();
+  }
+
+  // Hủy gửi đánh giá
+  cancelReview(): void {
+    this.showReviewConfirmPopup = false;
+  }
+
+  // Reset form sau khi gửi đánh giá
+  resetReviewForm(): void {
+    // Reset rating
+    this.userRating = 0;
+    const ratingInputs = document.querySelectorAll('input[name="rating"]') as NodeListOf<HTMLInputElement>;
+    ratingInputs.forEach(input => {
+      input.checked = false;
+    });
+
+    // Reset text
+    this.reviewText = '';
+    const textarea = document.querySelector('.review-form-container textarea') as HTMLTextAreaElement;
+    if (textarea) {
+      textarea.value = '';
+    }
+  }
+
+  // Chuyển số rating thành chuỗi sao
+  getRatingStars(rating: number): string {
+    let stars = '';
+    for (let i = 1; i <= 5; i++) {
+      if (i <= rating) {
+        stars += '★';
+      } else {
+        stars += '☆';
+      }
+    }
+    return stars;
+  }
+
+  // Tạo mảng để loop trong template
+  createRange(count: number): number[] {
+    return Array(count).fill(0).map((_, index) => index + 1);
   }
 
   loadProductDetails(productId: string): void {
@@ -113,26 +221,29 @@ export class ProductDetailBackupComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-
+  
     // Kiểm tra sản phẩm và số lượng
     if (!this.product) {
       this.errorMessage = 'Không tìm thấy thông tin sản phẩm';
       return;
     }
-
-    // Thêm vào giỏ hàng
+  
+    // Thêm vào giỏ hàng với đầy đủ thông tin
     this.cartService.addToCart(
       this.product._id,
       this.quantity,
-      this.product.unit_price
+      this.product.unit_price,
+      this.product.product_name,  // Thêm tên sản phẩm
+      this.product.image_1        // Thêm hình ảnh
     ).subscribe({
       next: (response) => {
         this.successMessage = 'Đã thêm sản phẩm vào giỏ hàng';
-        this.showPopup = true;  // Hiển thị popup từ backup component
+        this.showPopup = true;  // Hiển thị popup thông báo
         
         // Hiển thị thông báo success trong 3 giây
         setTimeout(() => {
           this.successMessage = '';
+          this.showPopup = false;
         }, 3000);
       },
       error: (error) => {
@@ -223,7 +334,4 @@ export class ProductDetailBackupComponent implements OnInit {
     }
     return 0;
   }
-
-
-
 }

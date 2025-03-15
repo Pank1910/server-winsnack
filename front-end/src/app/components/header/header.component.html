@@ -2,7 +2,7 @@
 <div class="flex flex-wrap md:flex-nowrap items-center justify-between z-10 py-4 px-4 md:px-8 lg:px-32 bg-[#FFF8EC]">
   <!-- Logo and Company Name -->
   <div class="flex items-center flex-shrink-0">
-    <img
+    <img routerLink="/account/order-history"
       loading="lazy"
       src="assets/images/header/logo.png"
       alt="Company Logo"
@@ -217,61 +217,61 @@
   </div>
 
   <!-- Navigation Links -->
-  <div class="flex flex-wrap md:flex-nowrap items-center justify-end gap-6 text-[#253D4E]">
-    <a routerLink="/home" class="nav-link group text-[#FF9413]">
-      <div class="flex items-center">
-        <img loading="lazy" src="assets/images/header/home.png" class="w-5 h-5" alt="Home" />
-        <span class="ml-1.5">Trang chủ</span>
-      </div>
-      <span class="block max-w-0 group-hover:max-w-full transition-all duration-300 h-0.5 bg-[#FF9413]"></span>
-    </a>
-    
-    <!-- Về chúng tôi Dropdown -->
-    <div class="relative group nav-link" (mouseenter)="showAbout = true" (mouseleave)="showAbout = false">
-      <div class="flex items-center cursor-pointer">
-        <img src="assets/images/header/about.png" class="w-5 h-5" alt="About Icon" />
-        <span class="ml-1.5 text-sm md:text-base">Về chúng tôi</span>
-        <i class="fa fa-angle-down ml-1.5"></i>
-      </div>
-      <span class="block max-w-0 group-hover:max-w-full transition-all duration-300 h-0.5 bg-[#FF9413]"></span>
+<div class="flex flex-wrap md:flex-nowrap items-center justify-end gap-6 text-[#253D4E]">
+  <a routerLink="/home" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" class="nav-link group">
+    <div class="flex items-center">
+      <img loading="lazy" src="assets/images/header/home.png" class="w-5 h-5" alt="Home" />
+      <span class="ml-1.5" [ngClass]="{'text-[#FF9413]': router.url === '/home'}">Trang chủ</span>
+    </div>
+    <span class="block h-0.5 bg-[#FF9413]" [ngClass]="{'max-w-full': router.url === '/home', 'max-w-0 group-hover:max-w-full transition-all duration-300': router.url !== '/home'}"></span>
+  </a>
+  
+  <!-- Về chúng tôi Dropdown -->
+  <div class="relative group nav-link" (mouseenter)="showAbout = true" (mouseleave)="showAbout = false">
+    <div class="flex items-center cursor-pointer">
+      <img src="assets/images/header/about.png" class="w-5 h-5" alt="About Icon" />
+      <span class="ml-1.5 text-sm md:text-base" [ngClass]="{'text-[#FF9413]': router.url === '/about' || router.url === '/terms-and-policies'}">Về chúng tôi</span>
+      <i class="fa fa-angle-down ml-1.5"></i>
+    </div>
+    <span class="block h-0.5 bg-[#FF9413]" [ngClass]="{'max-w-full': router.url === '/about' || router.url === '/terms-and-policies', 'max-w-0 group-hover:max-w-full transition-all duration-300': router.url !== '/about' && router.url !== '/terms-and-policies'}"></span>
 
-      <!-- Dropdown Content -->
-      <div *ngIf="showAbout" class="absolute left-0 top-full mt-1 w-40 md:w-48 bg-white shadow-lg rounded-md z-50">
-        <div class="py-1">
-          <a routerLink="/about" class="block px-4 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC] hover:text-[#FF9413] transition-colors duration-200">
-            Giới thiệu
-          </a>
-          <a routerLink="/terms-and-policies" class="block px-4 py-2 text-sm text-[#253D4E] hover:bg-[#FFF8EC] hover:text-[#FF9413] transition-colors duration-200">
-            Chính sách & Điều khoản
-          </a>
-        </div>
+    <!-- Dropdown Content -->
+    <div *ngIf="showAbout" class="absolute left-0 top-full mt-1 w-40 md:w-48 bg-white shadow-lg rounded-md z-50">
+      <div class="py-1">
+        <a routerLink="/about" class="block px-4 py-2 text-sm hover:bg-[#FFF8EC] transition-colors duration-200" [ngClass]="{'text-[#FF9413]': router.url === '/about', 'text-[#253D4E]': router.url !== '/about'}">
+          Giới thiệu
+        </a>
+        <a routerLink="/terms-and-policies" class="block px-4 py-2 text-sm hover:bg-[#FFF8EC] transition-colors duration-200" [ngClass]="{'text-[#FF9413]': router.url === '/terms-and-policies', 'text-[#253D4E]': router.url !== '/terms-and-policies'}">
+          Chính sách & Điều khoản
+        </a>
       </div>
     </div>
-
-    <a routerLink="/minigame" class="nav-link group">
-      <div class="flex items-center">
-        <img loading="lazy" src="assets/images/header/event.png" class="w-5 h-5" alt="Events" />
-        <span class="ml-1.5">Sự kiện</span>
-      </div>
-      <span class="block max-w-0 group-hover:max-w-full transition-all duration-300 h-0.5 bg-[#FF9413]"></span>
-    </a>
-    
-    <a routerLink="/blog" class="nav-link group">
-      <div class="flex items-center">
-        <img loading="lazy" src="assets/images/header/blog.png" class="w-5 h-5" alt="Blog" />
-        <span class="ml-1.5">Blog</span>
-      </div>
-      <span class="block max-w-0 group-hover:max-w-full transition-all duration-300 h-0.5 bg-[#FF9413]"></span>
-    </a>
-    
-    <a routerLink="/contact" class="nav-link group">
-      <div class="flex items-center">
-        <img loading="lazy" src="assets/images/header/contact.png" class="w-5 h-5" alt="Contact" />
-        <span class="ml-1.5">Liên hệ</span>
-      </div>
-      <span class="block max-w-0 group-hover:max-w-full transition-all duration-300 h-0.5 bg-[#FF9413]"></span>
-    </a>
   </div>
+
+  <a routerLink="/minigame" routerLinkActive="active-link" class="nav-link group">
+    <div class="flex items-center">
+      <img loading="lazy" src="assets/images/header/event.png" class="w-5 h-5" alt="Events" />
+      <span class="ml-1.5" [ngClass]="{'text-[#FF9413]': router.url === '/minigame'}">Sự kiện</span>
+    </div>
+    <span class="block h-0.5 bg-[#FF9413]" [ngClass]="{'max-w-full': router.url === '/minigame', 'max-w-0 group-hover:max-w-full transition-all duration-300': router.url !== '/minigame'}"></span>
+  </a>
+  
+  <a routerLink="/blog" routerLinkActive="active-link" class="nav-link group">
+    <div class="flex items-center">
+      <img loading="lazy" src="assets/images/header/blog.png" class="w-5 h-5" alt="Blog" />
+      <span class="ml-1.5" [ngClass]="{'text-[#FF9413]': router.url === '/blog'}">Blog</span>
+    </div>
+    <span class="block h-0.5 bg-[#FF9413]" [ngClass]="{'max-w-full': router.url === '/blog', 'max-w-0 group-hover:max-w-full transition-all duration-300': router.url !== '/blog'}"></span>
+  </a>
+  
+  <a routerLink="/contact" routerLinkActive="active-link" class="nav-link group">
+    <div class="flex items-center">
+      <img loading="lazy" src="assets/images/header/contact.png" class="w-5 h-5" alt="Contact" />
+      <span class="ml-1.5" [ngClass]="{'text-[#FF9413]': router.url === '/contact'}">Liên hệ</span>
+    </div>
+    <span class="block h-0.5 bg-[#FF9413]" [ngClass]="{'max-w-full': router.url === '/contact', 'max-w-0 group-hover:max-w-full transition-all duration-300': router.url !== '/contact'}"></span>
+  </a>
+</div>
 
   <!-- Call to Action -->
   <div class="flex items-center space-x-2 mt-2 md:mt-0">

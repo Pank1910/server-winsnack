@@ -47,6 +47,7 @@ export class CartService {
     });
   }
 
+  
   // Tính toán tổng số lượng và tổng giá
   private updateCartSummary(items: CartItem[]): void {
     const itemCount = items.length;
@@ -135,8 +136,8 @@ export class CartService {
       productId: productId,
       quantity: quantity,
       unit_price: unit_price,
-      product_name: product_name,
-      image_1: image_1,
+      product_name: product_name || '',
+      image_1: image_1 || '',
     };
     
     // Thêm vào localStorage (cho cả hai trường hợp)
@@ -160,9 +161,14 @@ export class CartService {
     
     // Nếu đã đăng nhập, cập nhật lên server
     if (currentUser && currentUser.userId) {
-      return this.cartAPIService.addToCart(currentUser.userId, productId, quantity, unit_price).pipe(
-        tap(() => {
-          console.log('Item added to cart in database');
+      return this.cartAPIService.addToCart(
+        currentUser.userId,
+        productId,
+        quantity,
+        unit_price
+      ).pipe(
+        tap((response) => {
+          console.log('Item added to cart in database:', response);
         }),
         catchError(error => {
           console.error('Error adding item to cart in database:', error);
@@ -174,6 +180,30 @@ export class CartService {
       return of({ success: true, message: 'Item added to cart locally' });
     }
   }
+
+clearCart(): Observable<any> {
+  const currentUser = this.authService.getCurrentUser();
+  
+  // Xóa giỏ hàng khỏi state và localStorage
+  this.cartItemsSubject.next([]);
+  this.saveCartToLocalStorage([]);
+  
+  // Nếu đã đăng nhập, xóa giỏ hàng trên server
+  if (currentUser && currentUser.userId) {
+    return this.cartAPIService.clearCart(currentUser.userId).pipe(
+      tap(() => {
+        console.log('Cart cleared from database');
+      }),
+      catchError(error => {
+        console.error('Error clearing cart from database:', error);
+        return of({ success: false, message: error.message });
+      })
+    );
+  } else {
+    // Nếu chưa đăng nhập, trả về observable thành công
+    return of({ success: true, message: 'Cart cleared locally' });
+  }
+}
 
   // Các phương thức khác giữ nguyên, chỉ cần thêm phần lưu localStorage
   // (Phương thức removeFromCart, updateQuantity, vv...)

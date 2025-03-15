@@ -55,6 +55,16 @@ body {
     transition: all 200ms;
   }
   
+  .active-link {
+    span {
+      color: #FF9413;
+    }
+    
+    span.block {
+      max-width: 100%;
+    }
+  }
+
   /* Mobile responsive */
   @media (max-width: 768px) {
     .group:hover .dropdown-content {
