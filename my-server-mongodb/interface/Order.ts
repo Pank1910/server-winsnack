@@ -1,5 +1,3 @@
-import { Product } from "../../my-server-mongodb/interface/Product";
-
 export class Order {
   constructor(
     public _id: string | null = null,

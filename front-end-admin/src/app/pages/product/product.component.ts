@@ -55,9 +55,10 @@ export class ProductComponent implements OnInit {
   /** 🔥 Xóa sản phẩm qua API */
   deleteProduct(id: string): void {
     if (confirm('❗ Bạn có chắc chắn muốn xóa sản phẩm này?')) {
-      this.http.delete(`http://localhost:5000/products/${id}`).subscribe({
-        next: () => {
-          // ✅ Xóa sản phẩm khỏi danh sách hiển thị
+      // Sử dụng service thay vì trực tiếp gọi http
+      this.productService.deleteProduct(id).subscribe({
+        next: (response) => {
+          // Xóa sản phẩm khỏi danh sách hiển thị
           this.products = this.products.filter(product => product._id !== id);
           this.filteredProducts = [...this.products];
           console.log(`✅ Đã xóa sản phẩm có ID: ${id}`);

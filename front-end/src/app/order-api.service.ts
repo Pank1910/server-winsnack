@@ -3,23 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CartItem } from '../../../my-server-mongodb/interface/Cart';
 
-// interface any {
-//   items: CartItem[];
-//   address: {
-//     name: string;
-//     phone: string;
-//     full_address: string;
-//   };
-//   shippingMethod: {
-//     estimated_delivery: string;
-//     cost: number;
-//   };
-//   totalOrder: number;
-//   shippingCost: number;
-//   discountAmount: number;
-//   finalAmount: number;
-// }
-
 interface PromoCodeValidationResult {
   isValid: boolean;
   discountAmount: number;

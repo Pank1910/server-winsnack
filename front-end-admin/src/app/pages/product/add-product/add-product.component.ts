@@ -16,6 +16,7 @@ export class AddProductComponent {
 
   // 🛒 Dữ liệu sản phẩm
   product = {
+    _id: '', // ✅ Thêm trường ID
     product_name: '',
     product_dept: '',
     stocked_quantity: 0,
@@ -38,6 +39,32 @@ export class AddProductComponent {
   // 🖼 Mảng lưu ảnh trước khi gửi API
   previewImages: string[] = [];
   selectedImages: File[] = [];
+
+  ngOnInit(): void {
+    // ✅ Lấy ID mới nhất từ API khi khởi tạo component
+    this.getLastProductId();
+  }
+
+  /** ✅ Lấy ID sản phẩm mới nhất để tạo ID tiếp theo */
+  getLastProductId() {
+    this.http.get('http://localhost:5000/products/lastId').subscribe({
+      next: (response: any) => {
+        // Nếu có ID trả về từ server, tăng lên 1
+        if (response && response.lastId) {
+          this.product._id = (parseInt(response.lastId) + 1).toString();
+        } else {
+          // Nếu không có sản phẩm nào, bắt đầu từ 31
+          this.product._id = '31';
+        }
+        console.log('✅ ID mới cho sản phẩm:', this.product._id);
+      },
+      error: (error) => {
+        console.error('❌ Lỗi khi lấy ID sản phẩm:', error);
+        // Mặc định bắt đầu từ 31 nếu có lỗi
+        this.product._id = '31';
+      }
+    });
+  }
 
   /** 🧮 Chỉ cho nhập giảm giá nếu chọn "Sản phẩm khuyến mãi" */
   checkDiscount() {
@@ -107,6 +134,7 @@ export class AddProductComponent {
 
     // 📝 FormData gửi dữ liệu sản phẩm & ảnh
     const formData = new FormData();
+    formData.append('_id', this.product._id); // ✅ Thêm ID vào form data
     formData.append('product_name', this.product.product_name);
     formData.append('product_dept', this.product.product_dept);
     formData.append('stocked_quantity', String(this.product.stocked_quantity));
