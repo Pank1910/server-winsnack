@@ -267,12 +267,83 @@ app.get("/products", async (req, res) => {
     }
 });
 
+// ✅ API thêm sản phẩm mới
+app.post("/products", upload.array("images", 5), async (req, res) => {
+    try {
+      const productData = req.body;
+      const files = req.files;
+  
+      // ✅ QUAN TRỌNG: Tìm ID lớn nhất hiện tại
+      const lastProduct = await productsCollection.find({})
+        .sort({ _id: -1 })
+        .limit(1)
+        .toArray();
+      
+      // Kiểm tra nếu _id là ObjectId hay string
+      let lastId = 30; // Mặc định bắt đầu từ 30
+      
+      if (lastProduct.length > 0) {
+        const currentId = lastProduct[0]._id;
+        // Nếu là ObjectId, thì tạo mới ID số
+        if (typeof currentId === 'string' && !isNaN(parseInt(currentId))) {
+          lastId = parseInt(currentId);
+        }
+      }
+      
+      // Tạo ID mới là số (không phải ObjectId)
+      productData._id = (lastId + 1).toString();
+  
+      // Xử lý các file ảnh
+      if (files && files.length > 0) {
+        files.forEach((file, index) => {
+          const imagePath = `/uploads/${file.filename}`;
+          productData[`image_${index + 1}`] = imagePath;
+        });
+      }
+  
+      // Convert string to appropriate types
+      if (productData.unit_price) productData.unit_price = Number(productData.unit_price);
+      if (productData.discount) productData.discount = Number(productData.discount);
+      if (productData.stocked_quantity) productData.stocked_quantity = Number(productData.stocked_quantity);
+      if (productData.rating) productData.rating = Number(productData.rating);
+      productData.isNew = productData.isNew === 'true';
+      productData.isDiscounted = productData.isDiscounted === 'true';
+  
+      // ✅ BỎ QUA MongoDB ObjectId và dùng _id từ productData
+      const result = await productsCollection.insertOne(productData);
+  
+      res.status(201).json({
+        success: true,
+        message: "✅ Sản phẩm đã được thêm thành công!",
+        productId: productData._id
+      });
+    } catch (error) {
+      console.error("❌ Lỗi khi thêm sản phẩm:", error);
+      res.status(500).json({
+        success: false,
+        message: "❌ Không thể thêm sản phẩm",
+        error: error.toString()
+      });
+    }
+  });
+
 
 // ✅ Endpoint lấy sản phẩm theo ID
 app.get("/products/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const product = await productsCollection.findOne({ _id: id });
+        
+        // Chuyển đổi id thành ObjectId nếu có thể
+        let objectId;
+        try {
+            objectId = new ObjectId(id);
+        } catch (error) {
+            // Nếu không thể chuyển đổi thành ObjectId, sử dụng ID ban đầu
+            objectId = id;
+        }
+        
+        const product = await productsCollection.findOne({ _id: objectId });
+        
         if (!product) {
             return res.status(404).json({
                 success: false,
@@ -292,6 +363,33 @@ app.get("/products/:id", async (req, res) => {
         });
     }
 });
+
+// ✅ API lấy ID sản phẩm lớn nhất
+app.get("/products/lastId", async (req, res) => {
+    try {
+      // Tìm sản phẩm với ID lớn nhất (sắp xếp giảm dần và lấy đầu tiên)
+      const lastProduct = await productsCollection.find({})
+        .sort({ _id: -1 })
+        .limit(1)
+        .toArray();
+  
+      // Trả về ID lớn nhất hoặc 30 nếu không có sản phẩm nào
+      const lastId = lastProduct.length > 0 ? lastProduct[0]._id : '30';
+      
+      res.json({
+        success: true,
+        lastId: lastId
+      });
+    } catch (error) {
+      console.error("❌ Lỗi khi lấy ID sản phẩm lớn nhất:", error);
+      res.status(500).json({
+        success: false,
+        message: "❌ Failed to get last product ID",
+        error: error.toString()
+      });
+    }
+  });
+
 
 // ✅ Endpoint tìm kiếm sản phẩm
 app.get("/products/search", async (req, res) => {
@@ -331,6 +429,36 @@ app.get("/products/search", async (req, res) => {
     }
 });
 
+// ✅ API XÓA SẢN PHẨM
+app.delete("/products/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        // Chuyển đổi id thành ObjectId
+        const objectId = new ObjectId(id);
+        
+        const result = await productsCollection.deleteOne({ _id: objectId });
+        
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ 
+                success: false, 
+                message: "❌ Không tìm thấy sản phẩm để xóa!" 
+            });
+        }
+        
+        res.json({ 
+            success: true, 
+            message: "✅ Sản phẩm đã được xóa thành công!" 
+        });
+    } catch (error) {
+        console.error("❌ Lỗi khi xóa sản phẩm:", error);
+        res.status(500).json({ 
+            success: false, 
+            message: "❌ Lỗi server khi xóa sản phẩm", 
+            error: error.toString() 
+        });
+    }
+});
 // Giả sử usersCollection đã được khai báo từ trước
 const usersCollection = database.collection("User");
 

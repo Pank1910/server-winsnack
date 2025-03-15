@@ -13,7 +13,7 @@ export class AuthService {
     getUserId(): string | null {
       throw new Error('Method not implemented.');
     }
-    private apiUrl = 'http://localhost:5001';
+    private apiUrl = 'http://localhost:5000';
 
     private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
     isLoggedIn$ = this.isLoggedInSubject.asObservable(); 
@@ -72,7 +72,7 @@ export class AuthService {
     }
 
     login(credentials: { profileName: string; password: string }): Observable<any> {
-        return this.http.post<any>('http://localhost:5001/auth/login', credentials).pipe(
+        return this.http.post<any>('http://localhost:5000/auth/login', credentials).pipe(
           tap((response) => {
             if (response && response.user) {
               // Lưu token vào localStorage

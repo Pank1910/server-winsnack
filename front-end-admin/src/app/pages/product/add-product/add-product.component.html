@@ -4,6 +4,10 @@
 
         <form (ngSubmit)="submitForm()">
             <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="col-span-2 sm:col-span-1">
+                    <label class="block">ID sản phẩm</label>
+                    <input [(ngModel)]="product._id" name="_id" type="text" class="w-full p-2 border border-gray-300 rounded-md bg-gray-100" readonly>
+                  </div>
                 <div class="col-span-2">
                     <label class="block">Tên sản phẩm</label>
                     <input [(ngModel)]="product.product_name" name="productName" type="text" 
