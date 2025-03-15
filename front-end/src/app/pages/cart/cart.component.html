@@ -1,220 +1,151 @@
-<!DOCTYPE html>
-<html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Win Snack - Thưởng thức những món snack ngon nhất với hương vị hấp dẫn" />
-    <meta name="keywords" content="snack, bánh tráng, đồ ăn vặt, Win Snack" />
-    <meta name="author" content="Win Snack" />
-    <title>Giỏ hàng của bạn</title>
-    <link rel="stylesheet" href="/assets/reset.css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      /* Fade-in animation */
-      @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
+<div class="bg-gradient-to-br from-[#fef6f3] via-orange-50 to-white min-h-screen font-sans">
+  <div class="container mx-auto py-12 px-4">
+    <!-- Header Section -->
+    <div class="text-center mb-10 fade-in">
+      <h2 class="text-4xl font-extrabold text-[#f57c00] bg-gradient-to-r from-orange-500 to-orange-700 bg-clip-text text-transparent">
+        Giỏ hàng của bạn
+      </h2>
+      <p class="text-gray-600 mt-3 text-lg tracking-wide">Dễ dàng quản lý giỏ hàng và tiến hành thanh toán nhanh chóng!</p>
+    </div>
 
-      .fade-in {
-        animation: fadeIn 0.8s ease-out forwards;
-      }
-
-      /* Gradient button animation */
-      .gradient-btn {
-        background: linear-gradient(90deg, #f97316, #f59e0b, #f97316);
-        background-size: 200%;
-        transition: background-position 0.5s ease, transform 0.3s ease;
-      }
-
-      .gradient-btn:hover {
-        background-position: right;
-        transform: scale(1.05);
-      }
-
-      /* Highlight effect for Sốt me */
-      .highlight {
-        position: relative;
-        border: 2px solid #f97316;
-        box-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
-        animation: pulse 2s infinite;
-      }
-
-      @keyframes pulse {
-        0% { box-shadow: 0 0 10px rgba(249, 115, 22, 0.5); }
-        50% { box-shadow: 0 0 20px rgba(249, 115, 22, 0.8); }
-        100% { box-shadow: 0 0 10px rgba(249, 115, 22, 0.5); }
-      }
-
-      /* Image hover effect */
-      .product-image {
-        transition: transform 0.3s ease;
-      }
-
-      .product-image:hover {
-        transform: scale(1.05);
-      }
-
-      /* Smooth input transition */
-      .smooth-input {
-        transition: all 0.3s ease;
-      }
-
-      .smooth-input:focus {
-        box-shadow: 0 0 10px rgba(249, 115, 22, 0.3);
-        border-color: #f97316;
-      }
-    </style>
-  </head>
-  <body class="bg-gradient-to-br from-[#fef6f3] via-orange-50 to-white min-h-screen font-sans">
-    <div class="container mx-auto py-12 px-4">
-      <!-- Header Section -->
-      <div class="text-center mb-10 fade-in">
-        <h2 class="text-4xl font-extrabold text-[#f57c00] bg-gradient-to-r from-orange-500 to-orange-700 bg-clip-text text-transparent">
-          Giỏ hàng của bạn
-        </h2>
-        <p class="text-gray-600 mt-3 text-lg tracking-wide">Dễ dàng quản lý giỏ hàng và tiến hành thanh toán nhanh chóng!</p>
-      </div>
-
-      <!-- Main Content -->
-      <div class="flex flex-col lg:flex-row gap-8">
-        <!-- Cart Items Section -->
-        <div class="flex-grow bg-white shadow-2xl rounded-2xl p-8 fade-in">
-          <div class="overflow-x-auto">
-            <table class="w-full border-collapse" *ngIf="cartItems && cartItems.length > 0">
-              <thead>
-                <tr class="border-b-2 border-orange-100">
-                  <th class="text-left pb-4 pr-4">
-                    <input type="checkbox" class="form-checkbox h-6 w-6 text-orange-600 rounded transition duration-200" (click)="toggleSelectAll()" />
-                  </th>
-                  <th class="text-left pb-4 pr-4 text-gray-700 font-semibold text-xl">Sản phẩm</th>
-                  <th class="text-left pb-4 pr-4 text-gray-700 font-semibold text-xl">Giá</th>
-                  <th class="text-left pb-4 pr-4 text-gray-700 font-semibold text-xl">Số lượng</th>
-                  <th class="text-left pb-4 pr-4 text-gray-700 font-semibold text-xl">Tạm tính</th>
-                  <th class="text-left pb-4 text-gray-700 font-semibold text-xl">Hành động</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of cartItems" class="border-b border-gray-100 hover:bg-orange-50 transition duration-300">
-                  <td class="py-4 pr-4">
-                    <input type="checkbox" class="form-checkbox h-6 w-6 text-orange-600 rounded" [(ngModel)]="item.isSelected" (ngModelChange)="onItemSelectChange()" />
-                  </td>
-                  <td class="py-4 pr-4 flex items-center">
-                    <a [routerLink]="'/product/' + item.productId" class="hover:opacity-80 transition duration-200">
-                      <img [src]="item.image_1" alt="{{ item.product_name }}" class="w-64 h-64 object-contain rounded-xl shadow-md product-image" />
-                    </a>
-                    <span class="ml-8 text-gray-800 font-medium text-xl">{{ item.product_name }}</span>
-                  </td>
-                  <td class="py-4 pr-4 text-gray-700 text-xl">{{ item.unit_price | currency: 'VND' }}</td>
-                  <td class="py-4 pr-4">
-                    <div class="flex items-center">
-                      <button class="px-4 py-2 border border-gray-300 rounded-l-xl hover:bg-orange-600 hover:text-white transition duration-200 transform hover:scale-105" 
-                              (click)="decreaseQuantity(item)" [disabled]="item.tempQuantity <= 1">-</button>
-                      <input type="number" [(ngModel)]="item.tempQuantity" 
-                             class="w-20 text-center border-t border-b border-gray-300 mx-1 p-2 text-gray-800 smooth-input rounded-none text-lg" 
-                             (change)="updateTempQuantity(item.productId, item.tempQuantity)" 
-                             min="1" [max]="item.stocked_quantity" />
-                      <button class="px-4 py-2 border border-gray-300 rounded-r-xl hover:bg-orange-600 hover:text-white transition duration-200 transform hover:scale-105" 
-                              (click)="increaseQuantity(item)" 
-                              [disabled]="item.tempQuantity >= item.stocked_quantity">+</button>
-                    </div>
-                    <p class="text-sm text-gray-500 mt-2 font-medium">
-                      {{ item.stocked_quantity > 0 ? 'Còn hàng' : 'Hết hàng' }}
-                    </p>
-                  </td>
-                  <td class="py-4 pr-4 text-gray-700 font-semibold text-xl">{{ (item.unit_price * item.tempQuantity) | currency: 'VND' }}</td>
-                  <td class="py-4">
-                    <button class="font-medium text-blue-600 hover:text-blue-800 mr-3 transition duration-200 transform hover:scale-105 text-lg" 
-                            (click)="saveChanges(item.productId)">Lưu</button>
-                    <button class="font-medium text-red-600 hover:text-red-800 transition duration-200 transform hover:scale-105 text-lg" 
-                            (click)="confirmRemoveFromCart(item.productId)">Xóa</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div *ngIf="cartItems.length === 0" class="text-center py-12 text-gray-500 bg-gray-50 rounded-2xl">
-              <p class="text-2xl font-medium">Không có sản phẩm nào trong giỏ hàng.</p>
-              <button class="mt-6 bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 px-6 rounded-full gradient-btn" (click)="continueShopping()">Mua sắm ngay</button>
-            </div>
-            <div class="flex justify-between items-center mt-8">
-              <button class="bg-gray-200 rounded-full py-3 px-8 text-gray-700 hover:bg-gray-300 transition duration-200 transform hover:scale-105" (click)="continueShopping()">Quay lại cửa hàng</button>
-              <button class="bg-green-600 text-white rounded-full py-3 px-8 hover:bg-green-700 transition duration-200 transform hover:scale-105" (click)="toggleSelectAll()">Chọn tất cả</button>
-            </div>
+    <!-- Main Content -->
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Cart Items Section -->
+      <div class="flex-grow bg-white shadow-2xl rounded-2xl p-8 fade-in">
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse" *ngIf="cartItems && cartItems.length > 0">
+            <thead>
+              <tr class="border-b-2 border-orange-100">
+                <th class="text-left pb-4 pr-4">
+                  <input type="checkbox" class="form-checkbox h-6 w-6 text-orange-600 rounded transition duration-200" (click)="toggleSelectAll()" />
+                </th>
+                <th class="text-left pb-4 pr-4 text-gray-700 font-semibold text-xl">Sản phẩm</th>
+                <th class="text-left pb-4 pr-4 text-gray-700 font-semibold text-xl">Giá</th>
+                <th class="text-left pb-4 pr-4 text-gray-700 font-semibold text-xl">Số lượng</th>
+                <th class="text-left pb-4 pr-4 text-gray-700 font-semibold text-xl">Tạm tính</th>
+                <th class="text-left pb-4 text-gray-700 font-semibold text-xl">Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of cartItems" class="border-b border-gray-100 hover:bg-orange-50 transition duration-300">
+                <td class="py-4 pr-4">
+                  <input type="checkbox" class="form-checkbox h-6 w-6 text-orange-600 rounded" [(ngModel)]="item.isSelected" (ngModelChange)="onItemSelectChange()" />
+                </td>
+                <td class="py-1 pr-4 flex items-center">
+                  <a [routerLink]="'/product/' + item.productId" class="hover:opacity-80 transition duration-200">
+                    <img [src]="item.image_1" alt="{{ item.product_name }}" class="w-52 h-52 object-contain rounded-xl shadow-md product-image" />
+                  </a>
+                  <span class="ml-8 text-gray-800 font-medium text-xl">{{ item.product_name }}</span>
+                </td>
+                <td class="py-4 pr-4 text-gray-700 text-xl">{{ item.unit_price | currency: 'VND' }}</td>
+                <td class="py-4 pr-4">
+                  <div class="flex items-center">
+                    <button class="px-4 py-2 border border-gray-300 rounded-l-xl hover:bg-orange-600 hover:text-white transition duration-200 transform hover:scale-105" 
+                            (click)="decreaseQuantity(item)" [disabled]="item.tempQuantity <= 1">-</button>
+                    <input type="number" [(ngModel)]="item.tempQuantity" 
+                            class="w-20 text-center border-t border-b border-gray-300 mx-1 p-2 text-gray-800 smooth-input rounded-none text-lg" 
+                            (change)="updateTempQuantity(item.productId, item.tempQuantity)" 
+                            min="1" [max]="item.stocked_quantity" />
+                    <button class="px-4 py-2 border border-gray-300 rounded-r-xl hover:bg-orange-600 hover:text-white transition duration-200 transform hover:scale-105" 
+                            (click)="increaseQuantity(item)" 
+                            [disabled]="item.tempQuantity >= item.stocked_quantity">+</button>
+                  </div>
+                  <p class="text-sm text-gray-500 mt-2 font-medium">
+                    {{ item.stocked_quantity > 0 ? 'Còn hàng' : 'Hết hàng' }}
+                  </p>
+                </td>
+                <td class="py-4 pr-4 text-gray-700 font-semibold text-xl">{{ (item.unit_price * item.tempQuantity) | currency: 'VND' }}</td>
+                <td class="py-4">
+                  <button class="font-medium text-blue-600 hover:text-blue-800 mr-3 transition duration-200 transform hover:scale-105 text-lg" 
+                          (click)="saveChanges(item.productId)">Lưu</button>
+                  <button class="font-medium text-red-600 hover:text-red-800 transition duration-200 transform hover:scale-105 text-lg" 
+                          (click)="confirmRemoveFromCart(item.productId)">Xóa</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div *ngIf="cartItems.length === 0" class="text-center py-12 text-gray-500 bg-gray-50 rounded-2xl">
+            <p class="text-2xl font-medium">Không có sản phẩm nào trong giỏ hàng.</p>
+            <button class="mt-6 bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 px-6 rounded-full gradient-btn" (click)="continueShopping()">Mua sắm ngay</button>
+          </div>
+          <div class="flex justify-between items-center mt-8">
+            <button class="bg-gray-200 rounded-full py-3 px-8 text-gray-700 hover:bg-gray-300 transition duration-200 transform hover:scale-105" (click)="continueShopping()">Quay lại cửa hàng</button>
+            <button class="bg-green-600 text-white rounded-full py-3 px-8 hover:bg-green-700 transition duration-200 transform hover:scale-105" (click)="toggleSelectAll()">Chọn tất cả</button>
           </div>
         </div>
+      </div>
 
-        <!-- Cart Summary Section -->
-        <div class="w-80 bg-white shadow-2xl rounded-2xl p-8 fade-in">
-          <h3 class="text-2xl font-bold mb-6 text-[#f57c00] border-b-2 border-orange-100 pb-3">Tổng Giỏ Hàng</h3>
-          <div class="space-y-5">
-            <div class="flex justify-between text-gray-700 text-lg">
-              <span>Tổng tiền hàng</span>
-              <span class="font-medium">{{ totalSelectedPrice | currency: 'VND' }}</span>
-            </div>
-            <div class="flex justify-between text-2xl font-bold text-gray-800 border-t-2 border-orange-100 pt-5">
-              <span>Thành tiền</span>
-              <span class="text-orange-600">{{ totalSelectedPrice | currency: 'VND' }}</span>
-            </div>
+      <!-- Cart Summary Section -->
+      <div class="w-80 bg-white shadow-2xl rounded-2xl p-8 fade-in">
+        <h3 class="text-2xl font-bold mb-6 text-[#f57c00] border-b-2 border-orange-100 pb-3">Tổng Giỏ Hàng</h3>
+        <div class="space-y-5">
+          <div class="flex justify-between text-gray-700 text-lg">
+            <span>Tổng tiền hàng</span>
+            <span class="font-medium">{{ totalSelectedPrice | currency: 'VND' }}</span>
           </div>
-          <button class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full py-4 mt-8 gradient-btn" 
-                  (click)="proceedToCheckout()">Thanh toán</button>
-          <div class="mt-8">
+          <div class="flex justify-between text-2xl font-bold text-gray-800 border-t-2 border-orange-100 pt-5">
+            <span>Thành tiền</span>
+            <span class="text-orange-600">{{ totalSelectedPrice | currency: 'VND' }}</span>
+          </div>
+        </div>
+        <button class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full py-4 mt-8 gradient-btn" 
+                (click)="proceedToCheckout()">Thanh toán</button>
+        <div class="mt-8">
 
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recommended Products -->
+  <div class="bg-gradient-to-br from-[#fef6f3] to-orange-50 py-16">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center mb-10 bg-gradient-to-r from-orange-600 to-orange-700 text-white py-4 px-8 rounded-2xl shadow-xl fade-in">
+        <h3 class="text-2xl font-bold">BẠN CÓ THỂ THÍCH</h3>
+        <a href="/products" class="font-semibold hover:underline transition duration-200">Xem tất cả ></a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 fade-in">
+        <!-- Sốt me chua ngọt -->
+        <div class="bg-white rounded-2xl shadow-xl p-5 highlight transition-all duration-300 transform hover:-translate-y-3 hover:shadow-2xl">
+          <a [routerLink]="['/product-detail/8']" class="block">
+            <img src="assets/images/product-category/Sotme.png" alt="Sốt me chua ngọt" class="w-full h-72 object-contain rounded-xl product-image" />
+            <h4 class="text-lg font-bold mt-4 text-gray-800">Sốt me chua ngọt</h4>
+            <p class="text-orange-600 font-bold mt-2 text-lg">{{ 42500 | currency: 'VND' }}</p>
+          </a>
+        </div>
+        <!-- Bánh tráng chà bông -->
+        <div class="bg-white rounded-2xl shadow-xl p-5 transition-all duration-300 transform hover:-translate-y-3 hover:shadow-2xl">
+          <div>
+            <img src="assets/images/product-category/Chabong.png" alt="Bánh tráng chà bông" class="w-full h-72 object-contain rounded-xl product-image" />
+            <h4 class="text-lg font-bold mt-4 text-gray-800">Bánh tráng chà bông</h4>
+            <p class="text-orange-600 font-bold mt-2 text-lg">{{ 25000 | currency: 'VND' }}</p>
+          </div>
+        </div>
+        <!-- Bánh tráng rong biển -->
+        <div class="bg-white rounded-2xl shadow-xl p-5 transition-all duration-300 transform hover:-translate-y-3 hover:shadow-2xl">
+          <div>
+            <img src="assets/images/product-category/Rongbien.png" alt="Bánh tráng rong biển" class="w-full h-72 object-contain rounded-xl product-image" />
+            <h4 class="text-lg font-bold mt-4 text-gray-800">Bánh tráng rong biển</h4>
+            <p class="text-orange-600 font-bold mt-2 text-lg">{{ 15000 | currency: 'VND' }}</p>
+          </div>
+        </div>
+        <!-- Bánh tráng vị bò -->
+        <div class="bg-white rounded-2xl shadow-xl p-5 transition-all duration-300 transform hover:-translate-y-3 hover:shadow-2xl">
+          <div>
+            <img src="assets/images/product-category/Bo.png" alt="Bánh tráng vị bò" class="w-full h-72 object-contain rounded-xl product-image" />
+            <h4 class="text-lg font-bold mt-4 text-gray-800">Bánh tráng vị bò</h4>
+            <p class="text-orange-600 font-bold mt-2 text-lg">{{ 20000 | currency: 'VND' }}</p>
+          </div>
+        </div>
+        <!-- Bánh tráng vị gà -->
+        <div class="bg-white rounded-2xl shadow-xl p-5 transition-all duration-300 transform hover:-translate-y-3 hover:shadow-2xl">
+          <div>
+            <img src="assets/images/product-category/Ga.png" alt="Bánh tráng vị gà" class="w-full h-72 object-contain rounded-xl product-image" />
+            <h4 class="text-lg font-bold mt-4 text-gray-800">Bánh tráng vị gà</h4>
+            <p class="text-orange-600 font-bold mt-2 text-lg">{{ 15000 | currency: 'VND' }}</p>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Recommended Products -->
-    <div class="bg-gradient-to-br from-[#fef6f3] to-orange-50 py-16">
-      <div class="container mx-auto px-4">
-        <div class="flex justify-between items-center mb-10 bg-gradient-to-r from-orange-600 to-orange-700 text-white py-4 px-8 rounded-2xl shadow-xl fade-in">
-          <h3 class="text-2xl font-bold">BẠN CÓ THỂ THÍCH</h3>
-          <a href="/products" class="font-semibold hover:underline transition duration-200">Xem tất cả ></a>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 fade-in">
-          <!-- Sốt me chua ngọt -->
-          <div class="bg-white rounded-2xl shadow-xl p-5 highlight transition-all duration-300 transform hover:-translate-y-3 hover:shadow-2xl">
-            <a [routerLink]="['/product-detail/8']" class="block">
-              <img src="assets/images/product-category/Sotme.png" alt="Sốt me chua ngọt" class="w-full h-72 object-contain rounded-xl product-image" />
-              <h4 class="text-lg font-bold mt-4 text-gray-800">Sốt me chua ngọt</h4>
-              <p class="text-orange-600 font-bold mt-2 text-lg">{{ 42500 | currency: 'VND' }}</p>
-            </a>
-          </div>
-          <!-- Bánh tráng chà bông -->
-          <div class="bg-white rounded-2xl shadow-xl p-5 transition-all duration-300 transform hover:-translate-y-3 hover:shadow-2xl">
-            <div>
-              <img src="assets/images/product-category/Chabong.png" alt="Bánh tráng chà bông" class="w-full h-72 object-contain rounded-xl product-image" />
-              <h4 class="text-lg font-bold mt-4 text-gray-800">Bánh tráng chà bông</h4>
-              <p class="text-orange-600 font-bold mt-2 text-lg">{{ 25000 | currency: 'VND' }}</p>
-            </div>
-          </div>
-          <!-- Bánh tráng rong biển -->
-          <div class="bg-white rounded-2xl shadow-xl p-5 transition-all duration-300 transform hover:-translate-y-3 hover:shadow-2xl">
-            <div>
-              <img src="assets/images/product-category/Rongbien.png" alt="Bánh tráng rong biển" class="w-full h-72 object-contain rounded-xl product-image" />
-              <h4 class="text-lg font-bold mt-4 text-gray-800">Bánh tráng rong biển</h4>
-              <p class="text-orange-600 font-bold mt-2 text-lg">{{ 15000 | currency: 'VND' }}</p>
-            </div>
-          </div>
-          <!-- Bánh tráng vị bò -->
-          <div class="bg-white rounded-2xl shadow-xl p-5 transition-all duration-300 transform hover:-translate-y-3 hover:shadow-2xl">
-            <div>
-              <img src="assets/images/product-category/Bo.png" alt="Bánh tráng vị bò" class="w-full h-72 object-contain rounded-xl product-image" />
-              <h4 class="text-lg font-bold mt-4 text-gray-800">Bánh tráng vị bò</h4>
-              <p class="text-orange-600 font-bold mt-2 text-lg">{{ 20000 | currency: 'VND' }}</p>
-            </div>
-          </div>
-          <!-- Bánh tráng vị gà -->
-          <div class="bg-white rounded-2xl shadow-xl p-5 transition-all duration-300 transform hover:-translate-y-3 hover:shadow-2xl">
-            <div>
-              <img src="assets/images/product-category/Ga.png" alt="Bánh tráng vị gà" class="w-full h-72 object-contain rounded-xl product-image" />
-              <h4 class="text-lg font-bold mt-4 text-gray-800">Bánh tráng vị gà</h4>
-              <p class="text-orange-600 font-bold mt-2 text-lg">{{ 15000 | currency: 'VND' }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </body>
-</html>
+  </div>
+</div>

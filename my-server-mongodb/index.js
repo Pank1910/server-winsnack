@@ -48,7 +48,7 @@ const upload = multer({
 
 app.use(cors({
     origin: '*', // ✅ Cho phép tất cả domain truy cập
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // ✅ Cho phép các phương thức
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'], // ✅ Cho phép các phương thức
     allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
     credentials: true
 }));
@@ -420,41 +420,50 @@ const cartCollection = database.collection("Cart");
 
 app.post('/carts/add', async (req, res) => {
     try {
-        const cartItem = req.body;
-       
-        // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
-        const existingItem = await cartCollection.findOne({
+      const cartItem = req.body;
+      
+      // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
+      const existingItem = await cartCollection.findOne({
+        productId: cartItem.productId,
+        userId: cartItem.userId
+      });
+  
+      if (existingItem) {
+        // Nếu đã tồn tại, cập nhật số lượng
+        const result = await cartCollection.findOneAndUpdate(
+          {
             productId: cartItem.productId,
             userId: cartItem.userId
+          },
+          { $inc: { quantity: cartItem.quantity } },
+          { returnDocument: 'after' }
+        );
+        res.json({
+          success: true,
+          message: 'Đã cập nhật số lượng sản phẩm',
+          data: result
         });
-
-
-        if (existingItem) {
-            // Nếu đã tồn tại, cập nhật số lượng
-            const result = await cartCollection.findOneAndUpdate(
-                {
-                    productId: cartItem.productId,
-                    userId: cartItem.userId
-                },
-                { $inc: { quantity: cartItem.quantity } },
-                { returnDocument: 'after' }
-            );
-            res.json(result);
-        } else {
-            // Nếu chưa tồn tại, thêm mới
-            const result = await cartCollection.insertOne(cartItem);
-            res.status(201).json({
-                ...cartItem,
-                _id: result.insertedId
-            });
-        }
+      } else {
+        // Nếu chưa tồn tại, thêm mới
+        const result = await cartCollection.insertOne(cartItem);
+        res.status(201).json({
+          success: true,
+          message: 'Đã thêm sản phẩm vào giỏ hàng',
+          data: {
+            ...cartItem,
+            _id: result.insertedId
+          }
+        });
+      }
     } catch (error) {
-        res.status(500).json({
-            message: "Lỗi thêm sản phẩm vào giỏ hàng",
-            error: error.toString()
-        });
+      console.error('Lỗi thêm sản phẩm vào giỏ hàng:', error);
+      res.status(500).json({
+        success: false,
+        message: "Lỗi thêm sản phẩm vào giỏ hàng",
+        error: error.toString()
+      });
     }
-});
+  });
 
 
 app.get('/cart/items', async (req, res) => {

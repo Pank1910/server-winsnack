@@ -55,9 +55,9 @@ export class CartAPIService {
       );
   }
 
-  updateQuantity(userId: string, productId: string, quantity: number): Observable<{ message: string }> { // Note: Thêm userId
+  updateQuantity(userId: string, productId: string, quantity: number): Observable<{ message: string }> {
     return this.http
-      .patch<{ message: string }>(`${this.apiUrl}/update`, { userId, productId, quantity }, {
+      .patch<{ message: string }>(`${this.apiUrl}/update/${productId}?userId=${userId}`, { quantity }, {
         headers: this.getHeaders(),
       })
       .pipe(

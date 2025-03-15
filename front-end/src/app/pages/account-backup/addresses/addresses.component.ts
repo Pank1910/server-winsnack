@@ -10,9 +10,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   styleUrl: './addresses.component.css'
 })
 export class AddressesComponent {
-  addressTitle: string = 'Linh Linh (mặc định)';
   phoneNumber: string = '0123456789';
-  address: string = 'KTX Khu B, ĐHQG TP HCM';
+  address: string = 'Sâu thẳm nơi đại dương';
   mapSrc: SafeResourceUrl;
 
   constructor(private sanitizer: DomSanitizer) {

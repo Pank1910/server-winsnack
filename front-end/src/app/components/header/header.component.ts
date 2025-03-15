@@ -35,7 +35,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private cartSubscription: Subscription | null = null;
 
   constructor(
-    private router: Router,
+    public router: Router,
     private productService: ProductApiService,
     private authService: AuthService,
     private cartService: CartService
@@ -196,7 +196,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   
   ngAfterViewInit(): void {
-    const blogSection = document.querySelector("section.bg-[#FFF8EC]") as HTMLElement;
+    const blogSection = document.querySelector("section.bg-\\[\\#FFF8EC\\]") as HTMLElement;
     const mascot = document.getElementById("mascot");
     
     if (!blogSection || !mascot) {
