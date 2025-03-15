@@ -56,7 +56,7 @@ app.use(cors({
 // 🔥 Middleware bổ sung để chắc chắn CORS hoạt động
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
 
     if (req.method === "OPTIONS") {
@@ -1525,6 +1525,55 @@ app.get('/api/order-admin', async (req, res) => {
       });
     }
   });
+
+  // Endpoint cập nhật trạng thái đơn hàng
+app.patch('/api/order/update-status/:orderId', async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        const { status } = req.body;
+
+        if (!status) {
+            return res.status(400).json({
+                success: false,
+                message: 'Trạng thái là bắt buộc'
+            });
+        }
+
+        const validStatuses = ['pending', 'completed', 'cancelled'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Trạng thái không hợp lệ'
+            });
+        }
+
+        const result = await orderCollection.findOneAndUpdate(
+            { orderId: orderId },
+            { $set: { status: status } },
+            { returnDocument: 'after' }
+        );
+
+        if (!result.value) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy đơn hàng'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Cập nhật trạng thái thành công',
+            data: result.value
+        });
+    } catch (error) {
+        console.error('Lỗi khi cập nhật trạng thái đơn hàng:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi server khi cập nhật trạng thái',
+            error: error.toString()
+        });
+    }
+});
 
 // Khởi động server
 app.listen(port, () => {

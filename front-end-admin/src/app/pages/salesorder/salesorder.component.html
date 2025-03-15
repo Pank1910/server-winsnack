@@ -3,18 +3,17 @@
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-orange-500">DANH SÁCH ĐƠN HÀNG</h1>
             <div class="flex gap-2">
-                <select [(ngModel)]="selectedFilter" (change)="changeFilter($event)" class="px-4 py-2 rounded bg-white border">
+                <select [(ngModel)]="selectedFilter" (change)="changeFilter($event)" class="px-4 py-2 rounded bg-white border border-orange-500 w-36">
                     <option *ngFor="let option of filterOptions" [value]="option">{{ filterLabels[option] }}</option>
                 </select>
                 <div class="relative">
-                    <input type="text" [(ngModel)]="searchText" (keyup.enter)="searchOrders()" placeholder="Tìm kiếm" class="px-4 py-2 rounded" />
+                    <input type="text" [(ngModel)]="searchText" (keyup.enter)="searchOrders()" placeholder="Tìm kiếm" class="px-4 py-2 rounded border border-orange-500" />
                     <button (click)="searchOrders()" class="absolute right-0 top-0 h-full px-4 bg-orange-400 rounded-r hover:bg-orange-500 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                         </svg>
                     </button>
                 </div>
-                <!-- Nút Reload -->
                 <button (click)="reloadOrders()" class="px-4 py-2 bg-orange-400 rounded hover:bg-orange-500 transition-colors text-white relative">
                     <svg *ngIf="!isLoading" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
@@ -24,23 +23,21 @@
             </div>
         </div>
 
-        <!-- Loading spinner toàn màn hình -->
         <div *ngIf="isLoading" class="flex justify-center items-center py-8">
             <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
         </div>
 
-        <!-- Bảng dữ liệu -->
         <div *ngIf="!isLoading" class="shadow-lg rounded-lg overflow-hidden">
             <table class="w-full bg-white">
                 <thead class="bg-orange-400 text-white">
                     <tr>
-                        <th class="py-4 px-6 text-center">STT</th>
-                        <th class="py-4 px-6 text-center">Mã đơn hàng</th>
-                        <th class="py-4 px-6 text-center">Khách hàng</th>
-                        <th class="py-4 px-6 text-center">Thời gian</th>
-                        <th class="py-4 px-6 text-center">Tình trạng</th>
-                        <th class="py-4 px-6 text-center">Thanh toán</th>
-                        <th class="py-4 px-6 text-center">Chi tiết</th>
+                        <th class="py-4 px-6 text-center w-12">STT</th>
+                        <th class="py-4 px-6 text-center w-32">Mã đơn hàng</th>
+                        <th class="py-4 px-6 text-center w-44">Khách hàng</th>
+                        <th class="py-4 px-6 text-center w-32">Thời gian</th>
+                        <th class="py-4 px-6 text-center w-48">Tình trạng</th>
+                        <th class="py-4 px-6 text-center w-24">Thanh toán</th>
+                        <th class="py-4 px-6 text-center w-24">Chi tiết</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,11 +50,9 @@
                             <div>{{ order.date }}</div>
                         </td>
                         <td class="py-4 px-6 text-center">
-                            <div class="flex justify-center">
-                                <button disabled class="py-2 px-6 rounded-full text-center w-36" [ngClass]="getStatusButtonClass(order.status)">
-                                    {{ getStatusDisplay(order.status) }}
-                                </button>
-                            </div>
+                            <select [(ngModel)]="order.status" (change)="updateOrderStatus(order)" class="py-2 px-4 rounded border w-full text-center" [ngClass]="getStatusSelectClass(order.status)">
+                                <option *ngFor="let status of statusOptions" [value]="status.value">{{ status.label }}</option>
+                            </select>
                         </td>
                         <td class="py-4 px-6 text-center">{{ order.payment }}</td>
                         <td class="py-4 px-6 text-center">
@@ -68,7 +63,6 @@
                             </a>
                         </td>
                     </tr>
-                    <!-- No orders message -->
                     <tr *ngIf="displayOrders.length === 0">
                         <td colspan="7" class="py-8 text-center text-gray-500">Không tìm thấy đơn hàng nào</td>
                     </tr>

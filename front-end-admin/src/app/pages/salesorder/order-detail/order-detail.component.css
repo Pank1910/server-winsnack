@@ -1,0 +1,31 @@
+/* order-detail.component.css */
+.export-hidden {
+    display: block;
+  }
+  
+  .pdf-mode .export-hidden {
+    display: none;
+  }
+  
+  /* Tùy chỉnh giao diện cho PDF */
+  .pdf-mode {
+    background-color: #ffffff !important; /* Nền trắng */
+  }
+  
+  .pdf-mode * {
+    color: #000000 !important; /* Chữ đen */
+    background-color: transparent !important; /* Xóa mọi màu nền */
+  }
+  
+  .pdf-mode .pdf-invoice {
+    border: 2px solid #000000 !important; /* Viền giống hóa đơn */
+  }
+  
+  .pdf-mode .pdf-invoice table {
+    border-collapse: collapse !important;
+  }
+  
+  .pdf-mode .pdf-invoice th,
+  .pdf-mode .pdf-invoice td {
+    border: 1px solid #000000 !important;
+  }

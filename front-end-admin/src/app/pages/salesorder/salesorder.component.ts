@@ -32,6 +32,14 @@ export class SalesorderComponent implements OnInit {
     'payment': 'Thanh toán'
   };
   isLoading: boolean = false;
+
+  // Các trạng thái hợp lệ từ backend
+  statusOptions: { value: string; label: string }[] = [
+    { value: 'pending', label: 'Đang giao hàng' },
+    { value: 'completed', label: 'Đã thanh toán' },
+    { value: 'cancelled', label: 'Đã hủy' }
+  ];
+
   constructor(private orderApiService: OrderApiService) { }
 
   ngOnInit(): void {
@@ -55,7 +63,7 @@ export class SalesorderComponent implements OnInit {
   }
 
   reloadOrders(): void {
-    this.searchText = ''; 
+    this.searchText = '';
     this.selectedFilter = 'all';
     this.currentPage = 1;
     this.loadOrders();
@@ -111,12 +119,12 @@ export class SalesorderComponent implements OnInit {
     }
   }
 
-  getStatusButtonClass(status: string): string {
+  getStatusSelectClass(status: string): string {
     switch (status) {
-      case 'pending': return 'bg-orange-100 border border-orange-500 text-orange-500';
-      case 'completed': return 'bg-green-100 border border-green-500 text-green-500';
-      case 'cancelled': return 'bg-red-100 border border-red-500 text-red-500';
-      default: return 'bg-gray-100 border border-gray-500 text-gray-500';
+      case 'pending': return 'bg-orange-100 border-orange-500 text-orange-500';
+      case 'completed': return 'bg-green-100 border-green-500 text-green-500';
+      case 'cancelled': return 'bg-red-100 border-red-500 text-red-500';
+      default: return 'bg-gray-100 border-gray-500 text-gray-500';
     }
   }
 
@@ -124,5 +132,27 @@ export class SalesorderComponent implements OnInit {
     const select = event.target as HTMLSelectElement;
     this.selectedFilter = select.value;
     this.searchOrders();
+  }
+
+  updateOrderStatus(order: OrderApi): void {
+    this.isLoading = true;
+    this.orderApiService.updateOrderStatus(order.id, order.status).subscribe({
+      next: (response) => {
+        console.log('Cập nhật trạng thái thành công:', response);
+        this.isLoading = false;
+        // Cập nhật danh sách orders để đảm bảo đồng bộ
+        const index = this.orders.findIndex(o => o.id === order.id);
+        if (index !== -1) {
+          this.orders[index].status = order.status;
+          this.filteredOrders = [...this.orders];
+          this.updatePagination();
+        }
+      },
+      error: (error) => {
+        console.error('Lỗi khi cập nhật trạng thái:', error);
+        this.loadOrders(); // Tải lại nếu lỗi để đồng bộ
+        this.isLoading = false;
+      }
+    });
   }
 }

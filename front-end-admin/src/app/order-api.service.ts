@@ -20,7 +20,7 @@ export interface OrderApi {
   customer: string;
   time: string;
   date: string;
-  status: 'processing' | 'cancelled' | 'delivered';
+  status: 'pending' | 'cancelled' | 'delivered';
   payment: string;
 }
 
@@ -64,13 +64,17 @@ export class OrderApiService {
             customer: order.userName,
             time: new Date(order.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
             date: new Date(order.createdAt).toLocaleDateString('vi-VN'),
-            status: order.status.toLowerCase() as 'processing' | 'cancelled' | 'delivered',
+            status: order.status.toLowerCase() as 'pending' | 'cancelled' | 'delivered',
             payment: order.paymentMethod
           }));
         }
         return [];
       })
     );
+  }
+
+  updateOrderStatus(orderId: string, status: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/order/update-status/${orderId}`, { status });
   }
 
   // Lấy chi tiết đơn hàng theo orderId

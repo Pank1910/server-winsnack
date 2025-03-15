@@ -1,17 +1,19 @@
 <div class="container mx-auto p-6 bg-orange-50">
   <!-- Back Button -->
-  <div class="p-4 bg-orange-50">
+  <div class="p-4 bg-orange-50 export-hidden">
     <button (click)="goBack()" class="bg-orange-500 hover:bg-white hover:text-orange-500 text-white font-medium px-4 py-2 rounded border border-orange-500 transition-all">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
       </svg>
     </button>
   </div>
-  <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+
+  <!-- Nội dung cần xuất PDF -->
+  <div #orderContent class="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
     <!-- Header -->
     <div class="flex justify-between items-center bg-orange-100 p-4">
       <h1 class="text-2xl font-bold text-orange-500">CHI TIẾT ĐƠN HÀNG</h1>
-      <button (click)="exportOrder()" class="bg-orange-500 hover:bg-white hover:text-orange-500 text-white font-medium px-4 py-2 rounded border border-orange-500 transition-all">
+      <button class="export-hidden bg-orange-500 hover:bg-white hover:text-orange-500 text-white font-medium px-4 py-2 rounded border border-orange-500 transition-all" (click)="exportOrder()">
         XUẤT HÓA ĐƠN
       </button>
     </div>
@@ -24,27 +26,21 @@
           <div class="grid grid-cols-2 gap-y-2">
             <p class="text-gray-500">Mã đơn hàng:</p>
             <p class="font-semibold">{{ order.id }}</p>
-            
             <p class="text-gray-500">Ngày đặt hàng:</p>
             <p>{{ order.orderDate }}</p>
-            
             <p class="text-gray-500">Thời gian:</p>
             <p>{{ order.orderTime }}</p>
-            
             <p class="text-gray-500">Tình trạng đơn hàng:</p>
             <p class="font-semibold">{{ order.status }}</p>
           </div>
         </div>
-        
         <div>
           <h2 class="text-lg font-bold text-orange-500 mb-4">Địa chỉ người nhận:</h2>
           <div class="grid grid-cols-2 gap-y-2">
             <p class="text-gray-500">Họ và tên:</p>
             <p>{{ order.recipientName }}</p>
-            
             <p class="text-gray-500">Địa chỉ:</p>
             <p>{{ order.recipientAddress }}</p>
-            
             <p class="text-gray-500">Số điện thoại:</p>
             <p>{{ order.recipientPhone }}</p>
           </div>
@@ -57,7 +53,7 @@
       <table class="w-full">
         <thead class="bg-orange-400 text-white">
           <tr>
-            <th class="py-3 px-4 text-left">Ảnh</th>
+            <th class="py-3 px-4 text-left export-hidden">Ảnh</th>
             <th class="py-3 px-4 text-left">Sản phẩm</th>
             <th class="py-3 px-4 text-right">Đơn giá</th>
             <th class="py-3 px-4 text-center">Số lượng</th>
@@ -66,7 +62,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of order.items; let odd = odd" [ngClass]="odd ? 'bg-orange-50' : 'bg-white'">
-            <td class="py-4 px-4">
+            <td class="py-4 px-4 export-hidden">
               <img [src]="item.image" alt="{{ item.name }}" class="w-16 h-16 object-cover rounded">
             </td>
             <td class="py-4 px-4">
