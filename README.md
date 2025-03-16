@@ -1,6 +1,14 @@
 # WinSnack - Website Bán Bánh Tráng
 
-**WinSnack** là trang web chuyên cung cấp các loại bánh tráng đa dạng và chất lượng cao, phục vụ nhu cầu ăn vặt của khách hàng. Với sự ứng dụng công nghệ **Node.js** và **Angular**, cùng việc sử dụng **MongoDB** làm cơ sở dữ liệu, chúng tôi mong muốn mang lại trải nghiệm mua sắm trực tuyến mượt mà và hiện đại cho người dùng.
+✨ Chào mừng đến với WinSnack – nơi những giấc mơ công nghệ trở thành hiện thực! ✨
+
+Ngày xửa ngày xưa (thật ra là năm 2024 thôi 😆), năm nhà thám hiểm đầy nhiệt huyết từ WinSnack team – Pank, DAn, Tỷ, Linh, BTran – đã cùng nhau đặt những viên gạch đầu tiên cho WinSnack. Họ không chỉ có chung niềm đam mê với công nghệ mà còn mang trong mình những hoài bão lớn lao về một nền tảng vững chắc cho tương lai, cùng nhau đi trên hành trình biến một ý tưởng nhỏ bé thành một thương hiệu đầy màu sắc.
+
+Từ những ngày đầu ngồi cùng nhau vẽ nên những mẫu mockup bánh tráng đầu tiên, đến khi cầm trên tay những bao bì sản phẩm thật, mỗi bước đi của WinSnack đều là dấu ấn của sự sáng tạo và quyết tâm. Không dừng lại ở đó, tụi mình tiếp tục phát triển landing page đầu tiên, xây dựng các kênh social để kết nối với cộng đồng mê ăn vặt...
+
+Chỉ trong một năm ngắn ngủi, WinSnack đã không ngừng phát triển mạnh mẽ, và rồi… tadaaa 🎉, giờ đây đội quân tinh nhuệ chào đón thêm website WinSnack đầy màu sắc! – nơi mang đến trải nghiệm mua sắm tiện lợi và hấp dẫn hơn bao giờ hết! Với kinh nghiệm dày dặn và tinh thần đồng đội tuyệt vời, chiếc web này đã tiếp thêm sức mạnh cho WinSnack, giúp cả team vững bước trên hành trình chinh phục những thử thách công nghệ đầy thú vị.
+
+💙🚀 Win Snack – team tụi mình không chỉ bán bánh tráng, mà còn “trộn” thật nhiều đam mê và niềm vui vào từng sản phẩm! 💙🥰
 
 ## Giới thiệu
 
