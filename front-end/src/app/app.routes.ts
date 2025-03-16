@@ -21,6 +21,7 @@ import { ProductCategoryComponent } from './pages/product-category/product-categ
 import { ProductTableComponent } from './components/product-table/product-table.component';
 import { PaymentPageComponent } from './pages/payment/payment.component';
 import { TermsAndPoliciesComponent } from './pages/terms-and-policies backup/terms-and-policies.component';
+import { FavoriteProductsComponent } from './pages/favorite-products/favorite-products.component';
 
 export const routes: Routes = [
     { path: 'home', component: HomepageComponent },
@@ -38,6 +39,7 @@ export const routes: Routes = [
     { path: 'minigame', component: MinigameComponent },
     { path: 'product-category', component: ProductCategoryComponent },
     { path: 'product-detail/:id', component: ProductDetailBackupComponent },
+    { path: 'favorites', component: FavoriteProductsComponent },
     {
         path: 'account',
         component: AccountBackupComponent,

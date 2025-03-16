@@ -56,6 +56,14 @@
                     <span class="text-[#FF9413] text-xl">★ {{ product.rating }}</span>
                     <span class="text-gray-600 ml-2">(67 đánh giá)</span>
                     <span class="text-gray-600 ml-2">Sản phẩm mới: {{ product.isNew ? 'Có' : 'Không' }}</span>
+                    <button 
+                    class="favorite-button ml-10" 
+                    [ngClass]="{'is-favorite': isFavorite, 'not-favorite': !isFavorite}" 
+                    (click)="toggleFavorite(product._id)" 
+                    [attr.aria-label]="isFavorite ? 'Bỏ thích sản phẩm' : 'Thêm vào yêu thích'">
+                    <i class="fas" [ngClass]="{'fa-heart': isFavorite, 'fa-heart-o': !isFavorite}"></i>
+                    ❤️ {{ isFavorite ? 'Đã yêu thích' : 'Yêu thích' }}
+                    </button>
                 </div>
                 <div class="mb-4">
                     <p class="text-gray-700 leading-relaxed">{{ product.product_detail }}</p>
