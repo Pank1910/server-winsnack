@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -6,6 +6,8 @@ import { ProductApiService } from '../../product-api.service';
 import { Product } from '../../../../../my-server-mongodb/interface/Product';
 import { CartService } from '../../components/header/cart3.service';
 import { AuthService } from '../../services/auth.service';
+import { ProductService } from '../../services/product.service';
+import { LocalStorageService } from '../../services/localStorage.service';
 
 interface Review {
   reviewerName: string;
@@ -60,29 +62,45 @@ export class ProductDetailBackupComponent implements OnInit {
     }
   ];
   showReviewConfirmPopup = false;
+  @Input() productId: string = '';
+  @Output() favoriteChanged = new EventEmitter<boolean>();
+  
+  isFavorite: boolean = false;
   
   constructor(
     private route: ActivatedRoute,
-    private productService: ProductApiService,
+    private productAPIService: ProductApiService,
     private cartService: CartService,
     private authService: AuthService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private productService: ProductService,
+    private localStorageService: LocalStorageService
+  ) {
+    console.log('LocalStorageService initialized:', !!this.localStorageService);
+  }
 
   ngOnInit(): void {
+    // Thêm console.log
+    console.log('Component initialized with productId:', this.productId);
+    
     // Kiểm tra trạng thái đăng nhập
     this.isLoggedIn = this.authService.isLoggedIn();
+    console.log('User logged in:', this.isLoggedIn);
     
     // Đăng ký theo dõi thay đổi đăng nhập
     this.authService.isLoggedIn$.subscribe(loggedIn => {
       this.isLoggedIn = loggedIn;
+      console.log('Login status changed:', loggedIn);
     });
-
+  
     // Lấy id sản phẩm từ URL
     this.route.paramMap.subscribe(params => {
       const productId = params.get('id');
       if (productId) {
+        this.productId = productId; // Lưu productId
+        console.log('ProductId from URL:', productId);
         this.loadProductDetails(productId);
+        this.checkFavoriteStatus(); // Kiểm tra trạng thái yêu thích
       } else {
         this.errorMessage = 'Không tìm thấy sản phẩm';
         this.isLoading = false;
@@ -90,6 +108,52 @@ export class ProductDetailBackupComponent implements OnInit {
     });
   }
 
+  onFavoriteChanged(productId: string, isFavorite: boolean): void {
+    console.log(`Sản phẩm ${productId} ${isFavorite ? 'đã được thêm vào' : 'đã bị xóa khỏi'} danh sách yêu thích`);
+  }
+  
+
+  // Sửa phương thức kiểm tra trạng thái yêu thích
+  checkFavoriteStatus(): void {
+    try {
+      if (this.productId) {
+        // Đảm bảo localStorageService đã được khởi tạo
+        if (this.localStorageService) {
+          this.isFavorite = this.localStorageService.isFavorite(this.productId);
+          console.log('Favorite status checked:', this.productId, this.isFavorite);
+        }
+      }
+    } catch (error) {
+      console.error('Error checking favorite status:', error);
+      this.isFavorite = false;
+    }
+  }
+  
+  toggleFavorite(productId?: string): void {
+    try {
+      const id = productId || this.productId;
+      
+      if (this.isFavorite) {
+        this.localStorageService.removeFromFavorites(id);
+        console.log('Removed from favorites:', id);
+      } else {
+        this.localStorageService.addToFavorites(id);
+        console.log('Added to favorites:', id);
+      }
+      
+      // Cập nhật trạng thái
+      this.isFavorite = this.localStorageService.isFavorite(id);
+      this.favoriteChanged.emit(this.isFavorite);
+      
+      // Hiển thị thông báo (optional)
+      this.successMessage = this.isFavorite ? 'Đã thêm vào danh sách yêu thích' : 'Đã xóa khỏi danh sách yêu thích';
+      setTimeout(() => {
+        this.successMessage = '';
+      }, 3000);
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
+  }
   
   // Xử lý khi người dùng submit form đánh giá
   handleReviewSubmit(event: Event): void {
@@ -170,7 +234,7 @@ export class ProductDetailBackupComponent implements OnInit {
 
   loadProductDetails(productId: string): void {
     this.isLoading = true;
-    this.productService.getProductById(productId).subscribe({
+    this.productAPIService.getProductById(productId).subscribe({
       next: (response) => {
         if (response.success && response.data) {
           this.product = response.data;

@@ -8,6 +8,7 @@ import { Product } from '../../../../../my-server-mongodb/interface/Product';
 import { ProductApiService } from '../../product-api.service';
 import { FormsModule } from '@angular/forms';
 import { CartService } from './cart3.service';
+import { LocalStorageService } from '../../services/localStorage.service';
 
 @Component({
   selector: 'app-header',
@@ -24,10 +25,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   currentUser: any = null;
   header = {
-    favorites: { number: 10 },
+    favorites: { number: 0 },
     cart: { number: 0 },
     price: 0,
   };
+  
   searchTerm: string = '';
   searchResults: Product[] = [];
   showDropdown: boolean = false;
@@ -38,7 +40,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public router: Router,
     private productService: ProductApiService,
     private authService: AuthService,
-    private cartService: CartService
+    private cartService: CartService,
+    private localStorageService: LocalStorageService
   ) { }
 
   ngOnInit(): void {
@@ -89,7 +92,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // Tải giỏ hàng ban đầu nếu người dùng đã đăng nhập
     if (this.isLoggedIn) {
       this.cartService.loadCartFromDatabase();
-    }
+    };
+    // Lấy số lượng sản phẩm yêu thích ban đầu
+    this.updateFavoritesNumber();
+
+    // Đăng ký lắng nghe sự thay đổi của danh sách yêu thích
+    this.localStorageService.favorites$.subscribe(() => {
+      this.updateFavoritesNumber();
+    });
   }
 
   ngOnDestroy(): void {
@@ -97,6 +107,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.cartSubscription) {
       this.cartSubscription.unsubscribe();
     }
+  }
+
+  private updateFavoritesNumber(): void {
+    // Lấy danh sách ID sản phẩm yêu thích từ LocalStorageService
+    const favoriteIds = this.localStorageService.getFavoriteIds();
+    // Cập nhật số lượng
+    this.header.favorites.number = favoriteIds.length;
   }
 
   // Định dạng giá tiền với đơn vị VND
