@@ -1,6 +1,6 @@
 # WinSnack - Website Bán Bánh Tráng
 
-**WinSnack** là trang web chuyên cung cấp các loại bánh tráng đa dạng và chất lượng cao, phục vụ nhu cầu ăn vặt của khách hàng. Với sự chuyển đổi công nghệ từ Django sang **Node.js** và **Angular**, cùng việc sử dụng **MongoDB** làm cơ sở dữ liệu, chúng tôi mong muốn mang lại trải nghiệm mua sắm trực tuyến mượt mà và hiện đại cho người dùng.
+**WinSnack** là trang web chuyên cung cấp các loại bánh tráng đa dạng và chất lượng cao, phục vụ nhu cầu ăn vặt của khách hàng. Với sự ứng dụng công nghệ **Node.js** và **Angular**, cùng việc sử dụng **MongoDB** làm cơ sở dữ liệu, chúng tôi mong muốn mang lại trải nghiệm mua sắm trực tuyến mượt mà và hiện đại cho người dùng.
 
 ## Giới thiệu
 
