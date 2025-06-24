@@ -170,4 +170,12 @@ export class AuthService {
         
         return throwError(() => new Error(errorMessage));
     }
+
+    getAvatarUrl(): string | null {
+        const user = this.currentUserSubject.value;
+        if (user && user.avatar) {
+          return `${this.apiUrl}${user.avatar}`; // Ghép base URL với đường dẫn avatar từ database
+        }
+        return null; // Trả về null nếu không có avatar
+      }
 }

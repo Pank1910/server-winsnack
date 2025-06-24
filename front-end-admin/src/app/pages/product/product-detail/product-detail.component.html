@@ -6,22 +6,22 @@
     <meta name="description" content="Trang quản lý sản phẩm Win Snack">
     <meta name="keywords" content="snack, bánh tráng, quản lý sản phẩm, Win Snack">
     <meta name="author" content="Win Snack">
-    <title>Chi Tiết Sản Phẩm - Win Snack</title>
+    <title>Product Details - Win Snack</title>
 </head>
 <body class="bg-[#FFF8EC]">
 
 <h1 class="text-3xl font-bold text-orange-dark mb-6 text-center">
-    CHI TIẾT SẢN PHẨM
+    PRODUCT DETAILS
 </h1>
 
 <!-- Thông tin sản phẩm -->
 <div class="mb-6" *ngIf="product">
-    <p class="text-lg mt-2">Tên sản phẩm: 
+    <p class="text-lg mt-2">Product Name: 
         <span class="text-xl font-semibold text-orange-dark">{{ product.product_name }}</span>
     </p>
-    <p class="text-lg mt-2">Số lượng tồn kho: <span class="font-semibold">{{ product.stocked_quantity }}</span></p>
+    <p class="text-lg mt-2">Stocked Quantity: <span class="font-semibold">{{ product.stocked_quantity }}</span></p>
     <p class="mt-2 flex items-center">
-        Chất lượng:
+        Rating:
         <span class="flex space-x-1 ml-2 text-yellow-500">{{ getStars(product.rating) }}</span>
     </p>
 </div>
@@ -30,11 +30,11 @@
 <table class="min-w-full rounded-lg shadow-md mt-6">
     <thead>
         <tr class="bg-orange-dark text-white">
-            <th class="px-4 py-2 text-center">STT</th>
-            <th class="px-4 py-2 text-center">Khách hàng</th>
-            <th class="px-4 py-2 text-center">Ngày</th>
-            <th class="px-4 py-2 text-center">Nội dung</th>
-            <th class="px-4 py-2 text-center">Số sao</th>
+            <th class="px-4 py-2 text-center">No.</th>
+            <th class="px-4 py-2 text-center">Customer</th>
+            <th class="px-4 py-2 text-center">Date</th>
+            <th class="px-4 py-2 text-center">Comment</th>
+            <th class="px-4 py-2 text-center">Star Rating</th>
             <th class="px-4 py-2 text-center">Chat</th>
         </tr>
     </thead>
@@ -67,21 +67,21 @@
 
 <!-- Phản hồi -->
 <div class="mt-6">
-    <h3 class="text-xl font-semibold text-black mb-2">Phản hồi đánh giá</h3>
+    <h3 class="text-xl font-semibold text-black mb-2">Feedback review</h3>
     <textarea [(ngModel)]="replyContent" class="w-full p-4 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark focus:ring-opacity-50" rows="4" placeholder="Nhập phản hồi..."></textarea>
     <div class="mt-4 flex justify-center space-x-4">
         <button class="px-6 py-2 bg-[#DFDDDD] text-black rounded-md hover:bg-orange-medium hover:text-white transition duration-300">
-            Huỷ bỏ
+            Cancel
         </button>
         <button class="px-6 py-2 bg-orange-dark text-white rounded-md hover:bg-orange-medium hover:text-black transition duration-300" (click)="addReply()">
-            Thêm
+            Add
         </button>
     </div>
 </div>
 <!-- Popup cảm ơn -->
 <div *ngIf="showPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
     <div class="bg-white p-6 rounded-lg shadow-lg text-center">
-        <p class="text-xl font-semibold text-orange-dark">🎉 Cảm ơn bạn đã phản hồi!</p>
+        <p class="text-xl font-semibold text-orange-dark">🎉 Thanks for your feedback!</p>
         <button class="mt-4 px-6 py-2 bg-orange-dark text-white rounded-md hover:bg-orange-medium transition duration-300" (click)="closePopup()">
             OK
         </button>

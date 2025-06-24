@@ -7,14 +7,14 @@
   <div class="flex flex-col mt-5 max-w-full w-[268px]">
     <a routerLink="/dashboard" class="flex items-center gap-3 px-3 py-4 w-full min-h-[60px] rounded-lg hover:bg-[#FF9413] hover:text-white text-[#FF9413] cursor-pointer">
       <img src="assets/icons/overview.png" class="w-6 h-6 mr-4" alt="Tổng quan icon" />
-      <span class="text-2xl font-semibold">Tổng quan</span>
+      <span class="text-2xl font-semibold">Overview</span>
     </a>
     
     <!-- Sản phẩm với dropdown -->
     <div class="relative w-full">
       <div (click)="toggleProductMenu()" class="flex items-center gap-3 px-3 py-4 w-full min-h-[60px] rounded-lg hover:bg-[#FFE0C3] text-[#FF9413] cursor-pointer" [ngClass]="{'bg-[#FFE0C3]': isProductMenuOpen}">
         <img src="assets/icons/products.png" class="w-6 h-6 mr-4" alt="Sản phẩm icon" />
-        <span class="text-2xl font-semibold">Sản phẩm</span>
+        <span class="text-2xl font-semibold">Products</span>
         <img src="assets/icons/arrow-down-orange.png" class="w-4 h-4 ml-auto transition-transform duration-300" [ngClass]="{'transform rotate-180': isProductMenuOpen}" alt="Arrow icon" />
       </div>
       
@@ -22,33 +22,33 @@
       <div *ngIf="isProductMenuOpen" class="pl-4 w-full transition-all duration-300 overflow-hidden">
         <a routerLink="/product-list" class="flex items-center gap-2 px-3 py-3 w-full text-gray-700 hover:text-[#FF9413] cursor-pointer">
           <img src="assets/icons/list.png" class="w-5 h-5 mr-2" alt="All products icon" />
-          <span class="text-lg">Tất cả sản phẩm</span>
+          <span class="text-lg">All Products</span>
         </a>
         <a routerLink="/product-category" class="flex items-center gap-2 px-3 py-3 w-full text-gray-700 hover:text-[#FF9413] cursor-pointer">
           <img src="assets/icons/grid.png" class="w-5 h-5 mr-2" alt="Categories icon" />
-          <span class="text-lg">Danh mục sản phẩm</span>
+          <span class="text-lg">Product Categories</span>
         </a>
       </div>
     </div>
     
     <a routerLink="/customer" class="flex items-center gap-3 px-3 py-4 w-full min-h-[60px] rounded-lg hover:bg-[#FF9413] hover:text-white text-[#FF9413] cursor-pointer">
       <img src="assets/icons/customers.png" class="w-6 h-6 mr-4" alt="Khách hàng icon" />
-      <span class="text-2xl font-semibold">Khách hàng</span>
+      <span class="text-2xl font-semibold">Customer</span>
     </a>
     <a routerLink="/salesorder" class="flex items-center gap-3 px-3 py-4 w-full min-h-[60px] rounded-lg hover:bg-[#FF9413] hover:text-white text-[#FF9413] cursor-pointer">
       <img src="assets/icons/orders.png" class="w-6 h-6 mr-4" alt="Đơn hàng icon" />
-      <span class="text-2xl font-semibold">Đơn hàng</span>
+      <span class="text-2xl font-semibold">Sales Order</span>
     </a>
     <a routerLink="/promotion" class="flex items-center gap-3 px-3 py-4 w-full min-h-[60px] rounded-lg hover:bg-[#FF9413] hover:text-white text-[#FF9413] cursor-pointer">
       <img src="assets/icons/coupons.png" class="w-6 h-6 mr-4" alt="Khuyến mãi icon" />
-      <span class="text-2xl font-semibold">Khuyến mãi</span>
+      <span class="text-2xl font-semibold">Promotion</span>
     </a>
     <a routerLink="/blog-list" class="flex items-center gap-3 px-3 py-4 w-full min-h-[60px] rounded-lg hover:bg-[#FF9413] hover:text-white text-[#FF9413] cursor-pointer">
       <img src="assets/icons/blog.png" class="w-6 h-6 mr-4" alt="Blog icon" />
       <span class="text-2xl font-semibold">Blog</span>
     </a>
     <button (click)="onLogout()" class="flex items-center gap-3 px-4 py-2 mt-4 ml-16 w-[150px] text-[#F00000] bg-[#FFE0C3] rounded-lg hover:bg-[#FF9413] shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
-      <span class="text-lg font-bold">ĐĂNG XUẤT</span>
+      <span class="text-lg font-bold">LOGOUT</span>
     </button>
   </div>
 </nav>

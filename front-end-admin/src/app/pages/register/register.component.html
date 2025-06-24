@@ -19,7 +19,7 @@
         <!-- Right Section (Form) -->
         <div class="flex-1">
             <div class="text-center mb-6">
-                <h1 class="text-3xl font-bold text-orange-600">Chào mừng đến với <span class="text-green-500">Win Snack!</span></h1>
+                <h1 class="text-3xl font-bold text-orange-600">Welcome to <span class="text-green-500">Win Snack!</span></h1>
             </div>
             
             <!-- Register & Login Buttons -->
@@ -27,64 +27,64 @@
                 <button 
                 class="w-32 py-2 bg-[#ff9a76] text-white font-semibold rounded-full hover:bg-[#ff8b60]" 
                 routerLink="/login">
-                Đăng nhập
+                Log In
                 </button>
                 <button 
                 class="w-32 py-2 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600" 
                 routerLink="/register">
-                Đăng ký
+                Sign Up
                 </button>
             </div>
   
             <!-- Add the new text above the form -->
             <div class="text-lg font-semibold text-gray-700 mb-4">
-                Bạn đang thèm gì? Ghé ngay <span class="text-orange-600">Win Snack</span>! – nơi hội tụ những món ăn vặt đỉnh cao. Đảm bảo <span class="font-bold text-black">Ăn là ghiền!</span>
+                What are you craving? Visit <span class="text-orange-600">Win Snack now!</span>! – where the best snacks converge. Ensure <span class="font-bold text-black">Eat is addicted!</span>
             </div>
             
             <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6">
                 <!-- Tên đăng nhập -->
                 <div class="text-sm text-gray-700">
-                  <label for="profileName">Tên đăng nhập</label>
+                  <label for="profileName">Username</label>
                   <input type="text" id="profileName" formControlName="profileName"
                     class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    placeholder="Nhập tên đăng nhập của bạn">
+                    placeholder="Enter your username">
                   <span *ngIf="registerForm.get('profileName')?.invalid && registerForm.get('profileName')?.touched"
-                    class="text-red-500 text-xs">Thông tin này không được để trống</span>
+                    class="text-red-500 text-xs">This information cannot be left blank</span>
                 </div>
                 
                 <!-- Mật khẩu -->
                 <div class="text-sm text-gray-700">
-                    <label for="password">Mật khẩu</label>
+                    <label for="password">Password</label>
                     <div class="relative">
                     <input [type]="passwordVisible ? 'text' : 'password'" id="password" formControlName="password"
                         class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        placeholder="Nhập mật khẩu của bạn">
+                        placeholder="Enter your password">
                     <button type="button" (click)="togglePasswordVisibility()"
                         class="absolute right-3 top-1/2 transform -translate-y-1/2">
                         <img src="assets/images/login-register/invisible-icon.png" alt="Show/Hide" class="w-6 h-6">
                     </button>
                     </div>
                     <span *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
-                    class="text-red-500 text-xs">Thông tin này không được để trống</span>
+                    class="text-red-500 text-xs">This information cannot be left blank</span>
                 </div>
                 
                 <!-- Xác nhận mật khẩu -->
                 <div class="text-sm text-gray-700">
-                    <label for="confirmPassword">Xác nhận mật khẩu</label>
+                    <label for="confirmPassword">Confirm Password</label>
                     <div class="relative">
                     <input [type]="confirmPasswordVisible ? 'text' : 'password'" id="confirmPassword"
                         formControlName="confirmPassword"
                         class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        placeholder="Nhập lại mật khẩu">
+                        placeholder="Re-enter password">
                     <button type="button" (click)="toggleConfirmPasswordVisibility()"
                         class="absolute right-3 top-1/2 transform -translate-y-1/2">
                         <img src="assets/images/login-register/invisible-icon.png" alt="Show/Hide" class="w-6 h-6">
                     </button>
                     </div>
                     <span *ngIf="registerForm.get('confirmPassword')?.errors?.['passwordMismatch'] && registerForm.get('confirmPassword')?.touched"
-                    class="text-red-500 text-xs">Mật khẩu không khớp</span>
+                    class="text-red-500 text-xs">Passwords do not match</span>
                     <span *ngIf="registerForm.get('confirmPassword')?.errors?.['required'] && registerForm.get('confirmPassword')?.touched"
-                    class="text-red-500 text-xs">Thông tin này không được để trống</span>
+                    class="text-red-500 text-xs">This information cannot be left blank</span>
                 </div>
 
                 <!-- Checkbox khuyến mãi -->
@@ -101,7 +101,7 @@
                     </div>
 
                     <label for="newsletter" class="text-[#ffb74d] cursor-pointer" (click)="toggleNewsletter()">
-                        Nhận thông tin khuyến mãi và ưu đãi đặc quyền từ WinSnack
+                        Receive promotional information and exclusive offers from WinSnack
                     </label>
                 </div>
 
@@ -119,12 +119,12 @@
                     </div>
 
                     <label for="terms" class="text-[#ffb74d] cursor-pointer" (click)="toggleTerms()">
-                        Đồng ý với Điều khoản sử dụng và Chính sách bảo mật của Win Snack
+                        Agree to Win Snack's Terms of Use and Privacy Policy
                     </label>
                 </div>
 
                 <span *ngIf="registerForm.get('terms')?.invalid && registerForm.get('terms')?.touched"
-                    class="text-red-500 text-xs">Bạn phải đồng ý với Điều khoản.</span>
+                    class="text-red-500 text-xs">You must agree to the Terms.</span>
 
                 <!-- Show general errors - Fixed to use bracket notation -->
                 <div *ngIf="errors['general']" class="text-red-500 text-sm">{{ errors['general'] }}</div>
@@ -133,8 +133,8 @@
                 <div class="mt-6">
                     <button type="submit" class="w-full py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600"
                     [disabled]="isSubmitting">
-                    <span *ngIf="isSubmitting">Đang xử lý...</span>
-                    <span *ngIf="!isSubmitting">Đăng ký</span>
+                    <span *ngIf="isSubmitting">Processing...</span>
+                    <span *ngIf="!isSubmitting">Sign Up</span>
                     </button>
                 </div>
 
@@ -142,11 +142,11 @@
                 <div class="text-center mt-4">
                     <button type="button" class="w-full py-3 bg-[#ffb74d] text-white font-semibold rounded-lg hover:bg-[#ff9e3f] mb-2 flex items-center justify-center space-x-2">
                         <img src="assets/images/login-register/google-icon.png" alt="Google" class="w-5 h-5">
-                        <span>Đăng ký với Google</span>
+                        <span>Sign up with Google</span>
                     </button>
                     <button type="button" class="w-full py-3 bg-[#ffb74d] text-white font-semibold rounded-lg hover:bg-[#ff9e3f] flex items-center justify-center space-x-2">
                         <img src="assets/images/login-register/facebook-icon.png" alt="Facebook" class="w-5 h-5">
-                        <span>Đăng ký với Facebook</span>
+                        <span>Sign up with Facebook</span>
                     </button>
                 </div>
             </form>

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Trang quản lý bài viết Win Snack">
-    <meta name="keywords" content="snack, bánh tráng, quản lý bài viết, Win Snack">
+    <meta name="description" content="Win Snack Blog Management Page">
+    <meta name="keywords" content="snack, rice paper, blog management, Win Snack">
     <meta name="author" content="Win Snack">
-    <title>Quản lý Sản Phẩm - Win Snack</title>
+    <title>Product Management - Win Snack</title>
     <!-- Styles -->
     <link rel="stylesheet" href="./blog.component.css" />
 </head>
@@ -16,43 +16,43 @@
     <header class="bg-orange-light text-white p-4 flex justify-between items-center">
         <button routerLink="/blog" 
             class="px-6 py-2 bg-white text-orange-dark border-2 border-[#FF9413] rounded-md hover:bg-[#FFE0C3] transition duration-300">
-            <b>THÊM BÀI VIẾT</b>
+            <b>ADD POST</b>
         </button>
         
         <div class="flex items-center space-x-6">
             <select [(ngModel)]="selectedCategory" (change)="onCategoryChange($event)" 
                 class="p-2 rounded-md bg-orange-light text-black border border-gray-300 focus:ring focus:ring-orange-dark focus:ring-opacity-50">
-                <option value="all-posts">Tất cả bài viết</option>
-                <option value="category-1">Góc sức khỏe và dinh dưỡng</option>
-                <option value="category-2">Đánh giá và feedback khách hàng</option>
-                <option value="category-3">Chuyện kể từ nguyên liệu</option>
-                <option value="category-4">Bí quyết ăn vặt ngon miệng</option>
-                <option value="category-5">Công thức DIY</option>
+                <option value="all-posts">All Posts</option>
+                <option value="category-1">Health and Nutrition Corner</option>
+                <option value="category-2">Customer Reviews and Feedback</option>
+                <option value="category-3">Stories from Ingredients</option>
+                <option value="category-4">Secrets to Tasty Snacking</option>
+                <option value="category-5">DIY Recipes</option>
             </select>
             
             <input type="text" [(ngModel)]="searchText" (input)="onSearchChange($event)"
-                placeholder="Tìm kiếm bài viết..." 
+                placeholder="Search posts..." 
                 class="text-black p-2 rounded-md border border-gray-300 input-focus">
             
             <button (click)="filterPosts()" 
                 class="p-2 rounded-md bg-orange-dark text-orange-dark border border-gray-300 hover:bg-orange-dark hover:text-white transition duration-300 btn-hover">
-                <img src="assets/icons/search.png" class="w-5 h-5" alt="Tìm kiếm">
+                <img src="assets/icons/search.png" class="w-5 h-5" alt="Search">
             </button>
         </div>
     </header>
 
-    <!-- Nội dung chính -->
+    <!-- Main Content -->
     <div class="p-6">
         <table class="min-w-full bg-white rounded-lg shadow-md">
             <thead>
                 <tr class="bg-orange-dark text-white whitespace-nowrap">
-                    <th class="px-3 py-2 text-center">STT</th>
+                    <th class="px-3 py-2 text-center">No.</th>
                     <th class="px-3 py-2 text-center">ID</th>
-                    <th class="px-3 py-2 text-center">Ngày</th>
-                    <th class="px-3 py-2 text-center">Danh mục</th>
-                    <th class="px-3 py-2 text-center">Tiêu đề</th>
-                    <th class="px-3 py-2 text-center">Hiển thị</th>
-                    <th class="px-3 py-2 text-center">Tác vụ</th>
+                    <th class="px-3 py-2 text-center">Date</th>
+                    <th class="px-3 py-2 text-center">Category</th>
+                    <th class="px-3 py-2 text-center">Title</th>
+                    <th class="px-3 py-2 text-center">Visibility</th>
+                    <th class="px-3 py-2 text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -68,22 +68,22 @@
                                class="focus:outline-none focus:ring-2 focus:ring-orange-dark">
                     </td>
                     <td class="px-3 py-2 flex justify-center">
-                        <!-- Nút Sửa -->
+                        <!-- Edit Button -->
                         <button [routerLink]="['/update-post', post.id]"
                                 class="p-2 rounded-md hover:bg-orange-medium transition duration-300">
-                            <img src="assets/icons/edit.png" alt="Sửa" class="w-7 h-7">
+                            <img src="assets/icons/edit.png" alt="Edit" class="w-7 h-7">
                         </button>
                         
-                        <!-- Nút Xóa -->
+                        <!-- Delete Button -->
                         <button (click)="deletePost(post.id)" 
                                 class="p-2 rounded-md hover:bg-red-500 transition duration-300">
-                            <img src="assets/icons/delete.png" alt="Xoá" class="w-7 h-7">
+                            <img src="assets/icons/delete.png" alt="Delete" class="w-7 h-7">
                         </button>
                         
-                        <!-- Nút Xem Chi Tiết -->
+                        <!-- View Details Button -->
                         <button [routerLink]="['/post-detail', post.id]" 
                                 class="p-2 rounded-md hover:bg-orange-light transition duration-300">
-                            <img src="assets/icons/detail.png" alt="Xem Chi Tiết" class="w-7 h-7">
+                            <img src="assets/icons/detail.png" alt="View Details" class="w-7 h-7">
                         </button>
                     </td>
                 </tr>

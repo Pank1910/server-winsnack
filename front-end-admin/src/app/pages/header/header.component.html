@@ -8,10 +8,10 @@
     <div class="relative">
       <div class="flex gap-1.5 items-center cursor-pointer" (click)="isNotificationOpen = !isNotificationOpen">
         <img loading="lazy" src="assets/images/header/notification.png" alt="Thông báo" class="w-[30px] aspect-square object-contain" />
-        <span>Thông báo</span>
+        <span>Notification</span>
       </div>
       <div *ngIf="isNotificationOpen" class="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-md p-4">
-        <p class="text-gray-500">Không có thông báo mới</p>
+        <p class="text-gray-500">No new notifications</p>
       </div>
     </div>
     <div class="flex gap-1.5 items-center whitespace-nowrap cursor-pointer" (click)="navigateToAccount()">
