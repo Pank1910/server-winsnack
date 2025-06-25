@@ -1,5 +1,4 @@
 <div class="bg-[#fff8e5] text-[#333] flex justify-center items-center min-h-screen">
-
     <div class="w-full max-w-6xl flex bg-white p-8 rounded-lg shadow-xl">
     <div class="flex-1 mr-8">
         <div class="flex justify-center mb-6">
@@ -10,7 +9,7 @@
     <!-- Right Section (Form) -->
     <div class="flex-1">
         <div class="text-center mb-6">
-            <h1 class="text-3xl font-bold text-orange-600">Chào mừng đến với <span class="text-green-500">Win Snack!</span></h1>
+            <h1 class="text-3xl font-bold text-orange-600">Welcome to <span class="text-green-500">Win Snack!</span></h1>
         </div>
 
         <!-- Register & Login Buttons -->
@@ -18,18 +17,18 @@
             <button 
                 class="w-32 py-2 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600" 
                 routerLink="/login">
-                Đăng nhập
+                Log In
             </button>
             <!-- <button 
                 class="w-32 py-2 bg-[#ff9a76] text-white font-semibold rounded-full hover:bg-[#ff8b60]" 
                 routerLink="/register">
-                Đăng ký
+                Sign Up
             </button> -->
         </div>
         
         <!-- Add the new text above the form -->
         <div class="text-lg font-semibold text-gray-700 mb-4">
-            Quản lý hiệu quả với <span class="text-orange-600">Win Snack Admin</span> – Hệ thống hỗ trợ tối ưu vận hành.
+            Manage efficiently with <span class="text-orange-600">Win Snack Admin</span> – Optimized system for operations.
         </div>
 
         <!-- Login Form -->
@@ -37,21 +36,21 @@
             <div class="space-y-6">
                 <!-- profileName Field -->
                 <div class="text-sm text-gray-700">
-                    <label for="profileName" class="block">Tên đăng nhập</label>
+                    <label for="profileName" class="block">Username</label>
                     <input 
                         type="text"
                         id="profileName" 
                         formControlName="profileName" 
                         class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" 
-                        placeholder="Nhập Tên đăng nhập của bạn">
+                        placeholder="Enter your Username">
                     <span class="text-red-500 text-xs" *ngIf="profileName?.touched && profileName?.errors?.['required']">
-                        Tên đăng nhập không được để trống <!-- Sửa nội dung lỗi -->
+                        Username cannot be empty
                     </span>
                 </div>
 
                 <!-- Password Field -->
                 <div class="text-sm text-gray-700">
-                    <label for="password" class="block">Mật khẩu</label>
+                    <label for="password" class="block">Password</label>
                     <div class="relative">
                         <input 
                         [type]="passwordVisible ? 'text' : 'password'" 
@@ -59,7 +58,7 @@
                         formControlName="password" 
                         autocomplete="current-password"
                         class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" 
-                        placeholder="Nhập mật khẩu của bạn">
+                        placeholder="Enter your Password">
 
                         <button 
                             type="button" 
@@ -71,7 +70,7 @@
                         </button>
                     </div>
                     <span class="text-red-500 text-xs" *ngIf="password?.touched && password?.errors?.['required']">
-                        Mật khẩu không được để trống
+                        Password cannot be empty
                     </span>
                 </div>
 
@@ -82,7 +81,7 @@
                         id="rememberMe" 
                         formControlName="rememberMe" 
                         class="w-4 h-4 text-orange-500 focus:ring-orange-500">
-                    <label for="rememberMe" class="text-[#ffb74d]">Lưu mật khẩu</label>
+                    <label for="rememberMe" class="text-[#ffb74d]">Remember Password</label>
                 </div>
 
                 <!-- Error Message -->
@@ -94,8 +93,8 @@
                         type="submit" 
                         class="w-full py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600"
                         [disabled]="isLoading">
-                        <span *ngIf="isLoading">Đang xử lý...</span>
-                        <span *ngIf="!isLoading">Đăng nhập</span>
+                        <span *ngIf="isLoading">Processing...</span>
+                        <span *ngIf="!isLoading">Log In</span>
                     </button>
                 </div>
 
@@ -103,11 +102,11 @@
                 <div class="text-center mt-4">
                     <button type="button" class="w-full py-3 bg-[#ffb74d] text-white font-semibold rounded-lg hover:bg-[#ff9e3f] mb-2 flex items-center justify-center space-x-2">
                         <img src="assets/images/login-register/google-icon.png" alt="Google" class="w-5 h-5">
-                        <span>Đăng nhập với Google</span>
+                        <span>Log in with Google</span>
                     </button>
                     <button type="button" class="w-full py-3 bg-[#ffb74d] text-white font-semibold rounded-lg hover:bg-[#ff9e3f] flex items-center justify-center space-x-2">
                         <img src="assets/images/login-register/facebook-icon.png" alt="Facebook" class="w-5 h-5">
-                        <span>Đăng nhập với Facebook</span>
+                        <span>Log in with Facebook</span>
                     </button>
                 </div>
             </div>

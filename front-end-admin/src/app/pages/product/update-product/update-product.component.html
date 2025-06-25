@@ -1,6 +1,6 @@
 <body class="bg-[#FFF8EC]">
     <div class="p-6 max-w-5xl mx-auto mt-10 rounded-lg shadow-md bg-[#FFF8EC]">
-        <h1 class="text-3xl font-bold text-orange-dark text-center mb-6">CẬP NHẬT SẢN PHẨM</h1>
+        <h1 class="text-3xl font-bold text-orange-dark text-center mb-6">PRODUCT UPDATE</h1>
 
         <!-- Hiển thị lỗi nếu có -->
         <div *ngIf="error" class="text-red-600 text-center mb-4">{{ error }}</div>
@@ -8,46 +8,46 @@
         <form (ngSubmit)="updateProduct()">
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <div class="col-span-2">
-                    <label class="block">Tên sản phẩm</label>
+                    <label class="block">Product Name</label>
                     <input [(ngModel)]="product.product_name" name="productName" type="text"
                            class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark">
                 </div>
 
                 <div class="col-span-2">
-                    <label class="block">Danh mục</label>
+                    <label class="block">Product Category</label>
                     <select [(ngModel)]="product.product_dept" name="category"
                             class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark">
-                        <option value="">Chọn danh mục</option>
+                        <option value="">Select Category</option>
                         <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
                     </select>
                 </div>
 
                 <div class="col-span-2">
-                    <label class="block">Giá hiện tại</label>
+                    <label class="block">Current Price</label>
                     <input [(ngModel)]="product.unit_price" (input)="calculateFinalPrice()" name="currentPrice" type="number"
                            class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark">
                 </div>
 
                 <div class="col-span-2">
-                    <label class="block">Khuyến mãi (%)</label>
+                    <label class="block">Promotion (%)</label>
                     <input [(ngModel)]="product.discount" (input)="calculateFinalPrice()" name="discount" type="number"
                            class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark">
                 </div>
 
                 <div class="col-span-2 flex items-center">
-                    <label class="block mr-2">Giá sau khuyến mãi:</label>
+                    <label class="block mr-2">Price after promotion:</label>
                     <span class="text-red-600 font-semibold text-2xl">{{ calculateFinalPrice() | currency:'VND' }}</span>
                 </div>
             </div>
 
             <div class="mb-4">
-                <label class="block">Thông tin sản phẩm</label>
+                <label class="block">Product information</label>
                 <textarea [(ngModel)]="product.product_detail" name="productInfo" rows="4"
                           class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark"></textarea>
             </div>
 
             <div class="mb-4">
-                <label class="block text-gray-700 font-semibold mb-2">Hình ảnh sản phẩm</label>
+                <label class="block text-gray-700 font-semibold mb-2">Product Image</label>
 
                 <div *ngFor="let imageField of imageFields">
                     <input type="file" (change)="handleImageUpload($event, imageField)">
@@ -59,11 +59,11 @@
             <div class="flex justify-center space-x-6">
                 <button type="button" (click)="cancelUpdate()"
                         class="px-6 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400">
-                    Hủy
+                    Cancel
                 </button>
                 <button type="submit"
                         class="px-6 py-2 bg-orange-dark text-white rounded-md hover:bg-orange-medium">
-                    Cập Nhật
+                    Update
                 </button>
             </div>
         </form>

@@ -1,28 +1,28 @@
-<div class="bg-orange-50 min-h-screen"> <!-- Thêm min-h-screen để phủ toàn màn hình -->
+<div class="bg-orange-50 min-h-screen">
     <div class="container mx-auto p-6">
          <div class="flex justify-between items-center mb-6">
              <button (click)="addPromotion()" class="px-6 py-2 text-white bg-orange-500 rounded-lg font-bold hover:bg-white hover:text-orange-500 hover:border-orange-500 hover:border-2 transition">
-                 THÊM KHUYẾN MÃI
+                 ADD PROMOTION
              </button>
              <div class="flex gap-2">
                  <select [(ngModel)]="filterColumn" class="px-4 py-2 rounded bg-white border border-orange-300 focus:ring-2 focus:ring-orange-400">
-                     <option>Tất cả</option>
-                     <option>Danh mục</option>
-                     <option>Mã</option>
-                     <option>Tình trạng</option>
-                     <option>Số lượng</option>
-                     <option>Bắt đầu</option>
-                     <option>Kết thúc</option>
+                     <option>All</option>
+                     <option>Category</option>
+                     <option>Code</option>
+                     <option>Status</option>
+                     <option>Quantity</option>
+                     <option>Start Date</option>
+                     <option>End Date</option>
                  </select>
                  <div class="relative">
-                     <input type="text" [(ngModel)]="searchText" (input)="applyFilter()" placeholder="Tìm kiếm" class="px-4 py-2 rounded border border-orange-300 focus:ring-2 focus:ring-orange-400" />
+                     <input type="text" [(ngModel)]="searchText" (input)="applyFilter()" placeholder="Search" class="px-4 py-2 rounded border border-orange-300 focus:ring-2 focus:ring-orange-400" />
                      <button class="absolute right-0 top-0 h-full px-4 bg-orange-400 rounded-r hover:bg-orange-500 transition">
                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
                              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                          </svg>
                      </button>
                  </div>
-                 <!-- Nút Reload -->
+                 <!-- Reload Button -->
                  <button (click)="reloadPromotions()" class="px-4 py-2 bg-orange-400 rounded hover:bg-orange-500 transition-colors text-white relative">
                      <svg *ngIf="!isLoading" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                          <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
@@ -31,23 +31,23 @@
                  </button>
              </div>
          </div>
- 
-         <!-- Spinner khi tải dữ liệu -->
+
+         <!-- Spinner when loading data -->
          <div *ngIf="isLoading" class="flex justify-center items-center py-8">
              <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
          </div>
- 
-         <!-- Bảng dữ liệu -->
+
+         <!-- Data table -->
          <table *ngIf="!isLoading" class="w-full bg-white shadow rounded-lg overflow-hidden">
              <thead class="bg-orange-400 text-white">
                  <tr>
-                     <th class="py-4 px-4 text-left">STT</th>
-                     <th class="py-4 px-4 text-left">Danh mục</th>
-                     <th class="py-4 px-4 text-left">Mã</th>
-                     <th class="py-4 px-4 text-left">Tình trạng</th>
-                     <th class="py-4 px-4 text-left">Số lượng</th>
-                     <th class="py-4 px-4 text-left">Bắt đầu</th>
-                     <th class="py-4 px-4 text-left">Kết thúc</th>
+                     <th class="py-4 px-4 text-left">No.</th>
+                     <th class="py-4 px-4 text-left">Category</th>
+                     <th class="py-4 px-4 text-left">Code</th>
+                     <th class="py-4 px-4 text-left">Status</th>
+                     <th class="py-4 px-4 text-left">Quantity</th>
+                     <th class="py-4 px-4 text-left">Start Date</th>
+                     <th class="py-4 px-4 text-left">End Date</th>
                      <th class="py-4 px-4 text-left"></th>
                  </tr>
              </thead>
@@ -83,11 +83,11 @@
                      </td>
                  </tr>
                  <tr *ngIf="filteredPromotions.length === 0">
-                     <td colspan="8" class="py-8 text-center text-gray-500">Không tìm thấy khuyến mãi nào</td>
+                     <td colspan="8" class="py-8 text-center text-gray-500">No promotions found</td>
                  </tr>
              </tbody>
          </table>
- 
+
          <div *ngIf="!isLoading" class="flex justify-center mt-6 gap-2">
              <button (click)="goToPage(currentPage - 1)" *ngIf="currentPage > 1" class="w-8 h-8 flex items-center justify-center rounded hover:bg-orange-400 hover:text-white">
                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -107,33 +107,33 @@
              </button>
          </div>
      </div>
- 
-     <!-- Modal thêm/chỉnh sửa khuyến mãi -->
+
+     <!-- Add/Edit Promotion Modal -->
      <div *ngIf="showAddEditForm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
          <div class="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg border border-orange-200">
-             <h2 class="text-xl font-bold mb-6 text-orange-500">{{ isEditing ? 'Chỉnh sửa khuyến mãi' : 'Thêm khuyến mãi mới' }}</h2>
+             <h2 class="text-xl font-bold mb-6 text-orange-500">{{ isEditing ? 'Edit Promotion' : 'Add New Promotion' }}</h2>
              
              <div class="space-y-4">
                  <div>
-                     <label class="block text-sm font-medium text-gray-700 mb-1">Danh mục</label>
+                     <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
                      <select [(ngModel)]="currentPromotion.category" class="w-full p-2 border border-orange-300 rounded focus:ring-2 focus:ring-orange-400 bg-orange-50">
-                         <option value="Mã giảm giá">Mã giảm giá</option>
-                         <option value="Ưu đãi phí vận chuyển">Ưu đãi phí vận chuyển</option>
+                         <option value="Discount Code">Discount Code</option>
+                         <option value="Shipping Offer">Shipping Offer</option>
                      </select>
                  </div>
                  
                  <div>
-                     <label class="block text-sm font-medium text-gray-700 mb-1">Mã khuyến mãi</label>
-                     <input [(ngModel)]="currentPromotion.code" type="text" class="w-full p-2 border border-orange-300 rounded focus:ring-2 focus:ring-orange-400 bg-orange-50" placeholder="Nhập mã khuyến mãi">
+                     <label class="block text-sm font-medium text-gray-700 mb-1">Promotion Code</label>
+                     <input [(ngModel)]="currentPromotion.code" type="text" class="w-full p-2 border border-orange-300 rounded focus:ring-2 focus:ring-orange-400 bg-orange-50" placeholder="Enter promotion code">
                  </div>
                  
                  <div>
-                     <label class="block text-sm font-medium text-gray-700 mb-1">Mô tả</label>
-                     <input [(ngModel)]="currentPromotion.description" type="text" class="w-full p-2 border border-orange-300 rounded focus:ring-2 focus:ring-orange-400 bg-orange-50" placeholder="Nhập mô tả">
+                     <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                     <input [(ngModel)]="currentPromotion.description" type="text" class="w-full p-2 border border-orange-300 rounded focus:ring-2 focus:ring-orange-400 bg-orange-50" placeholder="Enter description">
                  </div>
                  
                  <div>
-                     <label class="block text-sm font-medium text-gray-700 mb-1">Tình trạng</label>
+                     <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                      <select [(ngModel)]="currentPromotion.status" class="w-full p-2 border border-orange-300 rounded focus:ring-2 focus:ring-orange-400 bg-orange-50">
                          <option value="On Sales">On Sales</option>
                          <option value="Expired">Expired</option>
@@ -142,30 +142,30 @@
                  
                  <div class="flex gap-4">
                      <div class="flex-1">
-                         <label class="block text-sm font-medium text-gray-700 mb-1">Số lượng đã dùng</label>
+                         <label class="block text-sm font-medium text-gray-700 mb-1">Used Quantity</label>
                          <input [(ngModel)]="currentPromotion.used" type="number" min="0" class="w-full p-2 border border-orange-300 rounded focus:ring-2 focus:ring-orange-400 bg-orange-50" placeholder="0">
                      </div>
                      <div class="flex-1">
-                         <label class="block text-sm font-medium text-gray-700 mb-1">Tổng số lượng</label>
+                         <label class="block text-sm font-medium text-gray-700 mb-1">Total Quantity</label>
                          <input [(ngModel)]="currentPromotion.total" type="number" min="1" class="w-full p-2 border border-orange-300 rounded focus:ring-2 focus:ring-orange-400 bg-orange-50" placeholder="1">
                      </div>
                  </div>
                  
                  <div class="flex gap-4">
                      <div class="flex-1">
-                         <label class="block text-sm font-medium text-gray-700 mb-1">Ngày bắt đầu</label>
+                         <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
                          <input [(ngModel)]="currentPromotion.startDate" type="text" class="w-full p-2 border border-orange-300 rounded focus:ring-2 focus:ring-orange-400 bg-orange-50" placeholder="DD/MM/YY">
                      </div>
                      <div class="flex-1">
-                         <label class="block text-sm font-medium text-gray-700 mb-1">Ngày kết thúc</label>
+                         <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
                          <input [(ngModel)]="currentPromotion.endDate" type="text" class="w-full p-2 border border-orange-300 rounded focus:ring-2 focus:ring-orange-400 bg-orange-50" placeholder="DD/MM/YY">
                      </div>
                  </div>
              </div>
              
              <div class="flex justify-end gap-2 mt-6">
-                 <button (click)="cancelForm()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition">Hủy</button>
-                 <button (click)="savePromotion()" class="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition">Lưu</button>
+                 <button (click)="cancelForm()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition">Cancel</button>
+                 <button (click)="savePromotion()" class="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition">Save</button>
              </div>
          </div>
      </div>

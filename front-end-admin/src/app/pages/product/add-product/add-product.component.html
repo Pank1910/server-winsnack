@@ -1,64 +1,64 @@
 <body class="bg-[#FFF8EC]">
     <div class="p-6 max-w-5xl mx-auto mt-10 rounded-lg shadow-md bg-[#FFF8EC]">
-        <h1 class="text-3xl font-bold text-orange-dark text-center mb-6">THÊM SẢN PHẨM MỚI</h1>
+        <h1 class="text-3xl font-bold text-orange-dark text-center mb-6">ADD NEW PRODUCT</h1>
 
         <form (ngSubmit)="submitForm()">
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <div class="col-span-2 sm:col-span-1">
-                    <label class="block">ID sản phẩm</label>
+                    <label class="block">Product ID</label>
                     <input [(ngModel)]="product._id" name="_id" type="text" class="w-full p-2 border border-gray-300 rounded-md bg-gray-100" readonly>
                   </div>
                 <div class="col-span-2">
-                    <label class="block">Tên sản phẩm</label>
+                    <label class="block">Product Name</label>
                     <input [(ngModel)]="product.product_name" name="productName" type="text" 
                            class="w-full p-2 border border-gray-300 rounded-md">
                 </div>
 
                 <div class="col-span-2">
-                    <label class="block">Danh mục</label>
+                    <label class="block">Category</label>
                     <select [(ngModel)]="product.product_dept" name="category" 
                             class="w-full p-2 border border-gray-300 rounded-md">
-                        <option value="">Chọn danh mục</option>
+                        <option value="">Select Category</option>
                         <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
                     </select>
                 </div>
 
                 <div class="col-span-2 flex items-center space-x-4">
                     <input type="checkbox" [(ngModel)]="product.isNew" name="isNew" class="mr-2">
-                    <label>Hiển thị trên website</label>
+                    <label>Display on Website</label>
 
                     <input type="checkbox" [(ngModel)]="product.isDiscounted" name="isDiscounted" (change)="checkDiscount()" class="mr-2">
-                    <label>Sản phẩm khuyến mãi</label>
+                    <label>Promotional Product</label>
                 </div>
 
                 <div class="col-span-2 sm:col-span-1">
-                    <label class="block">Giá hiện tại</label>
+                    <label class="block">Current Price</label>
                     <input [(ngModel)]="product.unit_price" name="unit_price" type="number" 
                            class="w-full p-2 border border-gray-300 rounded-md">
                 </div>
 
                 <div class="col-span-2 sm:col-span-1" *ngIf="product.isDiscounted">
-                    <label class="block">Khuyến mãi (%)</label>
+                    <label class="block">Discount (%)</label>
                     <input [(ngModel)]="product.discount" name="discount" type="number" 
                            class="w-full p-2 border border-gray-300 rounded-md">
                 </div>
 
                 <div class="col-span-2 flex items-center">
-                    <label class="block mr-2">Giá sau khuyến mãi:</label>
+                    <label class="block mr-2">Price After Discount:</label>
                     <span class="text-red-600 font-semibold text-2xl">
-                        {{ calculateFinalPrice() | currency:'VND' }}
+                        {{ calculateFinalPrice() | currency:'USD' }}
                     </span>
                 </div>
             </div>
 
             <div class="mb-4">
-                <label class="block">Thông tin sản phẩm</label>
+                <label class="block">Product Information</label>
                 <textarea [(ngModel)]="product.product_detail" name="productInfo" rows="4"
                           class="w-full p-2 border border-gray-300 rounded-md"></textarea>
             </div>
 
             <div class="mb-4">
-                <label class="block">Hình ảnh sản phẩm</label>
+                <label class="block">Product Images</label>
                 <input type="file" (change)="handleImageUpload($event)" multiple class="w-full p-2 border border-gray-300 rounded-md">
                 
                 <div class="flex flex-wrap gap-2 mt-2">
@@ -72,8 +72,8 @@
             </div>
 
             <div class="flex justify-center space-x-6">
-                <button type="button" class="px-6 py-2 bg-gray-300 text-black rounded-md" (click)="cancel()">Hủy bỏ</button>
-                <button type="submit" class="px-6 py-2 bg-orange-dark text-white rounded-md">Thêm</button>
+                <button type="button" class="px-6 py-2 bg-gray-300 text-black rounded-md" (click)="cancel()">Cancel</button>
+                <button type="submit" class="px-6 py-2 bg-orange-dark text-white rounded-md">Add</button>
             </div>
         </form>
     </div>

@@ -1,17 +1,17 @@
 <div class="container mx-auto min-h-screen p-6 bg-orange-50">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-orange-500">DANH SÁCH KHÁCH HÀNG</h1>
+        <h1 class="text-2xl font-bold text-orange-500">CUSTOMER LIST</h1>
         <div class="flex gap-2">
             <select [(ngModel)]="searchType" class="px-4 py-2 rounded bg-white border">
-                <option value="all">Tất cả</option>
-                <option value="name">Tên khách hàng</option>
+                <option value="all">All</option>
+                <option value="name">Customer Name</option>
                 <option value="email">Email</option>
-                <option value="phone">Số điện thoại</option>
-                <option value="address">Địa chỉ</option>
-                <option value="orderCount">Số đơn hàng</option>
+                <option value="phone">Phone Number</option>
+                <option value="address">Address</option>
+                <option value="orderCount">Order Count</option>
             </select>
             <div class="relative">
-                <input type="text" [(ngModel)]="searchTerm" placeholder="Tìm kiếm" class="px-4 py-2 rounded" />
+                <input type="text" [(ngModel)]="searchTerm" placeholder="Search" class="px-4 py-2 rounded" />
                 <button (click)="search()" class="absolute right-0 top-0 h-full px-4 bg-orange-400 rounded-r hover:bg-orange-500 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
@@ -40,11 +40,11 @@
     <table *ngIf="!isLoading && !errorMessage" class="w-full bg-white rounded-lg overflow-hidden shadow-lg">
         <thead class="bg-orange-400 text-white">
             <tr>
-                <th class="py-4 px-6 text-center">Họ và tên</th>
+                <th class="py-4 px-6 text-center">Full Name</th>
                 <th class="py-4 px-6 text-center">Email</th>
-                <th class="py-4 px-6 text-center">Số điện thoại</th>
-                <th class="py-4 px-6 text-center">Địa chỉ</th>
-                <th class="py-4 px-6 text-center">Tổng số đơn hàng</th>
+                <th class="py-4 px-6 text-center">Phone Number</th>
+                <th class="py-4 px-6 text-center">Address</th>
+                <th class="py-4 px-6 text-center">Total Orders</th>
             </tr>
         </thead>
         <tbody>
@@ -56,7 +56,7 @@
                 <td class="py-4 px-6 text-center">{{ customer.orderCount }}</td>
             </tr>
             <tr *ngIf="displayCustomers.length === 0">
-                <td colspan="5" class="py-4 px-6 text-center text-gray-500">Không tìm thấy khách hàng nào</td>
+                <td colspan="5" class="py-4 px-6 text-center text-gray-500">No customers found</td>
             </tr>
         </tbody>
     </table>

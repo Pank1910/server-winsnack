@@ -1,7 +1,7 @@
 <div class="bg-orange-50 min-h-screen">
     <div class="container mx-auto p-6">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-orange-500">DANH SÁCH ĐƠN HÀNG</h1>
+            <h1 class="text-2xl font-bold text-orange-500">ORDER LIST</h1>
             <div class="flex gap-2">
                 <select [(ngModel)]="selectedFilter" (change)="changeFilter($event)" class="px-4 py-2 rounded bg-white border border-orange-500 w-36">
                     <option *ngFor="let option of filterOptions" [value]="option">{{ filterLabels[option] }}</option>
@@ -31,13 +31,13 @@
             <table class="w-full bg-white">
                 <thead class="bg-orange-400 text-white">
                     <tr>
-                        <th class="py-4 px-6 text-center w-12">STT</th>
-                        <th class="py-4 px-6 text-center w-32">Mã đơn hàng</th>
-                        <th class="py-4 px-6 text-center w-44">Khách hàng</th>
-                        <th class="py-4 px-6 text-center w-32">Thời gian</th>
-                        <th class="py-4 px-6 text-center w-48">Tình trạng</th>
-                        <th class="py-4 px-6 text-center w-24">Thanh toán</th>
-                        <th class="py-4 px-6 text-center w-24">Chi tiết</th>
+                        <th class="py-4 px-6 text-center w-12">No.</th>
+                        <th class="py-4 px-6 text-center w-32">Order code</th>
+                        <th class="py-4 px-6 text-center w-44">Customer</th>
+                        <th class="py-4 px-6 text-center w-32">Time</th>
+                        <th class="py-4 px-6 text-center w-48">Status</th>
+                        <th class="py-4 px-6 text-center w-24">Payment</th>
+                        <th class="py-4 px-6 text-center w-24">Details</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,7 +64,7 @@
                         </td>
                     </tr>
                     <tr *ngIf="displayOrders.length === 0">
-                        <td colspan="7" class="py-8 text-center text-gray-500">Không tìm thấy đơn hàng nào</td>
+                        <td colspan="7" class="py-8 text-center text-gray-500">No orders found</td>
                     </tr>
                 </tbody>
             </table>
