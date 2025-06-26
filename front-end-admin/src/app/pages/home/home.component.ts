@@ -42,7 +42,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         data: {
           labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           datasets: [{
-            label: 'Doanh thu',
+            label: 'Revenue',
             data: [50, 60, 70, 60, 80, 90, 85, 75, 90, 95, 100, 85],
             borderColor: 'rgba(255, 126, 95, 1)',
             backgroundColor: 'rgba(255, 126, 95, 0.2)',
@@ -67,14 +67,14 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           labels: ['Aug', 'Jul'],
           datasets: [
             {
-              label: 'Người dùng tự do',
+              label: 'Regular Users',
               data: [80, 50],
               backgroundColor: 'rgba(255, 97, 74, 0.8)',
               borderColor: 'rgba(255, 97, 74, 1)',
               borderWidth: 1
             },
             {
-              label: 'Hội viên',
+              label: 'Member',
               data: [30, 10],
               backgroundColor: 'rgba(240, 179, 112, 0.8)',
               borderColor: 'rgba(240, 179, 112, 1)',

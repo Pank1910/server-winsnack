@@ -14,9 +14,9 @@ import { Router } from '@angular/router';
 export class AddProductComponent {
   constructor(private http: HttpClient, private router: Router) {}
 
-  // 🛒 Dữ liệu sản phẩm
+  // 🛒 Product data
   product = {
-    _id: '', // ✅ Thêm trường ID
+    _id: '', // ✅ Add ID field
     product_name: '',
     product_dept: '',
     stocked_quantity: 0,
@@ -25,7 +25,7 @@ export class AddProductComponent {
     product_detail: '',
     rating: 4,
     isNew: false,
-    isDiscounted: false, // ✅ Có giảm giá không
+    isDiscounted: false, // ✅ Is discounted
     image_1: '',
     image_2: '',
     image_3: '',
@@ -33,47 +33,48 @@ export class AddProductComponent {
     image_5: ''
   };
 
-  // Danh mục sản phẩm
-  categories = ['Bánh tráng trộn sẵn', 'Bánh tráng nướng', 'Bánh tráng ngọt', 'Combo bánh tráng mix vị', 'Nguyên liệu lẻ'];
+  // Product categories
+  categories = ['Ready-made rice paper mix', 'Grilled rice paper', 'Sweet rice paper', 'Rice paper combo mixed flavors', 'Retail materials'];
 
-  // 🖼 Mảng lưu ảnh trước khi gửi API
+  // 🖼 Array to store images before sending to API
   previewImages: string[] = [];
   selectedImages: File[] = [];
+  fileNames: string = ''; // Property to store concatenated file names
 
   ngOnInit(): void {
-    // ✅ Lấy ID mới nhất từ API khi khởi tạo component
+    // ✅ Get the latest ID from API when initializing component
     this.getLastProductId();
   }
 
-  /** ✅ Lấy ID sản phẩm mới nhất để tạo ID tiếp theo */
+  /** ✅ Get the latest product ID to create the next ID */
   getLastProductId() {
     this.http.get('http://localhost:5000/products/lastId').subscribe({
       next: (response: any) => {
-        // Nếu có ID trả về từ server, tăng lên 1
+        // If an ID is returned from the server, increment by 1
         if (response && response.lastId) {
           this.product._id = (parseInt(response.lastId) + 1).toString();
         } else {
-          // Nếu không có sản phẩm nào, bắt đầu từ 31
+          // If no products exist, start from 31
           this.product._id = '31';
         }
-        console.log('✅ ID mới cho sản phẩm:', this.product._id);
+        console.log('✅ New ID for product:', this.product._id);
       },
       error: (error) => {
-        console.error('❌ Lỗi khi lấy ID sản phẩm:', error);
-        // Mặc định bắt đầu từ 31 nếu có lỗi
+        console.error('❌ Error getting product ID:', error);
+        // Default to starting from 31 if an error occurs
         this.product._id = '31';
       }
     });
   }
 
-  /** 🧮 Chỉ cho nhập giảm giá nếu chọn "Sản phẩm khuyến mãi" */
+  /** 🧮 Allow entering discount only if "Discounted product" is selected */
   checkDiscount() {
     if (!this.product.isDiscounted) {
       this.product.discount = 0;
     }
   }
 
-  /** 🧮 Tính giá sau khuyến mãi */
+  /** 🧮 Calculate price after discount */
   calculateFinalPrice() {
     if (this.product.isDiscounted && this.product.discount > 0) {
       return this.product.unit_price * (1 - this.product.discount / 100);
@@ -81,17 +82,17 @@ export class AddProductComponent {
     return this.product.unit_price;
   }
 
-  /** 🖼 Xử lý tải ảnh */
+  /** 🖼 Handle image upload */
   handleImageUpload(event: any) {
     const files: FileList = event.target.files;
     if (files.length > 0) {
       Array.from(files).forEach((file: File, index) => {
-        if (index < 5) { // Giới hạn 5 ảnh
+        if (index < 5) { // Limit to 5 images
           this.selectedImages.push(file);
           const key = `image_${index + 1}` as keyof typeof this.product;
           (this.product as any)[key] = URL.createObjectURL(file);
 
-          // Đọc file để hiển thị trước khi gửi API
+          // Read file to display preview before sending to API
           const reader = new FileReader();
           reader.onload = (e: any) => {
             this.previewImages.push(e.target.result as string);
@@ -99,42 +100,58 @@ export class AddProductComponent {
           reader.readAsDataURL(file);
         }
       });
+      this.updateFileNames(); // Update file names after upload
     }
   }
 
-  /** 🗑 Xóa ảnh đã chọn */
+  /** 🗑 Remove selected image */
   removeImage(index: number) {
     this.selectedImages.splice(index, 1);
     this.previewImages.splice(index, 1);
 
-    // Xóa ảnh khỏi product.image_1, image_2, ...
+    // Remove image from product.image_1, image_2, ...
     const key = `image_${index + 1}`;
-    (this.product as any)[key] = ''; // ✅ Ép kiểu any để tránh lỗi TypeScript
+    (this.product as any)[key] = ''; // ✅ Typecast to any to avoid TypeScript error
+    this.updateFileNames(); // Update file names after removal
   }
 
-  /** 🚀 Gửi dữ liệu lên API */
-  submitForm() {
-    console.log('📌 Dữ liệu sản phẩm gửi lên API:', this.product);
+  /** 🖼 Update displayed file names based on selected images */
+  updateFileNames() {
+    if (this.selectedImages.length === 0) {
+      this.fileNames = 'No files selected';
+    } else {
+      this.fileNames = this.selectedImages.map(file => file.name).join(', ');
+    }
+  }
 
-    // Kiểm tra lỗi
+  /** 🖼 Get tooltip text based on selected images */
+  getTooltipText(): string {
+    return this.selectedImages.length === 0 ? 'No Files Selected' : this.fileNames;
+  }
+
+  /** 🚀 Send data to API */
+  submitForm() {
+    console.log('📌 Product data sent to API:', this.product);
+
+    // Check for errors
     if (!this.product.product_name || !this.product.product_dept) {
-      alert('❌ Vui lòng nhập đầy đủ thông tin sản phẩm!');
+      alert('❌ Please enter complete product information!');
       return;
     }
 
     if (this.product.isDiscounted && this.product.discount <= 0) {
-      alert('⚠️ Vui lòng nhập giảm giá hợp lệ nếu sản phẩm có khuyến mãi!');
+      alert('⚠️ Please enter a valid discount if the product is on sale!');
       return;
     }
 
     if (this.selectedImages.length === 0) {
-      alert('❌ Vui lòng chọn ít nhất một hình ảnh!');
+      alert('❌ Please select at least one image!');
       return;
     }
 
-    // 📝 FormData gửi dữ liệu sản phẩm & ảnh
+    // 📝 FormData to send product data & images
     const formData = new FormData();
-    formData.append('_id', this.product._id); // ✅ Thêm ID vào form data
+    formData.append('_id', this.product._id); // ✅ Add ID to form data
     formData.append('product_name', this.product.product_name);
     formData.append('product_dept', this.product.product_dept);
     formData.append('stocked_quantity', String(this.product.stocked_quantity));
@@ -146,26 +163,26 @@ export class AddProductComponent {
     formData.append('isDiscounted', String(this.product.isDiscounted));
 
     this.selectedImages.forEach((file, index) => {
-      formData.append(`images`, file); // ✅ Đúng key của `multer`
+      formData.append(`images`, file); // ✅ Correct key for `multer`
     });
-    console.log('🚀 FormData gửi lên API:', formData);
+    console.log('🚀 FormData sent to API:', formData);
 
-    // 🛠 Gửi dữ liệu lên API
+    // 🛠 Send data to API
     this.http.post('http://localhost:5000/products', formData).subscribe({
       next: (response) => {
         console.log('✅ API Response:', response);
-        alert('🎉 Sản phẩm đã được thêm thành công!');
-        this.router.navigate(['/product-list']); // ✅ Quay lại trang product
+        alert('🎉 Product added successfully!');
+        this.router.navigate(['/product-list']); // ✅ Navigate back to product page
       },
       error: (error) => {
-        console.error('❌ Lỗi API:', error);
-        alert('⚠️ Không thể thêm sản phẩm, vui lòng thử lại!');
+        console.error('❌ API Error:', error);
+        alert('⚠️ Unable to add product, please try again!');
       }
     });
   }
 
-  /** 🔙 Hủy và quay lại danh sách */
+  /** 🔙 Cancel and return to list */
   cancel() {
-    this.router.navigate(['/product-list']); // ✅ Quay lại trang product
+    this.router.navigate(['/product-list']); // ✅ Navigate back to product page
   }
 }
