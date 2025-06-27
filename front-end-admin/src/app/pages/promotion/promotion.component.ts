@@ -30,7 +30,7 @@ export class PromotionComponent implements OnInit {
   totalPages: number = 1;
   
   searchText: string = '';
-  filterColumn: string = 'Tất cả';
+  filterColumn: string = 'All';
   
   showAddEditForm: boolean = false;
   isEditing: boolean = false;
@@ -61,9 +61,9 @@ export class PromotionComponent implements OnInit {
       this.promotions = [
         {
           id: 1,
-          category: 'Mã giảm giá',
+          category: 'Discount Code',
           code: 'PNTHFG152368',
-          description: 'Giảm giá 20%, tối đa 30.000 VNĐ',
+          description: '20% discount, up to 30,000 VND',
           status: 'On Sales',
           used: 30,
           total: 50,
@@ -72,9 +72,9 @@ export class PromotionComponent implements OnInit {
         },
         {
           id: 2,
-          category: 'Ưu đãi phí vận chuyển',
+          category: 'Shipping Offer',
           code: 'SHIPFREE123',
-          description: 'Giảm giá 20%, tối đa 30.000 VNĐ',
+          description: '20% discount, up to 30,000 VND',
           status: 'Expired',
           used: 30,
           total: 50,
@@ -83,9 +83,9 @@ export class PromotionComponent implements OnInit {
         },
         {
           id: 3,
-          category: 'Ưu đãi phí vận chuyển',
+          category: 'Shipping Offer',
           code: 'SHIPFREE456',
-          description: 'Giảm giá 20%, tối đa 30.000 VNĐ',
+          description: '20% discount, up to 30,000 VND',
           status: 'Expired',
           used: 30,
           total: 50,
@@ -94,9 +94,9 @@ export class PromotionComponent implements OnInit {
         },
         {
           id: 4,
-          category: 'Mã giảm giá',
+          category: 'Discount Code',
           code: 'SUMMER2024',
-          description: 'Giảm giá 15%, không giới hạn',
+          description: '15% off, unlimited',
           status: 'On Sales',
           used: 45,
           total: 100,
@@ -105,9 +105,9 @@ export class PromotionComponent implements OnInit {
         },
         {
           id: 5,
-          category: 'Mã giảm giá',
+          category: 'Discount Code',
           code: 'NEWYEAR2024',
-          description: 'Giảm giá 25%, tối đa 50.000 VNĐ',
+          description: '25% discount, up to 50,000 VND',
           status: 'Expired',
           used: 98,
           total: 100,
@@ -116,9 +116,9 @@ export class PromotionComponent implements OnInit {
         },
         {
           id: 6,
-          category: 'Ưu đãi phí vận chuyển',
+          category: 'Shipping Offer',
           code: 'SHIP100K',
-          description: 'Miễn phí vận chuyển cho đơn hàng từ 100.000 VNĐ',
+          description: 'Free shipping for orders over 100,000 VND',
           status: 'On Sales',
           used: 25,
           total: 100,
@@ -127,9 +127,9 @@ export class PromotionComponent implements OnInit {
         },
         {
           id: 7,
-          category: 'Mã giảm giá',
+          category: 'Discount Code',
           code: 'WELCOME10',
-          description: 'Giảm 10% cho khách hàng mới',
+          description: '10% off for new customers',
           status: 'On Sales',
           used: 120,
           total: 500,
@@ -149,7 +149,7 @@ export class PromotionComponent implements OnInit {
 
   reloadPromotions(): void {
     this.searchText = '';
-    this.filterColumn = 'Tất cả';
+    this.filterColumn = 'All';
     this.currentPage = 1;
     this.loadPromotions(); // Tải lại dữ liệu với spinner
   }
@@ -161,20 +161,20 @@ export class PromotionComponent implements OnInit {
       this.filteredPromotions = this.promotions.filter(promo => {
         const searchLower = this.searchText.toLowerCase();
         switch (this.filterColumn) {
-          case 'Danh mục':
+          case 'Category':
             return promo.category.toLowerCase().includes(searchLower);
-          case 'Mã':
+          case 'Code':
             return promo.code.toLowerCase().includes(searchLower) || 
                    promo.description.toLowerCase().includes(searchLower);
-          case 'Tình trạng':
+          case 'Status':
             return promo.status.toLowerCase().includes(searchLower);
-          case 'Số lượng':
+          case 'Quantity':
             return `${promo.used}/${promo.total}`.includes(this.searchText);
-          case 'Bắt đầu':
+          case 'Start':
             return promo.startDate.includes(this.searchText);
-          case 'Kết thúc':
+          case 'End':
             return promo.endDate.includes(this.searchText);
-          default: // 'Tất cả'
+          default: // 'All'
             return (
               promo.category.toLowerCase().includes(searchLower) ||
               promo.code.toLowerCase().includes(searchLower) ||
@@ -233,7 +233,7 @@ export class PromotionComponent implements OnInit {
   }
 
   deletePromotion(id: number): void {
-    if (confirm('Bạn có chắc chắn muốn xóa khuyến mãi này?')) {
+    if (confirm('Are you sure you want to delete this promotion?')) {
       this.promotions = this.promotions.filter(p => p.id !== id);
       this.saveToLocalStorage();
       this.applyFilter();

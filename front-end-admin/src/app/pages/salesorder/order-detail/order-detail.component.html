@@ -8,13 +8,13 @@
     </button>
   </div>
 
-  <!-- Nội dung cần xuất PDF -->
+  <!-- Content for PDF export -->
   <div #orderContent class="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
     <!-- Header -->
     <div class="flex justify-between items-center bg-orange-100 p-4">
-      <h1 class="text-2xl font-bold text-orange-500">CHI TIẾT ĐƠN HÀNG</h1>
+      <h1 class="text-2xl font-bold text-orange-500">ORDER DETAILS</h1>
       <button class="export-hidden bg-orange-500 hover:bg-white hover:text-orange-500 text-white font-medium px-4 py-2 rounded border border-orange-500 transition-all" (click)="exportOrder()">
-        XUẤT HÓA ĐƠN
+        EXPORT INVOICE
       </button>
     </div>
 
@@ -22,26 +22,26 @@
     <div class="bg-orange-50 p-6">
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <h2 class="text-lg font-bold text-orange-500 mb-4">Đơn hàng:</h2>
+          <h2 class="text-lg font-bold text-orange-500 mb-4">Order:</h2>
           <div class="grid grid-cols-2 gap-y-2">
-            <p class="text-gray-500">Mã đơn hàng:</p>
+            <p class="text-gray-500">Order ID:</p>
             <p class="font-semibold">{{ order.id }}</p>
-            <p class="text-gray-500">Ngày đặt hàng:</p>
+            <p class="text-gray-500">Order Date:</p>
             <p>{{ order.orderDate }}</p>
-            <p class="text-gray-500">Thời gian:</p>
+            <p class="text-gray-500">Time:</p>
             <p>{{ order.orderTime }}</p>
-            <p class="text-gray-500">Tình trạng đơn hàng:</p>
+            <p class="text-gray-500">Order Status:</p>
             <p class="font-semibold">{{ order.status }}</p>
           </div>
         </div>
         <div>
-          <h2 class="text-lg font-bold text-orange-500 mb-4">Địa chỉ người nhận:</h2>
+          <h2 class="text-lg font-bold text-orange-500 mb-4">Recipient Address:</h2>
           <div class="grid grid-cols-2 gap-y-2">
-            <p class="text-gray-500">Họ và tên:</p>
+            <p class="text-gray-500">Full Name:</p>
             <p>{{ order.recipientName }}</p>
-            <p class="text-gray-500">Địa chỉ:</p>
+            <p class="text-gray-500">Address:</p>
             <p>{{ order.recipientAddress }}</p>
-            <p class="text-gray-500">Số điện thoại:</p>
+            <p class="text-gray-500">Phone Number:</p>
             <p>{{ order.recipientPhone }}</p>
           </div>
         </div>
@@ -53,11 +53,11 @@
       <table class="w-full">
         <thead class="bg-orange-400 text-white">
           <tr>
-            <th class="py-3 px-4 text-left export-hidden">Ảnh</th>
-            <th class="py-3 px-4 text-left">Sản phẩm</th>
-            <th class="py-3 px-4 text-right">Đơn giá</th>
-            <th class="py-3 px-4 text-center">Số lượng</th>
-            <th class="py-3 px-4 text-right">Thành tiền</th>
+            <th class="py-3 px-4 text-left export-hidden">Image</th>
+            <th class="py-3 px-4 text-left">Product</th>
+            <th class="py-3 px-4 text-right">Unit Price</th>
+            <th class="py-3 px-4 text-center">Quantity</th>
+            <th class="py-3 px-4 text-right">Total</th>
           </tr>
         </thead>
         <tbody>
@@ -80,19 +80,19 @@
     <div class="p-6 bg-orange-50">
       <div class="max-w-md ml-auto">
         <div class="flex justify-between py-2">
-          <span class="text-gray-600">Giá sản phẩm:</span>
+          <span class="text-gray-600">Product Price:</span>
           <span class="font-medium">{{ order.subtotal | number:'1.0-0' }}</span>
         </div>
         <div class="flex justify-between py-2">
-          <span class="text-gray-600">Phí vận chuyển:</span>
+          <span class="text-gray-600">Shipping Fee:</span>
           <span class="font-medium">{{ order.shippingFee | number:'1.0-0' }}</span>
         </div>
         <div class="flex justify-between py-2">
-          <span class="text-gray-600">Khuyến mãi:</span>
+          <span class="text-gray-600">Discount:</span>
           <span class="font-medium text-green-600">-{{ order.discount | number:'1.0-0' }}</span>
         </div>
         <div class="flex justify-between py-2 mt-2 border-t border-orange-200">
-          <span class="text-lg font-bold text-red-600">Tổng tiền:</span>
+          <span class="text-lg font-bold text-red-600">Total Amount:</span>
           <span class="text-lg font-bold text-red-600">{{ order.total | number:'1.0-0' }}</span>
         </div>
       </div>

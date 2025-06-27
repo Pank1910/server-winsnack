@@ -24,20 +24,20 @@ export class SalesorderComponent implements OnInit {
   selectedFilter: string = 'all';
   filterOptions: string[] = ['all', 'id', 'customer', 'date', 'status', 'payment'];
   filterLabels: { [key: string]: string } = {
-    'all': 'Tất cả',
-    'id': 'Mã đơn hàng',
-    'customer': 'Khách hàng',
-    'date': 'Thời gian',
-    'status': 'Tình trạng',
-    'payment': 'Thanh toán'
+    'all': 'All',
+    'id': 'Order code',
+    'customer': 'Customer',
+    'date': 'Time',
+    'status': 'Status',
+    'payment': 'Payment'
   };
   isLoading: boolean = false;
 
   // Các trạng thái hợp lệ từ backend
   statusOptions: { value: string; label: string }[] = [
-    { value: 'pending', label: 'Đang giao hàng' },
-    { value: 'completed', label: 'Đã thanh toán' },
-    { value: 'cancelled', label: 'Đã hủy' }
+    { value: 'pending', label: 'Pending' },
+    { value: 'completed', label: 'Completed' },
+    { value: 'cancelled', label: 'Canceled' }
   ];
 
   constructor(private orderApiService: OrderApiService) { }

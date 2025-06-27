@@ -75,7 +75,7 @@ export class RegisterComponent implements OnInit {
         const control = this.registerForm.get(key);
         control?.markAsTouched();
       });
-      this.errors = { general: 'Vui lòng điền đầy đủ thông tin.' };
+      this.errors = { general: 'Please fill in all information.' };
       return;
     }
 
@@ -90,7 +90,7 @@ export class RegisterComponent implements OnInit {
         this.router.navigate(['/login']);
       },
       error: (err) => {
-        this.errors = { general: err.error?.message || 'Đăng ký thất bại' };
+        this.errors = { general: err.error?.message || 'Registration failed' };
         this.isSubmitting = false;
       },
     });

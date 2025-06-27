@@ -12,73 +12,74 @@ export class ProductApiService {
 
   constructor(private http: HttpClient) {}
 
-  /** 📌 Lấy toàn bộ sản phẩm */
+  /** 📌 Fetch all products */
   getAllProducts(): Observable<{ success: boolean; data: Product[]; count: number }> {
-    console.log("🔍 Gửi request GET đến:", this.baseUrl);
+    console.log("🔍 Sending GET request to:", this.baseUrl);
     return this.http.get<{ success: boolean; data: Product[]; count: number }>(this.baseUrl);
   }
 
-  /** 🔎 Lấy sản phẩm theo danh mục */
+  /** 🔎 Fetch products by category */
   getProductsByCategory(category: string): Observable<{ success: boolean; data: Product[]; count: number }> {
     const url = `${this.baseUrl}?category=${encodeURIComponent(category)}`;
-    console.log("📌 Lọc theo danh mục:", category, "➡️", url);
+    console.log("📌 Filter by category:", category, "➡️", url);
     return this.http.get<{ success: boolean; data: Product[]; count: number }>(url);
   }
 
-  /** 🔎 Lấy sản phẩm theo ID */
+  /** 🔎 Fetch product by ID */
   getProductById(id: string): Observable<{ success: boolean; data: Product }> {
     const url = `${this.baseUrl}/${id}`;
-    console.log("📌 Lấy chi tiết sản phẩm ID:", id, "➡️", url);
+    console.log("📌 Fetch product details ID:", id, "➡️", url);
     return this.http.get<{ success: boolean; data: Product }>(url);
   }
 
-  /** 🏆 Lấy sản phẩm nổi bật */
+  /** 🏆 Fetch featured products */
   getFeaturedProducts(): Observable<Product[]> {
     const url = `${this.baseUrl}/featured`;
-    console.log("⭐ Lấy sản phẩm nổi bật ➡️", url);
+    console.log("⭐ Fetch featured products ➡️", url);
     return this.http.get<Product[]>(url);
   }
 
-  /** 🔥 Lấy sản phẩm bán chạy */
+  /** 🔥 Fetch best-seller products */
   getBestSellerProducts(): Observable<Product[]> {
     const url = `${this.baseUrl}/bestseller`;
-    console.log("🔥 Lấy sản phẩm bán chạy ➡️", url);
+    console.log("🔥 Fetch best-seller products ➡️", url);
     return this.http.get<Product[]>(url);
   }
 
-  /** 🆕 Thêm sản phẩm mới */
+  /** 🆕 Add new product */
   addProduct(product: Product): Observable<{ success: boolean; message: string; data: Product }> {
-    console.log("📌 Thêm sản phẩm:", product);
+    console.log("📌 Add product:", product);
     return this.http.post<{ success: boolean; message: string; data: Product }>(this.baseUrl, product);
   }
 
-  /** ✏️ Cập nhật sản phẩm */
+  /** ✏️ Update product */
   updateProduct(id: string, product: Product): Observable<{ success: boolean; message: string; data: Product }> {
     const url = `${this.baseUrl}/${id}`;
-    console.log("✏️ Cập nhật sản phẩm ID:", id, "➡️", url, "➡️", product);
+    console.log("✏️ Update product ID:", id, "➡️", url, "➡️", product);
     return this.http.put<{ success: boolean; message: string; data: Product }>(url, product);
   }
 
-  /** ❌ Xóa sản phẩm */
+  /** ❌ Delete product */
   deleteProduct(id: string): Observable<{ success: boolean; message: string }> {
     const url = `${this.baseUrl}/${id}`;
-    console.log("🗑️ Xóa sản phẩm ID:", id, "➡️", url);
+    console.log("🗑️ Delete product ID:", id, "➡️", url);
     return this.http.delete<{ success: boolean; message: string }>(url);
   }
 
-  /** 🔍 Tìm kiếm sản phẩm theo từ khóa */
+  /** 🔍 Search products by keyword */
   searchProducts(query: string): Observable<{ success: boolean; data: Product[]; count: number }> {
     const url = `${this.baseUrl}/search?q=${encodeURIComponent(query)}`;
-    console.log("🔎 Tìm kiếm sản phẩm:", query, "➡️", url);
+    console.log("🔎 Search products:", query, "➡️", url);
     return this.http.get<{ success: boolean; data: Product[]; count: number }>(url);
   }
 
-  /** 💰 Lọc sản phẩm theo giá */
+  /** 💰 Filter products by price */
   filterProductsByPrice(minPrice: number, maxPrice: number): Observable<{ success: boolean; data: Product[]; count: number }> {
     const url = `${this.baseUrl}?minPrice=${minPrice}&maxPrice=${maxPrice}`;
-    console.log("💰 Lọc sản phẩm theo giá:", minPrice, "-", maxPrice, "➡️", url);
+    console.log("💰 Filter products by price:", minPrice, "-", maxPrice, "➡️", url);
     return this.http.get<{ success: boolean; data: Product[]; count: number }>(url);
   }
+
   deleteCategory(categoryName: string): Observable<any> {
     return this.http.delete<any>(`${this.baseUrl}/category/${categoryName}`);
   }

@@ -31,47 +31,47 @@ export class ProductComponent implements OnInit {
 
     this.productService.getAllProducts().subscribe({
       next: (response) => {
-        console.log("Dữ liệu API trả về:", response); // Kiểm tra dữ liệu có đến FE không
+        console.log("API data returned:", response); // Kiểm tra dữ liệu có đến FE không
         this.products = response.data;
         this.filteredProducts = this.products;
         this.loading = false;
       },
       error: (err) => {
-        console.error("Lỗi API:", err);
+        console.error("API Error:", err);
         this.loading = false;
       }
     });
   }
 
   addProduct(): void {
-    console.log('Thêm sản phẩm mới');
+    console.log('Add new product');
   }
 
   editProduct(id: string): void {
-    console.log(`Chỉnh sửa sản phẩm: ${id}`);
+    console.log(`Edit product: ${id}`);
     this.router.navigate(['/update-product', id]);
   }
 
   /** 🔥 Xóa sản phẩm qua API */
   deleteProduct(id: string): void {
-    if (confirm('❗ Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+    if (confirm('❗ Are you sure you want to delete this product?')) {
       // Sử dụng service thay vì trực tiếp gọi http
       this.productService.deleteProduct(id).subscribe({
         next: (response) => {
           // Xóa sản phẩm khỏi danh sách hiển thị
           this.products = this.products.filter(product => product._id !== id);
           this.filteredProducts = [...this.products];
-          console.log(`✅ Đã xóa sản phẩm có ID: ${id}`);
+          console.log(`✅ Product with ID deleted: ${id}`);
         },
         error: (err) => {
-          console.error('❌ Lỗi khi xóa sản phẩm:', err);
+          console.error('❌ Error while deleting product:', err);
         }
       });
     }
   }
 
   viewProduct(id: string): void {
-    console.log(`Xem chi tiết sản phẩm: ${id}`);
+    console.log(`View product details: ${id}`);
     this.router.navigate(['/product-detail', id]);
   }
 

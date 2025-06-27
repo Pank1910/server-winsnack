@@ -43,10 +43,10 @@ export class CustomerApiService {
   private mapUsersToCustomers(users: User[]): CustomerApiUser[] {
     return users.map(user => {
       return {
-        name: user.profileName || 'Không có tên',
-        email: user.email || 'Không có email',
-        phone: user.phone || 'Chưa cung cấp',
-        address: user.address || 'Chưa cung cấp',
+        name: user.profileName || 'No name',
+        email: user.email || 'No email',
+        phone: user.phone || 'Not provided',
+        address: user.address || 'Not provided',
         orderCount: user.orderCount !== undefined ? Number(user.orderCount) : 0 // Lấy từ response, không từ User
       };
     });
