@@ -16,12 +16,12 @@ import { RouterModule } from '@angular/router';
 export class ProductDetailComponent implements OnInit {
   product: Product | null = null;
   reviews = [
-    { id: 1, customer: 'Thành Tỷ', date: '26/02/24', content: 'Bánh tráng WinSnack đúng là "Ăn là ghiền"!', rating: 4 },
-    { id: 2, customer: 'Linh Mèo', date: '25/02/24', content: 'Mình thích bánh tráng muối tắc nhất!', rating: 5 },
-    { id: 3, customer: 'Duy Bé', date: '24/02/24', content: 'Giao hàng nhanh, bánh tráng giòn ngon.', rating: 4 },
-    { id: 4, customer: 'Mai Hương', date: '23/02/24', content: 'Bánh tráng hơi mặn so với khẩu vị của mình.', rating: 3 },
-    { id: 5, customer: 'Trung Cận', date: '22/02/24', content: 'Bánh tráng ngon nhưng gói hơi nhỏ.', rating: 4 },
-    { id: 6, customer: 'Lan Ngọc', date: '21/02/24', content: 'Giao hàng nhanh, đóng gói đẹp.', rating: 5 }
+    { id: 1, customer: 'Thanh Ty', date: '26/02/24', content: 'WinSnack rice paper is truly "Addictive"!', rating: 4 },
+    { id: 2, customer: 'Linh Meo', date: '25/02/24', content: 'I like salted kumquat rice paper the most!', rating: 5 },
+    { id: 3, customer: 'Duy Be', date: '24/02/24', content: 'Fast delivery, delicious crispy rice paper.', rating: 4 },
+    { id: 4, customer: 'Mai Huong', date: '23/02/24', content: 'The rice paper is a bit salty for my taste.', rating: 3 },
+    { id: 5, customer: 'Trung Can', date: '22/02/24', content: 'The rice paper is delicious but the package is a bit small.', rating: 4 },
+    { id: 6, customer: 'Lan Ngoc', date: '21/02/24', content: 'Fast delivery, nice packaging.', rating: 5 }
   ];
   currentPage = 1;
   reviewsPerPage = 3;
@@ -46,7 +46,7 @@ export class ProductDetailComponent implements OnInit {
         }
       },
       (error) => {
-        console.error('Lỗi khi lấy chi tiết sản phẩm:', error);
+        console.error('Error getting product details:', error);
       }
     );
   }
@@ -70,10 +70,10 @@ export class ProductDetailComponent implements OnInit {
 
   addReply() {
     if (!this.replyContent.trim()) {
-      alert('Vui lòng nhập nội dung phản hồi!');
+      alert('Please enter feedback!');
       return;
     }
-    console.log(`Admin phản hồi: ${this.replyContent}`);
+    console.log(`Admin response: ${this.replyContent}`);
     this.replyContent = '';
 
     this.showPopup = true; // ✅ Hiển thị popup
