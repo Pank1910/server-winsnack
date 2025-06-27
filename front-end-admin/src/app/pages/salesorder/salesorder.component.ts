@@ -56,7 +56,7 @@ export class SalesorderComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Lỗi khi tải danh sách đơn hàng:', error);
+        console.error('Error loading order list:', error);
         this.isLoading = false;
       }
     });
@@ -112,10 +112,10 @@ export class SalesorderComponent implements OnInit {
 
   getStatusDisplay(status: string): string {
     switch (status) {
-      case 'pending': return 'Đang giao hàng';
-      case 'completed': return 'Đã thanh toán';
-      case 'cancelled': return 'Đã hủy';
-      default: return 'Không xác định';
+      case 'pending': return 'Pending';
+      case 'completed': return 'Completed';
+      case 'cancelled': return 'Canceled';
+      default: return 'Unknown';
     }
   }
 
@@ -138,7 +138,7 @@ export class SalesorderComponent implements OnInit {
     this.isLoading = true;
     this.orderApiService.updateOrderStatus(order.id, order.status).subscribe({
       next: (response) => {
-        console.log('Cập nhật trạng thái thành công:', response);
+        console.log('Status update successful:', response);
         this.isLoading = false;
         // Cập nhật danh sách orders để đảm bảo đồng bộ
         const index = this.orders.findIndex(o => o.id === order.id);
@@ -149,7 +149,7 @@ export class SalesorderComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Lỗi khi cập nhật trạng thái:', error);
+        console.error('Error while updating status:', error);
         this.loadOrders(); // Tải lại nếu lỗi để đồng bộ
         this.isLoading = false;
       }
