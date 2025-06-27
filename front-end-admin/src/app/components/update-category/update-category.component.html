@@ -5,21 +5,21 @@
     <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
       <div class="grid grid-cols-2 gap-4 mb-4">
         <div class="col-span-2">
-          <label class="block">Tên danh mục</label>
+          <label class="block">Category Name</label>
           <input 
             type="text" 
             formControlName="product_dept"
-            placeholder="Nhập tên danh mục"
+            placeholder="Enter category name"
             class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark"
           >
         </div>
 
         <div class="col-span-2">
-          <label class="block">Số lượng sản phẩm</label>
+          <label class="block">Number of products</label>
           <input 
             type="text" 
             formControlName="stocked_quantity"
-            placeholder="Nhập số lượng sản phẩm"
+            placeholder="Enter product quantity"
             class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-dark"
           >
         </div>
@@ -31,12 +31,12 @@
             (change)="toggleStatus($event)"
             class="w-5 h-5 rounded border-gray-300 text-[#FF9413] focus:ring-[#FF9413] cursor-pointer"
           >
-          <label>Hiển thị danh mục trên website</label>
+          <label>Display categories on website</label>
         </div>
       </div>
 
       <div class="mb-4">
-        <label class="block text-gray-700 font-semibold mb-2">Hình ảnh danh mục</label>
+        <label class="block text-gray-700 font-semibold mb-2">Category Image</label>
         <ngx-dropzone (change)="onFileSelected($event)" [accept]="'image/*'"
           class="min-h-[176px] bg-[#FFF8EC] border border-dashed border-gray-300 rounded-md">
           <ngx-dropzone-label>
@@ -46,9 +46,9 @@
       </div>
 
       <div class="flex justify-between items-center mb-4">
-        <span class="font-semibold">Sản phẩm thuộc danh mục</span>
+        <span class="font-semibold">Products belongs to category</span>
         <button type="button" class="px-6 py-2 text-orange-dark bg-white font-bold border border-orange-dark rounded-md"
-          (click)="addProduct()">THÊM SẢN PHẨM</button>
+          (click)="addProduct()">ADD PRODUCT</button>
       </div>
 
       <div class="overflow-x-auto mb-6">
@@ -56,12 +56,12 @@
           <thead>
             <tr class="text-white bg-orange-dark">
               <th class="p-3 text-center">ID</th>
-              <th class="p-3 text-center">Danh mục</th>
-              <th class="p-3 text-center">Hình ảnh</th>
-              <th class="p-3 text-center">Sản phẩm</th>
-              <th class="p-3 text-center">Đơn giá</th>
-              <th class="p-3 text-center">Hiển thị</th>
-              <th class="p-3 text-center">Tác vụ</th>
+              <th class="p-3 text-center">Category</th>
+              <th class="p-3 text-center">Image</th>
+              <th class="p-3 text-center">Product</th>
+              <th class="p-3 text-center">Unit price</th>
+              <th class="p-3 text-center">Display</th>
+              <th class="p-3 text-center">Task</th>
             </tr>
           </thead>
           <tbody>

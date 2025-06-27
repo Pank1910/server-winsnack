@@ -52,7 +52,7 @@ export class OrderDetailComponent implements OnInit {
         this.order = order;
       },
       error: (error) => {
-        console.error('Lỗi khi tải chi tiết đơn hàng:', error);
+        console.error('Error loading order details:', error);
       }
     });
   }
@@ -111,12 +111,12 @@ export class OrderDetailComponent implements OnInit {
         const scaledHeight = imgHeight * ratio;
   
         pdf.addImage(imgData, 'PNG', 0, 0, scaledWidth, scaledHeight);
-        pdf.save(`HoaDon_${this.order.id}.pdf`);
+        pdf.save(`Invoice_${this.order.id}.pdf`);
   
         // Xóa bản sao sau khi hoàn tất
         document.body.removeChild(clonedElement);
       }).catch((error: any) => {
-        console.error('Lỗi khi xuất PDF:', error);
+        console.error('Error exporting PDF:', error);
         // Xóa bản sao nếu có lỗi
         document.body.removeChild(clonedElement);
       });

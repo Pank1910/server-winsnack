@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
         
         // Kiểm tra role admin
         if (response.user.role !== 'admin') {
-          this.error = 'Vui lòng đăng nhập bằng tài khoản Admin!';
+          this.error = 'Please login with Admin account!';
           this.authService.logout(); // Đăng xuất ngay vì không phải admin
           return;
         }
@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
-        this.error = error.message || 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.';
+        this.error = error.message || 'Login failed. Please check your information again.';
       }
     });
 }

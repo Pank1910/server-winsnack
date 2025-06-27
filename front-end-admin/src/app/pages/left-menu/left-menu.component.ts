@@ -22,15 +22,15 @@ export class LeftMenuComponent {
   }
 
   onLogout() {
-    const confirmLogout = window.confirm('Bạn có muốn đăng xuất khỏi tài khoản không?');
+    const confirmLogout = window.confirm('Do you want to log out of your account?');
     
     if (confirmLogout) {
-      console.log('Đang đăng xuất...');
+      console.log('Logging out...');
    
       this.authService.logout();
       
     } else {
-      console.log('Hủy đăng xuất');
+      console.log('Cancel logout');
     }
   }
 }

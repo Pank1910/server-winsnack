@@ -30,14 +30,14 @@ export class ProductCategoryComponent implements OnInit {
   fetchProducts() {
     this.productApiService.getAllProducts().subscribe(
       (response) => {
-        console.log('Dữ liệu API:', response); 
+        console.log('API Data:', response); 
         if (response.success) {
           this.products = response.data;
           this.groupByCategory();
         }
       },
       (error) => {
-        console.error('Lỗi khi tải danh sách sản phẩm:', error);
+        console.error('Error loading product list:', error);
       }
     );
   }
@@ -63,19 +63,19 @@ export class ProductCategoryComponent implements OnInit {
     }));
 
     this.filteredCategories = [...this.categories];
-    console.log('Danh sách danh mục sau khi xử lý:', this.categories);
+    console.log('List of categories after processing:', this.categories);
   }
 
   /** 🔥 Gọi API để xóa danh mục */
   deleteCategory(categoryName: string) {
-    if (confirm(`Bạn có chắc chắn muốn xóa danh mục "${categoryName}" không?`)) {
+    if (confirm(`Are you sure you want to delete category "${categoryName}"?`)) {
       this.productApiService.deleteCategory(categoryName).subscribe({
         next: (response) => {
-          console.log(`Danh mục "${categoryName}" đã được xóa khỏi API`, response);
+          console.log(`Category "${categoryName}" has been removed from the API`, response);
           this.fetchProducts(); // ✅ Tải lại danh mục sau khi xóa
         },
         error: (error) => {
-          console.error('Lỗi khi xóa danh mục:', error);
+          console.error('Error while deleting category:', error);
         }
       });
     }
@@ -106,6 +106,6 @@ export class ProductCategoryComponent implements OnInit {
     }
 
     this.filteredCategories = tempCategories;
-    console.log('Danh mục sau khi lọc:', this.filteredCategories);
+    console.log('List after filtering:', this.filteredCategories);
   }
 }

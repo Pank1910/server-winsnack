@@ -53,9 +53,9 @@ export class CustomerComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Lỗi khi tải dữ liệu khách hàng:', error);
-        console.error('Chi tiết lỗi:', error.status, error.statusText, error.error);
-        this.errorMessage = 'Không thể tải dữ liệu khách hàng. Vui lòng thử lại sau.';
+        console.error('Error loading customer data:', error);
+        console.error('Error details:', error.status, error.statusText, error.error);
+        this.errorMessage = 'Unable to load customer data. Please try again later.';
         this.isLoading = false;
       }
     });
@@ -84,7 +84,7 @@ export class CustomerComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Lỗi khi tìm kiếm khách hàng:', error);
+        console.error('Error when searching for customers:', error);
         // Fallback to client-side filtering
         this.performClientSideSearch();
         this.isLoading = false;

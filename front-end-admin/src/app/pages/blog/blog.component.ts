@@ -12,11 +12,11 @@ import { RouterModule } from '@angular/router';
 })
 export class BlogComponent implements OnInit {
   blogPosts = [
-    { id: 'bt1211', date: '26/02/24', category: 'Bí quyết ăn vặt ngon miệng', title: 'Cách làm bánh tráng trộn thơm ngon chuẩn vị Sài Gòn', isVisible: true },
-    { id: 'bt1212', date: '26/02/24', category: 'Chuyện kể từ nguyên liệu', title: 'Muối tôm Tây Ninh: Hương vị làm nên sự đặc biệt của Win Snack', isVisible: true },
-    { id: 'bt1213', date: '26/02/24', category: 'Công thức DIY', title: 'Tự làm bánh tráng cuộn phô mai giòn rụm siêu dễ', isVisible: false },
-    { id: 'bt1214', date: '26/02/24', category: 'Góc sức khỏe và dinh dưỡng', title: 'Ăn vặt lành mạnh: Các món snack ít calo cho bạn giữ dáng', isVisible: true },
-    { id: 'bt1215', date: '26/02/24', category: 'Đánh giá và feedback khách hàng', title: 'Khách hàng nói gì về combo snack đặc biệt của Win Snack?', isVisible: false },
+    { id: 'bt1211', date: '26/02/24', category: 'Delicious snack tips', title: 'How to make delicious mixed rice paper with Saigon flavor', isVisible: true },
+    { id: 'bt1212', date: '26/02/24', category: 'Story from raw materials', title: 'Tay Ninh Shrimp Salt: The flavor that makes Win Snack special', isVisible: true },
+    { id: 'bt1213', date: '26/02/24', category: 'DIY Recipe', title: 'Make your own crispy cheese rolls super easy', isVisible: false },
+    { id: 'bt1214', date: '26/02/24', category: 'Health and nutrition', title: 'Healthy Snacking: Low-Calorie Snacks to Keep You Slim', isVisible: true },
+    { id: 'bt1215', date: '26/02/24', category: 'Customer reviews and feedback', title: 'What do customers say about our special snack combo of Win Snack?', isVisible: false },
   ];
   
   filteredPosts: any[] = [];
@@ -32,26 +32,26 @@ export class BlogComponent implements OnInit {
     const post = this.blogPosts.find(post => post.id === postId);
     if (post) {
       post.isVisible = !post.isVisible;
-      console.log(`Trạng thái hiển thị của bài viết "${post.title}":`, post.isVisible);
+      console.log(`Post visibility status "${post.title}":`, post.isVisible);
     }
   }
   
   addPost() {
-    console.log('Thêm bài viết mới');
+    console.log('Add new post');
   }
   
   editPost(id: string) {
-    console.log(`Chỉnh sửa bài viết: ${id}`);
+    console.log(`Edit post: ${id}`);
   }
   
   deletePost(id: string) {
     this.blogPosts = this.blogPosts.filter(post => post.id !== id);
     this.filterPosts();
-    console.log(`Xóa bài viết: ${id}`);
+    console.log(`Delete post: ${id}`);
   }
   
   viewPost(id: string) {
-    console.log(`Xem chi tiết bài viết: ${id}`);
+    console.log(`See post details: ${id}`);
   }
   
   onSearchChange(event: any) {
@@ -89,11 +89,11 @@ export class BlogComponent implements OnInit {
   // Hàm để lấy tên danh mục từ giá trị option
   getCategoryNameFromValue(value: string): string {
     switch(value) {
-      case 'category-4': return 'Bí quyết ăn vặt ngon miệng';
-      case 'category-3': return 'Chuyện kể từ nguyên liệu';
-      case 'category-5': return 'Công thức DIY';
-      case 'category-1': return 'Góc sức khỏe và dinh dưỡng';
-      case 'category-2': return 'Đánh giá và feedback khách hàng';
+      case 'category-4': return 'Delicious snack tips';
+      case 'category-3': return 'Story from raw materials';
+      case 'category-5': return 'DIY Recipe';
+      case 'category-1': return 'Health and nutrition';
+      case 'category-2': return 'Customer reviews and feedback';
       default: return '';
     }
   }

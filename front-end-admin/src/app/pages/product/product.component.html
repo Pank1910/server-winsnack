@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Trang quản lý sản phẩm Win Snack">
-    <meta name="keywords" content="snack, bánh tráng, quản lý sản phẩm, Win Snack">
+    <meta name="description" content="Win Snack product management page">
+    <meta name="keywords" content="snack, rice paper, product management, Win Snack">
     <meta name="author" content="Win Snack">
     <title>Product Management - Win Snack</title>
     
@@ -64,7 +64,7 @@
         </button>
 
         <div class="flex items-center space-x-6">
-            <input type="text" placeholder="Tìm kiếm sản phẩm..." (keyup)="searchProduct($event)"
+            <input type="text" placeholder="Search for products..." (keyup)="searchProduct($event)"
             class="p-2 rounded-md border border-gray-300 input-focus text-black">
              </div>
     </header>
@@ -89,7 +89,7 @@
                     class="border-b table-row-hover">
                     <td class="px-4 py-2">{{ product._id }}</td>
                     <td class="px-4 py-2">{{ product.product_dept }}</td>
-                    <td class="px-4 py-2"><img [src]="product.image_1" alt="Hình ảnh sản phẩm" class="w-16 h-16 object-cover"></td>
+                    <td class="px-4 py-2"><img [src]="product.image_1" alt="Product Image" class="w-16 h-16 object-cover"></td>
                     <td class="px-4 py-2">{{ product.product_name }}</td>
                     <td class="px-4 py-2">{{ product.unit_price | number }}₫</td>
                     <td class="px-4 py-2"><input type="checkbox" [checked]="product.isNew" class="form-checkbox"></td>
@@ -103,13 +103,13 @@
                         <!-- Nút Xóa -->
                         <button (click)="deleteProduct(product._id)" 
                                 class="p-2 rounded-md hover:bg-red-500 transition duration-300">
-                            <img src="assets/icons/delete.png" alt="Xoá" class="w-7 h-7">
+                            <img src="assets/icons/delete.png" alt="delete" class="w-7 h-7">
                         </button>
                         
                         <!-- Nút Xem Chi Tiết -->
                         <button [routerLink]="['/product-detail', product._id]" 
                                 class="p-2 rounded-md hover:bg-orange-light transition duration-300">
-                            <img src="assets/icons/detail.png" alt="Xem Chi Tiết" class="w-7 h-7">
+                            <img src="assets/icons/detail.png" alt="detail" class="w-7 h-7">
                         </button>
                     </td>
                 </tr>

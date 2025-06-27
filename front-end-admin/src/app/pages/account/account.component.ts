@@ -26,8 +26,8 @@ export class AccountComponent implements OnInit {
   };
 
   editedUserData: User = { ...this.userData };
-  language: string = 'Tiếng Việt';
-  currency: string = 'Việt Nam đồng';
+  language: string = 'Vietnamese';
+  currency: string = 'Vietnamese Dong';
   smsNotifications: boolean = true;
   sms: string = '';
   isEditingProfile: boolean = false;
@@ -54,7 +54,7 @@ export class AccountComponent implements OnInit {
       this.loadUserData();
     } else {
       console.error('No user information found in localStorage');
-      alert('Vui lòng đăng nhập để xem thông tin tài khoản.');
+      alert('VPlease login to view account information!');
       // Có thể thêm redirect tới trang đăng nhập
       // this.router.navigate(['/login']);
     }
@@ -66,7 +66,7 @@ export class AccountComponent implements OnInit {
         console.log('API Response:', response); // Log để kiểm tra response từ server
         if (!response.success || !response.user) {
           console.error('Invalid response from API:', response);
-          alert('Dữ liệu người dùng không hợp lệ.');
+          alert('Invalid user data!');
           return;
         }
   
@@ -89,7 +89,7 @@ export class AccountComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading user data:', error);
-        alert('Không thể tải thông tin người dùng: ' + (error.message || 'Lỗi không xác định'));
+        alert('Unable to load user information: ' + (error.message || 'Unknown error'));
       }
     });
   }
@@ -272,7 +272,7 @@ export class AccountComponent implements OnInit {
         }
       });
     } else {
-      alert('Mật khẩu không khớp hoặc không hợp lệ!');
+      alert('Password does not match or is invalid!');
     }
   }
 

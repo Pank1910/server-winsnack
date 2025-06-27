@@ -86,17 +86,17 @@ export class OrderApiService {
           let statusDisplay: string;
           switch (order.status.toLowerCase()) {
             case 'pending':
-              statusDisplay = 'Đang giao hàng';
+              statusDisplay = 'Pending';
               break;
             case 'completed':
             case 'delivered':
-              statusDisplay = 'Đã thanh toán';
+              statusDisplay = 'Completed';
               break;
             case 'cancelled':
-              statusDisplay = 'Đã hủy';
+              statusDisplay = 'Canceled';
               break;
             default:
-              statusDisplay = 'Không xác định';
+              statusDisplay = 'Unknown';
           }
           // Tính tổng discount từ items
           const totalDiscount = order.items.reduce((sum: number, item: any) => {
@@ -108,9 +108,9 @@ export class OrderApiService {
             orderDate: new Date(order.createdAt).toLocaleDateString('vi-VN'),
             orderTime: new Date(order.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).toUpperCase(),
             status: statusDisplay,
-            recipientName: order.contact?.name || order.userName || 'Chưa cung cấp',
-            recipientAddress: order.contact?.address || 'Chưa cung cấp',
-            recipientPhone: order.contact?.phone || 'Chưa cung cấp',
+            recipientName: order.contact?.name || order.userName || 'Not provided',
+            recipientAddress: order.contact?.address || 'Not provided',
+            recipientPhone: order.contact?.phone || 'Not provided',
             items: order.items.map((item: any, index: number) => ({
               id: index + 1,
               name: item.product.product_name,
@@ -125,7 +125,7 @@ export class OrderApiService {
             total: order.totalPrice
           };
         }
-        throw new Error('Không tìm thấy đơn hàng');
+        throw new Error('Order not found');
       })
     );
   }

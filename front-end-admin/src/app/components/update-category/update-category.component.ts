@@ -17,7 +17,7 @@ export class UpdateCategoryComponent implements OnInit {
   categoryForm: FormGroup;
   categoryId: string | null = null;
   isAddMode: boolean = false;
-  pageTitle: string = 'CẬP NHẬT DANH MỤC';
+  pageTitle: string = 'UPDATE CATEGORY';
 
   category = {
     product_dept: '',
@@ -46,7 +46,7 @@ export class UpdateCategoryComponent implements OnInit {
     this.isAddMode = !this.categoryId;
     
     if (this.isAddMode) {
-      this.pageTitle = 'THÊM DANH MỤC MỚI';
+      this.pageTitle = 'ADD NEW CATEGORY';
     } else if (this.categoryId) {
       this.loadCategoryData(this.categoryId);
     }
@@ -66,7 +66,7 @@ export class UpdateCategoryComponent implements OnInit {
         isNew: this.category.isNew
       });
     } else {
-      alert('Không tìm thấy danh mục!');
+      alert('No category found!');
       this.router.navigate(['/product-category']);
     }
   }
@@ -99,7 +99,7 @@ export class UpdateCategoryComponent implements OnInit {
   }
 
   deleteProduct(productId: string) {
-    if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+    if (confirm('Are you sure you want to delete this product?')) {
       this.products = this.products.filter(p => p._id !== productId);
     }
   }
@@ -126,15 +126,15 @@ export class UpdateCategoryComponent implements OnInit {
       console.log('Submitting category data:', formData);
       
       if (this.isAddMode) {
-        alert('Danh mục mới đã được tạo thành công!');
+        alert('New category created successfully!');
       } else {
-        alert('Danh mục đã được cập nhật thành công!');
+        alert('The category has been updated successfully!');
       }
       
       this.router.navigate(['/product-category']);
     } else {
       this.categoryForm.markAllAsTouched();
-      alert('Vui lòng kiểm tra lại thông tin đã nhập!');
+      alert('Please check the information entered!');
     }
   }
 }

@@ -24,12 +24,12 @@
             </select>
             
             <input type="text" [(ngModel)]="searchText" (input)="onSearchChange($event)"
-                   placeholder="Tìm kiếm danh mục..." 
+                   placeholder="Search category..." 
                    class="text-black p-2 rounded-md border border-gray-300 input-focus">
             
             <button (click)="filterCategories()"
                     class="p-2 rounded-md bg-orange-dark text-white border border-gray-300 hover:bg-orange-500 transition duration-300 btn-hover">
-                <img src="assets/icons/search.png" class="w-5 h-5" alt="Tìm kiếm">
+                <img src="assets/icons/search.png" class="w-5 h-5" alt="Search">
             </button>
         </div>
     </header>
@@ -58,11 +58,11 @@
                         <div class="flex gap-4 justify-center">
                             <a [routerLink]="['/update-category', category.name]" 
                                class="p-2 rounded-md hover:bg-orange-medium transition duration-300" aria-label="Edit category">
-                                <img src="assets/icons/edit.png" alt="Sửa" class="w-7 h-7">
+                                <img src="assets/icons/edit.png" alt="edit" class="w-7 h-7">
                             </a>
                             <button (click)="deleteCategory(category.name)" 
                                     class="p-2 rounded-md hover:bg-red-500 transition duration-300" aria-label="Delete category">
-                                <img src="assets/icons/delete.png" alt="Xóa" class="w-7 h-7">
+                                <img src="assets/icons/delete.png" alt="delete" class="w-7 h-7">
                             </button>
                         </div>
                     </td>
